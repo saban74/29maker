@@ -3,126 +3,308 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>29maker</title>
-  <meta name="description" content="29maker - 아이디어를 현실로 만드는 메이커 스튜디오">
+  <title>JS Engineering · 환경시험장비</title>
+  <meta name="description" content="제이에스엔지니어링 - 1981년부터 ESPEC 환경시험장비 영업·설치·서비스. 항온항습챔버, 열충격시험기, HAST, 배터리 시험장비.">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700;900&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
+  <!-- 제품 그림 모음 (아래에서 <use href="#이름">으로 불러씁니다) -->
+  <svg width="0" height="0" style="position:absolute" aria-hidden="true">
+    <defs>
+      <linearGradient id="g-window" x1="0" y1="0" x2="1" y2="1">
+        <stop offset="0" style="stop-color:var(--cold)"/>
+        <stop offset="1" style="stop-color:var(--hot)"/>
+      </linearGradient>
+    </defs>
+    <!-- 대형 항온항습챔버 -->
+    <symbol id="ico-tall" viewBox="0 0 120 160">
+      <rect x="20" y="8" width="80" height="140" rx="6" fill="none" stroke="currentColor" stroke-width="2.5"/>
+      <rect x="30" y="24" width="44" height="64" rx="4" fill="url(#g-window)" opacity=".85"/>
+      <rect x="80" y="24" width="12" height="20" rx="2" fill="none" stroke="currentColor" stroke-width="2"/>
+      <line x1="20" y1="104" x2="100" y2="104" stroke="currentColor" stroke-width="2"/>
+      <line x1="30" y1="148" x2="30" y2="154" stroke="currentColor" stroke-width="2.5"/>
+      <line x1="90" y1="148" x2="90" y2="154" stroke="currentColor" stroke-width="2.5"/>
+    </symbol>
+    <!-- 벤치탑(소형) -->
+    <symbol id="ico-bench" viewBox="0 0 120 160">
+      <rect x="18" y="58" width="84" height="70" rx="6" fill="none" stroke="currentColor" stroke-width="2.5"/>
+      <rect x="28" y="70" width="46" height="46" rx="4" fill="url(#g-window)" opacity=".85"/>
+      <circle cx="88" cy="80" r="5" fill="none" stroke="currentColor" stroke-width="2"/>
+      <line x1="82" y1="100" x2="94" y2="100" stroke="currentColor" stroke-width="2"/>
+      <line x1="10" y1="134" x2="110" y2="134" stroke="currentColor" stroke-width="2.5"/>
+    </symbol>
+    <!-- 열충격(2존) -->
+    <symbol id="ico-shock" viewBox="0 0 120 160">
+      <rect x="14" y="10" width="92" height="138" rx="6" fill="none" stroke="currentColor" stroke-width="2.5"/>
+      <rect x="24" y="22" width="72" height="34" rx="3" style="fill:var(--hot)" opacity=".85"/>
+      <rect x="24" y="64" width="72" height="22" rx="3" fill="none" stroke="currentColor" stroke-width="2"/>
+      <rect x="24" y="94" width="72" height="34" rx="3" style="fill:var(--cold)" opacity=".85"/>
+      <path d="M60 66 v18 M54 72 l6 -6 6 6 M54 78 l6 6 6 -6" fill="none" stroke="currentColor" stroke-width="2"/>
+    </symbol>
+    <!-- 워크인 챔버 -->
+    <symbol id="ico-walk" viewBox="0 0 120 160">
+      <path d="M8 148 V40 L60 16 L112 40 V148 Z" fill="none" stroke="currentColor" stroke-width="2.5"/>
+      <rect x="40" y="76" width="40" height="72" rx="3" fill="url(#g-window)" opacity=".85"/>
+      <rect x="18" y="56" width="14" height="14" rx="2" fill="none" stroke="currentColor" stroke-width="2"/>
+      <circle cx="74" cy="114" r="2.5" fill="currentColor"/>
+    </symbol>
+    <!-- HAST(압력용기) -->
+    <symbol id="ico-hast" viewBox="0 0 120 160">
+      <rect x="16" y="40" width="88" height="96" rx="8" fill="none" stroke="currentColor" stroke-width="2.5"/>
+      <circle cx="60" cy="88" r="30" fill="none" stroke="currentColor" stroke-width="2.5"/>
+      <circle cx="60" cy="88" r="20" fill="url(#g-window)" opacity=".85"/>
+      <path d="M60 18 v14 M50 24 h20" stroke="currentColor" stroke-width="2.5"/>
+      <circle cx="94" cy="52" r="4" fill="none" stroke="currentColor" stroke-width="2"/>
+    </symbol>
+    <!-- 배터리 시험 -->
+    <symbol id="ico-battery" viewBox="0 0 120 160">
+      <rect x="20" y="20" width="80" height="120" rx="6" fill="none" stroke="currentColor" stroke-width="2.5"/>
+      <rect x="40" y="44" width="40" height="64" rx="4" fill="none" stroke="currentColor" stroke-width="2.5"/>
+      <rect x="52" y="38" width="16" height="6" rx="1" fill="currentColor"/>
+      <rect x="45" y="80" width="30" height="23" rx="2" fill="url(#g-window)" opacity=".9"/>
+      <path d="M62 54 l-8 14 h10 l-6 12" fill="none" stroke="currentColor" stroke-width="2"/>
+      <line x1="20" y1="120" x2="100" y2="120" stroke="currentColor" stroke-width="2"/>
+    </symbol>
+  </svg>
+
   <!-- ===== 상단 메뉴 ===== -->
-  <header class="header">
-    <div class="container header-inner">
-      <a href="#top" class="logo">29<span>maker</span></a>
-      <button class="menu-toggle" aria-label="메뉴 열기" aria-expanded="false">☰</button>
-      <nav class="nav">
-        <a href="#about">소개</a>
-        <a href="#services">서비스</a>
-        <a href="#portfolio">작업물</a>
+  <header class="header" id="header">
+    <div class="wrap header-inner">
+      <a href="#top" class="logo" aria-label="JS Engineering 홈">
+        <span class="logo-mark">JS</span><span class="logo-text">ENGINEERING</span>
+      </a>
+      <nav class="nav" id="nav">
+        <a href="#products">제품</a>
+        <a href="#service">서비스</a>
+        <a href="#about">회사</a>
         <a href="#contact" class="nav-cta">문의하기</a>
       </nav>
+      <button class="menu-btn" id="menu-btn" aria-label="메뉴" aria-expanded="false"><span></span><span></span></button>
     </div>
   </header>
 
   <main id="top">
 
-    <!-- ===== 첫 화면 (히어로) ===== -->
+    <!-- ===== 첫 화면 ===== -->
     <section class="hero">
-      <div class="container">
-        <p class="eyebrow">MAKER STUDIO</p>
-        <h1>아이디어를<br><span class="highlight">현실로</span> 만듭니다</h1>
-        <p class="hero-text">29maker는 기획부터 디자인, 제작까지 한 번에 도와드리는 메이커 스튜디오입니다.</p>
-        <div class="hero-buttons">
-          <a href="#contact" class="btn btn-primary">프로젝트 문의</a>
-          <a href="#portfolio" class="btn btn-ghost">작업물 보기</a>
+      <div class="wrap hero-grid">
+        <div class="hero-copy">
+          <p class="kicker"><span class="dot"></span>ESPEC Authorized Partner in Korea · Since 1981</p>
+          <h1>극한을 만들어<br><em>신뢰</em>를 증명합니다</h1>
+          <p class="lead">온도, 습도, 압력, 열충격까지.<br>제품이 세상에서 겪을 모든 환경을 시험실 안에 재현합니다.</p>
+          <div class="hero-actions">
+            <a href="#products" class="btn btn-light">제품 보기</a>
+            <a href="#contact" class="btn btn-line">견적 문의 →</a>
+          </div>
+        </div>
+
+        <!-- 온도가 변하는 챔버 그림 -->
+        <div class="hero-visual" aria-hidden="true">
+          <div class="chamber">
+            <div class="chamber-window"><div class="chamber-glow"></div></div>
+            <div class="chamber-panel">
+              <span class="readout" id="readout">+25.0</span><span class="unit">°C</span>
+              <span class="rh">RH <b id="rh">50</b>%</span>
+            </div>
+          </div>
+          <div class="scale">
+            <span>-70°C</span>
+            <div class="scale-bar"><i id="scale-pin"></i></div>
+            <span>+180°C</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="ticker" aria-label="적용 산업">
+        <div class="ticker-track">
+          <span>반도체</span><span>자동차 · 전장</span><span>2차전지</span><span>디스플레이</span><span>전자부품</span><span>통신 · 5G</span><span>소재 · 화학</span><span>제약 · 바이오</span>
+          <span>반도체</span><span>자동차 · 전장</span><span>2차전지</span><span>디스플레이</span><span>전자부품</span><span>통신 · 5G</span><span>소재 · 화학</span><span>제약 · 바이오</span>
         </div>
       </div>
     </section>
 
-    <!-- ===== 소개 ===== -->
-    <section id="about" class="section">
-      <div class="container about">
-        <div>
-          <p class="eyebrow">ABOUT</p>
-          <h2>작은 아이디어도<br>소중하게 다룹니다</h2>
+    <!-- ===== 제품 ===== -->
+    <section class="section" id="products">
+      <div class="wrap">
+        <div class="section-head">
+          <p class="label">01 — Products</p>
+          <h2>어떤 시험이 필요하신가요?</h2>
+          <p class="sub">시험 조건을 고르면 맞는 장비만 보여드립니다.</p>
         </div>
-        <div>
-          <p>머릿속에만 있던 생각을 눈에 보이고 손에 잡히는 결과물로 바꾸는 일을 합니다. 처음이라 막막하셔도 괜찮습니다. 함께 이야기하며 가장 좋은 방법을 찾아드립니다.</p>
-          <ul class="stats">
-            <li><strong>120+</strong><span>완료 프로젝트</span></li>
-            <li><strong>98%</strong><span>고객 만족도</span></li>
-            <li><strong>5년</strong><span>제작 경험</span></li>
-          </ul>
+
+        <div class="filters" role="tablist" aria-label="제품 분류">
+          <button class="chip is-active" data-filter="all">전체</button>
+          <button class="chip" data-filter="temp">온도 · 습도</button>
+          <button class="chip" data-filter="shock">열충격</button>
+          <button class="chip" data-filter="semi">반도체 · HAST</button>
+          <button class="chip" data-filter="battery">2차전지</button>
+          <button class="chip" data-filter="large">대형 · 워크인</button>
+        </div>
+
+        <div class="products" id="product-list">
+          <article class="product" data-cat="temp">
+            <div class="product-art"><svg><use href="#ico-tall"/></svg></div>
+            <div class="product-body">
+              <p class="series">PLATINOUS series</p>
+              <h3>항온항습챔버</h3>
+              <p class="spec"><span>-70 ~ +180°C</span><span>20 ~ 98% RH</span></p>
+              <p class="desc">가장 많이 쓰이는 범용 신뢰성 시험장비. 정밀한 온습도 제어.</p>
+            </div>
+            <button class="product-ask" data-product="항온항습챔버 (PLATINOUS)">이 제품 문의 <span>→</span></button>
+          </article>
+
+          <article class="product" data-cat="temp">
+            <div class="product-art"><svg><use href="#ico-bench"/></svg></div>
+            <div class="product-body">
+              <p class="series">SH series</p>
+              <h3>벤치탑 항온항습기</h3>
+              <p class="spec"><span>-60 ~ +150°C</span><span>책상 위 설치</span></p>
+              <p class="desc">작은 공간에서 부품·모듈 단위 시험을 빠르게.</p>
+            </div>
+            <button class="product-ask" data-product="벤치탑 항온항습기 (SH)">이 제품 문의 <span>→</span></button>
+          </article>
+
+          <article class="product" data-cat="temp semi">
+            <div class="product-art"><svg><use href="#ico-tall"/></svg></div>
+            <div class="product-body">
+              <p class="series">AR series</p>
+              <h3>급속 온도변화 챔버</h3>
+              <p class="spec"><span>-75 ~ +180°C</span><span>고속 온도 사이클</span></p>
+              <p class="desc">빠른 온도 변화로 스트레스 스크리닝(ESS) 시간을 단축.</p>
+            </div>
+            <button class="product-ask" data-product="급속 온도변화 챔버 (AR)">이 제품 문의 <span>→</span></button>
+          </article>
+
+          <article class="product" data-cat="shock">
+            <div class="product-art"><svg><use href="#ico-shock"/></svg></div>
+            <div class="product-body">
+              <p class="series">TSA · TSE series</p>
+              <h3>열충격시험기</h3>
+              <p class="spec"><span>고온 ↔ 저온</span><span>공기식 · 승강식</span></p>
+              <p class="desc">고온과 저온을 반복해 접합부·솔더의 내구성을 검증.</p>
+            </div>
+            <button class="product-ask" data-product="열충격시험기 (TSA/TSE)">이 제품 문의 <span>→</span></button>
+          </article>
+
+          <article class="product" data-cat="semi">
+            <div class="product-art"><svg><use href="#ico-hast"/></svg></div>
+            <div class="product-body">
+              <p class="series">EHS series</p>
+              <h3>HAST · 고도가속수명시험</h3>
+              <p class="spec"><span>고온 · 고습 · 고압</span><span>바이어스 시험</span></p>
+              <p class="desc">수 주 걸리던 내습성 시험을 며칠로. 반도체 패키지 평가.</p>
+            </div>
+            <button class="product-ask" data-product="HAST 챔버 (EHS)">이 제품 문의 <span>→</span></button>
+          </article>
+
+          <article class="product" data-cat="battery">
+            <div class="product-art"><svg><use href="#ico-battery"/></svg></div>
+            <div class="product-body">
+              <p class="series">Battery Test</p>
+              <h3>2차전지 시험장비</h3>
+              <p class="spec"><span>방폭 · 안전 설계</span><span>충방전 연동</span></p>
+              <p class="desc">셀·모듈·팩의 온도 환경 시험을 안전하게.</p>
+            </div>
+            <button class="product-ask" data-product="2차전지 시험장비">이 제품 문의 <span>→</span></button>
+          </article>
+
+          <article class="product" data-cat="large">
+            <div class="product-art"><svg><use href="#ico-walk"/></svg></div>
+            <div class="product-body">
+              <p class="series">Walk-in Chamber</p>
+              <h3>워크인 챔버</h3>
+              <p class="spec"><span>방 단위 시험공간</span><span>맞춤 설계</span></p>
+              <p class="desc">완성차 부품, 대형 장비까지 통째로 시험.</p>
+            </div>
+            <button class="product-ask" data-product="워크인 챔버">이 제품 문의 <span>→</span></button>
+          </article>
+
+          <article class="product product-custom" data-cat="custom">
+            <div class="product-body">
+              <p class="series">Custom</p>
+              <h3>찾는 장비가 없나요?</h3>
+              <p class="desc">시험 규격(IEC, JEDEC, ISO 등)만 알려주세요. 맞는 장비를 제안드립니다.</p>
+            </div>
+            <button class="product-ask" data-product="맞춤 장비 상담">맞춤 상담 <span>→</span></button>
+          </article>
         </div>
       </div>
     </section>
 
     <!-- ===== 서비스 ===== -->
-    <section id="services" class="section section-alt">
-      <div class="container">
-        <p class="eyebrow">SERVICES</p>
-        <h2>이런 일을 합니다</h2>
-        <div class="cards">
-          <article class="card">
-            <div class="card-icon">💡</div>
-            <h3>기획 · 컨설팅</h3>
-            <p>아이디어를 정리하고 실현 가능한 계획으로 구체화합니다.</p>
-          </article>
-          <article class="card">
-            <div class="card-icon">🎨</div>
-            <h3>디자인</h3>
-            <p>브랜드, 제품, 웹사이트까지 보기 좋고 쓰기 편하게 디자인합니다.</p>
-          </article>
-          <article class="card">
-            <div class="card-icon">🛠️</div>
-            <h3>제작 · 개발</h3>
-            <p>시제품 제작부터 웹·앱 개발까지 직접 만들어 드립니다.</p>
-          </article>
+    <section class="section section-dark" id="service">
+      <div class="wrap">
+        <div class="section-head">
+          <p class="label">02 — Service</p>
+          <h2>팔고 끝나지 않습니다.<br>멈추지 않게 지킵니다.</h2>
+        </div>
+
+        <ol class="steps">
+          <li><b>01</b><h3>상담 · 제안</h3><p>시험 규격과 시편에 맞춰 장비 사양을 함께 정합니다.</p></li>
+          <li><b>02</b><h3>설치 · 시운전</h3><p>현장 설치부터 성능 확인, 사용 교육까지.</p></li>
+          <li><b>03</b><h3>교정 · 정기점검</h3><p>정확도를 유지하도록 주기적으로 점검합니다.</p></li>
+          <li><b>04</b><h3>A/S · 부품</h3><p>고장 접수 시 빠르게 진단하고 정품 부품으로 수리.</p></li>
+        </ol>
+
+        <div class="service-cta">
+          <p>장비가 멈췄나요?</p>
+          <a href="#contact" class="btn btn-hot" data-type="service">A/S 접수하기 →</a>
         </div>
       </div>
     </section>
 
-    <!-- ===== 작업물 ===== -->
-    <section id="portfolio" class="section">
-      <div class="container">
-        <p class="eyebrow">PORTFOLIO</p>
-        <h2>최근 작업물</h2>
-        <div class="gallery">
-          <figure class="work" style="--c1:#ff8a5b;--c2:#ffcf5b">
-            <figcaption><strong>카페 브랜딩</strong><span>디자인</span></figcaption>
-          </figure>
-          <figure class="work" style="--c1:#5b8cff;--c2:#5be0ff">
-            <figcaption><strong>스마트 조명 시제품</strong><span>제작</span></figcaption>
-          </figure>
-          <figure class="work" style="--c1:#7a5bff;--c2:#ff5bc8">
-            <figcaption><strong>온라인 쇼핑몰</strong><span>개발</span></figcaption>
-          </figure>
-          <figure class="work" style="--c1:#2fbf71;--c2:#b6f05b">
-            <figcaption><strong>교육용 키트</strong><span>기획 · 제작</span></figcaption>
-          </figure>
+    <!-- ===== 회사 ===== -->
+    <section class="section" id="about">
+      <div class="wrap about">
+        <div class="section-head">
+          <p class="label">03 — Company</p>
+          <h2>45년, 한 분야만<br>깊게 파왔습니다.</h2>
+          <p class="sub">제이에스엔지니어링은 1981년부터 일본 ESPEC의 한국 파트너로 환경시험장비의 영업과 서비스를 맡아왔습니다.</p>
         </div>
+        <dl class="facts">
+          <div><dt>설립</dt><dd data-count="1981">1981</dd></div>
+          <div><dt>업력</dt><dd><span data-count="45">45</span>년</dd></div>
+          <div><dt>파트너</dt><dd class="small">ESPEC<br>SHINKEN</dd></div>
+          <div><dt>거점</dt><dd class="small">충남 아산</dd></div>
+        </dl>
       </div>
     </section>
 
     <!-- ===== 문의 ===== -->
-    <section id="contact" class="section section-alt">
-      <div class="container contact">
-        <div>
-          <p class="eyebrow">CONTACT</p>
-          <h2>프로젝트를<br>시작해 볼까요?</h2>
-          <ul class="contact-info">
-            <li>📧 hello@29maker.com</li>
-            <li>📞 010-0000-0000</li>
-            <li>📍 서울특별시 OO구 OO로 29</li>
+    <section class="section section-tint" id="contact">
+      <div class="wrap contact">
+        <div class="section-head">
+          <p class="label">04 — Contact</p>
+          <h2>무엇이든<br>물어보세요.</h2>
+          <ul class="contact-list">
+            <li><span>TEL</span><a href="tel:000-000-0000">000-000-0000</a></li>
+            <li><span>MAIL</span><a href="mailto:sales@jsec.co.kr">sales@jsec.co.kr</a></li>
+            <li><span>ADDR</span>충청남도 아산시 둔포면 (상세주소 입력)</li>
           </ul>
         </div>
+
         <form class="form" id="contact-form">
-          <label>이름<input type="text" name="name" required placeholder="홍길동"></label>
-          <label>이메일<input type="email" name="email" required placeholder="you@example.com"></label>
-          <label>문의 내용<textarea name="message" rows="5" required placeholder="만들고 싶은 것을 자유롭게 적어주세요."></textarea></label>
-          <button type="submit" class="btn btn-primary">보내기</button>
+          <div class="types" role="radiogroup" aria-label="문의 종류">
+            <label><input type="radio" name="type" value="sales" checked><span>견적 · 구매</span></label>
+            <label><input type="radio" name="type" value="service"><span>A/S · 점검</span></label>
+            <label><input type="radio" name="type" value="tech"><span>기술 상담</span></label>
+          </div>
+          <div class="row">
+            <label>회사명<input name="company" required placeholder="(주)회사명"></label>
+            <label>담당자<input name="name" required placeholder="홍길동"></label>
+          </div>
+          <div class="row">
+            <label>연락처<input name="phone" type="tel" required placeholder="010-0000-0000"></label>
+            <label>이메일<input name="email" type="email" required placeholder="you@company.com"></label>
+          </div>
+          <label>관심 제품 / 장비 모델<input name="product" id="product-field" placeholder="예: 항온항습챔버, 열충격시험기"></label>
+          <label id="message-label">문의 내용<textarea name="message" rows="4" required placeholder="시험 규격, 시편 크기, 온도 범위 등을 적어주시면 더 정확히 안내드립니다."></textarea></label>
+          <button type="submit" class="btn btn-dark">문의 보내기</button>
           <p class="form-result" aria-live="polite"></p>
         </form>
       </div>
@@ -131,7 +313,11 @@
   </main>
 
   <footer class="footer">
-    <div class="container">© <span id="year"></span> 29maker. All rights reserved.</div>
+    <div class="wrap footer-inner">
+      <div class="logo"><span class="logo-mark">JS</span><span class="logo-text">ENGINEERING</span></div>
+      <p>(주)제이에스엔지니어링 · 충청남도 아산시 둔포면 · 사업자등록번호 000-00-00000</p>
+      <p>ESPEC은 ESPEC Corp.의 상표입니다. © <span id="year"></span> JS Engineering.</p>
+    </div>
   </footer>
 
   <script src="script.js"></script>
