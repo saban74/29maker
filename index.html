@@ -29,6 +29,12 @@
       <linearGradient id="lcd" x1="0" y1="0" x2="0" y2="1">
         <stop offset="0" stop-color="#3a7bd5"/><stop offset="1" stop-color="#16345e"/>
       </linearGradient>
+      <linearGradient id="door-blue" x1="0" y1="0" x2="1" y2="0">
+        <stop offset="0" stop-color="#c3cfdc"/><stop offset="1" stop-color="#9fb1c6"/>
+      </linearGradient>
+      <linearGradient id="panel" x1="0" y1="0" x2="1" y2="0">
+        <stop offset="0" stop-color="#ebe8e2"/><stop offset="1" stop-color="#d3cfc7"/>
+      </linearGradient>
       <radialGradient id="glass" cx=".35" cy=".3" r=".9">
         <stop offset="0" stop-color="#fff" stop-opacity=".45"/><stop offset=".5" stop-color="#fff" stop-opacity="0"/><stop offset="1" stop-color="#000" stop-opacity=".35"/>
       </radialGradient>
@@ -36,37 +42,151 @@
         <rect width="10" height="10" fill="#1b1e23"/><rect width="5" height="10" fill="#ffc400"/>
       </pattern>
     </defs>
-    <!-- 대형 항온항습챔버 -->
-    <symbol id="ico-tall" viewBox="0 0 120 160">
-      <rect x="20" y="8" width="80" height="140" rx="6" fill="none" stroke="currentColor" stroke-width="2.5"/>
-      <rect x="30" y="24" width="44" height="64" rx="4" fill="url(#g-window)" opacity=".85"/>
-      <rect x="80" y="24" width="12" height="20" rx="2" fill="none" stroke="currentColor" stroke-width="2"/>
-      <line x1="20" y1="104" x2="100" y2="104" stroke="currentColor" stroke-width="2"/>
-      <line x1="30" y1="148" x2="30" y2="154" stroke="currentColor" stroke-width="2.5"/>
-      <line x1="90" y1="148" x2="90" y2="154" stroke="currentColor" stroke-width="2.5"/>
+    <!-- ===== 장비 정면도 (ESPEC 외형도 치수 기준, 단위 mm, 바닥 = 2400) ===== -->
+    <!-- G = 창문/표시등 색 (온도에 따라 바뀜) -->
+
+    <!-- SH-642 : W540 × H720, 실험대 위 -->
+    <symbol id="m-sh" viewBox="0 0 700 2400">
+      <rect x="0" y="1630" width="700" height="34" fill="#3a3f46"/>
+      <rect x="24" y="1664" width="30" height="736" fill="#2a2e34"/><rect x="646" y="1664" width="30" height="736" fill="#2a2e34"/>
+      <rect x="54" y="2240" width="592" height="20" fill="#2a2e34"/>
+      <rect x="80" y="910" width="540" height="700" rx="10" fill="url(#metal)"/>
+      <rect x="80" y="910" width="540" height="560" rx="10" fill="url(#door-blue)"/>
+      <rect x="80" y="910" width="540" height="10" rx="5" fill="#fff" opacity=".6"/>
+      <rect x="150" y="935" width="300" height="100" rx="8" fill="#5a6068"/>
+      <rect x="196" y="950" width="110" height="70" rx="4" fill="url(#lcd)"/>
+      <g fill="#9ba1a9"><rect x="166" y="952" width="18" height="14" rx="2"/><rect x="166" y="974" width="18" height="14" rx="2"/><rect x="166" y="996" width="18" height="14" rx="2"/></g>
+      <circle cx="350" cy="1000" r="16" fill="#9ba1a9"/>
+      <rect x="400" y="960" width="36" height="52" rx="4" fill="#3a3f46"/>
+      <rect x="160" y="1052" width="280" height="10" rx="5" style="fill:var(--glow);opacity:var(--glow-op)"/>
+      <rect x="586" y="1150" width="18" height="220" rx="9" fill="#4a4f56"/>
+      <path d="M80 1470 H620" stroke="#a6acb3" stroke-width="4"/>
+      <rect x="110" y="1610" width="40" height="20" fill="#22262b"/><rect x="550" y="1610" width="40" height="20" fill="#22262b"/>
     </symbol>
-    <!-- 벤치탑(소형) -->
-    <symbol id="ico-bench" viewBox="0 0 120 160">
-      <rect x="18" y="58" width="84" height="70" rx="6" fill="none" stroke="currentColor" stroke-width="2.5"/>
-      <rect x="28" y="70" width="46" height="46" rx="4" fill="url(#g-window)" opacity=".85"/>
-      <circle cx="88" cy="80" r="5" fill="none" stroke="currentColor" stroke-width="2"/>
-      <line x1="82" y1="100" x2="94" y2="100" stroke="currentColor" stroke-width="2"/>
-      <line x1="10" y1="134" x2="110" y2="134" stroke="currentColor" stroke-width="2.5"/>
+
+    <!-- PL-2J : W910(+힌지 28.5) × H1590 -->
+    <symbol id="m-pl" viewBox="0 0 940 2400">
+      <rect x="28" y="810" width="702" height="1554" fill="url(#metal)"/>
+      <rect x="0" y="840" width="30" height="960" rx="6" fill="#b9bec4"/>
+      <rect x="0" y="940" width="34" height="90" rx="6" fill="#8b9199"/><rect x="0" y="1620" width="34" height="90" rx="6" fill="#8b9199"/>
+      <rect x="28" y="810" width="702" height="10" fill="#fff" opacity=".7"/>
+      <rect x="40" y="830" width="678" height="975" rx="6" fill="url(#metal)" stroke="#a6acb3" stroke-width="3"/>
+      <rect x="200" y="930" width="340" height="520" rx="10" fill="#9aa0a8"/>
+      <rect x="216" y="946" width="308" height="488" rx="6" style="fill:var(--glow);opacity:var(--glow-op)"/>
+      <path d="M226 1190 H514" stroke="#fff" stroke-opacity=".35" stroke-width="5"/>
+      <rect x="216" y="946" width="308" height="488" rx="6" fill="url(#glass)"/>
+      <rect x="200" y="1490" width="340" height="300" rx="6" fill="#e4e1da"/>
+      <rect x="572" y="1100" width="96" height="300" rx="12" fill="#c3c8ce" stroke="#8b9199" stroke-width="4"/>
+      <rect x="604" y="1130" width="32" height="240" rx="16" fill="#eef0f2" stroke="#7d838c" stroke-width="4"/>
+      <rect x="40" y="1820" width="678" height="536" fill="#d7dbdf"/>
+      <path d="M40 1820 H718" stroke="#a6acb3" stroke-width="4"/>
+      <rect x="150" y="1850" width="420" height="470" rx="6" fill="#e4e1da" stroke="#a6acb3" stroke-width="3"/>
+      <rect x="160" y="1860" width="400" height="40" rx="4" fill="#cfcac0"/>
+      <rect x="340" y="1960" width="40" height="250" rx="20" fill="#f6f6f4" stroke="#7d838c" stroke-width="5"/>
+      <rect x="730" y="810" width="210" height="1554" fill="url(#column)"/>
+      <rect x="730" y="810" width="210" height="14" fill="#3fbf6a"/>
+      <rect x="760" y="1060" width="150" height="140" rx="8" fill="#15181c"/>
+      <rect x="770" y="1070" width="130" height="120" rx="4" fill="url(#lcd)"/>
+      <g fill="#9ba1a9"><rect x="770" y="1225" width="36" height="16" rx="3"/><rect x="814" y="1225" width="36" height="16" rx="3"/><circle cx="880" cy="1233" r="12"/></g>
+      <rect x="770" y="1280" width="130" height="34" rx="4" fill="#24272c"/>
+      <path d="M738 1350 H932 M738 1460 H932 M738 1570 H932 M738 1680 H932 M738 1800 H932" stroke="#1f2226" stroke-width="5"/>
+      <rect x="20" y="2356" width="925" height="12" fill="#2a2e34"/>
+      <g fill="#22262b"><rect x="90" y="2368" width="60" height="32" rx="8"/><rect x="800" y="2368" width="60" height="32" rx="8"/></g>
     </symbol>
-    <!-- 열충격(2존) -->
-    <symbol id="ico-shock" viewBox="0 0 120 160">
-      <rect x="14" y="10" width="92" height="138" rx="6" fill="none" stroke="currentColor" stroke-width="2.5"/>
-      <rect x="24" y="22" width="72" height="34" rx="3" style="fill:var(--hot)" opacity=".85"/>
-      <rect x="24" y="64" width="72" height="22" rx="3" fill="none" stroke="currentColor" stroke-width="2"/>
-      <rect x="24" y="94" width="72" height="34" rx="3" style="fill:var(--cold)" opacity=".85"/>
-      <path d="M60 66 v18 M54 72 l6 -6 6 6 M54 78 l6 6 6 -6" fill="none" stroke="currentColor" stroke-width="2"/>
+
+    <!-- ARGF-0400 : W800(+힌지 28.5) × H1783, 관찰창 180×260 -->
+    <symbol id="m-ar" viewBox="0 0 830 2400">
+      <rect x="0" y="660" width="30" height="940" rx="6" fill="#b9bec4"/>
+      <rect x="28" y="617" width="800" height="1693" fill="url(#metal)"/>
+      <rect x="28" y="617" width="800" height="10" fill="#fff" opacity=".7"/>
+      <rect x="28" y="617" width="196" height="1035" fill="url(#column)"/>
+      <rect x="222" y="617" width="10" height="1035" fill="#9cc0ec"/>
+      <rect x="50" y="690" width="152" height="130" rx="6" fill="#15181c"/>
+      <rect x="60" y="700" width="132" height="110" rx="4" fill="url(#lcd)"/>
+      <g fill="#9ba1a9"><rect x="60" y="845" width="34" height="14" rx="3"/><rect x="100" y="845" width="34" height="14" rx="3"/><circle cx="168" cy="852" r="11"/></g>
+      <rect x="60" y="890" width="132" height="30" rx="4" fill="#24272c"/>
+      <rect x="240" y="627" width="580" height="1018" rx="6" fill="url(#metal)" stroke="#a6acb3" stroke-width="3"/>
+      <rect x="282" y="692" width="196" height="276" rx="8" fill="#9aa0a8"/>
+      <rect x="290" y="700" width="180" height="260" rx="5" style="fill:var(--glow);opacity:var(--glow-op)"/>
+      <rect x="290" y="700" width="180" height="260" rx="5" fill="url(#glass)"/>
+      <rect x="700" y="1020" width="80" height="220" rx="10" fill="#c3c8ce" stroke="#8b9199" stroke-width="4"/>
+      <rect x="724" y="1045" width="32" height="170" rx="16" fill="#eef0f2" stroke="#7d838c" stroke-width="4"/>
+      <rect x="28" y="1652" width="800" height="658" fill="#d2d6db"/>
+      <path d="M28 1652 H828 M224 1652 V2310 M480 1652 V2310" stroke="#a6acb3" stroke-width="4"/>
+      <rect x="20" y="2300" width="816" height="14" fill="#2a2e34"/>
+      <g fill="#22262b"><rect x="70" y="2314" width="70" height="86" rx="10"/><rect x="720" y="2314" width="70" height="86" rx="10"/></g>
     </symbol>
-    <!-- 워크인 챔버 -->
-    <symbol id="ico-walk" viewBox="0 0 120 160">
-      <path d="M8 148 V40 L60 16 L112 40 V148 Z" fill="none" stroke="currentColor" stroke-width="2.5"/>
-      <rect x="40" y="76" width="40" height="72" rx="3" fill="url(#g-window)" opacity=".85"/>
-      <rect x="18" y="56" width="14" height="14" rx="2" fill="none" stroke="currentColor" stroke-width="2"/>
-      <circle cx="74" cy="114" r="2.5" fill="currentColor"/>
+
+    <!-- TCC-151W : W1000 × H1828 (상부 기계실 273) -->
+    <symbol id="m-tcc" viewBox="0 0 1000 2400">
+      <path d="M300 845 L340 572 H760 L800 845 Z" fill="#c7ccd2"/>
+      <g fill="#2a2e34"><rect x="380" y="640" width="70" height="40" rx="4"/><rect x="560" y="640" width="70" height="40" rx="4"/></g>
+      <path d="M360 760 H740 M360 790 H740" stroke="#1f2226" stroke-width="10" stroke-dasharray="40 16"/>
+      <rect x="0" y="845" width="1000" height="1535" fill="url(#metal)"/>
+      <rect x="0" y="845" width="1000" height="10" fill="#fff" opacity=".7"/>
+      <rect x="0" y="845" width="228" height="910" fill="url(#column)"/>
+      <rect x="30" y="866" width="168" height="12" rx="6" style="fill:var(--glow);opacity:var(--glow-op)"/>
+      <rect x="40" y="910" width="148" height="120" rx="6" fill="#15181c"/>
+      <rect x="50" y="920" width="128" height="100" rx="4" fill="url(#lcd)"/>
+      <g fill="#9ba1a9"><rect x="50" y="1055" width="34" height="14" rx="3"/><rect x="92" y="1055" width="34" height="14" rx="3"/><circle cx="160" cy="1062" r="11"/></g>
+      <path d="M8 1120 H220 M8 1280 H220 M8 1440 H220 M8 1600 H220" stroke="#1f2226" stroke-width="5"/>
+      <rect x="236" y="855" width="756" height="892" rx="6" fill="url(#metal)" stroke="#a6acb3" stroke-width="3"/>
+      <rect x="880" y="1150" width="80" height="220" rx="10" fill="#c3c8ce" stroke="#8b9199" stroke-width="4"/>
+      <rect x="904" y="1175" width="32" height="170" rx="16" fill="#eef0f2" stroke="#7d838c" stroke-width="4"/>
+      <circle cx="600" cy="1300" r="30" fill="#c3c8ce" stroke="#8b9199" stroke-width="4"/>
+      <rect x="0" y="1755" width="1000" height="625" fill="#d2d6db"/>
+      <path d="M0 1755 H1000 M228 1755 V2380" stroke="#a6acb3" stroke-width="4"/>
+      <rect x="40" y="1820" width="150" height="120" rx="6" fill="#3a3f46"/>
+      <g fill="#1f2226"><rect x="330" y="2290" width="110" height="26" rx="4"/><rect x="760" y="2290" width="110" height="26" rx="4"/></g>
+      <rect x="0" y="2380" width="1000" height="20" fill="#2a2e34"/>
+    </symbol>
+
+    <!-- TSA-73ES-W : W1310 × H1800 (열충격) -->
+    <symbol id="m-tsa" viewBox="0 0 1310 2400">
+      <rect x="0" y="600" width="1310" height="1780" fill="url(#metal)"/>
+      <rect x="0" y="600" width="1310" height="10" fill="#fff" opacity=".7"/>
+      <path d="M235 610 V2380" stroke="#a6acb3" stroke-width="4"/>
+      <rect x="250" y="615" width="550" height="560" rx="6" fill="url(#metal)" stroke="#a6acb3" stroke-width="3"/>
+      <rect x="280" y="645" width="230" height="16" rx="4" style="fill:var(--hot)"/>
+      <ellipse cx="525" cy="900" rx="40" ry="16" fill="none" stroke="#8b9199" stroke-width="5"/>
+      <rect x="250" y="1185" width="550" height="520" rx="6" fill="url(#metal)" stroke="#a6acb3" stroke-width="3"/>
+      <rect x="740" y="1330" width="30" height="220" rx="15" fill="#7d838c"/>
+      <rect x="250" y="1715" width="550" height="655" rx="6" fill="#d2d6db" stroke="#a6acb3" stroke-width="3"/>
+      <rect x="280" y="2320" width="230" height="16" rx="4" style="fill:var(--cold)"/>
+      <rect x="815" y="600" width="495" height="1780" fill="#d9dde1"/>
+      <path d="M815 600 V2380" stroke="#a6acb3" stroke-width="4"/>
+      <rect x="880" y="640" width="370" height="14" rx="7" style="fill:var(--glow);opacity:var(--glow-op)"/>
+      <rect x="900" y="830" width="200" height="150" rx="8" fill="#15181c"/>
+      <rect x="910" y="840" width="180" height="130" rx="4" fill="url(#lcd)"/>
+      <g fill="#9ba1a9"><rect x="910" y="1005" width="40" height="16" rx="3"/><rect x="960" y="1005" width="40" height="16" rx="3"/><circle cx="1070" cy="1013" r="13"/></g>
+      <rect x="900" y="1060" width="200" height="380" rx="6" fill="#3a3f46"/>
+      <path d="M910 1150 H1090 M910 1250 H1090 M910 1350 H1090" stroke="#24272c" stroke-width="6"/>
+      <rect x="1200" y="1150" width="22" height="200" rx="11" fill="#7d838c"/>
+      <rect x="0" y="2380" width="1310" height="20" fill="#2a2e34"/>
+    </symbol>
+
+    <!-- EBU 워크인 : W3150 × H2305, 출입문 850×1800, 관찰창 180×289, -30~+80°C -->
+    <symbol id="m-walk" viewBox="0 0 3560 2400">
+      <rect x="3150" y="170" width="410" height="2230" fill="#b4b9bf"/>
+      <g fill="#2a2e34"><rect x="3220" y="700" width="280" height="40" rx="6"/><rect x="3220" y="770" width="280" height="40" rx="6"/><rect x="3220" y="1500" width="280" height="40" rx="6"/></g>
+      <rect x="0" y="95" width="3150" height="2230" fill="url(#panel)"/>
+      <rect x="0" y="95" width="3150" height="14" fill="#fff" opacity=".6"/>
+      <path d="M65 95 V2325 M690 95 V2325 M1100 95 V2325 M2620 95 V2325 M3085 95 V2325" stroke="#b3afa6" stroke-width="5"/>
+      <rect x="1150" y="525" width="850" height="1800" rx="8" fill="#e7e4dd" stroke="#a39f96" stroke-width="6"/>
+      <rect x="1470" y="710" width="200" height="309" rx="10" fill="#8f8b83"/>
+      <rect x="1480" y="720" width="180" height="289" rx="6" style="fill:var(--glow);opacity:var(--glow-op)"/>
+      <rect x="1480" y="720" width="180" height="289" rx="6" fill="url(#glass)"/>
+      <rect x="1180" y="1150" width="26" height="520" rx="13" fill="#4a4f56"/>
+      <g fill="#4a4f56"><rect x="1166" y="1150" width="60" height="30" rx="6"/><rect x="1166" y="1640" width="60" height="30" rx="6"/></g>
+      <g fill="#6b6f76"><rect x="1985" y="680" width="40" height="110" rx="6"/><rect x="1985" y="1400" width="40" height="110" rx="6"/><rect x="1985" y="2060" width="40" height="110" rx="6"/></g>
+      <rect x="2330" y="95" width="56" height="1060" fill="#a8adb4"/>
+      <rect x="2280" y="1150" width="156" height="230" rx="10" fill="#3a3f46"/>
+      <rect x="2296" y="1170" width="124" height="100" rx="4" fill="url(#lcd)"/>
+      <g fill="#9ba1a9"><circle cx="2320" cy="1310" r="10"/><circle cx="2358" cy="1310" r="10"/><circle cx="2396" cy="1310" r="10"/></g>
+      <rect x="2500" y="1330" width="80" height="80" rx="6" fill="#c5c1b8" stroke="#a39f96" stroke-width="4"/>
+      <circle cx="225" cy="2025" r="30" fill="#c5c1b8" stroke="#8f8b83" stroke-width="6"/>
+      <rect x="1030" y="2335" width="190" height="10" rx="5" style="fill:var(--glow);opacity:var(--glow-op)"/>
+      <rect x="0" y="2325" width="3150" height="75" fill="#8f8b83"/>
     </symbol>
     <!-- HAST(압력용기) -->
     <symbol id="ico-hast" viewBox="0 0 120 160">
@@ -135,155 +255,12 @@
       <div class="stage-wrap">
         <p class="stage-hint" id="stage-hint">장비를 눌러 살펴보세요</p>
         <div class="stage" id="stage" role="group" aria-label="장비 라인업">
-
-          <button class="unit" data-id="sh" aria-pressed="false" aria-label="벤치탑 항온항습기">
-            <svg viewBox="0 0 72 220">
-              <rect x="4" y="118" width="64" height="64" rx="4" fill="url(#metal)"/>
-              <rect x="4" y="118" width="64" height="4" rx="2" fill="#fff" opacity=".6"/>
-              <rect x="10" y="128" width="34" height="42" rx="2" class="glow"/>
-              <rect x="10" y="128" width="34" height="42" rx="2" fill="url(#glass)"/>
-              <rect x="50" y="128" width="12" height="16" rx="1.5" class="screen"/>
-              <circle cx="56" cy="158" r="3" fill="#8b9199"/>
-              <rect x="0" y="184" width="72" height="5" rx="1" fill="#3a3f46"/>
-              <path d="M6 189 V208 M66 189 V208" stroke="#3a3f46" stroke-width="3"/>
-              <circle cx="6" cy="212" r="4" fill="#22262b"/><circle cx="66" cy="212" r="4" fill="#22262b"/>
-            </svg>
-            <span class="unit-label">SH</span>
-          </button>
-
-          <button class="unit" data-id="platinous" aria-pressed="false" aria-label="항온항습챔버 PL-2J">
-            <!-- PL-2J 실제 치수(mm) 기준 정면도: 폭 910 + 힌지 28.5, 높이 1590 -->
-            <svg viewBox="0 0 94 220">
-              <g transform="scale(.1)">
-                <!-- 본체 -->
-                <rect x="28" y="570" width="702" height="1554" fill="url(#metal)"/>
-                <rect x="0" y="600" width="30" height="960" rx="6" fill="#b9bec4"/>
-                <rect x="0" y="700" width="34" height="90" rx="6" fill="#8b9199"/>
-                <rect x="0" y="1380" width="34" height="90" rx="6" fill="#8b9199"/>
-                <rect x="28" y="570" width="702" height="10" fill="#fff" opacity=".7"/>
-                <!-- 문 (위) -->
-                <rect x="40" y="590" width="678" height="975" rx="6" fill="url(#metal)" stroke="#a6acb3" stroke-width="3"/>
-                <rect x="200" y="690" width="340" height="520" rx="10" fill="#9aa0a8"/>
-                <rect x="216" y="706" width="308" height="488" rx="6" class="glow"/>
-                <path d="M226 950 H514" stroke="#fff" stroke-opacity=".35" stroke-width="5"/>
-                <rect x="216" y="706" width="308" height="488" rx="6" fill="url(#glass)"/>
-                <rect x="200" y="1250" width="340" height="300" rx="6" fill="#e4e1da"/>
-                <!-- 손잡이 -->
-                <rect x="572" y="860" width="96" height="300" rx="12" fill="#c3c8ce" stroke="#8b9199" stroke-width="4"/>
-                <rect x="604" y="890" width="32" height="240" rx="16" fill="#eef0f2" stroke="#7d838c" stroke-width="4"/>
-                <!-- 아래 칸 + 물탱크 서랍 -->
-                <rect x="40" y="1580" width="678" height="536" fill="#d7dbdf"/>
-                <path d="M40 1580 H718" stroke="#a6acb3" stroke-width="4"/>
-                <rect x="150" y="1610" width="420" height="470" rx="6" fill="#e4e1da" stroke="#a6acb3" stroke-width="3"/>
-                <rect x="160" y="1620" width="400" height="40" rx="4" fill="#cfcac0"/>
-                <rect x="340" y="1720" width="40" height="250" rx="20" fill="#f6f6f4" stroke="#7d838c" stroke-width="5"/>
-                <!-- 오른쪽 조작부 -->
-                <rect x="730" y="570" width="210" height="1554" fill="url(#column)"/>
-                <rect x="730" y="570" width="210" height="14" fill="#3fbf6a"/>
-                <rect x="760" y="820" width="150" height="140" rx="8" fill="#15181c"/>
-                <rect x="770" y="830" width="130" height="120" rx="4" class="lcd"/>
-                <g fill="#9ba1a9"><rect x="770" y="985" width="36" height="16" rx="3"/><rect x="814" y="985" width="36" height="16" rx="3"/><circle cx="880" cy="993" r="12"/></g>
-                <rect x="770" y="1040" width="130" height="34" rx="4" fill="#24272c"/>
-                <path d="M738 1110 H932 M738 1220 H932 M738 1330 H932 M738 1440 H932 M738 1560 H932" stroke="#1f2226" stroke-width="5"/>
-                <rect x="756" y="1135" width="10" height="60" rx="4" fill="#8b9199"/>
-                <!-- 받침 + 바퀴 -->
-                <rect x="20" y="2116" width="925" height="12" fill="#2a2e34"/>
-                <g fill="#22262b"><rect x="90" y="2128" width="60" height="32" rx="8"/><rect x="800" y="2128" width="60" height="32" rx="8"/></g>
-              </g>
-            </svg>
-            <span class="unit-label">PLATINOUS</span>
-          </button>
-
-          <button class="unit" data-id="tsa" aria-pressed="false" aria-label="열충격시험기">
-            <svg viewBox="0 0 96 220">
-              <rect x="4" y="26" width="88" height="178" rx="4" fill="url(#metal)"/>
-              <rect x="4" y="26" width="88" height="5" rx="2" fill="#fff" opacity=".6"/>
-              <rect x="10" y="38" width="76" height="46" rx="2" fill="none" stroke="#9aa0a8" stroke-width=".8"/>
-              <rect x="16" y="44" width="40" height="4" rx="1" style="fill:var(--hot)"/>
-              <path d="M16 58 H80 M16 64 H80 M16 70 H80 M16 76 H80" stroke="#a3a9b1"/>
-              <rect x="14" y="94" width="50" height="54" rx="2" class="glow"/>
-              <rect x="14" y="94" width="50" height="54" rx="2" fill="url(#glass)"/>
-              <rect x="70" y="96" width="16" height="24" rx="1.5" class="screen"/>
-              <rect x="10" y="158" width="76" height="40" rx="2" fill="none" stroke="#9aa0a8" stroke-width=".8"/>
-              <rect x="16" y="164" width="40" height="4" rx="1" style="fill:var(--cold)"/>
-              <path d="M16 176 H80 M16 182 H80 M16 188 H80" stroke="#a3a9b1"/>
-              <rect x="2" y="202" width="92" height="6" rx="1" fill="#3a3f46"/>
-              <circle cx="12" cy="212" r="4" fill="#22262b"/><circle cx="84" cy="212" r="4" fill="#22262b"/>
-            </svg>
-            <span class="unit-label">TSA</span>
-          </button>
-
-          <button class="unit" data-id="walkin" aria-pressed="false" aria-label="워크인 챔버">
-            <svg viewBox="0 0 172 220">
-              <rect x="4" y="16" width="164" height="192" rx="3" fill="url(#metal)"/>
-              <rect x="4" y="16" width="164" height="5" rx="2" fill="#fff" opacity=".6"/>
-              <path d="M45 21 V208 M127 21 V208" stroke="#aeb3ba"/>
-              <rect x="154" y="6" width="8" height="10" rx="2" class="glow"/>
-              <rect x="12" y="58" width="26" height="38" rx="2" fill="#2a2e34"/>
-              <rect x="15" y="62" width="20" height="16" rx="1" class="screen"/>
-              <rect x="58" y="62" width="56" height="146" rx="2" fill="#e3e6ea" stroke="#9aa0a8" stroke-width=".8"/>
-              <rect x="72" y="78" width="28" height="36" rx="2" class="glow"/>
-              <rect x="72" y="78" width="28" height="36" rx="2" fill="url(#glass)"/>
-              <rect x="104" y="130" width="4" height="30" rx="2" fill="#7d838c"/>
-              <rect x="0" y="206" width="172" height="6" rx="1" fill="#3a3f46"/>
-            </svg>
-            <span class="unit-label">WALK-IN</span>
-          </button>
-
-          <button class="unit" data-id="ar" aria-pressed="false" aria-label="급속 온도변화 챔버">
-            <svg viewBox="0 0 112 220">
-              <rect x="4" y="20" width="104" height="184" rx="4" fill="url(#metal)"/>
-              <rect x="4" y="20" width="104" height="5" rx="2" fill="#fff" opacity=".6"/>
-              <rect x="8" y="30" width="72" height="120" rx="3" fill="none" stroke="#9aa0a8" stroke-width=".8"/>
-              <rect x="14" y="40" width="60" height="82" rx="2" class="glow"/>
-              <rect x="14" y="40" width="60" height="82" rx="2" fill="url(#glass)"/>
-              <path d="M16 68 H72 M16 96 H72" stroke="#fff" stroke-opacity=".35"/>
-              <rect x="74" y="96" width="3" height="28" rx="1.5" fill="#7d838c"/>
-              <rect x="84" y="40" width="20" height="30" rx="1.5" class="screen"/>
-              <circle cx="89" cy="80" r="2.5" fill="#2fbf71"/><circle cx="97" cy="80" r="2.5" fill="#8b9199"/>
-              <path d="M14 162 H98 M14 168 H98 M14 174 H98 M14 180 H98 M14 186 H98 M14 192 H98" stroke="#a3a9b1"/>
-              <rect x="2" y="202" width="108" height="6" rx="1" fill="#3a3f46"/>
-              <circle cx="12" cy="212" r="4" fill="#22262b"/><circle cx="100" cy="212" r="4" fill="#22262b"/>
-            </svg>
-            <span class="unit-label">AR</span>
-          </button>
-
-          <button class="unit" data-id="hast" aria-pressed="false" aria-label="HAST 챔버">
-            <svg viewBox="0 0 92 220">
-              <path d="M40 92 V80 H56 V74" fill="none" stroke="#7d838c" stroke-width="3"/>
-              <circle cx="62" cy="72" r="6" fill="#e3e6ea" stroke="#7d838c" stroke-width="1.5"/>
-              <rect x="4" y="90" width="84" height="114" rx="6" fill="url(#metal)"/>
-              <rect x="4" y="90" width="84" height="5" rx="2" fill="#fff" opacity=".6"/>
-              <circle cx="38" cy="138" r="28" fill="#cfd3d8" stroke="#8b9199" stroke-width="2"/>
-              <circle cx="38" cy="138" r="15" class="glow"/>
-              <circle cx="38" cy="138" r="15" fill="url(#glass)"/>
-              <g fill="#8b9199"><circle cx="38" cy="114" r="1.6"/><circle cx="38" cy="162" r="1.6"/><circle cx="14" cy="138" r="1.6"/><circle cx="62" cy="138" r="1.6"/></g>
-              <rect x="70" y="102" width="12" height="20" rx="1.5" class="screen"/>
-              <path d="M10 180 H82 M10 186 H82 M10 192 H82" stroke="#a3a9b1"/>
-              <rect x="2" y="202" width="88" height="6" rx="1" fill="#3a3f46"/>
-              <circle cx="12" cy="212" r="4" fill="#22262b"/><circle cx="80" cy="212" r="4" fill="#22262b"/>
-            </svg>
-            <span class="unit-label">HAST</span>
-          </button>
-
-          <button class="unit" data-id="battery" aria-pressed="false" aria-label="2차전지 시험장비">
-            <svg viewBox="0 0 92 220">
-              <rect x="28" y="38" width="36" height="12" rx="2" fill="#3a3f46"/>
-              <rect x="4" y="48" width="84" height="156" rx="4" fill="url(#metal)"/>
-              <rect x="4" y="48" width="84" height="5" rx="2" fill="#fff" opacity=".6"/>
-              <rect x="14" y="62" width="46" height="58" rx="2" class="glow"/>
-              <rect x="14" y="62" width="46" height="58" rx="2" fill="url(#glass)"/>
-              <rect x="29" y="78" width="16" height="28" rx="2" fill="none" stroke="#fff" stroke-opacity=".7" stroke-width="1.5"/>
-              <rect x="34" y="75" width="6" height="3" fill="#fff" fill-opacity=".7"/>
-              <rect x="66" y="62" width="16" height="22" rx="1.5" class="screen"/>
-              <circle cx="74" cy="94" r="3" fill="#ff3b30"/>
-              <rect x="4" y="176" width="84" height="12" fill="url(#hazard)"/>
-              <rect x="2" y="202" width="88" height="6" rx="1" fill="#3a3f46"/>
-              <circle cx="12" cy="212" r="4" fill="#22262b"/><circle cx="80" cy="212" r="4" fill="#22262b"/>
-            </svg>
-            <span class="unit-label">BATTERY</span>
-          </button>
-
+          <button class="unit" data-id="sh" aria-pressed="false" aria-label="벤치탑 항온항습기 SH-642"><svg viewBox="0 0 700 2400"><use href="#m-sh"/></svg><span class="unit-label">SH-642</span></button>
+          <button class="unit" data-id="platinous" aria-pressed="false" aria-label="항온항습챔버 PL-2J"><svg viewBox="0 0 940 2400"><use href="#m-pl"/></svg><span class="unit-label">PL-2J</span></button>
+          <button class="unit" data-id="ar" aria-pressed="false" aria-label="AR 시리즈 ARGF-0400"><svg viewBox="0 0 830 2400"><use href="#m-ar"/></svg><span class="unit-label">ARGF-0400</span></button>
+          <button class="unit" data-id="tcc" aria-pressed="false" aria-label="온도 사이클 챔버 TCC-151W"><svg viewBox="0 0 1000 2400"><use href="#m-tcc"/></svg><span class="unit-label">TCC-151W</span></button>
+          <button class="unit" data-id="tsa" aria-pressed="false" aria-label="열충격시험기 TSA-73ES-W"><svg viewBox="0 0 1310 2400"><use href="#m-tsa"/></svg><span class="unit-label">TSA-73ES-W</span></button>
+          <button class="unit" data-id="walkin" aria-pressed="false" aria-label="워크인 챔버 EBU"><svg viewBox="0 0 3560 2400"><use href="#m-walk"/></svg><span class="unit-label">EBU WALK-IN</span></button>
         </div>
       </div>
 
@@ -315,50 +292,72 @@
 
         <div class="products" id="product-list">
           <article class="product" data-id="platinous" data-cat="temp">
-            <div class="product-art"><svg><use href="#ico-tall"/></svg></div>
+            <div class="product-art"><svg viewBox="0 600 940 1800"><use href="#m-pl"/></svg></div>
             <div class="product-body">
-              <p class="series">PLATINOUS series</p>
+              <p class="series">PLATINOUS J · PL-2J</p>
               <h3>항온항습챔버</h3>
-              <p class="spec"><span>-70 ~ +180°C</span><span>20 ~ 98% RH</span></p>
+              <p class="spec"><span>-40 ~ +100°C</span><span>20 ~ 98% RH</span><span>W910 × H1590</span></p>
               <p class="desc">가장 많이 쓰이는 범용 신뢰성 시험장비. 정밀한 온습도 제어.</p>
             </div>
-            <button class="product-ask" data-product="항온항습챔버 (PLATINOUS)">이 제품 문의 <span>→</span></button>
+            <button class="product-ask" data-product="항온항습챔버 PL-2J">이 제품 문의 <span>→</span></button>
           </article>
 
           <article class="product" data-id="sh" data-cat="temp">
-            <div class="product-art"><svg><use href="#ico-bench"/></svg></div>
+            <div class="product-art"><svg viewBox="0 600 700 1800"><use href="#m-sh"/></svg></div>
             <div class="product-body">
-              <p class="series">SH series</p>
+              <p class="series">SH series · SH-642</p>
               <h3>벤치탑 항온항습기</h3>
-              <p class="spec"><span>-60 ~ +150°C</span><span>책상 위 설치</span></p>
-              <p class="desc">작은 공간에서 부품·모듈 단위 시험을 빠르게.</p>
+              <p class="spec"><span>-40 ~ +150°C</span><span>W540 × H720</span></p>
+              <p class="desc">책상 위에 올려 쓰는 소형 챔버. 부품·모듈 단위 시험을 빠르게.</p>
             </div>
-            <button class="product-ask" data-product="벤치탑 항온항습기 (SH)">이 제품 문의 <span>→</span></button>
+            <button class="product-ask" data-product="벤치탑 항온항습기 SH-642">이 제품 문의 <span>→</span></button>
           </article>
 
-          <article class="product" data-id="ar" data-cat="temp semi">
-            <div class="product-art"><svg><use href="#ico-tall"/></svg></div>
+          <article class="product" data-id="ar" data-cat="temp large">
+            <div class="product-art"><svg viewBox="0 600 830 1800"><use href="#m-ar"/></svg></div>
             <div class="product-body">
-              <p class="series">AR series</p>
-              <h3>급속 온도변화 챔버</h3>
-              <p class="spec"><span>-75 ~ +180°C</span><span>고속 온도 사이클</span></p>
-              <p class="desc">빠른 온도 변화로 스트레스 스크리닝(ESS) 시간을 단축.</p>
+              <p class="series">AR series · ARGF-0400</p>
+              <h3>대용량 환경시험챔버</h3>
+              <p class="spec"><span>깊이 2242</span><span>W800 × H1783</span></p>
+              <p class="desc">넓고 깊은 시험공간. 큰 시편이나 많은 수량을 한 번에.</p>
             </div>
-            <button class="product-ask" data-product="급속 온도변화 챔버 (AR)">이 제품 문의 <span>→</span></button>
+            <button class="product-ask" data-product="환경시험챔버 ARGF-0400">이 제품 문의 <span>→</span></button>
+          </article>
+
+          <article class="product" data-id="tcc" data-cat="temp semi">
+            <div class="product-art"><svg viewBox="0 500 1000 1900"><use href="#m-tcc"/></svg></div>
+            <div class="product-body">
+              <p class="series">TCC series · TCC-151W</p>
+              <h3>온도 사이클 챔버</h3>
+              <p class="spec"><span>수냉식</span><span>W1000 × H1828</span></p>
+              <p class="desc">온도 상승·하강을 반복해 열 피로 내구성을 평가.</p>
+            </div>
+            <button class="product-ask" data-product="온도 사이클 챔버 TCC-151W">이 제품 문의 <span>→</span></button>
           </article>
 
           <article class="product" data-id="tsa" data-cat="shock">
-            <div class="product-art"><svg><use href="#ico-shock"/></svg></div>
+            <div class="product-art"><svg viewBox="0 550 1310 1850"><use href="#m-tsa"/></svg></div>
             <div class="product-body">
-              <p class="series">TSA · TSE series</p>
+              <p class="series">TSA series · TSA-73ES-W</p>
               <h3>열충격시험기</h3>
-              <p class="spec"><span>고온 ↔ 저온</span><span>공기식 · 승강식</span></p>
+              <p class="spec"><span>고온 ↔ 저온</span><span>W1310 × H1800</span></p>
               <p class="desc">고온과 저온을 반복해 접합부·솔더의 내구성을 검증.</p>
             </div>
-            <button class="product-ask" data-product="열충격시험기 (TSA/TSE)">이 제품 문의 <span>→</span></button>
+            <button class="product-ask" data-product="열충격시험기 TSA-73ES-W">이 제품 문의 <span>→</span></button>
           </article>
 
-          <article class="product" data-id="hast" data-cat="semi">
+          <article class="product" data-id="walkin" data-cat="large">
+            <div class="product-art"><svg viewBox="0 0 3560 2400"><use href="#m-walk"/></svg></div>
+            <div class="product-body">
+              <p class="series">Walk-in · EBU</p>
+              <h3>워크인 챔버</h3>
+              <p class="spec"><span>-30 ~ +80°C</span><span>W3150 × H2305</span></p>
+              <p class="desc">사람이 들어가 작업하는 방 크기 시험실. 완성차 부품·대형 장비까지.</p>
+            </div>
+            <button class="product-ask" data-product="워크인 챔버 EBU">이 제품 문의 <span>→</span></button>
+          </article>
+
+          <article class="product" data-cat="semi">
             <div class="product-art"><svg><use href="#ico-hast"/></svg></div>
             <div class="product-body">
               <p class="series">EHS series</p>
@@ -369,7 +368,7 @@
             <button class="product-ask" data-product="HAST 챔버 (EHS)">이 제품 문의 <span>→</span></button>
           </article>
 
-          <article class="product" data-id="battery" data-cat="battery">
+          <article class="product" data-cat="battery">
             <div class="product-art"><svg><use href="#ico-battery"/></svg></div>
             <div class="product-body">
               <p class="series">Battery Test</p>
@@ -378,17 +377,6 @@
               <p class="desc">셀·모듈·팩의 온도 환경 시험을 안전하게.</p>
             </div>
             <button class="product-ask" data-product="2차전지 시험장비">이 제품 문의 <span>→</span></button>
-          </article>
-
-          <article class="product" data-id="walkin" data-cat="large">
-            <div class="product-art"><svg><use href="#ico-walk"/></svg></div>
-            <div class="product-body">
-              <p class="series">Walk-in Chamber</p>
-              <h3>워크인 챔버</h3>
-              <p class="spec"><span>방 단위 시험공간</span><span>맞춤 설계</span></p>
-              <p class="desc">완성차 부품, 대형 장비까지 통째로 시험.</p>
-            </div>
-            <button class="product-ask" data-product="워크인 챔버">이 제품 문의 <span>→</span></button>
           </article>
 
           <article class="product product-custom" data-cat="custom">

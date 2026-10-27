@@ -66,13 +66,12 @@ form.addEventListener('submit', (e) => {
 // 장비 정보 목록 - 이름·사양·문구를 바꾸려면 여기만 고치면 됩니다.
 // temps: 정보창에서 번갈아 보여줄 시험 온도
 const machines = {
-  sh:        { series: 'SH series', name: '벤치탑 항온항습기', spec: ['-60 ~ +150°C', '22.5L / 64L', '책상 위 설치'], desc: '작은 공간에서 부품·모듈 단위 시험을 빠르게.', temps: [-40, 85, 150, -60] },
-  platinous: { series: 'PLATINOUS series', name: '항온항습챔버', spec: ['-70 ~ +180°C', '20 ~ 98% RH', '범용'], desc: '가장 많이 쓰이는 신뢰성 시험장비. 정밀한 온습도 제어.', temps: [85, -40, 150, 25] },
-  tsa:       { series: 'TSA series', name: '열충격시험기', spec: ['고온 ↔ 저온', '공기식', '40L ~ 1000L'], desc: '고온과 저온을 반복해 접합부·솔더의 내구성을 검증.', temps: [150, -65] },
-  walkin:    { series: 'Walk-in Chamber', name: '워크인 챔버', spec: ['방 단위 시험공간', '맞춤 설계'], desc: '완성차 부품, 대형 장비까지 통째로 시험.', temps: [40, -30, 85] },
-  ar:        { series: 'AR series', name: '급속 온도변화 챔버', spec: ['-75 ~ +180°C', '고속 사이클', 'ESS'], desc: '빠른 온도 변화로 스트레스 스크리닝 시간을 단축.', temps: [-75, 180] },
-  hast:      { series: 'EHS series', name: 'HAST 챔버', spec: ['고온 · 고습 · 고압', '바이어스 시험'], desc: '수 주 걸리던 내습성 시험을 며칠로. 반도체 패키지 평가.', temps: [110, 130, 121] },
-  battery:   { series: 'Battery Test', name: '2차전지 시험장비', spec: ['방폭 · 안전 설계', '충방전 연동'], desc: '셀·모듈·팩의 온도 환경 시험을 안전하게.', temps: [-20, 60, 45] },
+  sh:        { series: 'SH series · SH-642', name: '벤치탑 항온항습기', spec: ['-40 ~ +150°C', 'W540 × H720 mm', '책상 위 설치'], desc: '책상 위에 올려 쓰는 소형 챔버. 부품·모듈 단위 시험을 빠르게.', temps: [-40, 85, 150] },
+  platinous: { series: 'PLATINOUS J · PL-2J', name: '항온항습챔버', spec: ['-40 ~ +100°C', '20 ~ 98% RH', 'W910 × H1590 mm'], desc: '가장 많이 쓰이는 신뢰성 시험장비. 정밀한 온습도 제어.', temps: [85, -40, 60, 25] },
+  ar:        { series: 'AR series · ARGF-0400', name: '대용량 환경시험챔버', spec: ['W800 × D2242 × H1783 mm', '관찰창 180 × 260'], desc: '넓고 깊은 시험공간. 큰 시편이나 많은 수량을 한 번에.', temps: [-40, 120, 25] },
+  tcc:       { series: 'TCC series · TCC-151W', name: '온도 사이클 챔버', spec: ['수냉식', 'W1000 × H1828 mm'], desc: '온도 상승·하강을 반복해 열 피로 내구성을 평가.', temps: [-55, 125] },
+  tsa:       { series: 'TSA series · TSA-73ES-W', name: '열충격시험기', spec: ['고온 ↔ 저온', 'W1310 × H1800 mm'], desc: '고온과 저온을 반복해 접합부·솔더의 내구성을 검증.', temps: [150, -65] },
+  walkin:    { series: 'Walk-in · EBU', name: '워크인 챔버', spec: ['-30 ~ +80°C', 'W3150 × H2305 mm', '출입문 850 × 1800'], desc: '사람이 들어가 작업하는 방 크기 시험실. 완성차 부품·대형 장비까지.', temps: [-30, 80, 25] },
 };
 
 const stage = document.getElementById('stage');

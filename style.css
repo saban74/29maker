@@ -121,13 +121,16 @@ h1 em {
 }
 .stage-hint.is-gone { opacity: 0; }
 .stage {
-  --stage-h: clamp(240px, 26vw, 360px);
+  --stage-h: clamp(200px, 19vw, 300px); /* 2400mm 높이 = 이 값 (모든 장비 같은 축척) */
   position: relative; z-index: 1;
-  display: flex; justify-content: center; align-items: flex-end; gap: clamp(10px, 1.6vw, 26px);
+  display: flex; align-items: flex-end; gap: clamp(10px, 1.6vw, 26px);
   padding: 44px 16px 52px; overflow-x: auto; scrollbar-width: none;
 }
 .stage::-webkit-scrollbar { display: none; }
+.unit:first-child { margin-left: auto; }
+.unit:last-child { margin-right: auto; }
 .unit {
+  --glow-op: .5;
   position: relative; flex-shrink: 0; display: grid; justify-items: center;
   transform-origin: 50% 100%;
   transition: transform .6s cubic-bezier(.2,.8,.2,1), filter .6s;
@@ -141,14 +144,13 @@ h1 em {
   margin-top: 12px; font-family: var(--mono); font-size: .68rem; letter-spacing: .08em; opacity: .45;
   transition: opacity .4s, color .4s;
 }
-.unit .glow { fill: var(--glow); opacity: .55; transition: opacity .6s, --glow 1s; }
-.unit .screen { fill: #15181c; }
-.unit .lcd { fill: url(#lcd); }
+.unit { transition: transform .6s cubic-bezier(.2,.8,.2,1), filter .6s, --glow 1s; }
 .unit:not(.is-active):hover { transform: translateY(-6px); }
 .stage.has-active .unit:not(.is-active) { filter: brightness(.42) saturate(.5); }
 @media (hover: hover) { .stage.has-active .unit:not(.is-active):hover { filter: brightness(.7) saturate(.8); } }
 .unit.is-active { transform: translateY(-14px) scale(1.12); z-index: 2; }
-.unit.is-active .glow { opacity: .95; }
+.unit[data-id="walkin"].is-active { transform: translateY(-10px) scale(1.04); }
+.unit.is-active { --glow-op: .95; }
 .unit.is-active .unit-label { opacity: 1; color: var(--temp-color, var(--white)); }
 .unit:focus-visible { outline: 2px solid var(--hot); outline-offset: 6px; border-radius: 6px; }
 
@@ -193,7 +195,8 @@ h2 { font-size: clamp(2rem, 4.4vw, 3.4rem); line-height: 1.15; font-weight: 800;
   display: grid; place-items: center; height: 200px;
   background: linear-gradient(180deg, #f8f7f4, #efede7); color: var(--ink);
 }
-.product-art svg { width: 110px; height: 150px; transition: transform .4s; }
+.product-art { --glow: #7fa9d9; --glow-op: .7; padding: 20px 16px 0; align-items: end; }
+.product-art svg { height: 170px; width: auto; max-width: 100%; transition: transform .4s; transform-origin: 50% 100%; }
 .product:hover .product-art svg { transform: scale(1.06); }
 .product-body { padding: 22px 22px 8px; flex: 1; }
 .series { font-family: var(--mono); font-size: .72rem; color: var(--muted); letter-spacing: .04em; }
