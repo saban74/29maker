@@ -1,0 +1,87 @@
+/* ===== 제품 상세 페이지 (style.css 위에 덧붙임) ===== */
+
+/* 첫 화면 */
+.p-hero {
+  padding: 120px 0 0; overflow: hidden;
+  background: linear-gradient(180deg, #f3f1ed 0%, #e9e6e0 70%, #e3dfd8 100%);
+}
+.crumb { font-size: .82rem; color: var(--muted); display: flex; gap: 8px; margin-bottom: 40px; }
+.crumb a:hover { color: var(--ink); }
+.p-hero-copy { max-width: 620px; }
+.p-hero h1 { font-size: clamp(2.2rem, 5vw, 4rem); line-height: 1.1; }
+.p-hero h1 span { font-family: var(--mono); font-weight: 600; letter-spacing: -.02em; font-size: .78em; color: #6c6f76; }
+.p-hero .lead { margin-top: 20px; font-size: clamp(1rem, 1.5vw, 1.15rem); color: var(--muted); max-width: 520px; }
+.badges { list-style: none; display: flex; flex-wrap: wrap; gap: 8px; margin: 28px 0 32px; }
+.badges li {
+  display: grid; padding: 9px 14px; border-radius: 10px; font-size: .78rem; color: var(--muted);
+  background: rgba(255,255,255,.7); border: 1px solid rgba(13,15,18,.06); line-height: 1.35;
+}
+.badges b { font-family: var(--mono); font-size: .8rem; color: var(--ink); letter-spacing: .04em; }
+.p-actions { display: flex; gap: 10px; flex-wrap: wrap; }
+
+/* 장비 사진 + 바닥 그림자·반사 */
+.p-hero-img { position: relative; margin: 40px auto 0; width: min(1100px, 100% - 32px); padding-bottom: 70px; }
+.p-hero-img img { position: relative; z-index: 1; display: block; width: 100%; height: auto; }
+.p-hero-img::before { /* 바닥 그림자 */
+  content: ""; position: absolute; left: 2%; right: 2%; bottom: 62px; height: 26px; z-index: 0;
+  background: radial-gradient(ellipse at center, rgba(13,15,18,.35), transparent 70%); filter: blur(6px);
+}
+.p-hero-img::after { /* 바닥 반사 */
+  content: ""; position: absolute; left: 0; right: 0; bottom: 0; height: 70px;
+  background: url("images/products/platinous-j.webp") center bottom / 100% auto no-repeat;
+  transform: scaleY(-1); transform-origin: top; top: calc(100% - 70px);
+  opacity: .12; -webkit-mask-image: linear-gradient(180deg, transparent 0%, #000 100%); mask-image: linear-gradient(180deg, transparent 0%, #000 100%);
+}
+.p-hero-img figcaption { position: absolute; right: 0; bottom: 18px; font-family: var(--mono); font-size: .72rem; color: var(--muted); }
+
+/* 한눈에 보기 */
+.p-glance { background: var(--ink); color: var(--white); padding: 40px 0 28px; }
+.glance { display: grid; grid-template-columns: repeat(4, 1fr); }
+.glance div { padding: 6px 24px; border-left: 1px solid rgba(255,255,255,.12); }
+.glance div:first-child { padding-left: 0; border-left: 0; }
+.glance dt { font-size: .8rem; opacity: .55; }
+.glance dd { margin-top: 6px; font-family: var(--mono); font-size: clamp(1.3rem, 2.6vw, 2rem); font-weight: 600; letter-spacing: -.02em; }
+.glance small { font-size: .5em; opacity: .6; margin-left: 6px; font-weight: 400; }
+.note { margin-top: 18px; font-size: .78rem; opacity: .45; }
+
+/* 특징 */
+.features { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; }
+.features article { background: var(--white); border-radius: var(--radius); padding: 28px 24px 32px; }
+.f-no { font-family: var(--mono); font-size: .8rem; color: var(--hot); }
+.features h3 { font-size: 1.15rem; margin: 40px 0 10px; letter-spacing: -.02em; }
+.features p { font-size: .93rem; color: var(--muted); }
+
+/* 모델 사양 */
+.model { display: grid; grid-template-columns: 280px 1fr; gap: 32px; background: var(--white); border-radius: var(--radius); padding: clamp(24px, 4vw, 40px); }
+.model h3 { font-family: var(--mono); font-size: 2.4rem; letter-spacing: -.03em; margin: 4px 0 24px; }
+.spec-table { width: 100%; border-collapse: collapse; font-size: .95rem; }
+.spec-table th, .spec-table td { text-align: left; padding: 14px 0; border-bottom: 1px solid var(--line); vertical-align: top; }
+.spec-table th { width: 42%; font-weight: 500; color: var(--muted); padding-right: 16px; }
+.spec-table td { font-family: var(--mono); font-size: .9rem; }
+.spec-table tr:last-child th, .spec-table tr:last-child td { border-bottom: 0; }
+
+/* 적용 분야 */
+.apps { list-style: none; display: grid; grid-template-columns: repeat(4, 1fr); border-top: 1px solid var(--line); }
+.apps li { padding: 28px 20px 28px 0; border-bottom: 1px solid var(--line); color: var(--muted); font-size: .95rem; }
+.apps b { display: block; color: var(--ink); font-size: 1.2rem; margin-bottom: 6px; letter-spacing: -.02em; }
+
+/* 문의 */
+.inquiry { display: grid; grid-template-columns: .9fr 1.1fr; gap: 56px; align-items: start; }
+.inquiry > * { min-width: 0; }
+.sub-light { margin-top: 18px; opacity: .6; }
+.section-dark .form { color: var(--ink); }
+
+@media (max-width: 1024px) {
+  .features { grid-template-columns: repeat(2, 1fr); }
+  .apps { grid-template-columns: repeat(2, 1fr); }
+}
+@media (max-width: 760px) {
+  .p-hero { padding-top: 96px; }
+  .crumb { margin-bottom: 28px; }
+  .glance { grid-template-columns: repeat(2, 1fr); row-gap: 20px; }
+  .glance div:nth-child(3) { padding-left: 0; border-left: 0; }
+  .features, .apps, .inquiry, .model { grid-template-columns: 1fr; }
+  .features h3 { margin-top: 20px; }
+  .p-hero-img { padding-bottom: 48px; }
+  .p-hero-img figcaption { position: static; margin-top: 10px; text-align: right; }
+}

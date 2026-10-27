@@ -67,7 +67,7 @@ form.addEventListener('submit', (e) => {
 // temps: 정보창에서 번갈아 보여줄 시험 온도
 const machines = {
   sh:        { series: 'SH series · SH-642', name: '벤치탑 항온항습기', spec: ['-40 ~ +150°C', 'W540 × H720 mm', '책상 위 설치'], desc: '책상 위에 올려 쓰는 소형 챔버. 부품·모듈 단위 시험을 빠르게.', temps: [-40, 85, 150] },
-  platinous: { series: 'PLATINOUS J · PL-2J', name: '항온항습챔버', spec: ['-40 ~ +100°C', '20 ~ 98% RH', 'W910 × H1590 mm'], desc: '가장 많이 쓰이는 신뢰성 시험장비. 정밀한 온습도 제어.', temps: [85, -40, 60, 25] },
+  platinous: { series: 'PLATINOUS J · PL-2J', name: '항온항습챔버', spec: ['-40 ~ +100°C', '20 ~ 98% RH', 'W910 × H1590 mm'], desc: '가장 많이 쓰이는 신뢰성 시험장비. 정밀한 온습도 제어.', temps: [85, -40, 60, 25], page: 'platinous.html' },
   ar:        { series: 'AR series · ARGF-0400', name: '대용량 환경시험챔버', spec: ['W800 × D2242 × H1783 mm', '관찰창 180 × 260'], desc: '넓고 깊은 시험공간. 큰 시편이나 많은 수량을 한 번에.', temps: [-40, 120, 25] },
   tcc:       { series: 'TCC series · TCC-151W', name: '온도 사이클 챔버', spec: ['수냉식', 'W1000 × H1828 mm'], desc: '온도 상승·하강을 반복해 열 피로 내구성을 평가.', temps: [-55, 125] },
   tsa:       { series: 'TSA series · TSA-73ES-W', name: '열충격시험기', spec: ['고온 ↔ 저온', 'W1310 × H1800 mm'], desc: '고온과 저온을 반복해 접합부·솔더의 내구성을 검증.', temps: [150, -65] },
@@ -173,6 +173,8 @@ stage.addEventListener('scroll', () => {
 
 // 정보창 버튼: 제품 카드로 이동 / 문의 폼에 제품명 입력
 document.getElementById('p-detail').addEventListener('click', (e) => {
+  // 제품 상세 페이지가 있는 장비는 그 페이지로 이동
+  if (machines[activeId].page) { e.preventDefault(); location.href = machines[activeId].page; return; }
   const card = document.querySelector(`.product[data-id="${activeId}"]`);
   if (!card) return;
   e.preventDefault();

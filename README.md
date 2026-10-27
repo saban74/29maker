@@ -24,6 +24,12 @@
   2. `index.html`의 해당 `<button class="unit">` 안 `<svg>…</svg>`를 `<img src="images/platinous.png" alt="">`로 교체
 - 장비 이름·사양·설명은 `script.js` 위쪽 `machines` 목록에서 수정
 
+## 제품 상세 페이지
+- `platinous.html` – 항온항습챔버 PLATINOUS J (첫 화면 정보창·제품 카드의 "자세히 보기"에서 연결)
+- 장비 사진: `images/products/platinous-j.webp` – ESPEC 공식 배너에서 장비만 잘라 배경 제거·선명화 (ESPEC 사용 허락 및 고해상도 원본 요청 권장)
+- 확인 필요: 온도 -40~+100°C, 습도 20~98% RH (카탈로그 확인), 용량 225L은 도면 내부치수(500×750×600)로 계산
+- 디자인은 `product.css`, 동작은 `product.js`. 다른 제품 페이지도 이 파일을 복사해 만들면 됩니다
+
 ## 파일
 | 파일 | 내용 |
 |---|---|

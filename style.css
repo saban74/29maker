@@ -209,6 +209,8 @@ h2 { font-size: clamp(2rem, 4.4vw, 3.4rem); line-height: 1.15; font-weight: 800;
 }
 .product-ask span { transition: transform .2s; }
 .product-ask:hover { color: var(--hot); }
+.product-more { display: flex; justify-content: space-between; margin: 0 22px; padding-top: 14px; border-top: 1px solid var(--line); font-weight: 600; font-size: .92rem; color: var(--hot); }
+.product-more + .product-ask { margin-top: 8px; border-top: 0; padding-top: 6px; }
 .product-ask:hover span { transform: translateX(4px); }
 .product-custom { background: var(--ink); color: var(--white); justify-content: flex-end; }
 .product-custom .product-body { padding-top: 32px; }
