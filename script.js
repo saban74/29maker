@@ -120,6 +120,8 @@ function select(id, { scroll = true } = {}) {
     u.setAttribute('aria-pressed', on);
   });
   stage.classList.add('has-active');
+  stageWrap.classList.add('has-active');
+  panel.classList.add('is-open');
 
   // 정보창 채우기
   document.getElementById('p-series').textContent = m.series;
@@ -150,7 +152,19 @@ function select(id, { scroll = true } = {}) {
   }
 }
 
+// 정보창 닫기: 같은 장비를 다시 누르거나 × 버튼
+function deselect() {
+  activeId = null;
+  clearInterval(timer);
+  units.forEach((u) => { u.classList.remove('is-active'); u.setAttribute('aria-pressed', false); });
+  stage.classList.remove('has-active');
+  stageWrap.classList.remove('has-active');
+  panel.classList.remove('is-open');
+}
+document.getElementById('p-close').addEventListener('click', deselect);
+
 units.forEach((u) => u.addEventListener('click', () => {
+  if (u.dataset.id === activeId) { deselect(); return; }
   select(u.dataset.id);
   document.getElementById('stage-hint').classList.add('is-gone');
 }));
@@ -187,7 +201,6 @@ document.getElementById('p-ask').addEventListener('click', () => {
   setType('sales');
 });
 
-select('platinous', { scroll: false });
 
 // ===== 스크롤하면 부드럽게 나타나기 =====
 const revealTargets = document.querySelectorAll('.section-head, .product, .steps li, .facts div, .form, .service-cta');

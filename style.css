@@ -64,94 +64,121 @@ button { font: inherit; color: inherit; background: none; border: 0; cursor: poi
 .menu-btn[aria-expanded="true"] span:first-child { transform: translateY(4px) rotate(45deg); }
 .menu-btn[aria-expanded="true"] span:last-child { transform: translateY(-4px) rotate(-45deg); }
 
-/* ===== 첫 화면: 장비 쇼룸 ===== */
-@property --glow { syntax: "<color>"; inherits: true; initial-value: #3d8bff; }
-.hero {
-  position: relative; overflow: hidden;
-  /* 렌더링 스튜디오 배경과 같은 톤 */
-  background: linear-gradient(180deg, #f1eee9 0%, #e9e5de 55%, #e2ddd5 100%); color: var(--ink);
-  padding-top: 120px;
+/* ===== 첫 화면: 시험실 ===== */
+/* 1번 어두운 바깥 · 2번 J 시리즈 화면 · 3번 시험실 바닥 */
+.hero.lab {
+  --stage-h: clamp(190px, 17vw, 260px);   /* 장비 2400mm 높이 = 이 값 (장비·사람 같은 축척) */
+  --floor-h: 96px;
+  position: relative; overflow: hidden; color: var(--white);
+  background:
+    radial-gradient(70% 50% at 50% 0%, #23272e 0, transparent 70%),
+    #101216;
+  padding: 84px 0 0;
 }
-.hero-top { position: relative; z-index: 2; display: grid; grid-template-columns: 1fr 380px; gap: 48px; align-items: start; }
-.kicker { display: inline-flex; align-items: center; gap: 10px; font-family: var(--mono); font-size: .78rem; letter-spacing: .04em; opacity: .7; margin-bottom: 24px; }
+.home .header:not(.is-solid) { color: var(--white); }
+
+/* 2번: 큰 화면 */
+.lab-screen {
+  position: relative; width: min(1320px, 100% - 32px); margin: 0 auto;
+  height: clamp(520px, calc(100svh - 84px - var(--floor-h) - 70px), 700px);
+  border-radius: 28px; overflow: hidden; color: var(--ink);
+  background: linear-gradient(180deg, #f4f2ee 0%, #e8e4dd 100%);
+  box-shadow: 0 40px 80px rgba(0,0,0,.45), inset 0 0 0 1px rgba(255,255,255,.4);
+  display: grid; grid-template-columns: minmax(360px, 1fr) 1.15fr; gap: 24px; align-items: start;
+  padding: clamp(28px, 4vw, 56px);
+}
+.lab-copy { position: relative; z-index: 2; }
+.kicker { display: inline-flex; align-items: center; gap: 10px; font-family: var(--mono); font-size: .76rem; letter-spacing: .04em; color: var(--muted); margin-bottom: 22px; }
 .dot { width: 8px; height: 8px; border-radius: 50%; background: var(--hot); box-shadow: 0 0 12px var(--hot); animation: blink 2s infinite; flex-shrink: 0; }
 @keyframes blink { 50% { opacity: .3; } }
-h1 { font-size: clamp(2.4rem, 5.4vw, 4.6rem); line-height: 1.08; font-weight: 800; letter-spacing: -.04em; }
-h1 em {
-  font-style: normal;
-  background: linear-gradient(90deg, var(--cold), var(--hot));
-  -webkit-background-clip: text; background-clip: text; color: transparent;
+h1 { font-size: clamp(2.1rem, 3.9vw, 3.7rem); line-height: 1.08; font-weight: 800; letter-spacing: -.04em; }
+h1 em { font-style: normal; background: linear-gradient(90deg, var(--cold), var(--hot)); -webkit-background-clip: text; background-clip: text; color: transparent; }
+.lead { margin-top: 20px; font-size: clamp(.98rem, 1.3vw, 1.08rem); color: var(--muted); max-width: 420px; }
+.lab-feature {
+  display: inline-flex; align-items: center; gap: 12px; margin-top: 28px; padding: 10px 16px 10px 10px;
+  border-radius: 999px; background: rgba(255,255,255,.75); border: 1px solid rgba(13,15,18,.06); font-size: .9rem;
+  transition: transform .2s, box-shadow .2s;
 }
-.lead { margin-top: 22px; font-size: clamp(1rem, 1.4vw, 1.1rem); opacity: .65; max-width: 460px; }
+.lab-feature:hover { transform: translateY(-2px); box-shadow: 0 10px 24px rgba(13,15,18,.08); }
+.lab-feature-tag { font-family: var(--mono); font-size: .7rem; padding: 4px 8px; border-radius: 999px; background: var(--ink); color: var(--white); }
+.lab-hero-img {
+  justify-self: end; width: 100%; max-width: 760px; height: auto; margin-top: 2%;
+  filter: drop-shadow(0 24px 24px rgba(13,15,18,.18));
+}
 
-/* 정보창 */
-.panel {
-  padding: 24px; border-radius: var(--radius);
-  background: rgba(255,255,255,.6); border: 1px solid rgba(13,15,18,.06);
-  box-shadow: 0 20px 50px rgba(13,15,18,.06); backdrop-filter: blur(12px);
+/* 시험실 무대: 2번 화면 아래쪽 경계에 걸쳐 섬 */
+.stage-wrap { position: relative; z-index: 3; margin-top: calc(var(--stage-h) * -0.72 - 40px); }
+.stage-wrap::after { /* 선택된 장비 아래 바닥 조명 */
+  content: ""; position: absolute; bottom: 0; left: var(--spot-x, 50%); width: 460px; height: var(--floor-h);
+  transform: translateX(-50%); pointer-events: none; z-index: 0; opacity: 0; transition: left .6s cubic-bezier(.2,.8,.2,1), opacity .4s;
+  background: radial-gradient(ellipse 50% 70% at 50% 0%, color-mix(in srgb, var(--temp-color, var(--cold)) 45%, transparent), transparent 70%);
 }
-.panel.is-swap > * { animation: swap .5s; }
-@keyframes swap { from { opacity: 0; transform: translateY(8px); } }
-.panel-series { font-family: var(--mono); font-size: .75rem; opacity: .55; }
-.panel-name { font-size: 1.6rem; margin: 4px 0 14px; letter-spacing: -.03em; line-height: 1.25; }
-.panel-readout { display: flex; align-items: baseline; gap: 6px; padding: 12px 14px; border-radius: 12px; background: #15181c; color: var(--white); font-family: var(--mono); }
-.readout { font-size: 2rem; font-weight: 600; color: var(--temp-color, var(--cold)); transition: color 1s; }
-.unit { opacity: .6; }
-.panel-live { margin-left: auto; display: inline-flex; align-items: center; gap: 6px; font-size: .68rem; opacity: .6; }
-.panel-live i { width: 6px; height: 6px; border-radius: 50%; background: #2fbf71; animation: blink 1.4s infinite; }
-.panel-spec { list-style: none; display: flex; flex-wrap: wrap; gap: 6px; margin: 14px 0 10px; }
-.panel-spec li { font-family: var(--mono); font-size: .72rem; padding: 4px 9px; border-radius: 6px; background: rgba(13,15,18,.06); }
-.panel-desc { font-size: .92rem; color: var(--muted); min-height: 3em; }
-.panel-actions { display: flex; gap: 8px; margin-top: 18px; flex-wrap: wrap; }
-.panel-actions .btn { padding: 11px 20px; font-size: .92rem; }
-
-/* 무대 + 장비 */
-.stage-wrap { position: relative; margin-top: 24px; }
-.stage-wrap::before { /* 바닥 */
-  content: ""; position: absolute; left: 0; right: 0; bottom: 0; height: 120px;
-  background: linear-gradient(180deg, rgba(255,255,255,0), rgba(255,255,255,.35));
-}
-.stage-wrap::after { /* 선택된 장비 위 조명 */
-  content: ""; position: absolute; bottom: 40px; left: var(--spot-x, 50%); width: 420px; height: 520px;
-  transform: translateX(-50%); pointer-events: none;
-  background: radial-gradient(ellipse 50% 60% at 50% 100%, rgba(255,255,255,.95), transparent 70%),
-              radial-gradient(ellipse 40% 30% at 50% 100%, color-mix(in srgb, var(--temp-color, var(--cold)) 18%, transparent), transparent 70%);
-  transition: left .6s cubic-bezier(.2,.8,.2,1), background 1s;
-}
+.stage-wrap.has-active::after { opacity: 1; }
 .stage-hint {
-  position: absolute; top: -4px; left: 50%; transform: translateX(-50%); z-index: 2;
-  font-family: var(--mono); font-size: .75rem; opacity: .5; transition: opacity .5s;
+  position: absolute; left: 50%; bottom: 14px; transform: translateX(-50%); z-index: 2;
+  font-family: var(--mono); font-size: .72rem; color: rgba(255,255,255,.55); transition: opacity .5s; white-space: nowrap;
 }
 .stage-hint.is-gone { opacity: 0; }
 .stage {
-  --stage-h: clamp(200px, 19vw, 300px); /* 2400mm 높이 = 이 값 (모든 장비 같은 축척) */
   position: relative; z-index: 1;
-  display: flex; align-items: flex-end; gap: clamp(10px, 1.6vw, 26px);
-  padding: 44px 16px 52px; overflow-x: auto; scrollbar-width: none;
+  display: flex; align-items: flex-end; gap: clamp(6px, 1vw, 16px);
+  padding: 40px 16px calc(var(--floor-h) - 30px); overflow-x: auto; scrollbar-width: none;
+  /* 3번: 시험실 바닥 (장비가 서는 선부터 아래) */
+  background:
+    linear-gradient(180deg, rgba(255,255,255,.16) 0 1px, rgba(255,255,255,.06) 1px, transparent 40%) bottom / 100% var(--floor-h) no-repeat,
+    repeating-linear-gradient(90deg, rgba(255,255,255,.045) 0 1px, transparent 1px 120px) bottom / 100% var(--floor-h) no-repeat,
+    linear-gradient(180deg, #2a2e35 0%, #1a1d22 100%) bottom / 100% var(--floor-h) no-repeat;
 }
 .stage::-webkit-scrollbar { display: none; }
-.unit:first-child { margin-left: auto; }
-.unit:last-child { margin-right: auto; }
-.unit {
-  --glow-op: .5;
-  position: relative; flex-shrink: 0; display: grid; justify-items: center;
-  transform-origin: 50% 100%;
-  transition: transform .6s cubic-bezier(.2,.8,.2,1), filter .6s;
+.stage > :first-child { margin-left: auto; }
+.stage > :last-child { margin-right: auto; }
+.unit, .person { position: relative; flex-shrink: 0; display: grid; justify-items: center; transform-origin: 50% calc(100% - 30px); }
+.unit svg, .person svg {
+  display: block; height: var(--stage-h); width: auto;
+  -webkit-box-reflect: below 0 linear-gradient(transparent 82%, rgba(255,255,255,.16));   /* 바닥 반사 */
 }
-.unit img { display: block; height: calc(var(--stage-h) * var(--k, 1)); width: auto; }
-.unit svg { display: block; height: var(--stage-h); width: auto; filter: drop-shadow(0 14px 14px rgba(13,15,18,.18)); }
-.unit-label {
-  margin-top: 12px; font-family: var(--mono); font-size: .68rem; letter-spacing: .08em; opacity: .45;
-  transition: opacity .4s, color .4s;
-}
+.unit svg { filter: drop-shadow(0 10px 10px rgba(0,0,0,.35)); }
+.person { pointer-events: none; padding-bottom: 30px; }   /* 장비 이름 줄 높이만큼 맞춤 */
+.person-touch { margin-left: calc(var(--stage-h) * -0.11); margin-right: calc(var(--stage-h) * -0.06); }
+.unit-label { margin-top: 12px; height: 18px; font-family: var(--mono); font-size: .66rem; letter-spacing: .08em; color: rgba(255,255,255,.45); transition: color .4s; }
 .unit { transition: transform .6s cubic-bezier(.2,.8,.2,1), filter .6s, opacity .6s; }
 .unit:not(.is-active):hover { transform: translateY(-6px); }
-.stage.has-active .unit:not(.is-active) { opacity: .5; filter: grayscale(.5) blur(.6px); }
-@media (hover: hover) { .stage.has-active .unit:not(.is-active):hover { opacity: .85; filter: none; } }
+.stage.has-active .unit:not(.is-active), .stage.has-active .person { opacity: .55; filter: saturate(.6); }
 .unit.is-active { transform: translateY(-10px) scale(1.08); z-index: 2; }
 .unit[data-id="walkin"].is-active { transform: translateY(-8px) scale(1.03); }
-.unit.is-active .unit-label { opacity: 1; color: var(--ink); font-weight: 600; }
+.unit.is-active .unit-label { color: var(--white); font-weight: 600; }
 .unit:focus-visible { outline: 2px solid var(--hot); outline-offset: 6px; border-radius: 6px; }
+
+/* 말풍선 정보창: 선택한 장비 위에 뜸 */
+.panel {
+  position: absolute; z-index: 5; width: 300px;
+  left: clamp(166px, var(--spot-x, 50%), calc(100% - 166px)); bottom: calc(var(--floor-h) + var(--stage-h) - 10px);
+  transform: translate(-50%, 10px); opacity: 0; pointer-events: none;
+  transition: opacity .35s, transform .35s, left .6s cubic-bezier(.2,.8,.2,1);
+  padding: 18px 18px 16px; border-radius: 18px; color: var(--white);
+  background: rgba(16,18,22,.92); backdrop-filter: blur(12px); box-shadow: 0 24px 50px rgba(0,0,0,.35);
+}
+.panel.is-open { opacity: 1; transform: translate(-50%, 0); pointer-events: auto; }
+.panel-close { position: absolute; top: 8px; right: 10px; width: 28px; height: 28px; font-size: 1.2rem; opacity: .5; }
+.panel-close:hover { opacity: 1; }
+.panel.is-swap > * { animation: swap .5s; }
+@keyframes swap { from { opacity: 0; transform: translateY(6px); } }
+.panel-series { font-family: var(--mono); font-size: .7rem; opacity: .55; }
+.panel-name { font-size: 1.25rem; margin: 2px 0 10px; letter-spacing: -.03em; line-height: 1.25; }
+.panel-readout { display: flex; align-items: baseline; gap: 6px; padding: 8px 12px; border-radius: 10px; background: rgba(255,255,255,.06); font-family: var(--mono); }
+.readout { font-size: 1.5rem; font-weight: 600; color: var(--temp-color, var(--cold)); transition: color 1s; }
+.panel-readout .unit { opacity: .6; }
+.panel-live { margin-left: auto; display: inline-flex; align-items: center; gap: 6px; font-size: .64rem; opacity: .6; }
+.panel-live i { width: 6px; height: 6px; border-radius: 50%; background: #2fbf71; animation: blink 1.4s infinite; }
+.panel-spec { list-style: none; display: flex; flex-wrap: wrap; gap: 5px; margin: 10px 0 0; }
+.panel-spec li { font-family: var(--mono); font-size: .66rem; padding: 3px 8px; border-radius: 6px; background: rgba(255,255,255,.08); }
+.panel-desc { display: none; }
+.panel-actions { display: flex; gap: 6px; margin-top: 14px; }
+.panel-actions .btn { padding: 9px 16px; font-size: .84rem; }
+.panel::after { /* 말풍선 꼬리 */
+  content: ""; position: absolute; left: 50%; bottom: -7px; width: 14px; height: 14px; transform: translateX(-50%) rotate(45deg);
+  background: rgba(16,18,22,.92);
+}
 
 /* 제품 카드 강조 (정보창에서 "자세히 보기"를 눌렀을 때) */
 .product.is-flash { animation: flash 1.6s; }
@@ -276,14 +303,9 @@ h2 { font-size: clamp(2rem, 4.4vw, 3.4rem); line-height: 1.15; font-weight: 800;
 
 /* ===== 화면 크기별 ===== */
 @media (max-width: 1024px) {
-  /* 태블릿·모바일: 제목 → 장비 → 정보창 순서 */
-  .hero { display: flex; flex-direction: column; }
-  .hero-top { display: contents; }
-  .hero-copy, .panel { width: min(1200px, 100% - 32px); margin-inline: auto; position: relative; z-index: 2; }
-  .hero-copy { order: 1; }
-  .stage-wrap { order: 2; }
-  .panel { order: 3; margin-bottom: 40px; }
-  .ticker { order: 4; }
+  /* 태블릿: 2번 화면 안에서 글 → J 시리즈 사진 순서 */
+  .lab-screen { grid-template-columns: 1fr; height: auto; padding-bottom: calc(var(--stage-h) * .72 + 40px); }
+  .lab-hero-img { justify-self: center; margin-top: 28px; }
   .products { grid-template-columns: repeat(2, 1fr); }
   .steps { grid-template-columns: repeat(2, 1fr); }
   .steps li:nth-child(2) { border-right: 0; }
@@ -300,10 +322,19 @@ h2 { font-size: clamp(2rem, 4.4vw, 3.4rem); line-height: 1.15; font-weight: 800;
   .nav.open { transform: none; }
   .nav a { padding: 16px 0; border-bottom: 1px solid var(--line); font-size: 1.1rem; }
   .nav-cta { border: 0; border-radius: 0; }
-  .hero { padding-top: 100px; }
+  .hero.lab { padding-top: 76px; --floor-h: 84px; }
+  .lab-screen { border-radius: 20px; padding: 26px 20px calc(var(--stage-h) * .72 + 40px); }
   .about, .contact { grid-template-columns: 1fr; }
-  .stage { justify-content: flex-start; scroll-snap-type: x mandatory; padding-inline: 40vw; }
+  .stage { scroll-snap-type: x proximity; }
   .unit { scroll-snap-align: center; }
+  /* 모바일: 정보창은 장비 아래에 카드로 */
+  .panel { position: relative; left: auto; bottom: auto; width: auto; margin: 0 16px 24px; transform: none; display: none; }
+  .panel.is-open { display: block; transform: none; }
+  .panel::after { display: none; }
+  .stage-wrap { display: flex; flex-direction: column; }
+  .stage { order: 1; }
+  .panel { order: 2; }
+  .stage-wrap::after { display: none; }
   .products { grid-template-columns: 1fr; }
   .steps { grid-template-columns: 1fr; }
   .steps li, .steps li + li { padding: 24px 0; border-right: 0; border-bottom: 1px solid rgba(255,255,255,.1); }
