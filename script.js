@@ -17,47 +17,6 @@ nav.querySelectorAll('a').forEach((a) => a.addEventListener('click', () => {
   menuBtn.setAttribute('aria-expanded', false);
 }));
 
-// ===== 첫 화면: 챔버 온도가 바뀌는 연출 =====
-const readout = document.getElementById('readout');
-const rhEl = document.getElementById('rh');
-const root = document.documentElement;
-const MIN = -70, MAX = 180;
-// 시험 시나리오: [온도, 습도]
-const scenario = [[25, 50], [85, 85], [150, 10], [-40, 0], [-70, 0], [125, 20], [25, 50]];
-let step = 0, current = 25;
-
-function tempColor(t) {
-  // 저온(파랑) → 상온(회색) → 고온(주황)
-  const cold = [61, 139, 255], mid = [190, 190, 190], hot = [255, 90, 31];
-  const r = (t - MIN) / (MAX - MIN);
-  const [a, b, k] = r < 0.38 ? [cold, mid, r / 0.38] : [mid, hot, (r - 0.38) / 0.62];
-  return `rgb(${a.map((v, i) => Math.round(v + (b[i] - v) * k)).join(',')})`;
-}
-
-function animateTo(target, rh) {
-  const start = current, t0 = performance.now(), dur = 1800;
-  root.style.setProperty('--temp-color', tempColor(target));
-  root.style.setProperty('--pin', ((target - MIN) / (MAX - MIN)) * 100 + '%');
-  rhEl.textContent = rh;
-  const tick = (now) => {
-    const p = Math.min((now - t0) / dur, 1);
-    const eased = 1 - Math.pow(1 - p, 3);
-    current = start + (target - start) * eased;
-    readout.textContent = (current >= 0 ? '+' : '') + current.toFixed(1);
-    if (p < 1) requestAnimationFrame(tick);
-  };
-  requestAnimationFrame(tick);
-}
-
-const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-animateTo(25, 50);
-if (!reduceMotion) {
-  setInterval(() => {
-    step = (step + 1) % scenario.length;
-    animateTo(...scenario[step]);
-  }, 3200);
-}
-
 // ===== 제품 필터 =====
 const chips = document.querySelectorAll('.chip');
 const products = document.querySelectorAll('.product');
@@ -102,6 +61,132 @@ form.addEventListener('submit', (e) => {
   form.reset();
   setType('sales');
 });
+
+// ===== 첫 화면: 장비 쇼룸 =====
+// 장비 정보 목록 - 이름·사양·문구를 바꾸려면 여기만 고치면 됩니다.
+// temps: 정보창에서 번갈아 보여줄 시험 온도
+const machines = {
+  sh:        { series: 'SH series', name: '벤치탑 항온항습기', spec: ['-60 ~ +150°C', '22.5L / 64L', '책상 위 설치'], desc: '작은 공간에서 부품·모듈 단위 시험을 빠르게.', temps: [-40, 85, 150, -60] },
+  platinous: { series: 'PLATINOUS series', name: '항온항습챔버', spec: ['-70 ~ +180°C', '20 ~ 98% RH', '범용'], desc: '가장 많이 쓰이는 신뢰성 시험장비. 정밀한 온습도 제어.', temps: [85, -40, 150, 25] },
+  tsa:       { series: 'TSA series', name: '열충격시험기', spec: ['고온 ↔ 저온', '공기식', '40L ~ 1000L'], desc: '고온과 저온을 반복해 접합부·솔더의 내구성을 검증.', temps: [150, -65] },
+  walkin:    { series: 'Walk-in Chamber', name: '워크인 챔버', spec: ['방 단위 시험공간', '맞춤 설계'], desc: '완성차 부품, 대형 장비까지 통째로 시험.', temps: [40, -30, 85] },
+  ar:        { series: 'AR series', name: '급속 온도변화 챔버', spec: ['-75 ~ +180°C', '고속 사이클', 'ESS'], desc: '빠른 온도 변화로 스트레스 스크리닝 시간을 단축.', temps: [-75, 180] },
+  hast:      { series: 'EHS series', name: 'HAST 챔버', spec: ['고온 · 고습 · 고압', '바이어스 시험'], desc: '수 주 걸리던 내습성 시험을 며칠로. 반도체 패키지 평가.', temps: [110, 130, 121] },
+  battery:   { series: 'Battery Test', name: '2차전지 시험장비', spec: ['방폭 · 안전 설계', '충방전 연동'], desc: '셀·모듈·팩의 온도 환경 시험을 안전하게.', temps: [-20, 60, 45] },
+};
+
+const stage = document.getElementById('stage');
+const stageWrap = stage.parentElement;
+const units = [...stage.querySelectorAll('.unit')];
+const panel = document.querySelector('.panel');
+const readout = document.getElementById('readout');
+const root = document.documentElement;
+const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+const MIN = -75, MAX = 180;
+
+function tempColor(t) {
+  // 저온(파랑) → 상온(회색) → 고온(주황)
+  const cold = [61, 139, 255], mid = [190, 190, 190], hot = [255, 90, 31];
+  const r = Math.max(0, Math.min(1, (t - MIN) / (MAX - MIN)));
+  const [a, b, k] = r < 0.39 ? [cold, mid, r / 0.39] : [mid, hot, (r - 0.39) / 0.61];
+  return `rgb(${a.map((v, i) => Math.round(v + (b[i] - v) * k)).join(',')})`;
+}
+
+// 각 장비 창문 색을 그 장비의 대표 온도 색으로
+units.forEach((u) => u.style.setProperty('--glow', tempColor(machines[u.dataset.id].temps[0])));
+
+let current = 25, frame, timer, activeId;
+function animateTo(target) {
+  cancelAnimationFrame(frame);
+  const start = current, t0 = performance.now(), dur = reduceMotion ? 1 : 1600;
+  const color = tempColor(target);
+  root.style.setProperty('--temp-color', color);
+  const active = stage.querySelector('.unit.is-active');
+  if (active) active.style.setProperty('--glow', color);
+  const tick = (now) => {
+    const p = Math.min((now - t0) / dur, 1);
+    current = start + (target - start) * (1 - Math.pow(1 - p, 3));
+    readout.textContent = (current >= 0 ? '+' : '') + current.toFixed(1);
+    if (p < 1) frame = requestAnimationFrame(tick);
+  };
+  frame = requestAnimationFrame(tick);
+}
+
+function select(id, { scroll = true } = {}) {
+  const m = machines[id];
+  activeId = id;
+  units.forEach((u) => {
+    const on = u.dataset.id === id;
+    u.classList.toggle('is-active', on);
+    u.setAttribute('aria-pressed', on);
+  });
+  stage.classList.add('has-active');
+
+  // 정보창 채우기
+  document.getElementById('p-series').textContent = m.series;
+  document.getElementById('p-name').textContent = m.name;
+  document.getElementById('p-desc').textContent = m.desc;
+  document.getElementById('p-spec').innerHTML = m.spec.map((s) => `<li>${s}</li>`).join('');
+  panel.classList.remove('is-swap'); void panel.offsetWidth; panel.classList.add('is-swap');
+
+  // 조명 위치를 선택한 장비 쪽으로
+  const unit = units.find((u) => u.dataset.id === id);
+  const placeSpot = () => {
+    const ur = unit.getBoundingClientRect(), wr = stageWrap.getBoundingClientRect();
+    stageWrap.style.setProperty('--spot-x', ur.left + ur.width / 2 - wr.left + 'px');
+  };
+  // 모바일: 가로 스크롤을 선택한 장비가 가운데 오도록
+  if (scroll && stage.scrollWidth > stage.clientWidth) {
+    stage.scrollTo({ left: unit.offsetLeft + unit.offsetWidth / 2 - stage.clientWidth / 2, behavior: reduceMotion ? 'auto' : 'smooth' });
+    setTimeout(placeSpot, 450);
+  }
+  placeSpot();
+
+  // 시험 온도 순환
+  clearInterval(timer);
+  let i = 0;
+  animateTo(m.temps[0]);
+  if (!reduceMotion && m.temps.length > 1) {
+    timer = setInterval(() => { i = (i + 1) % m.temps.length; animateTo(m.temps[i]); }, 2600);
+  }
+}
+
+units.forEach((u) => u.addEventListener('click', () => {
+  select(u.dataset.id);
+  document.getElementById('stage-hint').classList.add('is-gone');
+}));
+
+// 키보드 ← → 로 장비 이동
+stage.addEventListener('keydown', (e) => {
+  if (e.key !== 'ArrowRight' && e.key !== 'ArrowLeft') return;
+  const i = units.findIndex((u) => u.dataset.id === activeId);
+  const next = units[(i + (e.key === 'ArrowRight' ? 1 : units.length - 1)) % units.length];
+  next.focus(); next.click(); e.preventDefault();
+});
+
+window.addEventListener('resize', () => activeId && select(activeId, { scroll: false }));
+stage.addEventListener('scroll', () => {
+  const unit = units.find((u) => u.dataset.id === activeId);
+  if (!unit) return;
+  const ur = unit.getBoundingClientRect(), wr = stageWrap.getBoundingClientRect();
+  stageWrap.style.setProperty('--spot-x', ur.left + ur.width / 2 - wr.left + 'px');
+}, { passive: true });
+
+// 정보창 버튼: 제품 카드로 이동 / 문의 폼에 제품명 입력
+document.getElementById('p-detail').addEventListener('click', (e) => {
+  const card = document.querySelector(`.product[data-id="${activeId}"]`);
+  if (!card) return;
+  e.preventDefault();
+  document.querySelector('.chip[data-filter="all"]').click();
+  card.scrollIntoView({ block: 'center' });
+  card.classList.remove('is-flash'); void card.offsetWidth; card.classList.add('is-flash');
+});
+document.getElementById('p-ask').addEventListener('click', () => {
+  productField.value = machines[activeId].name + ' (' + machines[activeId].series + ')';
+  setType('sales');
+});
+
+select('platinous', { scroll: false });
 
 // ===== 스크롤하면 부드럽게 나타나기 =====
 const revealTargets = document.querySelectorAll('.section-head, .product, .steps li, .facts div, .form, .service-cta');

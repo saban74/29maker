@@ -20,6 +20,15 @@
         <stop offset="0" style="stop-color:var(--cold)"/>
         <stop offset="1" style="stop-color:var(--hot)"/>
       </linearGradient>
+      <linearGradient id="metal" x1="0" y1="0" x2="1" y2="0">
+        <stop offset="0" stop-color="#f4f5f7"/><stop offset=".6" stop-color="#dfe2e6"/><stop offset="1" stop-color="#bfc4ca"/>
+      </linearGradient>
+      <radialGradient id="glass" cx=".35" cy=".3" r=".9">
+        <stop offset="0" stop-color="#fff" stop-opacity=".45"/><stop offset=".5" stop-color="#fff" stop-opacity="0"/><stop offset="1" stop-color="#000" stop-opacity=".35"/>
+      </radialGradient>
+      <pattern id="hazard" width="10" height="10" patternUnits="userSpaceOnUse" patternTransform="rotate(45)">
+        <rect width="10" height="10" fill="#1b1e23"/><rect width="5" height="10" fill="#ffc400"/>
+      </pattern>
     </defs>
     <!-- 대형 항온항습챔버 -->
     <symbol id="ico-tall" viewBox="0 0 120 160">
@@ -90,33 +99,159 @@
 
   <main id="top">
 
-    <!-- ===== 첫 화면 ===== -->
+    <!-- ===== 첫 화면: 장비 쇼룸 ===== -->
     <section class="hero">
-      <div class="wrap hero-grid">
+      <div class="wrap hero-top">
         <div class="hero-copy">
           <p class="kicker"><span class="dot"></span>ESPEC Authorized Partner in Korea · Since 1981</p>
           <h1>극한을 만들어<br><em>신뢰</em>를 증명합니다</h1>
-          <p class="lead">온도, 습도, 압력, 열충격까지.<br>제품이 세상에서 겪을 모든 환경을 시험실 안에 재현합니다.</p>
-          <div class="hero-actions">
-            <a href="#products" class="btn btn-light">제품 보기</a>
-            <a href="#contact" class="btn btn-line">견적 문의 →</a>
-          </div>
+          <p class="lead">온도, 습도, 압력, 열충격까지. 제품이 겪을 모든 환경을 시험실 안에 재현합니다.</p>
         </div>
 
-        <!-- 온도가 변하는 챔버 그림 -->
-        <div class="hero-visual" aria-hidden="true">
-          <div class="chamber">
-            <div class="chamber-window"><div class="chamber-glow"></div></div>
-            <div class="chamber-panel">
-              <span class="readout" id="readout">+25.0</span><span class="unit">°C</span>
-              <span class="rh">RH <b id="rh">50</b>%</span>
-            </div>
+        <!-- 선택한 장비 정보 (script.js의 machines 목록에서 채워집니다) -->
+        <aside class="panel" aria-live="polite">
+          <p class="panel-series" id="p-series">PLATINOUS series</p>
+          <h2 class="panel-name" id="p-name">항온항습챔버</h2>
+          <div class="panel-readout">
+            <span class="readout" id="readout">+25.0</span><span class="unit">°C</span>
+            <span class="panel-live"><i></i>시험 시뮬레이션</span>
           </div>
-          <div class="scale">
-            <span>-70°C</span>
-            <div class="scale-bar"><i id="scale-pin"></i></div>
-            <span>+180°C</span>
+          <ul class="panel-spec" id="p-spec"></ul>
+          <p class="panel-desc" id="p-desc"></p>
+          <div class="panel-actions">
+            <a href="#products" class="btn btn-light" id="p-detail">자세히 보기</a>
+            <a href="#contact" class="btn btn-line" id="p-ask">견적 문의 →</a>
           </div>
+        </aside>
+      </div>
+
+      <!-- 장비 라인업 (실제 사진이 생기면 <svg> 대신 <img src="images/파일.png" alt="">로 바꾸면 됩니다) -->
+      <div class="stage-wrap">
+        <p class="stage-hint" id="stage-hint">장비를 눌러 살펴보세요</p>
+        <div class="stage" id="stage" role="group" aria-label="장비 라인업">
+
+          <button class="unit" data-id="sh" aria-pressed="false" aria-label="벤치탑 항온항습기">
+            <svg viewBox="0 0 72 220">
+              <rect x="4" y="118" width="64" height="64" rx="4" fill="url(#metal)"/>
+              <rect x="4" y="118" width="64" height="4" rx="2" fill="#fff" opacity=".6"/>
+              <rect x="10" y="128" width="34" height="42" rx="2" class="glow"/>
+              <rect x="10" y="128" width="34" height="42" rx="2" fill="url(#glass)"/>
+              <rect x="50" y="128" width="12" height="16" rx="1.5" class="screen"/>
+              <circle cx="56" cy="158" r="3" fill="#8b9199"/>
+              <rect x="0" y="184" width="72" height="5" rx="1" fill="#3a3f46"/>
+              <path d="M6 189 V208 M66 189 V208" stroke="#3a3f46" stroke-width="3"/>
+              <circle cx="6" cy="212" r="4" fill="#22262b"/><circle cx="66" cy="212" r="4" fill="#22262b"/>
+            </svg>
+            <span class="unit-label">SH</span>
+          </button>
+
+          <button class="unit" data-id="platinous" aria-pressed="false" aria-label="항온항습챔버">
+            <svg viewBox="0 0 90 220">
+              <rect x="4" y="36" width="82" height="168" rx="4" fill="url(#metal)"/>
+              <rect x="4" y="36" width="82" height="5" rx="2" fill="#fff" opacity=".6"/>
+              <rect x="8" y="46" width="56" height="104" rx="3" fill="none" stroke="#9aa0a8" stroke-width=".8"/>
+              <rect x="14" y="56" width="44" height="62" rx="2" class="glow"/>
+              <rect x="14" y="56" width="44" height="62" rx="2" fill="url(#glass)"/>
+              <path d="M16 88 H56" stroke="#fff" stroke-opacity=".35"/>
+              <rect x="58" y="92" width="3" height="24" rx="1.5" fill="#7d838c"/>
+              <rect x="68" y="56" width="14" height="22" rx="1.5" class="screen"/>
+              <path d="M14 166 H76 M14 172 H76 M14 178 H76 M14 184 H76 M14 190 H76" stroke="#a3a9b1"/>
+              <rect x="2" y="202" width="86" height="6" rx="1" fill="#3a3f46"/>
+              <circle cx="12" cy="212" r="4" fill="#22262b"/><circle cx="78" cy="212" r="4" fill="#22262b"/>
+            </svg>
+            <span class="unit-label">PLATINOUS</span>
+          </button>
+
+          <button class="unit" data-id="tsa" aria-pressed="false" aria-label="열충격시험기">
+            <svg viewBox="0 0 96 220">
+              <rect x="4" y="26" width="88" height="178" rx="4" fill="url(#metal)"/>
+              <rect x="4" y="26" width="88" height="5" rx="2" fill="#fff" opacity=".6"/>
+              <rect x="10" y="38" width="76" height="46" rx="2" fill="none" stroke="#9aa0a8" stroke-width=".8"/>
+              <rect x="16" y="44" width="40" height="4" rx="1" style="fill:var(--hot)"/>
+              <path d="M16 58 H80 M16 64 H80 M16 70 H80 M16 76 H80" stroke="#a3a9b1"/>
+              <rect x="14" y="94" width="50" height="54" rx="2" class="glow"/>
+              <rect x="14" y="94" width="50" height="54" rx="2" fill="url(#glass)"/>
+              <rect x="70" y="96" width="16" height="24" rx="1.5" class="screen"/>
+              <rect x="10" y="158" width="76" height="40" rx="2" fill="none" stroke="#9aa0a8" stroke-width=".8"/>
+              <rect x="16" y="164" width="40" height="4" rx="1" style="fill:var(--cold)"/>
+              <path d="M16 176 H80 M16 182 H80 M16 188 H80" stroke="#a3a9b1"/>
+              <rect x="2" y="202" width="92" height="6" rx="1" fill="#3a3f46"/>
+              <circle cx="12" cy="212" r="4" fill="#22262b"/><circle cx="84" cy="212" r="4" fill="#22262b"/>
+            </svg>
+            <span class="unit-label">TSA</span>
+          </button>
+
+          <button class="unit" data-id="walkin" aria-pressed="false" aria-label="워크인 챔버">
+            <svg viewBox="0 0 172 220">
+              <rect x="4" y="16" width="164" height="192" rx="3" fill="url(#metal)"/>
+              <rect x="4" y="16" width="164" height="5" rx="2" fill="#fff" opacity=".6"/>
+              <path d="M45 21 V208 M127 21 V208" stroke="#aeb3ba"/>
+              <rect x="154" y="6" width="8" height="10" rx="2" class="glow"/>
+              <rect x="12" y="58" width="26" height="38" rx="2" fill="#2a2e34"/>
+              <rect x="15" y="62" width="20" height="16" rx="1" class="screen"/>
+              <rect x="58" y="62" width="56" height="146" rx="2" fill="#e3e6ea" stroke="#9aa0a8" stroke-width=".8"/>
+              <rect x="72" y="78" width="28" height="36" rx="2" class="glow"/>
+              <rect x="72" y="78" width="28" height="36" rx="2" fill="url(#glass)"/>
+              <rect x="104" y="130" width="4" height="30" rx="2" fill="#7d838c"/>
+              <rect x="0" y="206" width="172" height="6" rx="1" fill="#3a3f46"/>
+            </svg>
+            <span class="unit-label">WALK-IN</span>
+          </button>
+
+          <button class="unit" data-id="ar" aria-pressed="false" aria-label="급속 온도변화 챔버">
+            <svg viewBox="0 0 112 220">
+              <rect x="4" y="20" width="104" height="184" rx="4" fill="url(#metal)"/>
+              <rect x="4" y="20" width="104" height="5" rx="2" fill="#fff" opacity=".6"/>
+              <rect x="8" y="30" width="72" height="120" rx="3" fill="none" stroke="#9aa0a8" stroke-width=".8"/>
+              <rect x="14" y="40" width="60" height="82" rx="2" class="glow"/>
+              <rect x="14" y="40" width="60" height="82" rx="2" fill="url(#glass)"/>
+              <path d="M16 68 H72 M16 96 H72" stroke="#fff" stroke-opacity=".35"/>
+              <rect x="74" y="96" width="3" height="28" rx="1.5" fill="#7d838c"/>
+              <rect x="84" y="40" width="20" height="30" rx="1.5" class="screen"/>
+              <circle cx="89" cy="80" r="2.5" fill="#2fbf71"/><circle cx="97" cy="80" r="2.5" fill="#8b9199"/>
+              <path d="M14 162 H98 M14 168 H98 M14 174 H98 M14 180 H98 M14 186 H98 M14 192 H98" stroke="#a3a9b1"/>
+              <rect x="2" y="202" width="108" height="6" rx="1" fill="#3a3f46"/>
+              <circle cx="12" cy="212" r="4" fill="#22262b"/><circle cx="100" cy="212" r="4" fill="#22262b"/>
+            </svg>
+            <span class="unit-label">AR</span>
+          </button>
+
+          <button class="unit" data-id="hast" aria-pressed="false" aria-label="HAST 챔버">
+            <svg viewBox="0 0 92 220">
+              <path d="M40 92 V80 H56 V74" fill="none" stroke="#7d838c" stroke-width="3"/>
+              <circle cx="62" cy="72" r="6" fill="#e3e6ea" stroke="#7d838c" stroke-width="1.5"/>
+              <rect x="4" y="90" width="84" height="114" rx="6" fill="url(#metal)"/>
+              <rect x="4" y="90" width="84" height="5" rx="2" fill="#fff" opacity=".6"/>
+              <circle cx="38" cy="138" r="28" fill="#cfd3d8" stroke="#8b9199" stroke-width="2"/>
+              <circle cx="38" cy="138" r="15" class="glow"/>
+              <circle cx="38" cy="138" r="15" fill="url(#glass)"/>
+              <g fill="#8b9199"><circle cx="38" cy="114" r="1.6"/><circle cx="38" cy="162" r="1.6"/><circle cx="14" cy="138" r="1.6"/><circle cx="62" cy="138" r="1.6"/></g>
+              <rect x="70" y="102" width="12" height="20" rx="1.5" class="screen"/>
+              <path d="M10 180 H82 M10 186 H82 M10 192 H82" stroke="#a3a9b1"/>
+              <rect x="2" y="202" width="88" height="6" rx="1" fill="#3a3f46"/>
+              <circle cx="12" cy="212" r="4" fill="#22262b"/><circle cx="80" cy="212" r="4" fill="#22262b"/>
+            </svg>
+            <span class="unit-label">HAST</span>
+          </button>
+
+          <button class="unit" data-id="battery" aria-pressed="false" aria-label="2차전지 시험장비">
+            <svg viewBox="0 0 92 220">
+              <rect x="28" y="38" width="36" height="12" rx="2" fill="#3a3f46"/>
+              <rect x="4" y="48" width="84" height="156" rx="4" fill="url(#metal)"/>
+              <rect x="4" y="48" width="84" height="5" rx="2" fill="#fff" opacity=".6"/>
+              <rect x="14" y="62" width="46" height="58" rx="2" class="glow"/>
+              <rect x="14" y="62" width="46" height="58" rx="2" fill="url(#glass)"/>
+              <rect x="29" y="78" width="16" height="28" rx="2" fill="none" stroke="#fff" stroke-opacity=".7" stroke-width="1.5"/>
+              <rect x="34" y="75" width="6" height="3" fill="#fff" fill-opacity=".7"/>
+              <rect x="66" y="62" width="16" height="22" rx="1.5" class="screen"/>
+              <circle cx="74" cy="94" r="3" fill="#ff3b30"/>
+              <rect x="4" y="176" width="84" height="12" fill="url(#hazard)"/>
+              <rect x="2" y="202" width="88" height="6" rx="1" fill="#3a3f46"/>
+              <circle cx="12" cy="212" r="4" fill="#22262b"/><circle cx="80" cy="212" r="4" fill="#22262b"/>
+            </svg>
+            <span class="unit-label">BATTERY</span>
+          </button>
+
         </div>
       </div>
 
@@ -147,7 +282,7 @@
         </div>
 
         <div class="products" id="product-list">
-          <article class="product" data-cat="temp">
+          <article class="product" data-id="platinous" data-cat="temp">
             <div class="product-art"><svg><use href="#ico-tall"/></svg></div>
             <div class="product-body">
               <p class="series">PLATINOUS series</p>
@@ -158,7 +293,7 @@
             <button class="product-ask" data-product="항온항습챔버 (PLATINOUS)">이 제품 문의 <span>→</span></button>
           </article>
 
-          <article class="product" data-cat="temp">
+          <article class="product" data-id="sh" data-cat="temp">
             <div class="product-art"><svg><use href="#ico-bench"/></svg></div>
             <div class="product-body">
               <p class="series">SH series</p>
@@ -169,7 +304,7 @@
             <button class="product-ask" data-product="벤치탑 항온항습기 (SH)">이 제품 문의 <span>→</span></button>
           </article>
 
-          <article class="product" data-cat="temp semi">
+          <article class="product" data-id="ar" data-cat="temp semi">
             <div class="product-art"><svg><use href="#ico-tall"/></svg></div>
             <div class="product-body">
               <p class="series">AR series</p>
@@ -180,7 +315,7 @@
             <button class="product-ask" data-product="급속 온도변화 챔버 (AR)">이 제품 문의 <span>→</span></button>
           </article>
 
-          <article class="product" data-cat="shock">
+          <article class="product" data-id="tsa" data-cat="shock">
             <div class="product-art"><svg><use href="#ico-shock"/></svg></div>
             <div class="product-body">
               <p class="series">TSA · TSE series</p>
@@ -191,7 +326,7 @@
             <button class="product-ask" data-product="열충격시험기 (TSA/TSE)">이 제품 문의 <span>→</span></button>
           </article>
 
-          <article class="product" data-cat="semi">
+          <article class="product" data-id="hast" data-cat="semi">
             <div class="product-art"><svg><use href="#ico-hast"/></svg></div>
             <div class="product-body">
               <p class="series">EHS series</p>
@@ -202,7 +337,7 @@
             <button class="product-ask" data-product="HAST 챔버 (EHS)">이 제품 문의 <span>→</span></button>
           </article>
 
-          <article class="product" data-cat="battery">
+          <article class="product" data-id="battery" data-cat="battery">
             <div class="product-art"><svg><use href="#ico-battery"/></svg></div>
             <div class="product-body">
               <p class="series">Battery Test</p>
@@ -213,7 +348,7 @@
             <button class="product-ask" data-product="2차전지 시험장비">이 제품 문의 <span>→</span></button>
           </article>
 
-          <article class="product" data-cat="large">
+          <article class="product" data-id="walkin" data-cat="large">
             <div class="product-art"><svg><use href="#ico-walk"/></svg></div>
             <div class="product-body">
               <p class="series">Walk-in Chamber</p>
