@@ -23,6 +23,12 @@
       <linearGradient id="metal" x1="0" y1="0" x2="1" y2="0">
         <stop offset="0" stop-color="#f4f5f7"/><stop offset=".6" stop-color="#dfe2e6"/><stop offset="1" stop-color="#bfc4ca"/>
       </linearGradient>
+      <linearGradient id="column" x1="0" y1="0" x2="1" y2="0">
+        <stop offset="0" stop-color="#43474d"/><stop offset="1" stop-color="#2b2e33"/>
+      </linearGradient>
+      <linearGradient id="lcd" x1="0" y1="0" x2="0" y2="1">
+        <stop offset="0" stop-color="#3a7bd5"/><stop offset="1" stop-color="#16345e"/>
+      </linearGradient>
       <radialGradient id="glass" cx=".35" cy=".3" r=".9">
         <stop offset="0" stop-color="#fff" stop-opacity=".45"/><stop offset=".5" stop-color="#fff" stop-opacity="0"/><stop offset="1" stop-color="#000" stop-opacity=".35"/>
       </radialGradient>
@@ -145,19 +151,45 @@
             <span class="unit-label">SH</span>
           </button>
 
-          <button class="unit" data-id="platinous" aria-pressed="false" aria-label="항온항습챔버">
-            <svg viewBox="0 0 90 220">
-              <rect x="4" y="36" width="82" height="168" rx="4" fill="url(#metal)"/>
-              <rect x="4" y="36" width="82" height="5" rx="2" fill="#fff" opacity=".6"/>
-              <rect x="8" y="46" width="56" height="104" rx="3" fill="none" stroke="#9aa0a8" stroke-width=".8"/>
-              <rect x="14" y="56" width="44" height="62" rx="2" class="glow"/>
-              <rect x="14" y="56" width="44" height="62" rx="2" fill="url(#glass)"/>
-              <path d="M16 88 H56" stroke="#fff" stroke-opacity=".35"/>
-              <rect x="58" y="92" width="3" height="24" rx="1.5" fill="#7d838c"/>
-              <rect x="68" y="56" width="14" height="22" rx="1.5" class="screen"/>
-              <path d="M14 166 H76 M14 172 H76 M14 178 H76 M14 184 H76 M14 190 H76" stroke="#a3a9b1"/>
-              <rect x="2" y="202" width="86" height="6" rx="1" fill="#3a3f46"/>
-              <circle cx="12" cy="212" r="4" fill="#22262b"/><circle cx="78" cy="212" r="4" fill="#22262b"/>
+          <button class="unit" data-id="platinous" aria-pressed="false" aria-label="항온항습챔버 PL-2J">
+            <!-- PL-2J 실제 치수(mm) 기준 정면도: 폭 910 + 힌지 28.5, 높이 1590 -->
+            <svg viewBox="0 0 94 220">
+              <g transform="scale(.1)">
+                <!-- 본체 -->
+                <rect x="28" y="570" width="702" height="1554" fill="url(#metal)"/>
+                <rect x="0" y="600" width="30" height="960" rx="6" fill="#b9bec4"/>
+                <rect x="0" y="700" width="34" height="90" rx="6" fill="#8b9199"/>
+                <rect x="0" y="1380" width="34" height="90" rx="6" fill="#8b9199"/>
+                <rect x="28" y="570" width="702" height="10" fill="#fff" opacity=".7"/>
+                <!-- 문 (위) -->
+                <rect x="40" y="590" width="678" height="975" rx="6" fill="url(#metal)" stroke="#a6acb3" stroke-width="3"/>
+                <rect x="200" y="690" width="340" height="520" rx="10" fill="#9aa0a8"/>
+                <rect x="216" y="706" width="308" height="488" rx="6" class="glow"/>
+                <path d="M226 950 H514" stroke="#fff" stroke-opacity=".35" stroke-width="5"/>
+                <rect x="216" y="706" width="308" height="488" rx="6" fill="url(#glass)"/>
+                <rect x="200" y="1250" width="340" height="300" rx="6" fill="#e4e1da"/>
+                <!-- 손잡이 -->
+                <rect x="572" y="860" width="96" height="300" rx="12" fill="#c3c8ce" stroke="#8b9199" stroke-width="4"/>
+                <rect x="604" y="890" width="32" height="240" rx="16" fill="#eef0f2" stroke="#7d838c" stroke-width="4"/>
+                <!-- 아래 칸 + 물탱크 서랍 -->
+                <rect x="40" y="1580" width="678" height="536" fill="#d7dbdf"/>
+                <path d="M40 1580 H718" stroke="#a6acb3" stroke-width="4"/>
+                <rect x="150" y="1610" width="420" height="470" rx="6" fill="#e4e1da" stroke="#a6acb3" stroke-width="3"/>
+                <rect x="160" y="1620" width="400" height="40" rx="4" fill="#cfcac0"/>
+                <rect x="340" y="1720" width="40" height="250" rx="20" fill="#f6f6f4" stroke="#7d838c" stroke-width="5"/>
+                <!-- 오른쪽 조작부 -->
+                <rect x="730" y="570" width="210" height="1554" fill="url(#column)"/>
+                <rect x="730" y="570" width="210" height="14" fill="#3fbf6a"/>
+                <rect x="760" y="820" width="150" height="140" rx="8" fill="#15181c"/>
+                <rect x="770" y="830" width="130" height="120" rx="4" class="lcd"/>
+                <g fill="#9ba1a9"><rect x="770" y="985" width="36" height="16" rx="3"/><rect x="814" y="985" width="36" height="16" rx="3"/><circle cx="880" cy="993" r="12"/></g>
+                <rect x="770" y="1040" width="130" height="34" rx="4" fill="#24272c"/>
+                <path d="M738 1110 H932 M738 1220 H932 M738 1330 H932 M738 1440 H932 M738 1560 H932" stroke="#1f2226" stroke-width="5"/>
+                <rect x="756" y="1135" width="10" height="60" rx="4" fill="#8b9199"/>
+                <!-- 받침 + 바퀴 -->
+                <rect x="20" y="2116" width="925" height="12" fill="#2a2e34"/>
+                <g fill="#22262b"><rect x="90" y="2128" width="60" height="32" rx="8"/><rect x="800" y="2128" width="60" height="32" rx="8"/></g>
+              </g>
             </svg>
             <span class="unit-label">PLATINOUS</span>
           </button>

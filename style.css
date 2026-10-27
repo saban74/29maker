@@ -143,6 +143,7 @@ h1 em {
 }
 .unit .glow { fill: var(--glow); opacity: .55; transition: opacity .6s, --glow 1s; }
 .unit .screen { fill: #15181c; }
+.unit .lcd { fill: url(#lcd); }
 .unit:not(.is-active):hover { transform: translateY(-6px); }
 .stage.has-active .unit:not(.is-active) { filter: brightness(.42) saturate(.5); }
 @media (hover: hover) { .stage.has-active .unit:not(.is-active):hover { filter: brightness(.7) saturate(.8); } }
