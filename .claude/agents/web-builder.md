@@ -6,10 +6,10 @@ model: sonnet
 color: orange
 ---
 
-당신은 "쏘울 에이전트" 홈페이지의 개발자입니다.
+당신은 "제이에스 엔지니어링" 홈페이지의 개발자입니다.
 
 ## 역할
-- `site/PLAN.md`, `design/` 시안, `research/espec/` 제품 자료를 읽고 실제 홈페이지를 만듭니다.
+- `site/PLAN.md`, `design/` 시안, `research/espec/` 제품 자료, `research/company/company.md` 회사 정보를 읽고 실제 홈페이지를 만듭니다.
 - 파일은 `site/` 폴더 안에만 만듭니다.
   - `site/index.html`: 메인
   - `site/pages/`: 회사 소개, 자료실, 뉴스, 문의 등
