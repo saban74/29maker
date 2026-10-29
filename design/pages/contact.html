@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>견적·문의 | 쏘울 에이전트 (시안)</title>
+<link rel="stylesheet" href="../common.css">
+</head>
+<body>
+<a class="skip" href="#main">본문 바로가기</a>
+<div class="mock-bar">디자인 시안입니다. 실제 사이트에서는 단계별로 한 화면씩 보입니다. 시안에서는 4단계를 모두 펼쳐 보여 줍니다.</div>
+<header class="site-header">
+  <div class="container header-inner">
+    <a class="brand" href="../main.html"><span class="brand__mark" aria-hidden="true"></span><span class="brand__name">쏘울 에이전트</span></a>
+    <span class="badge-agent">ESPEC 한국 공식 총대리점</span>
+    <input type="checkbox" id="nav-toggle" class="nav-toggle" aria-label="메뉴 열기">
+    <label for="nav-toggle" class="nav-burger">메뉴</label>
+    <nav class="nav" aria-label="주 메뉴">
+      <ul>
+        <li><a href="products.html">제품</a><div class="sub"><a href="products.html#hvac">항온항습기</a><a href="products.html#cycle">급속 온도변화·온도 사이클</a><a href="products.html#shock">열충격 시험기</a><a href="products.html#hast">HAST 가속수명 시험기</a><a href="products.html#walkin">워크인 챔버</a><a href="products.html#oven">산업용 오븐</a><a href="products.html#battery">2차전지 시험 장비</a><a href="products.html#semi">반도체·전자부품 평가</a><a href="products.html#others">그 밖의 라인업</a></div></li>
+        <li><a href="applications.html">용도별 찾기</a><div class="sub"><a href="applications.html#purpose">시험 목적별</a><a href="applications.html#industry">산업 분야별</a></div></li>
+        <li><a href="resources.html">자료실</a></li>
+        <li><a href="news.html">뉴스</a></li>
+        <li><a href="about.html">회사 소개</a><div class="sub"><a href="about.html#greeting">인사말</a><a href="about.html#history">45년 연혁</a><a href="about.html#agent">공식 총대리점</a><a href="about.html#location">오시는 길</a></div></li>
+        <li class="nav__tel"><a href="#">전화 걸기 <span class="tbd">[확인 필요: 번호]</span></a></li>
+      </ul>
+    </nav>
+    <div class="header-right"><span class="tel">☎ <span class="tbd">[확인 필요]</span></span><a class="btn btn--primary btn--sm" href="contact.html" aria-current="page">견적 문의</a></div>
+  </div>
+</header>
+
+<main id="main">
+<div class="page-head">
+  <div class="container">
+    <div class="ticks"></div>
+    <h1>견적·문의</h1>
+    <p>몇 가지만 알려 주시면 담당자가 확인 후 연락드립니다. 접수 후 <span class="tbd">[확인 필요: 예) 영업일 기준 ○일 이내]</span>에 연락드립니다.</p>
+  </div>
+</div>
+
+<section class="section">
+  <div class="container contact-layout">
+    <form class="form-card" action="#" onsubmit="return false">
+      <div class="field">
+        <fieldset>
+          <legend>문의 유형 <span class="req">필수</span></legend>
+          <div class="choice-grid choice-grid--5">
+            <label class="choice"><input type="radio" name="type" checked> 견적 요청</label>
+            <label class="choice"><input type="radio" name="type"> 기술 상담</label>
+            <label class="choice"><input type="radio" name="type"> 자료 요청</label>
+            <label class="choice"><input type="radio" name="type"> A/S·유지보수</label>
+            <label class="choice"><input type="radio" name="type"> 기타</label>
+          </div>
+        </fieldset>
+        <p class="table-note">제품·자료실·뉴스에서 들어오면 유형과 제품명이 미리 선택됩니다.</p>
+      </div>
+
+      <ol class="stepper" aria-label="견적 요청 진행 단계">
+        <li class="is-now">1. 용도</li><li>2. 장비</li><li>3. 조건</li><li>4. 연락처</li>
+      </ol>
+
+      <div class="form-step">
+        <h3>1단계 · 어떤 시험을 하시나요?</h3>
+        <div class="field">
+          <fieldset><legend>시험 목적 <span class="req">필수</span></legend>
+            <div class="choice-grid choice-grid--3">
+              <label class="choice"><input type="radio" name="purpose"> 온도·습도 환경 시험</label>
+              <label class="choice"><input type="radio" name="purpose"> 급속 온도변화·온도 사이클</label>
+              <label class="choice"><input type="radio" name="purpose"> 열충격 시험</label>
+              <label class="choice"><input type="radio" name="purpose"> HAST 가속수명 시험</label>
+              <label class="choice"><input type="radio" name="purpose"> 배터리 충방전·안전 시험</label>
+              <label class="choice"><input type="radio" name="purpose"> 반도체 패키지 전기적 신뢰성</label>
+              <label class="choice"><input type="radio" name="purpose"> 대형 시험체·서버 시험</label>
+              <label class="choice"><input type="radio" name="purpose"> 고온 시험·열처리·건조</label>
+              <label class="choice"><input type="radio" name="purpose" checked> 잘 모르겠음</label>
+            </div>
+          </fieldset>
+        </div>
+        <div class="field"><label for="industry">산업 분야 <span class="opt">선택</span></label>
+          <select id="industry"><option>선택해 주세요</option><option>반도체·AI</option><option>배터리·전기차</option><option>자동차 전장</option><option>전자부품·PCB</option><option>데이터센터·서버</option><option>대학·연구소</option><option>기타</option></select></div>
+      </div>
+
+      <div class="form-step">
+        <h3>2단계 · 관심 장비</h3>
+        <div class="form-two">
+          <div class="field"><label for="product">관심 제품 <span class="opt">선택</span></label><input type="text" id="product" value="Platinous J Series" aria-describedby="p-note"><span id="p-note" class="table-note">제품 상세에서 들어오면 제품명이 자동으로 들어갑니다.</span></div>
+          <div class="field"><label for="qty">필요 대수 <span class="opt">선택</span></label><input type="number" id="qty" min="1" placeholder="예: 2"></div>
+        </div>
+      </div>
+
+      <div class="form-step">
+        <h3>3단계 · 시험 조건 (모두 선택)</h3>
+        <div class="form-two">
+          <div class="field"><label for="temp">온도 범위 <span class="opt">선택</span></label><input type="text" id="temp" placeholder="예: -40 ~ +100°C"></div>
+          <div class="field"><label for="hum">습도 범위 <span class="opt">선택</span></label><input type="text" id="hum" placeholder="예: 20 ~ 98%rh"></div>
+          <div class="field"><label for="size">필요한 용량·시험품 크기 <span class="opt">선택</span></label><input type="text" id="size" placeholder="예: 400L 이상"></div>
+          <div class="field"><label for="std">적용 규격 <span class="opt">선택</span></label><input type="text" id="std" placeholder="예: AEC-Q100"></div>
+          <div class="field"><label for="when">희망 도입 시기 <span class="opt">선택</span></label><input type="text" id="when" placeholder="예: 2027년 상반기"></div>
+          <div class="field"><label for="file">시험 사양서 첨부 <span class="opt">선택</span></label><input type="file" id="file"></div>
+        </div>
+        <div class="field"><label for="memo">기타 요청 <span class="opt">선택</span></label><textarea id="memo"></textarea></div>
+      </div>
+
+      <div class="form-step">
+        <h3>4단계 · 연락처</h3>
+        <div class="form-two">
+          <div class="field"><label for="co">회사·기관명 <span class="req">필수</span></label><input type="text" id="co" autocomplete="organization"></div>
+          <div class="field"><label for="nm">담당자 이름 <span class="req">필수</span></label><input type="text" id="nm" autocomplete="name"></div>
+          <div class="field"><label for="ph">연락처 <span class="req">필수</span></label><input type="tel" id="ph" autocomplete="tel"></div>
+          <div class="field"><label for="em">이메일 <span class="req">필수</span></label><input type="email" id="em" autocomplete="email"></div>
+        </div>
+        <div class="field"><label class="choice" style="font-weight:500"><input type="checkbox"> 개인정보 수집·이용에 동의합니다 <span class="req">필수</span></label>
+          <p class="table-note">수집 항목: 회사명, 이름, 연락처, 이메일 / 목적: 견적·문의 응대 / 보관 기간: <span class="tbd">[확인 필요]</span> · <a href="#">개인정보처리방침 전문 보기</a></p></div>
+        <div class="btn-row"><button type="button" class="btn btn--secondary">이전 단계</button><button type="button" class="btn btn--primary">문의 보내기</button></div>
+      </div>
+
+      <div class="source-note">자료 요청 · A/S 유형을 고르면 단계를 줄여 &quot;제품명(또는 모델명·장비 번호) + 요청 내용 + 연락처&quot; 한 화면으로 받습니다.</div>
+    </form>
+
+    <aside>
+      <div class="side-box">
+        <h3>폼이 불편하시면</h3>
+        <dl>
+          <dt>전화</dt><dd><span class="tbd">[확인 필요]</span></dd>
+          <dt>이메일</dt><dd><span class="tbd">[확인 필요]</span></dd>
+          <dt>업무 시간</dt><dd><span class="tbd">[확인 필요]</span></dd>
+          <dt>주소</dt><dd><span class="tbd">[확인 필요]</span> · <a href="about.html#location">오시는 길 보기</a></dd>
+        </dl>
+      </div>
+      <div class="ph" style="margin-top:16px;min-height:200px">지도 들어갈 자리 <span class="tbd">[확인 필요: 주소]</span></div>
+    </aside>
+  </div>
+</section>
+
+<section class="section section--alt">
+  <div class="container">
+    <div class="section__head"><span class="eyebrow">접수 완료 화면 시안</span><h2>문의가 접수되었습니다.</h2>
+      <p>담당자가 확인 후 연락드리겠습니다. 그동안 카탈로그를 살펴보세요.</p></div>
+    <a class="btn btn--secondary" href="resources.html">자료실 가기</a>
+  </div>
+</section>
+</main>
+
+<footer class="site-footer">
+  <div class="container">
+    <div class="footer-grid">
+      <div><div class="footer-brand">쏘울 에이전트</div><p>쏘울 에이전트는 ESPEC Corp.의 한국 공식 총대리점입니다.</p>
+        <p>대표자 <span class="tbd">[확인 필요]</span> · 사업자등록번호 <span class="tbd">[확인 필요]</span><br>주소 <span class="tbd">[확인 필요]</span><br>전화 <span class="tbd">[확인 필요]</span> · 팩스 <span class="tbd">[확인 필요]</span> · 이메일 <span class="tbd">[확인 필요]</span></p></div>
+      <div><h4>사이트 안내</h4><ul><li><a href="products.html">제품</a></li><li><a href="applications.html">용도별 찾기</a></li><li><a href="resources.html">자료실</a></li><li><a href="news.html">뉴스</a></li><li><a href="about.html">회사 소개</a></li><li><a href="contact.html">견적·문의</a></li></ul></div>
+      <div><h4>바로가기</h4><ul><li><a href="#">개인정보처리방침</a></li><li><a href="https://www.espec.co.jp/english/" target="_blank" rel="noopener">ESPEC 공식 사이트 (영문, 새 창)</a></li></ul></div>
+    </div>
+    <div class="footer-legal">ESPEC 및 각 제품명은 ESPEC Corp.의 상표입니다. 제품 정보는 ESPEC 공개 자료를 바탕으로 쏘울 에이전트가 정리했습니다.</div>
+  </div>
+</footer>
+</body>
+</html>
