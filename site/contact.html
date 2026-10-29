@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>견적·문의 | J&amp;S ENGINEERING 제이에스 엔지니어링 - ESPEC 한국 단독 총대리점</title>
+<meta name="description" content="견적 요청, 기술 상담, 자료 요청, A/S, 위탁 시험 문의를 남겨 주세요. 담당자가 확인 후 연락드립니다.">
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body data-root="" data-nav="support">
+<a class="skip" href="#main">본문 바로가기</a>
+<div id="site-header"></div>
+
+<main id="main">
+<!-- 머리 영역 -->
+<section class="page-head">
+  <div class="container">
+    <span class="eyebrow">Contact</span>
+    <h1>견적·문의</h1>
+    <p>몇 가지만 알려 주시면 담당자가 확인 후 연락드립니다. 접수 후 연락 시간 <span class="tbd">[확인 필요]</span></p>
+  </div>
+</section>
+
+<!-- 문의 폼. 제품 페이지에서 오면 문의 유형과 제품명이 미리 들어갑니다 (js/main.js).
+     data-types 는 어떤 문의 유형일 때 그 칸을 보여 줄지 정합니다. -->
+<section class="section">
+  <div class="container contact-layout">
+    <form id="contact-form" action="#" novalidate>
+      <div class="field"><label>문의 유형</label>
+        <div class="type-grid">
+          <label><input type="radio" name="type" value="quote" checked>견적 요청</label>
+          <label><input type="radio" name="type" value="tech">기술 상담</label>
+          <label><input type="radio" name="type" value="data">자료 요청</label>
+          <label><input type="radio" name="type" value="as">A/S·유지보수</label>
+          <label><input type="radio" name="type" value="lab">위탁 시험</label>
+          <label><input type="radio" name="type" value="etc">기타</label>
+        </div></div>
+
+      <ol class="steps" data-types="quote tech"><li class="is-on">1 용도</li><li class="is-on">2 장비</li><li class="is-on">3 조건</li><li class="is-on">4 연락처</li></ol>
+
+      <div class="form-grid">
+        <div class="field" data-types="quote tech"><label for="purpose">시험 목적 (견적 요청 시 필수)</label><select id="purpose" name="purpose"><option value="">선택해 주세요</option><option>온도·습도 환경 시험</option><option>급속 온도변화·온도 사이클</option><option>열충격 시험</option><option>HAST 가속수명 시험</option><option>배터리 충방전·안전 시험</option><option>반도체 패키지 전기적 신뢰성</option><option>대형 시험체·서버 시험</option><option>무풍·저진동 열변형 관찰</option><option>고온 시험·열처리·건조</option><option>진동 시험</option><option>잘 모르겠음</option></select></div>
+        <div class="field" data-types="quote tech"><label for="industry">산업 분야</label><select id="industry" name="industry"><option value="">선택해 주세요</option><option>반도체</option><option>전기전자</option><option>배터리</option><option>자동차·모빌리티</option><option>항공우주·방산</option><option>소재·기타</option></select></div>
+        <div class="field"><label for="prod" id="prod-label">관심 제품</label><input id="prod" name="product" placeholder="제품 페이지에서 오면 자동으로 입력됩니다"></div>
+        <div class="field" data-types="quote"><label for="qty">필요 대수</label><input id="qty" name="qty" placeholder="예: 1"></div>
+        <div class="field" data-types="quote tech"><label for="temp">온도 범위</label><input id="temp" name="temp" placeholder="예: -40 ~ +125°C"></div>
+        <div class="field" data-types="quote tech"><label for="size">용량·시험품 크기</label><input id="size" name="size" placeholder="예: 시험품 400×300×200mm"></div>
+      </div>
+      <div class="field"><label for="memo">기타 요청</label><textarea id="memo" name="memo" placeholder="적용 규격, 희망 도입 시기 등을 자유롭게 적어 주세요."></textarea></div>
+      <div class="field" data-types="quote tech"><label for="file">시험 사양서 첨부 (선택)</label><input id="file" name="file" type="file" disabled><p class="source-note" style="margin-top:6px">파일 첨부는 문의를 받는 방법이 정해지면 열립니다. 지금은 사양서를 메일로 보내 주세요. <span class="tbd">[확인 필요]</span></p></div>
+      <div class="form-grid">
+        <div class="field"><label for="co">회사·기관명 (필수)</label><input id="co" name="company" required></div>
+        <div class="field"><label for="nm">담당자 이름 (필수)</label><input id="nm" name="name" required></div>
+        <div class="field"><label for="tel">연락처 (필수)</label><input id="tel" name="tel" type="tel" required></div>
+        <div class="field"><label for="em">이메일 (필수)</label><input id="em" name="email" type="email" required></div>
+      </div>
+      <div class="field"><label class="check-line"><input type="checkbox" name="agree" required> 개인정보 수집·이용에 동의합니다. (필수)</label>
+        <p class="source-note" style="margin-top:6px">수집 항목: 회사명, 이름, 연락처, 이메일 / 목적: 견적·문의 응대 / 보관 기간 <span class="tbd">[확인 필요]</span> · <a href="privacy.html">개인정보처리방침</a></p></div>
+      <button class="btn" type="submit">문의 보내기</button>
+      <p class="source-note" style="margin-top:12px">현재는 입력 내용이 서버로 전송되지 않는 시험용 화면입니다. 문의를 받는 방법(이메일 등)이 정해지면 연결합니다. <span class="tbd">[확인 필요]</span></p>
+    </form>
+
+    <aside class="card card--soft">
+      <h3>전화·이메일로 문의</h3>
+      <p style="margin-top:12px">전화 <span class="tbd">[확인 필요]</span><br>이메일 <span class="tbd">[확인 필요]</span><br>업무 시간 <span class="tbd">[확인 필요]</span></p>
+      <hr style="border:0;border-top:1px solid var(--line);margin:20px 0">
+      <p>ESPEC 한국 단독 총대리점<br>제이에스 엔지니어링</p>
+      <a class="link-arrow" style="margin-top:16px" href="about.html#location">오시는 길</a>
+    </aside>
+  </div>
+</section>
+</main>
+
+<div id="site-footer"></div>
+<script src="js/layout.js"></script>
+<script src="js/main.js"></script>
+</body>
+</html>
