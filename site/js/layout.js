@@ -46,11 +46,11 @@
         '<div class="sub"><div class="container sub__in"><div class="sub__title"><strong>' + m.label + '</strong><span>' + m.desc +
         '</span></div><div class="sub__links">' + links + '</div></div></div></li>';
     }).join('');
-    return '<header class="site-header"><div class="container header-inner">' +
+    return '<div class="agent-strip">ESPEC 한국 단독 총대리점 · 제이에스 엔지니어링</div><header class="site-header"><div class="container header-inner">' +
       a('index.html', '<strong>J&amp;S ENGINEERING</strong><small>TOTAL TEST SOLUTION</small>', ' class="brand" aria-label="J&amp;S ENGINEERING 메인으로"') +
       '<span class="badge-agent">ESPEC 한국 단독 총대리점</span>' +
       '<input type="checkbox" id="nav-toggle" class="nav-toggle" aria-label="메뉴 열기">' +
-      '<label for="nav-toggle" class="nav-burger"><span></span></label>' +
+      '<label for="nav-toggle" class="nav-burger" aria-label="메뉴 열기"><span></span></label>' +
       '<nav class="nav" aria-label="주 메뉴"><ul>' + items + '</ul></nav>' +
       '<div class="header-right">' +
       a('products/index.html#search', '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="11" cy="11" r="7"/><path d="M20 20l-4-4"/></svg>', ' class="icon-btn" aria-label="제품 검색"') +
@@ -79,7 +79,7 @@
   function buildSupport() {
     var t = '<span class="tbd">[확인 필요]</span>';
     return '<div class="container"><div class="section__head"><div><span class="eyebrow">J&amp;S Support</span><h2>도입부터 사후관리까지</h2>' +
-      '<p>ESPEC 기술진과 정기 기술 협력하는 제이에스 엔지니어링 서비스 조직이 사후 관리를 맡습니다. 각 단계의 실제 범위는 확인 후 채웁니다.</p></div>' +
+      '<p>ESPEC 기술진과 정기 기술 협력하는 제이에스 엔지니어링 서비스 조직이 사후 관리를 맡습니다. 단계별 자세한 내용은 문의해 주시면 안내해 드립니다.</p></div>' +
       a('service.html', '서비스 보기', ' class="link-arrow"') + '</div>' +
       '<ol class="flow"><li><strong>도입 상담</strong>' + t + '</li><li><strong>사양 확정</strong>' + t + '</li><li><strong>견적</strong>' + t +
       '</li><li><strong>납품·설치</strong>' + t + '</li><li><strong>A/S</strong>' + t + '</li></ol></div>';
