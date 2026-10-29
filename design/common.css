@@ -1,5 +1,5 @@
 /* ==========================================================
-   쏘울 에이전트 공통 디자인 (common.css)
+   제이에스 엔지니어링 공통 디자인 (common.css)
    모든 시안이 이 파일 하나를 함께 씁니다.
    설명서: design/style-guide.md
    ========================================================== */
@@ -90,7 +90,7 @@ ul { margin: 0 0 var(--sp-4); padding-left: 1.2em; }
 .eyebrow { display: block; font-size: var(--fs-small); font-weight: 700; color: var(--teal-700); letter-spacing: 0.04em; margin-bottom: var(--sp-2); }
 .section--dark .eyebrow { color: #7FD0D8; }
 
-/* 눈금 장식: 쏘울 에이전트 고유 모양 (온도계 눈금을 닮은 선) */
+/* 눈금 장식: 제이에스 엔지니어링 고유 모양 (온도계 눈금을 닮은 선) */
 .ticks { height: 10px; width: 120px; margin-bottom: var(--sp-4);
   background: repeating-linear-gradient(90deg, var(--teal-600) 0 2px, transparent 2px 12px);
   -webkit-mask: linear-gradient(#000, #000) bottom/100% 2px no-repeat, repeating-linear-gradient(90deg, #000 0 2px, transparent 2px 12px);
@@ -256,7 +256,7 @@ table.spec tbody th { font-weight: 700; color: var(--navy-700); }
 .use-list { list-style: none; padding: 0; margin: 0; display: grid; gap: var(--sp-3); }
 .use-list li { display: flex; gap: var(--sp-3); align-items: flex-start; }
 
-/* 쏘울 에이전트 지원 흐름 (5단계) */
+/* 제이에스 엔지니어링 지원 흐름 (5단계) */
 .flow { list-style: none; margin: 0; padding: 0; display: grid; gap: var(--sp-3); counter-reset: s; }
 .flow li { counter-increment: s; background: #fff; border: 1px solid var(--gray-100); border-radius: var(--radius); padding: var(--sp-4); position: relative; padding-left: 64px; }
 .flow li::before { content: counter(s); position: absolute; left: 16px; top: 14px; width: 34px; height: 34px; border-radius: 50%;
