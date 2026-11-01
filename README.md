@@ -24,6 +24,11 @@
   2. `index.html`의 해당 `<button class="unit">` 안 `<svg>…</svg>`를 `<img src="images/platinous.png" alt="">`로 교체
 - 장비 이름·사양·설명은 `script.js` 위쪽 `machines` 목록에서 수정
 
+## 디자인 시안 2가지 (비교용)
+- `index.html` – 감각형: 시험실 콘셉트 첫 화면 (연구원 캐릭터 + 장비 라인업)
+- `clean.html` – 깔끔형: 제작사 홈페이지 스타일 (흰 배경, 제품 분류 카드, 바로가기, 실제 제품 사진). 디자인 `clean.css`, 동작 `clean.js`
+- 하나를 고르면 그 파일을 `index.html`로 정리합니다
+
 ## 제품 상세 페이지
 - `platinous.html` – 항온항습챔버 PLATINOUS J (첫 화면 정보창·제품 카드의 "자세히 보기"에서 연결)
 - 장비 사진: `images/products/platinous-j.webp` – ESPEC 공식 배너에서 장비만 잘라 배경 제거·선명화 (ESPEC 사용 허락 및 고해상도 원본 요청 권장)
