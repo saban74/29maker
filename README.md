@@ -26,6 +26,15 @@
 |---|---|
 | `code-explainer` | 코드를 입문자 눈높이로 쉽게 설명 (읽기 전용) |
 
+### 디자인 스킬 (`.claude/skills/`)
+
+| 스킬 | 출처 | 쓰는 팀원 | 하는 일 |
+|---|---|---|---|
+| `frontend-design` | [anthropics/skills](https://github.com/anthropics/skills) (Apache 2.0) | `web-designer` | 뻔한 "AI 디자인"을 피하고 개성 있는 색·글꼴·배치를 정하는 원칙 |
+| `web-design-guidelines` | [vercel-labs/web-interface-guidelines](https://github.com/vercel-labs/web-interface-guidelines) (MIT) | `web-reviewer` | 접근성·폼·포커스 등 100여 개 웹 화면 규칙으로 검사 |
+
+`web-design-guidelines`는 원래 검사할 때마다 인터넷에서 규칙을 받아 오지만, 여기서는 규칙을 `rules.md`로 저장해 두고 씁니다.
+
 ## 사용법
 
 Claude Code에서 이렇게 부탁하세요. 메인 Claude가 감독자가 되어 팀을 순서대로 움직입니다.
