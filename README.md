@@ -31,6 +31,7 @@
 | 스킬 | 출처 | 쓰는 팀원 | 하는 일 |
 |---|---|---|---|
 | `frontend-design` | [anthropics/skills](https://github.com/anthropics/skills) (Apache 2.0) | `web-designer` | 뻔한 "AI 디자인"을 피하고 개성 있는 색·글꼴·배치를 정하는 원칙 |
+| `design-taste-frontend` | [Leonxlnx/taste-skill](https://github.com/Leonxlnx/taste-skill) (MIT) | `web-designer` (보조) | 247개 수상 사이트 연구 기반의 엄격한 디자인 원칙. 참고 시안과 겹치지 않는 원칙만 적용 |
 | `web-design-guidelines` | [vercel-labs/web-interface-guidelines](https://github.com/vercel-labs/web-interface-guidelines) (MIT) | `web-reviewer` | 접근성·폼·포커스 등 100여 개 웹 화면 규칙으로 검사 |
 
 `web-design-guidelines`는 원래 검사할 때마다 인터넷에서 규칙을 받아 오지만, 여기서는 규칙을 `rules.md`로 저장해 두고 씁니다.
