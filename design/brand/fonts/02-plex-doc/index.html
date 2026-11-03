@@ -1,0 +1,125 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>글꼴 견본 2. 엔지니어링 문서형 (IBM Plex) - 제이에스 엔지니어링</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;600&family=IBM+Plex+Sans+KR:wght@400;600&family=IBM+Plex+Mono:wght@400&display=swap">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<a class="skip" href="#main">본문으로 건너뛰기</a>
+<div class="sheet">
+
+<header class="top">
+  <a class="logo" href="#main"><span class="mark">JS</span><span>제이에스 엔지니어링</span></a>
+  <nav aria-label="주 메뉴">
+    <a href="#hero" aria-current="page">회사 소개</a>
+    <a href="#spec">제품</a>
+    <a href="#ui">자료실</a>
+    <a href="#ui">뉴스</a>
+    <a class="btn btn-sm" href="#ui">문의하기</a>
+  </nav>
+</header>
+
+<main id="main">
+  <section class="hero" id="hero" aria-labelledby="h1">
+    <div class="hero-text">
+      <p class="cap">견본 2. 엔지니어링 문서형</p>
+      <h1 id="h1" class="t-display">ESPEC 한국 단독 총대리점, 1981년부터 45년</h1>
+      <p class="lead">-70°C 초저온에서 +180°C 고온, 98%rh 고습까지. 환경시험 장비의 선정부터 설치와 사후 관리까지 제이에스 엔지니어링이 맡습니다.</p>
+      <p class="actions"><a class="btn" href="#spec">제품 보기</a> <a class="btn btn-ghost" href="#ui">견적 문의</a></p>
+    </div>
+    <aside class="titleblock" aria-label="회사 개요 표">
+      <table>
+        <caption>회사 개요</caption>
+        <tbody>
+          <tr><th scope="row">회사명</th><td>(주)제이에스 엔지니어링</td></tr>
+          <tr><th scope="row">영문명</th><td>JS Engineering Corp.</td></tr>
+          <tr><th scope="row">설립</th><td class="mono">1981</td></tr>
+          <tr><th scope="row">지위</th><td>ESPEC 국내 단독 총대리점</td></tr>
+          <tr><th scope="row">시험 온도</th><td class="mono">-70 ~ +180 °C</td></tr>
+          <tr><th scope="row">습도</th><td class="mono">~ 98 %rh</td></tr>
+        </tbody>
+      </table>
+    </aside>
+  </section>
+
+  <section class="sec" aria-labelledby="s-about">
+    <h2 id="s-about">이 조합은 이런 회사에 어울립니다</h2>
+    <p>IBM Plex는 한 가족 안에 영문 산세리프, 고정폭(Mono), 한글(Sans KR)이 모두 있어 설계도나 시험성적서 같은 문서 느낌을 한 번에 만듭니다. 본문은 Plex Sans, 사양 숫자와 모델명은 Plex Mono로 쓰면 숫자가 한 칸씩 정확히 맞습니다.</p>
+    <table class="info">
+      <caption class="sr">글꼴 정보</caption>
+      <tbody>
+        <tr><th scope="row">영문 글꼴</th><td>IBM Plex Sans (400, 600), IBM Plex Mono (400) &middot; SIL OFL</td></tr>
+        <tr><th scope="row">한글 글꼴</th><td>IBM Plex Sans KR (400, 600) &middot; SIL OFL</td></tr>
+        <tr><th scope="row">로딩</th><td>Google Fonts 한 줄 (영문, 한글, 모노 함께)<br><code>https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;600&amp;family=IBM+Plex+Sans+KR:wght@400;600&amp;family=IBM+Plex+Mono:wght@400&amp;display=swap</code></td></tr>
+        <tr><th scope="row">글꼴 지정</th><td><code>font-family: "IBM Plex Sans", "IBM Plex Sans KR", sans-serif;</code><br><code>font-family: "IBM Plex Mono", "IBM Plex Sans KR", monospace;</code></td></tr>
+      </tbody>
+    </table>
+  </section>
+
+  <section class="sec" aria-labelledby="s-scale">
+    <h2 id="s-scale">글자 크기 체계</h2>
+    <div class="tablewrap">
+    <table class="scale">
+      <thead><tr><th scope="col">역할</th><th scope="col">PC</th><th scope="col">휴대폰</th><th scope="col">굵기 / 줄 간격</th><th scope="col">견본</th></tr></thead>
+      <tbody>
+        <tr><th scope="row">디스플레이</th><td class="mono">56px</td><td class="mono">34px</td><td>600 / 1.2</td><td><span class="t-display">시험 성적 Aa</span></td></tr>
+        <tr><th scope="row">제목</th><td class="mono">28px</td><td class="mono">22px</td><td>600 / 1.3</td><td><span class="t-title">환경시험 장비 -70°C</span></td></tr>
+        <tr><th scope="row">본문</th><td class="mono">16px</td><td class="mono">16px</td><td>400 / 1.75</td><td><span class="t-body">45년간 쌓은 설치와 점검의 기록</span></td></tr>
+        <tr><th scope="row">캡션 (Mono)</th><td class="mono">14px</td><td class="mono">14px</td><td>400 / 1.5</td><td><span class="cap mono">PSL-2J &nbsp;-70 ~ +100°C</span></td></tr>
+      </tbody>
+    </table>
+    </div>
+  </section>
+
+  <section class="sec" id="spec" aria-labelledby="s-spec">
+    <h2 id="s-spec">사양표</h2>
+    <div class="tablewrap">
+    <table class="spec">
+      <caption class="sr">ESPEC 대표 모델 사양</caption>
+      <thead><tr><th scope="col">모델</th><th scope="col" class="r">온도 (°C)</th><th scope="col" class="r">습도 (%rh)</th><th scope="col" class="r">내용적 (L)</th><th scope="col" class="r">최대 압력 (MPa)</th></tr></thead>
+      <tbody>
+        <tr><th scope="row" class="mono">PR-1J</th><td class="r mono">-20 ~ +100</td><td class="r mono">20 ~ 98</td><td class="r mono">120</td><td class="r mono">-</td></tr>
+        <tr><th scope="row" class="mono">PSL-2J</th><td class="r mono">-70 ~ +100</td><td class="r mono">20 ~ 98</td><td class="r mono">306</td><td class="r mono">-</td></tr>
+        <tr><th scope="row" class="mono">PHP-3J</th><td class="r mono">+10 ~ +100</td><td class="r mono">40 ~ 98</td><td class="r mono">398</td><td class="r mono">-</td></tr>
+        <tr><th scope="row" class="mono">EHS-212</th><td class="r mono">+105.0 ~ +142.9</td><td class="r mono">75 ~ 100</td><td class="r mono">-</td><td class="r mono">0.196</td></tr>
+        <tr><th scope="row" class="mono">EHS-412</th><td class="r mono">+105.0 ~ +162.2</td><td class="r mono">75 ~ 100</td><td class="r mono">-</td><td class="r mono">0.392</td></tr>
+      </tbody>
+    </table>
+    </div>
+    <p class="cap mono">출처: ESPEC 카탈로그 기준 정리. 압력은 게이지 압력.</p>
+  </section>
+
+  <section class="sec" id="ui" aria-labelledby="s-ui">
+    <h2 id="s-ui">버튼, 메뉴, 라벨</h2>
+    <p class="row"><a class="btn" href="#ui">견적 문의</a> <a class="btn btn-ghost" href="#ui">카탈로그 받기</a> <button class="btn btn-sm" type="button">제품 비교</button></p>
+    <p class="row"><span class="tag mono">REV.A</span> <span class="tag mono">-70°C</span> <span class="tag mono">IEC 60068-2-14</span> <span class="tag tag-on">열충격 시험기</span></p>
+    <p class="row menu"><a href="#ui">항온항습기</a><a href="#ui">열충격 시험기</a><a href="#ui">HAST</a><a href="#ui">워크인 챔버</a><a href="#ui">산업용 오븐</a></p>
+  </section>
+
+  <section class="sec" aria-labelledby="s-mix">
+    <h2 id="s-mix">한글과 영문, 숫자가 섞인 문장</h2>
+    <p class="mix1">ESPEC 한국 단독 총대리점, 1981년부터 45년</p>
+    <p>Platinous J 시리즈는 <span class="mono">-70°C</span>부터 <span class="mono">+100°C</span>까지, 습도는 <span class="mono">20~98%rh</span> 범위에서 제어합니다. EHS-412는 <span class="mono">+162.2°C</span>, <span class="mono">0.392MPa</span>(게이지)의 고온 고습 가압 조건에서 전자부품 수명을 평가합니다. TSA-73ES 열충격 시험기는 <span class="mono">+200°C</span>와 <span class="mono">-70°C</span> 사이를 오갑니다.</p>
+    <p class="cap">모델명과 수치는 Plex Mono, 설명 문장은 Plex Sans / Sans KR. 한글과 영문이 같은 가족이라 줄 높이와 굵기가 잘 맞습니다.</p>
+  </section>
+
+  <section class="sec" aria-labelledby="s-ref">
+    <h2 id="s-ref">참고한 fontsinuse 사례</h2>
+    <ul class="refs">
+      <li><a href="https://fontsinuse.com/uses/66227/northmed-visual-identity">NorthMed visual identity</a> (IBM Plex Sans, IBM Plex Mono) <span>의료와 기술을 잇는 전문가 단체. 빌린 점: Sans와 Mono를 한 가족으로 묶어 본문과 수치를 구분하는 방식.</span></li>
+      <li><a href="https://fontsinuse.com/uses/77799/sanity">Sanity</a> (KMR Waldenburg, IBM Plex Mono, 앞 글꼴은 유료) <span>기술 제품 회사. 빌린 점: 라벨과 코드성 글자를 모노로 처리해 기술 문서 인상을 만드는 점. 무료 대체로 Plex Sans를 씁니다.</span></li>
+    </ul>
+  </section>
+</main>
+
+<footer class="foot">
+  <p class="mono">(주)제이에스 엔지니어링 JS Engineering Corp. &middot; 글꼴 견본 2 &middot; <a href="../index.html">5종 비교로 돌아가기</a></p>
+</footer>
+</div>
+</body>
+</html>

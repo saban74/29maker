@@ -1,0 +1,73 @@
+/* AW/03 온도 게이지 (레퍼런스 A3 United Carriers의 원리) */
+:root{--k:#060503;--w:#fff;--hot:#f26a1b;--cold:#2f6bff;--cold-t:#7da2ff;--grey:#8c8c8c;--g2:#9a9a9a;--tech:"Chakra Petch","Pretendard Variable",sans-serif;--m:clamp(18px,2.6vw,40px)}
+body{background:var(--w);color:var(--k);font-size:17px}
+
+/* 첫 화면 */
+.hero{position:relative;min-height:100vh;background:var(--k);color:var(--w);overflow:hidden;padding:var(--m)}
+.logo{position:absolute;left:var(--m);top:var(--m);font-family:var(--tech);font-weight:700;font-size:17px;letter-spacing:.02em;z-index:3}
+.thumb{position:absolute;left:var(--m);bottom:var(--m);width:clamp(72px,8vw,120px)}
+.thumb img{width:100%;aspect-ratio:1;object-fit:cover;filter:grayscale(1) contrast(1.1)}
+.col{position:relative;z-index:3;margin-left:29%;padding-top:clamp(56px,9vh,96px);max-width:min(760px,64%)}
+.vnav{display:grid;gap:2px;margin-bottom:clamp(40px,8vh,90px);font-family:var(--tech);font-weight:500;font-size:15px}
+.vnav a{padding:5px 0;width:max-content;color:#cfcfcf;transition:color .15s,padding-left .25s}
+.vnav a:hover{color:#fff;padding-left:8px}
+.vnav .est{margin-top:12px;color:#fff;border-bottom:2px solid var(--hot);padding-bottom:3px}
+h1{font-weight:800;font-size:clamp(34px,5.4vw,80px);line-height:1.05;letter-spacing:-.035em}
+.col p{margin-top:28px;max-width:28em;font-size:18px;line-height:1.6;color:#e6e6e6}
+
+.gauge{position:absolute;right:calc(-1 * min(9vh,8vw));top:50%;transform:translateY(-50%);width:min(90vh,52vw);aspect-ratio:1;z-index:1}
+.dots{position:absolute;inset:3%;border-radius:50%;background-image:radial-gradient(circle,#7a7a7a 1.4px,transparent 1.8px);background-size:14px 14px;opacity:.75}
+.ring{position:absolute;inset:0;border-radius:50%;border:3px solid transparent;border-color:var(--hot) var(--cold) var(--cold) var(--hot);transform:rotate(45deg)}
+.pin{position:absolute;display:flex;align-items:center;gap:8px;font-size:14px;color:#fff;background:var(--k);padding:5px 10px 5px 8px;white-space:nowrap;z-index:2}
+.pin::before{content:"";width:10px;height:10px;border-radius:50%;background:currentColor;flex:none}
+.pin b{font-family:var(--tech);font-weight:700;font-size:16px}
+.pin.hot::before{background:var(--hot)} .pin.cold::before{background:var(--cold)}
+.pin.hot b{color:var(--hot)} .pin.cold b{color:var(--cold-t)}
+.p1{left:34%;top:12%} .p2{left:8%;top:34%} .p3{left:42%;top:84%} .p4{left:6%;top:64%}
+
+/* 흰 구역: 숫자 */
+.stats{display:grid;grid-template-columns:1fr 1fr;gap:clamp(32px,6vw,100px);padding:clamp(100px,13vw,200px) var(--m) clamp(80px,9vw,140px)}
+.stats-l{display:flex;flex-direction:column;gap:clamp(60px,12vw,200px);justify-content:space-between}
+.mini{width:clamp(110px,12vw,170px)}
+.mini img{width:100%;aspect-ratio:1;object-fit:cover}
+.say{font-family:var(--tech),var(--tech);font-weight:800;font-size:clamp(22px,2.8vw,42px);line-height:1.25;letter-spacing:-.025em}
+.say .g{color:var(--g2)} .say .k{color:var(--k)}
+.stats-r{display:grid}
+.stats-r>div{padding:20px 0 28px;border-top:1px solid #1a1a1a}
+.stats-r dt{font-size:16px;color:#333;font-weight:500;margin-bottom:6px}
+.num{font-family:var(--tech);font-weight:700;font-size:clamp(52px,7.2vw,112px);line-height:1;letter-spacing:-.01em}
+.num small{font-family:"Pretendard Variable",sans-serif;font-weight:700;font-size:clamp(16px,1.6vw,24px);letter-spacing:0;margin-left:.3em}
+
+/* 흰 구역: 장비가 아래 끝선에 서 있다 */
+.stand{display:grid;grid-template-columns:1fr 1.25fr;gap:var(--m);padding:clamp(60px,8vw,120px) var(--m) 0;min-height:70vh;align-items:stretch}
+.stand-l h2{font-weight:800;font-size:clamp(30px,3.6vw,52px);letter-spacing:-.03em;margin-bottom:28px;line-height:1.1}
+.plist{display:grid;font-size:clamp(20px,2vw,30px);font-weight:800;line-height:1.35;letter-spacing:-.02em}
+.plist a{display:block;padding:6px 0;transition:padding-left .25s}
+.plist a:hover{padding-left:12px}
+.plist .g{color:var(--g2);font-weight:600;font-size:.62em;display:block}
+.stand-r{display:flex;align-items:flex-end;justify-content:center;gap:clamp(10px,2vw,32px)}
+.stand-r img{height:auto;width:clamp(150px,22%,330px);flex:none}
+.stand-r img:nth-child(2){width:clamp(180px,30%,400px)}
+
+/* 아래 검은 띠 = 땅 */
+.foot{background:var(--k);color:var(--w);padding:clamp(50px,6vw,90px) var(--m) 28px}
+.run{overflow:hidden;margin:0 calc(-1 * var(--m)) clamp(60px,8vw,110px)}
+.track{display:flex;gap:clamp(30px,4vw,64px);width:max-content;font-size:clamp(18px,1.8vw,26px);color:#9a9a9a;font-weight:700;animation:run 50s linear infinite}
+@keyframes run{to{transform:translateX(-50%)}}
+.foot-grid{display:grid;grid-template-columns:1.5fr 1fr;gap:40px;align-items:end}
+.foot h2{font-weight:800;font-size:clamp(32px,4.4vw,64px);line-height:1.05;letter-spacing:-.035em}
+.btn{display:inline-block;margin-top:24px;font-family:var(--tech);font-weight:700;background:var(--hot);color:#000;padding:14px 28px;transition:background .2s}
+.btn:hover{background:#fff}
+.addr{display:grid;gap:12px;color:#cfcfcf;font-size:16px}
+.foot .credit{margin-top:60px;color:#9a9a9a}
+
+@media (max-width:860px){
+  .col{margin-left:0;max-width:100%;padding-top:70px}
+  .gauge{position:absolute;right:-30vw;top:auto;bottom:-6vh;transform:none;width:110vw;opacity:.55}
+  .pin{display:none}
+  .thumb{display:none}
+  .stats,.stand,.foot-grid{grid-template-columns:1fr}
+  .stats-l{gap:40px}
+  .stand-r{margin-top:20px}
+  .stand-r img{width:30%}
+}
