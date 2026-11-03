@@ -1,0 +1,119 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>글꼴 견본 5. 45년 전통형 (Instrument Serif + Noto Serif KR) - 제이에스 엔지니어링</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Instrument+Sans:wght@400..700&family=Instrument+Serif&family=Noto+Serif+KR:wght@500;700&display=swap">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<a class="skip" href="#main">본문으로 건너뛰기</a>
+
+<header class="top">
+  <a class="logo" href="#main"><span class="mark">JS</span><span>제이에스 엔지니어링</span></a>
+  <nav aria-label="주 메뉴">
+    <a href="#hero" aria-current="page">회사 소개</a>
+    <a href="#spec">제품</a>
+    <a href="#ui">자료실</a>
+    <a href="#ui">뉴스</a>
+    <a class="btn btn-sm" href="#ui">문의하기</a>
+  </nav>
+</header>
+
+<main id="main">
+  <section class="hero" id="hero" aria-labelledby="h1">
+    <div class="hero-text">
+      <p class="cap">견본 5. 45년 전통형</p>
+      <h1 id="h1" class="t-display">ESPEC 한국 단독 총대리점, 1981년부터 45년</h1>
+      <p class="lead">-70°C 초저온에서 +180°C 고온, 98%rh 고습까지. 환경시험 장비의 선정부터 설치와 사후 관리까지 제이에스 엔지니어링이 맡습니다.</p>
+      <p class="actions"><a class="btn" href="#spec">제품 보기</a> <a class="btn btn-ghost" href="#ui">견적 문의</a></p>
+    </div>
+    <div class="year" aria-label="1981년 설립, 2026년 현재">
+      <span class="y1">1981</span>
+      <span class="y2">2026</span>
+      <span class="ycap">설립에서 오늘까지</span>
+    </div>
+  </section>
+
+  <section class="sec" aria-labelledby="s-about">
+    <h2 id="s-about">이 조합은 이런 회사에 어울립니다</h2>
+    <div class="cols">
+    <p>큰 제목은 세리프(명조)로 써서 오래 이어 온 회사의 품격을 보이고, 본문과 표는 산세리프로 읽기 쉽게 정돈합니다. 제목의 영문은 Instrument Serif, 한글은 Noto Serif KR이 맡고, 본문의 영문은 Instrument Sans, 한글은 Pretendard가 맡습니다. 글꼴이 네 개라서 로딩이 가장 무겁다는 점은 감안해야 합니다.</p>
+    <table class="info">
+      <caption class="sr">글꼴 정보</caption>
+      <tbody>
+        <tr><th scope="row">영문 글꼴</th><td>Instrument Serif (제목), Instrument Sans (본문, 400~700) &middot; SIL OFL</td></tr>
+        <tr><th scope="row">한글 글꼴</th><td>Noto Serif KR (제목, 500/700), Pretendard Variable (본문) &middot; SIL OFL</td></tr>
+        <tr><th scope="row">영문 + 제목 한글 로딩</th><td>Google Fonts 한 줄<br><code>https://fonts.googleapis.com/css2?family=Instrument+Sans:wght@400..700&amp;family=Instrument+Serif&amp;family=Noto+Serif+KR:wght@500;700&amp;display=swap</code></td></tr>
+        <tr><th scope="row">본문 한글 로딩</th><td>jsDelivr (Pretendard v1.3.9)<br><code>https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css</code></td></tr>
+        <tr><th scope="row">글꼴 지정</th><td>제목 <code>"Instrument Serif", "Noto Serif KR", serif</code><br>본문 <code>"Instrument Sans", "Pretendard Variable", sans-serif</code></td></tr>
+      </tbody>
+    </table>
+    </div>
+  </section>
+
+  <section class="sec alt" aria-labelledby="s-scale">
+    <h2 id="s-scale">글자 크기 체계</h2>
+    <div class="tablewrap">
+    <table class="scale">
+      <thead><tr><th scope="col">역할</th><th scope="col">PC</th><th scope="col">휴대폰</th><th scope="col">굵기 / 줄 간격</th><th scope="col">견본</th></tr></thead>
+      <tbody>
+        <tr><th scope="row">디스플레이 (세리프)</th><td class="num">80px</td><td class="num">38px</td><td>400, 한글 500 / 1.12</td><td><span class="t-display">45년 Aa</span></td></tr>
+        <tr><th scope="row">제목 (세리프)</th><td class="num">34px</td><td class="num">26px</td><td>400, 한글 500 / 1.25</td><td><span class="t-title">환경시험 장비 -70°C</span></td></tr>
+        <tr><th scope="row">본문 (산세리프)</th><td class="num">17px</td><td class="num">16px</td><td>400 / 1.75</td><td><span class="t-body">45년간 쌓은 설치와 점검의 기록</span></td></tr>
+        <tr><th scope="row">캡션 (산세리프)</th><td class="num">14px</td><td class="num">14px</td><td>500 / 1.5</td><td><span class="cap">TSA-73ES 열충격 시험기</span></td></tr>
+      </tbody>
+    </table>
+    </div>
+  </section>
+
+  <section class="sec" id="spec" aria-labelledby="s-spec">
+    <h2 id="s-spec">사양표</h2>
+    <div class="tablewrap">
+    <table class="spec">
+      <caption class="sr">ESPEC 대표 모델 사양</caption>
+      <thead><tr><th scope="col">모델</th><th scope="col" class="r">온도 (°C)</th><th scope="col" class="r">습도 (%rh)</th><th scope="col" class="r">내용적 (L)</th><th scope="col" class="r">최대 압력 (MPa)</th></tr></thead>
+      <tbody>
+        <tr><th scope="row">PR-1J</th><td class="r">-20 ~ +100</td><td class="r">20 ~ 98</td><td class="r">120</td><td class="r">-</td></tr>
+        <tr><th scope="row">PSL-2J</th><td class="r">-70 ~ +100</td><td class="r">20 ~ 98</td><td class="r">306</td><td class="r">-</td></tr>
+        <tr><th scope="row">PHP-3J</th><td class="r">+10 ~ +100</td><td class="r">40 ~ 98</td><td class="r">398</td><td class="r">-</td></tr>
+        <tr><th scope="row">EHS-212</th><td class="r">+105.0 ~ +142.9</td><td class="r">75 ~ 100</td><td class="r">-</td><td class="r">0.196</td></tr>
+        <tr><th scope="row">EHS-412</th><td class="r">+105.0 ~ +162.2</td><td class="r">75 ~ 100</td><td class="r">-</td><td class="r">0.392</td></tr>
+      </tbody>
+    </table>
+    </div>
+    <p class="cap">출처: ESPEC 카탈로그 기준 정리. 압력은 게이지 압력.</p>
+  </section>
+
+  <section class="sec alt" id="ui" aria-labelledby="s-ui">
+    <h2 id="s-ui">버튼, 메뉴, 라벨</h2>
+    <p class="row"><a class="btn" href="#ui">견적 문의</a> <a class="btn btn-ghost" href="#ui">카탈로그 받기</a> <button class="btn btn-sm" type="button">제품 비교</button></p>
+    <p class="row"><span class="tag">창립 45주년</span> <span class="tag">-70°C 초저온</span> <span class="tag">HAST</span> <span class="tag tag-on">열충격 시험기</span></p>
+    <p class="row menu"><a href="#ui">항온항습기</a><a href="#ui">열충격 시험기</a><a href="#ui">HAST</a><a href="#ui">워크인 챔버</a><a href="#ui">산업용 오븐</a></p>
+  </section>
+
+  <section class="sec" aria-labelledby="s-mix">
+    <h2 id="s-mix">한글과 영문, 숫자가 섞인 문장</h2>
+    <p class="mix1">ESPEC 한국 단독 총대리점, 1981년부터 45년</p>
+    <p>Platinous J 시리즈는 -70°C부터 +100°C까지, 습도는 20~98%rh 범위에서 제어합니다. EHS-412는 +162.2°C, 0.392MPa(게이지)의 고온 고습 가압 조건에서 전자부품 수명을 평가합니다. TSA-73ES 열충격 시험기는 +200°C와 -70°C 사이를 오갑니다.</p>
+    <p class="cap">제목은 영문과 한글 세리프가 이어지고, 본문은 Instrument Sans와 Pretendard가 이어집니다. 세리프 제목 속 숫자와 단위가 어색하지 않은지 봅니다.</p>
+  </section>
+
+  <section class="sec alt" aria-labelledby="s-ref">
+    <h2 id="s-ref">참고한 fontsinuse 사례</h2>
+    <ul class="refs">
+      <li><a href="https://fontsinuse.com/uses/41105/cochran-branding">Cochran branding</a> (Pressio, Ballinger, 유료) <span>미국 북서부 전기공사 엔지니어링 회사의 60년 신뢰 리브랜딩. 빌린 점: 오래된 회사의 신뢰를 정돈된 글꼴로 보여 준다는 생각만 빌림. 무료 글꼴로 대체합니다.</span></li>
+      <li><a href="https://fontsinuse.com/uses/80376/hellomatik-website">Hellomatik website</a> (Hedvig Letters Serif, Inter) <span>fontsinuse 기술 주제 웹사이트. 빌린 점: 세리프 제목과 산세리프 본문을 짝짓는 구조.</span></li>
+    </ul>
+  </section>
+</main>
+
+<footer class="foot">
+  <p>(주)제이에스 엔지니어링 JS Engineering Corp. &middot; 글꼴 견본 5 &middot; <a href="../index.html">5종 비교로 돌아가기</a></p>
+</footer>
+</body>
+</html>
