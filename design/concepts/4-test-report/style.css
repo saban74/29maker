@@ -1,0 +1,115 @@
+/* 4. test-report : 시험 성적서 문서 구조 */
+:root{
+  --desk:#CDD4DC;      /* 책상(바깥 바탕) */
+  --paper:#FFFFFF;     /* 성적서 용지 */
+  --ink:#14233A;       /* 본문 먹색(남색 기운) */
+  --form:#2C5A9C;      /* 서식 파랑: 항목명, 표 머리 */
+  --form-bg:#E8EEF6;   /* 표 머리 바탕 */
+  --stamp:#C32B30;     /* 도장 빨강 */
+  --line:#9AA8BA;
+  --f:'Pretendard Variable',Pretendard,'Noto Sans KR','Malgun Gothic',system-ui,sans-serif;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;background:var(--desk);color:var(--ink);font:400 16px/1.65 var(--f);-webkit-font-smoothing:antialiased}
+a{color:inherit}
+:focus-visible{outline:3px solid var(--stamp);outline-offset:2px}
+img{display:block;max-width:100%;height:auto}
+
+/* 문서 위 탭 */
+.tabs{max-width:1080px;margin:0 auto;padding:20px 16px 0;display:flex;flex-wrap:wrap;gap:4px;align-items:flex-end}
+.tabs .brand{font-weight:800;font-size:17px;margin-right:auto;padding:8px 0}
+.tabs a{text-decoration:none;font-size:15px;font-weight:600;padding:10px 14px;background:#B9C3CF;border-radius:6px 6px 0 0}
+.tabs a:hover{background:#DCE3EB}
+.tabs a.cta{background:var(--stamp);color:#fff}
+
+.sheet{max-width:1080px;margin:0 auto;background:var(--paper);padding:48px 56px 40px;box-shadow:0 14px 40px rgba(20,35,58,.22)}
+
+/* 서식 머리 */
+.head{display:grid;grid-template-columns:1fr minmax(300px,420px);gap:32px;align-items:end;padding-bottom:28px}
+.head h1{font-size:clamp(30px,4.4vw,52px);line-height:1.15;letter-spacing:-.03em;font-weight:800;margin:0 0 14px}
+.head p{margin:0;max-width:34em;font-size:17px}
+.meta{width:100%;border-collapse:collapse;font-size:14.5px}
+.meta th,.meta td{border:1px solid var(--line);padding:7px 10px;text-align:left;vertical-align:top}
+.meta th{background:var(--form-bg);color:var(--form);font-weight:700;width:34%;white-space:nowrap}
+
+/* 조항 */
+.clause{margin-top:44px}
+.clause > h2{font-size:22px;letter-spacing:-.02em;margin:0 0 14px;padding:10px 14px;background:var(--ink);color:#fff;font-weight:700;display:flex;gap:12px;align-items:baseline}
+.clause > h2 .no{font-variant-numeric:tabular-nums;color:#9FC0EE}
+
+table.t{width:100%;border-collapse:collapse}
+table.t th,table.t td{border:1px solid var(--line);padding:10px 14px;text-align:left;vertical-align:middle}
+table.t thead th{background:var(--form-bg);color:var(--form);font-weight:700;font-size:15px}
+table.t tbody th{background:#F4F7FB;font-weight:700;width:22%}
+table.t td.num{font-variant-numeric:tabular-nums;white-space:nowrap;font-weight:600}
+.ph{background:#F1F4F8;width:200px;padding:10px}
+.ph img{margin:0 auto;mix-blend-mode:multiply}
+.ph.s img{max-width:140px}
+.ref{font-size:14.5px;color:#3A4A62}
+.tbc{color:var(--stamp);font-weight:700}
+
+/* 요약 */
+.summary{display:grid;grid-template-columns:1fr 300px;gap:0;border:1px solid var(--line)}
+.summary .big{padding:24px 28px;border-right:1px solid var(--line)}
+.summary .big p{margin:0 0 .8em;font-size:18px}
+.summary .big p:last-child{margin:0}
+.summary .year{display:flex;flex-direction:column;justify-content:center;align-items:center;background:var(--form-bg);padding:20px;text-align:center}
+.summary .year b{font-size:84px;line-height:1;letter-spacing:-.05em;color:var(--form);font-variant-numeric:tabular-nums}
+.summary .year span{font-weight:700;margin-top:8px}
+
+/* 점검표 */
+.check{list-style:none;margin:0;padding:0;border:1px solid var(--line)}
+.check li{display:grid;grid-template-columns:44px 1fr;gap:6px;padding:12px 14px;border-bottom:1px solid var(--line);align-items:start}
+.check li:last-child{border-bottom:0}
+.check li::before{content:"\2713";width:24px;height:24px;border:2px solid var(--form);margin-top:2px;color:var(--form);font-weight:800;line-height:20px;text-align:center}
+.check b{display:block}
+.check span{font-size:15px;color:#3A4A62}
+
+/* 장비 사진 보관 표 */
+.also{display:grid;grid-template-columns:repeat(auto-fill,minmax(190px,1fr));border:1px solid var(--line);border-right:0;border-bottom:0}
+.also figure{margin:0;border-right:1px solid var(--line);border-bottom:1px solid var(--line);padding:12px;background:#F7F9FC}
+.also .pic{height:140px;display:flex;align-items:center;justify-content:center;background:#fff;margin-bottom:10px}
+.also img{max-height:130px;width:auto;max-width:100%;object-fit:contain}
+.also figcaption{font-weight:700;font-size:15px}
+.also figcaption small{display:block;font-weight:400;color:#3A4A62}
+
+/* 서명란 */
+.sign{display:grid;grid-template-columns:1fr 1fr 220px;border:1px solid var(--line);margin-top:0}
+.sign > div{padding:16px 18px;border-right:1px solid var(--line);min-height:130px}
+.sign > div:last-child{border-right:0}
+.sign dt{color:var(--form);font-weight:700;font-size:14.5px}
+.sign dd{margin:6px 0 0}
+.sign .name{font-size:24px;font-weight:800;letter-spacing:.02em}
+.stamp{width:120px;height:120px;border:4px solid var(--stamp);border-radius:50%;color:var(--stamp);display:grid;place-content:center;text-align:center;font-weight:800;line-height:1.2;transform:rotate(-9deg);margin:0 auto;opacity:.92;outline:2px solid var(--stamp);outline-offset:-10px}
+.stamp small{display:block;font-size:11px;font-weight:700}
+.stamp strong{font-size:17px}
+
+.btns{display:flex;flex-wrap:wrap;gap:12px;margin-top:24px}
+.btn{display:inline-block;padding:14px 26px;font-weight:800;font-size:17px;text-decoration:none;background:var(--stamp);color:#fff;border-radius:0}
+.btn.alt{background:#fff;color:var(--ink);border:2px solid var(--ink)}
+.btn:hover{filter:brightness(1.08)}
+
+.foot{margin-top:40px;padding-top:14px;border-top:2px solid var(--ink);display:flex;flex-wrap:wrap;justify-content:space-between;gap:8px;font-size:14px;color:#3A4A62}
+.outer{max-width:1080px;margin:0 auto;padding:18px 16px 40px;font-size:14px;color:#2A3A52}
+
+/* 휴대폰 */
+@media (max-width:760px){
+  .sheet{padding:28px 18px}
+  .head{grid-template-columns:1fr}
+  .summary{grid-template-columns:1fr}
+  .summary .big{border-right:0;border-bottom:1px solid var(--line)}
+  .sign{grid-template-columns:1fr}
+  .sign > div{border-right:0;border-bottom:1px solid var(--line);min-height:0}
+  .sign > div:last-child{border-bottom:0}
+  .tabs a{padding:8px 10px;font-size:14px}
+  table.t thead{display:none}
+  table.t,table.t tbody,table.t tr,table.t td,table.t th{display:block;width:100%}
+  table.t tr{border:1px solid var(--line);margin-bottom:12px}
+  table.t td,table.t th{border:0;border-bottom:1px solid #D5DCE6}
+  table.t td[data-l]::before{content:attr(data-l) "  ";color:var(--form);font-weight:700}
+  .ph{width:100%}
+  .ph img{max-width:220px}
+  table.t tbody th{width:100%}
+}
+@media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
