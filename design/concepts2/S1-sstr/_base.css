@@ -52,7 +52,7 @@ h3{font-size:15px;font-weight:600;letter-spacing:0;line-height:1.4}
 /* 버튼: 시험 챔버 창 모양(대각 모서리 2곳 절단) 한 가지 */
 .btn{display:inline-flex;align-items:center;justify-content:center;min-height:48px;padding:0 26px;background:var(--or);color:#111;font:600 15px/1 var(--font);text-decoration:none;border:0;cursor:pointer;position:relative;
   clip-path:polygon(var(--cut) 0,100% 0,100% calc(100% - var(--cut)),calc(100% - var(--cut)) 100%,0 100%,0 var(--cut));
-  transition:background-color .2s}
+  transition:background-color .2s;overflow:hidden}
 .btn::after{content:"";position:absolute;inset:0;background:#111;transform:translateX(-101%);transition:transform .35s cubic-bezier(.2,.7,.2,1);z-index:0}
 .btn>span{position:relative;z-index:1;transition:color .2s}
 .btn:hover::after,.btn:focus-visible::after{transform:none}

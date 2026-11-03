@@ -26,7 +26,7 @@ h2 { font-size: clamp(28px, 3.1vw, 54px); }
 @media (max-width: 900px) {
   .c1__in { grid-template-columns: 1fr; padding-top: 150px; gap: 20px; }
   .c1 h1 { font-size: clamp(34px, 10vw, 54px); }
-  .c1__fig { margin: 0 -6%; }
+  .c1__fig { margin: 0; }
 }
 
 /* 장 2 */

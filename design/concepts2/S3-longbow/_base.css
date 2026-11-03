@@ -75,6 +75,9 @@ a{color:inherit}
 .reveal{animation:open 1.25s cubic-bezier(.65,0,.35,1) both}
 @keyframes run{to{transform:translateX(-50%)}}
 @media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important;scroll-behavior:auto!important}}
+/* 데스크톱: 배경 사진이 구역 전체(모든 행)를 덮게 한다. grid-area 1/1/-1/-1은 암시적 행에서 첫 행만 덮어서 바꿈 (메인 감독자 수정) */
+@media (min-width:821px){.bg{position:absolute;inset:0;grid-area:auto}}
+
 
 /* 휴대폰: 2열, 셀은 한 줄씩 쌓음 */
 @media (max-width:820px){

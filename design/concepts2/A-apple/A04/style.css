@@ -59,6 +59,6 @@ td{width:40%}
 
 @media (max-width:860px){
   .duo{grid-template-columns:1fr}
-  .or{position:static;transform:none;margin:-32px auto -32px;position:relative}
+  .or{position:relative;left:auto;transform:none;margin:-32px auto -32px}
   .paths{grid-template-columns:1fr}
 }
