@@ -40,7 +40,7 @@
 .stage .fig.is-active { opacity: 1; }
 .js .stage .fig { opacity: 0; }
 .js .stage .fig.is-active { opacity: 1; }
-.stage .fig img { mix-blend-mode: multiply; }
+.stage .fig img { mix-blend-mode: multiply; -webkit-mask-image: radial-gradient(ellipse 68% 66% at 50% 56%, #000 55%, transparent 100%); mask-image: radial-gradient(ellipse 68% 66% at 50% 56%, #000 55%, transparent 100%); }
 .claims__cap { margin-top: 16px; color: #3b5278; }
 @media (max-width: 900px) {
   .claims__in { grid-template-columns: 1fr; }

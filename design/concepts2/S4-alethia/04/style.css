@@ -1,0 +1,62 @@
+/* 04 둥근 문: 건메탈 + 연한 청록 한 점. 조준선이 원이다 */
+:root{--bg:#111417;--bg2:#cfd3d1;--acc:#b3efdc;--onl:#101513}
+.sr{position:absolute;left:-9999px}
+
+/* 1 첫 화면: 오른쪽 사진 창, 왼쪽 모서리 글자 */
+.hero{min-height:100svh;--fw:min(1500px,170vw)}
+.crop{position:absolute;right:0;top:0;bottom:0;width:min(66vw,1000px);overflow:hidden}
+.crop-fig{position:absolute;left:50%;top:54%;width:var(--fw);transform:translate(-50%,-50%)}
+.hero .h-xl{max-width:11em}
+.hero .dock.bl{display:grid;gap:18px;max-width:min(420px,44vw)}
+.hero .dock.bl .statement{text-shadow:0 0 18px #000}
+.hero .ret.o .tag{font-size:12px}
+
+/* 2 세 가지 값 */
+.stress{display:grid;gap:clamp(40px,6vw,96px);background:#000}
+.stress-h{max-width:20em}
+.stress-list{display:grid;grid-template-columns:repeat(3,1fr);gap:var(--m)}
+.stress-list>div{padding-top:20px;position:relative}
+.stress-list>div::before{content:"";position:absolute;left:0;top:0;width:9px;height:9px;background:var(--acc)}
+.stress-list dt{color:var(--dim);margin-bottom:12px}
+.stress-list .num{font-size:clamp(56px,7.4vw,124px)}
+.stress-list .num small{font-size:.28em;letter-spacing:0;margin-left:.1em}
+.stress-list .sub{margin-top:12px;color:var(--dim);font-size:15px}
+.stress-note{font-size:14px;max-width:46em}
+
+/* 3 밝은 구역: 같은 비율의 원 */
+.tank{display:grid;grid-template-columns:minmax(280px,.9fr) 1.1fr;gap:clamp(32px,6vw,110px);align-items:center}
+.rings{position:relative;width:min(100%,520px);aspect-ratio:1;justify-self:center}
+.ring{position:absolute;border-radius:50%;border:1px solid var(--rl);display:grid;place-items:end center}
+.ring span{padding-bottom:14px;color:var(--onl)}
+.r1{inset:0}
+.r1 i{position:absolute;left:14.6%;top:14.6%;width:10px;height:10px;background:var(--acc);outline:1px solid var(--onl)}
+.r1 span{position:absolute;bottom:auto;top:-30px;left:0;padding:0}
+.r2{inset:12.7%;border-color:var(--onl)}
+.tank-text{display:grid;gap:26px;justify-items:start}
+.tank .statement{max-width:24em;font-size:clamp(17px,1.4vw,20px)}
+.tank-nums{display:grid;grid-template-columns:1fr 1fr;gap:var(--m);width:100%}
+.tank-nums .num{display:block;font-size:clamp(44px,5vw,84px);margin-bottom:10px}
+.tank-nums .num small{font-size:.28em;letter-spacing:0;margin-left:.1em}
+.tank-nums span{display:block;font-size:14px;color:var(--dim);max-width:20em}
+
+/* 4 모델표 */
+.models{display:grid;grid-template-columns:minmax(260px,.7fr) 1.3fr;gap:clamp(32px,5vw,90px);align-items:center;background:var(--bg)}
+.models-fig{width:min(100%,1096px)}
+.models-right{display:grid;gap:clamp(24px,3vw,44px)}
+.tbl{overflow-x:auto}
+.tbl table{min-width:560px}
+.tbl tbody th{font:600 13px/1.4 var(--mono);letter-spacing:.04em;color:var(--acc);text-transform:none}
+.tbl td{font-size:15px;line-height:1.5}
+
+/* 5 맺음 */
+.close{display:grid;gap:36px;justify-items:start;background:#000}
+.close .statement{max-width:34em}
+
+@media (max-width:860px){
+  .crop{width:100%;top:84px;bottom:auto;height:62vh}
+  .crop-fig{top:50%}
+  .hero{min-height:100svh}
+  .hero .h-xl{font-size:clamp(32px,8.6vw,42px);top:auto;bottom:calc(var(--m) + 190px);position:absolute}
+  .hero .dock.bl{max-width:calc(100% - 2*var(--m))}
+  .stress-list,.tank,.models,.tank-nums{grid-template-columns:1fr}
+}

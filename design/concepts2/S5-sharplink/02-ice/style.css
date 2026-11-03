@@ -1,7 +1,7 @@
 /* 02 얼음: 밝은 얼음색 바탕, 회색 스튜디오 사진은 multiply로 바탕에 녹임 */
 body { background: var(--ice); color: var(--ink-on-ice); }
 .sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); }
-.shot img { mix-blend-mode: multiply; }
+.shot img { mix-blend-mode: multiply; -webkit-mask-image: radial-gradient(ellipse 68% 66% at 50% 56%, #000 55%, transparent 100%); mask-image: radial-gradient(ellipse 68% 66% at 50% 56%, #000 55%, transparent 100%); }
 .btn--line .btn__t { background: transparent; color: var(--navy-900); outline: 1px solid rgba(10,23,48,.45); outline-offset: -1px; }
 .btn--line:hover .btn__t { background: var(--white); }
 .dark { color: var(--white); }

@@ -1,0 +1,67 @@
+/* 03 아주 큰 가는 숫자 + 점 차트. 문 손잡이(세로 홈)를 버튼·표지에 반복 */
+:root{--cut:0px}
+.btn{clip-path:none;padding-inline:24px 18px;gap:18px}
+.btn::before{content:"";order:2;width:5px;height:20px;border-radius:3px;background:#111;position:relative;z-index:1;flex:none;transition:background-color .2s}
+.btn:hover::before,.btn:focus-visible::before{background:#fff}
+.btn-sm{padding-inline:16px 12px;gap:12px}
+.btn-sm::before{height:14px}
+.tag.slot::before{width:5px;height:18px;border-radius:3px}
+.tlink::before{width:5px;height:16px;border-radius:3px}
+.tlink:hover::before{transform:none;background:var(--g9)}
+
+/* 첫 화면 */
+.nav.light{position:absolute;inset:0 0 auto 0;background:transparent}
+.hero{padding:0;background:#b9bcbf;overflow:hidden}
+.hero-img{width:100%;height:auto;display:block;max-width:none}
+.hero-copy{position:absolute;z-index:3;left:calc(var(--rail) + var(--pad));top:112px;max-width:min(560px,44vw)}
+.hero h1{font-size:clamp(30px,3.6vw,56px);margin-bottom:20px;font-weight:300}
+.hero .lead{color:#25272a;font-size:16.5px}
+.hero-act{position:absolute;z-index:3;right:calc(var(--rail) + var(--pad));top:132px;display:flex;flex-direction:column;align-items:flex-end;gap:10px}
+
+/* 수치 장부 */
+.ledger{padding-block:clamp(72px,9vw,150px)}
+.ledger>h2{margin-bottom:clamp(40px,5vw,72px)}
+.row .cell{padding:clamp(28px,4vw,64px) var(--pad);display:flex;flex-direction:column;justify-content:center;gap:20px}
+.row+.row{border-top:0}
+.huge{font-size:clamp(120px,17vw,270px);display:flex;align-items:baseline;white-space:nowrap}
+.huge .u{font-size:.2em;letter-spacing:-.02em;margin-left:.1em;font-weight:200}
+.cap{font-size:16px;color:var(--sub);max-width:26em;line-height:1.6}
+.note{font-size:13px;color:var(--sub);line-height:1.5;max-width:34em}
+.dotplot{max-width:520px}
+.hr-list{gap:14px!important}
+.hr{display:grid;grid-template-columns:minmax(110px,150px) minmax(0,1fr);gap:16px;align-items:center;font-size:14px;color:#d2d4d7}
+.hr .dotplot{max-width:none}
+.hr-axis{justify-content:space-between;padding-left:166px;font-size:12.5px}
+.flip .cell:first-child{order:2}
+.flip .cell:last-child{order:1;border-left:0}
+.flip .cell:first-child{border-left:1px solid var(--hair)}
+
+/* TSA 라인업 */
+.line{padding-block:clamp(72px,9vw,150px)}
+.cell-img{padding:0;display:flex;background:#d3d6d8}
+.cell-img img{width:100%;height:100%;object-fit:cover;object-position:50% 70%;min-height:360px}
+.line-r{display:flex;flex-direction:column;align-items:flex-start;gap:22px;justify-content:center;padding:clamp(28px,4vw,64px) var(--pad)}
+.spec{font-size:14px;margin-block:6px}
+.spec th,.spec td{text-align:left;padding:10px 8px 10px 0;border-bottom:1px solid var(--hair);font-weight:400;white-space:nowrap}
+.spec thead th{font-size:12.5px;color:var(--sub)}
+.spec tbody th{font-weight:600}
+.line-r .table-wrap{overflow-x:auto}
+
+/* 푸터 */
+.cell-act{display:flex;flex-direction:column;align-items:flex-start;justify-content:center;gap:14px}
+.foot{padding-top:clamp(64px,8vw,120px)}
+.foot-name{font-size:clamp(40px,10.6vw,176px);font-weight:100;letter-spacing:-.05em;line-height:.95;white-space:nowrap;margin-bottom:clamp(36px,5vw,72px)}
+.foot-h{font-size:clamp(22px,2vw,30px);margin-bottom:12px}
+
+@media (max-width:860px){
+  .nav.light{position:relative;background:#b9bcbf}
+  .hero{display:grid}
+  .hero-img{aspect-ratio:3/4.2;object-fit:cover;object-position:34% 100%}
+  .hero-copy{position:absolute;top:18px;max-width:none;right:calc(var(--rail) + var(--pad))}
+  .hero .lead{display:none}
+  .hero-act{position:relative;right:auto;top:auto;flex-direction:row;align-items:center;justify-content:space-between;padding:18px calc(var(--rail) + var(--pad)) 24px;background:#b9bcbf;gap:16px}
+  .flip .cell:first-child,.flip .cell:last-child{order:0;border-left:0}
+  .hr{grid-template-columns:1fr;gap:6px}
+  .hr-axis{padding-left:0}
+  .spec{display:block;overflow-x:auto}
+}
