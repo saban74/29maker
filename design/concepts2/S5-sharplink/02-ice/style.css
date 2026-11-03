@@ -27,13 +27,7 @@ h2 { font-size: clamp(28px, 3.1vw, 54px); color: #2f4470; }
 .card__chart { width: 100%; flex: 1; min-height: 0; }
 .card__btn { width: 100%; }
 .card__btn .btn__t { flex: 1; background: var(--navy-950); outline: 1px solid rgba(255,255,255,.3); outline-offset: -1px; color: #fff; }
-.runner { position: absolute; left: 20px; top: 56px; width: 12px; height: 12px; background: #fff; box-shadow: none; offset-path: path("M10 50H90V260H170V50H250"); offset-rotate: 0deg; }
-.card .runner { /* 그래프 viewBox(280x300)를 카드 안에 맞춰 크기 변환 */
-  transform-origin: 0 0; }
-@supports (offset-path: path("M0 0")) {
-  .card { --s: 1; }
-  .runner { animation: run 7s linear infinite; offset-distance: 0%; left: 20px; top: 56px; margin: -6px 0 0 -6px; }
-}
+.runner { offset-path: path("M10 50H90V260H170V50H250"); offset-rotate: 0deg; offset-distance: 0%; animation: run 7s linear infinite; }
 @keyframes run { to { offset-distance: 100%; } }
 .feat { display: flex; flex-direction: column; justify-content: center; gap: 28px; }
 .feat li { opacity: .75; }

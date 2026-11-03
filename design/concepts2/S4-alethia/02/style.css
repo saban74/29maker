@@ -24,7 +24,6 @@
 .bar u{position:absolute;left:var(--l);width:var(--w);top:5px;height:2px;background:var(--onl);text-decoration:none;transform-origin:left;transition:transform 1.4s var(--ease)}
 .bar i{position:absolute;top:0;width:12px;height:12px;background:var(--acc);outline:1px solid var(--onl)}
 .bar i{left:var(--l);transform:translateX(-50%)}
-.scale li::after{content:"";grid-column:2;grid-row:1}
 .js .scale:not(.in) .bar u{transform:scaleX(0)}
 /* 오른쪽 끝 사각형: li 변수로 계산 */
 .scale li .bar{--r:calc(var(--l) + var(--w))}

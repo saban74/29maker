@@ -1,0 +1,68 @@
+/* A05 - 사양 페이지형. 아주 가는 거대한 숫자 위에 장비가 겹쳐 서 있습니다. 바탕은 장비 사진의 은회색. */
+:root{--bg:#e2e3e6;--ink:#17181b;--ink-2:#45474c;--accent:#17181b;--accent-d:#000;--on-accent:#fff;--link:#0a64c8;--graphite:#17181b;--nav-bg:rgba(226,227,230,.92)}
+h1,h2{font-weight:600;letter-spacing:-.045em;line-height:1.08}
+.mask{-webkit-mask-image:radial-gradient(ellipse 64% 76% at 50% 56%,#000 52%,transparent 100%);mask-image:radial-gradient(ellipse 64% 76% at 50% 56%,#000 52%,transparent 100%)}
+.prod{-webkit-mask-image:radial-gradient(ellipse 64% 76% at 50% 56%,#000 52%,transparent 100%);mask-image:radial-gradient(ellipse 64% 76% at 50% 56%,#000 52%,transparent 100%)}
+
+.bignum{font-weight:200;letter-spacing:-.08em;line-height:.8;font-size:clamp(120px,27vw,420px);white-space:nowrap;color:var(--ink);font-variant-numeric:tabular-nums;pointer-events:none}
+.bignum small{font-size:.3em;font-weight:200;letter-spacing:-.03em;margin-left:.04em}
+.bignum.right{text-align:right}
+.bignum.light{color:#fff;font-size:clamp(120px,24vw,360px)}
+
+/* 첫 화면: 숫자가 뒤, 장비가 앞 */
+.hero{position:relative;padding:clamp(40px,7vh,88px) 0 clamp(40px,6vw,80px);overflow:hidden;min-height:calc(100svh - 60px)}
+.hero .wrap{position:relative;z-index:3}
+.hero h1{font-size:clamp(28px,3.8vw,56px);max-width:16em}
+.hero .sub{font-size:clamp(16px,1.5vw,20px);color:var(--ink-2);margin-top:16px;max-width:30em}
+.hero .cta{display:flex;gap:24px;align-items:center;flex-wrap:wrap;margin-top:22px}
+.hero .bignum{position:absolute;left:var(--pad);bottom:clamp(20px,5vw,72px);z-index:1}
+.hero .prod{position:absolute;right:max(0px,calc(50% - 760px));bottom:-6%;width:min(66vw,980px);z-index:2}
+
+.row{padding:clamp(80px,10vw,150px) 0 clamp(60px,8vw,120px);position:relative}
+.row .wrap{position:relative}
+.r2 .bignum{margin-bottom:calc(clamp(120px,27vw,420px)*-.34)}
+.r2 .wideimg{position:relative;width:100%;max-width:1180px;margin:0 auto}
+.r2 .cap{max-width:34em;margin-top:clamp(0px,1vw,16px)}
+.r3 .wrap{display:grid;grid-template-columns:1.1fr 1fr;align-items:center;column-gap:clamp(8px,3vw,48px)}
+.r3 .prod{grid-column:1;grid-row:1/3;width:100%}
+.r3 .bignum{grid-column:2;grid-row:1;align-self:end;position:relative;z-index:0;margin-left:-14%}
+.r3 .cap{grid-column:2;grid-row:2;align-self:start}
+.cap h2{font-size:clamp(28px,3.4vw,48px)}
+.cap p{margin-top:14px;color:var(--ink-2);max-width:28em}
+
+.years{background:var(--graphite);color:#fff;padding:clamp(88px,11vw,160px) 0;--accent:#fff;--accent-d:#d9d9dd;--on-accent:#17181b;--link:#8fb8ff;--ink-2:#b5b7be}
+.years .bignum{margin-bottom:clamp(8px,2vw,28px)}
+.years h2{font-size:clamp(32px,5vw,72px)}
+.years p{margin-top:24px;color:var(--ink-2);max-width:32em}
+.years .acts{display:flex;gap:24px;align-items:center;flex-wrap:wrap;margin-top:30px}
+
+.more{padding:clamp(88px,11vw,150px) 0}
+.more h2{font-size:clamp(30px,4.2vw,56px)}
+.mini{display:grid;grid-template-columns:repeat(4,1fr);gap:clamp(20px,3vw,48px);margin-top:clamp(36px,5vw,64px)}
+.mini div{display:flex;flex-direction:column-reverse;justify-content:flex-end;gap:12px}
+.mini dd{font-size:clamp(34px,4.4vw,64px);font-weight:200;letter-spacing:-.06em;line-height:1;font-variant-numeric:tabular-nums;white-space:nowrap}
+.mini dd small{font-size:.38em;margin-left:2px}
+.mini dt{color:var(--ink-2);font-size:16px}
+
+.final{background:#d3d4d8;text-align:center;padding:clamp(100px,13vw,170px) 0}
+.final h2{font-size:clamp(36px,6vw,84px)}
+.final p{color:var(--ink-2);margin:22px auto 0;max-width:30em}
+.final .acts{display:flex;gap:16px;justify-content:center;flex-wrap:wrap;margin-top:34px;--ghost-ink:#17181b}
+.final .btn.ghost{color:#17181b}
+.final .btn.ghost:hover{color:#fff}
+.foot{--foot-bg:#d3d4d8}
+
+@media (prefers-reduced-motion:no-preference){
+  .hero .prod{animation:rise 1.6s var(--ease) both .2s}
+  @keyframes rise{from{opacity:0;transform:translateY(40px)}to{opacity:1;transform:none}}
+}
+
+@media (max-width:900px){
+  .hero{min-height:0;display:flex;flex-direction:column}
+  .hero .bignum{position:relative;left:auto;bottom:auto;padding:28px var(--pad) 0;margin-bottom:-6vw}
+  .hero .prod{position:relative;right:auto;bottom:auto;width:130%;max-width:none;margin:0 -15%;z-index:2}
+  .r3 .wrap{display:block}
+  .r3 .bignum{margin:-6vw 0 0}
+  .r3 .prod{width:130%;margin:0 -15%;max-width:none}
+  .mini{grid-template-columns:1fr 1fr}
+}
