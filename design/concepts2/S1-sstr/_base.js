@@ -15,6 +15,14 @@
         for(var k=Math.min(y,p);k<=Math.max(y,p);k++)add(i,k,c);
       });
     }
+    if(el.dataset.hr){ /* 한 줄짜리 범위: data-hr="20-98" data-hmax="100" */
+      var hc=+el.dataset.hcols||50,hm=+el.dataset.hmax||100,ab=el.dataset.hr.split('-').map(Number);
+      rows=1;
+      for(var xx=0;xx<=hc;xx++){
+        var val=xx/hc*hm;
+        add(xx,0,(val>=ab[0]&&val<=ab[1])?'o':'m');
+      }
+    }
     if(el.dataset.base)wave(el.dataset.base,'m');
     if(el.dataset.wave)wave(el.dataset.wave,'o');
     if(el.dataset.cols){
