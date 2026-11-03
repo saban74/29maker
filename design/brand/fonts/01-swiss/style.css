@@ -86,3 +86,6 @@ th,td{text-align:left;padding:14px 16px;vertical-align:top}
   .mix1{font-size:26px}
 }
 @media (prefers-reduced-motion:reduce){*{transition:none!important;scroll-behavior:auto!important}}
+
+/* 휴대폰에서 표가 넓어도 페이지가 옆으로 넘치지 않게: 그리드 칸이 내용 너비만큼 늘어나지 않도록 (메인 감독자 수정) */
+.sec > *, .sec-body { min-width: 0; }

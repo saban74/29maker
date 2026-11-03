@@ -69,5 +69,6 @@ h1{font-weight:800;font-size:clamp(34px,5.4vw,80px);line-height:1.05;letter-spac
   .stats,.stand,.foot-grid{grid-template-columns:1fr}
   .stats-l{gap:40px}
   .stand-r{margin-top:20px}
-  .stand-r img{width:30%}
+  .stand-r img,.stand-r img:nth-child(2){width:31%;min-width:0}
+  .stand-r{gap:8px;justify-content:space-between;max-width:100%}
 }
