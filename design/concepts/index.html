@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>메인 디자인 시안 7종 비교 | 제이에스 엔지니어링</title>
+<style>
+  /* 시안 7종을 한눈에 비교하는 목록 페이지 */
+  body { margin: 0; padding: 40px; font-family: Pretendard, "Noto Sans KR", system-ui, sans-serif; background: #eef0f3; color: #14181f; word-break: keep-all; }
+  h1 { margin: 0 0 8px; font-size: 32px; }
+  p.lead { margin: 0 0 32px; color: #4a5260; }
+  .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(420px, 1fr)); gap: 28px; }
+  a.card { display: block; background: #fff; color: inherit; text-decoration: none; }
+  a.card img { display: block; width: 100%; aspect-ratio: 16 / 10; object-fit: cover; object-position: top; }
+  a.card div { padding: 16px 20px 20px; }
+  a.card strong { font-size: 20px; }
+  a.card span { display: block; margin-top: 6px; color: #4a5260; font-size: 15px; line-height: 1.55; }
+  a.card:focus-visible { outline: 3px solid #0a64c8; outline-offset: 3px; }
+  footer { margin-top: 32px; font-size: 13px; color: #4a5260; }
+  @media (max-width: 520px) { body { padding: 20px 16px; } .grid { grid-template-columns: 1fr; } }
+</style>
+</head>
+<body>
+  <h1>메인 디자인 시안 7종</h1>
+  <p class="lead">시안을 누르면 실제 페이지가 열립니다. 노란 [확인 필요]는 회사 확인 전까지 비워 둔 자리입니다.</p>
+  <div class="grid">
+    <a class="card" href="1-apple-light/index.html"><img src="previews/1-apple-light-pc.png" alt="1번 애플 타입 밝은 시안 첫 화면"><div><strong>1. 애플 타입 · 밝은</strong><span>Platinous J 한 대가 주인공. 큰 제품명, 넓은 여백, 제품별 타일.</span></div></a>
+    <a class="card" href="2-apple-dark-pro/index.html"><img src="previews/2-apple-dark-pro-pc.png" alt="2번 애플 타입 프로 다크 시안 첫 화면"><div><strong>2. 애플 타입 · 프로 다크</strong><span>검은 바탕, AI 반도체 시험 장비 강조, 스크롤하면 거대한 사양 숫자.</span></div></a>
+    <a class="card" href="3-temperature-axis/index.html"><img src="previews/3-temperature-axis-pc.png" alt="3번 온도 축 시안 첫 화면"><div><strong>3. 온도 축</strong><span>-70~+300°C 눈금 위의 장비 막대. 시험 온도·습도를 고르면 맞는 장비만 남음.</span></div></a>
+    <a class="card" href="4-test-report/index.html"><img src="previews/4-test-report-pc.png" alt="4번 시험 성적서 시안 첫 화면"><div><strong>4. 시험 성적서</strong><span>45년의 공급 기록을 성적서 한 장으로. 문서 정보표, 조항, 사양표, 서명란.</span></div></a>
+    <a class="card" href="5-since-1981/index.html"><img src="previews/5-since-1981-pc.png" alt="5번 Since 1981 시안 첫 화면"><div><strong>5. Since 1981</strong><span>잡지형 편집. 연혁 연도가 거대한 활자로, 연대마다 바탕색이 바뀜.</span></div></a>
+    <a class="card" href="6-industry-lens/index.html"><img src="previews/6-industry-lens-pc.png" alt="6번 산업 렌즈 시안 첫 화면"><div><strong>6. 산업 렌즈</strong><span>"무엇을 시험하시나요?" 산업을 고르면 첫 화면의 장비와 문구가 통째로 바뀜.</span></div></a>
+    <a class="card" href="7-reference-plus/index.html"><img src="previews/7-reference-plus-pc.png" alt="7번 참고 시안 개선판 첫 화면"><div><strong>7. 참고 시안 개선판</strong><span>보내 주신 참고 시안 구성 그대로, 실제 장비 사진을 넣고 다듬은 비교 기준.</span></div></a>
+  </div>
+  <footer>장비 이미지 출처: ESPEC Corp. 공식 웹사이트 (홈페이지 공개 전 사용 허락 확인 필요)</footer>
+</body>
+</html>

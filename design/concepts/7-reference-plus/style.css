@@ -233,3 +233,7 @@ p { color: var(--text2); }
   .cta-band h2 { font-size: 22px; }
   .footer-grid { grid-template-columns: 1fr; gap: 28px; }
 }
+
+/* 첫 화면 사진 자리 안내가 바로가기 띠에 가려지지 않게 위쪽 오른편으로 (메인 감독자 수정) */
+.ph--hero .ph__label { top: 16px; bottom: auto; left: auto; right: 40px; }
+@media (max-width: 720px) { .ph--hero .ph__label { left: 20px; right: 20px; } }

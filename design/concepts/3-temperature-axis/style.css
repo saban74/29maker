@@ -226,3 +226,6 @@ section.block h2.big { font-size: clamp(28px, 3.4vw, 44px); line-height: 1.18; l
   html { scroll-behavior: auto; }
   .band, .bar { transition: none; }
 }
+
+/* 한글 낱말이 중간에서 끊기지 않게 (메인 감독자 수정) */
+body { word-break: keep-all; overflow-wrap: break-word; }

@@ -105,3 +105,6 @@ footer small{display:block;margin-top:26px;color:#C9D0EA;font-size:14px}
   .gear figure img{margin:0 auto}
 }
 @media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
+
+/* 한글 낱말이 중간에서 끊기지 않게 (메인 감독자 수정) */
+body { word-break: keep-all; overflow-wrap: break-word; }
