@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="64" height="64" role="img" aria-label="J&amp;S 심볼">
+  <title>J&amp;S 심볼 - 평행선</title>
+  <defs>
+    <mask id="m" maskUnits="userSpaceOnUse" x="0" y="0" width="64" height="64">
+      <g fill="none" stroke-linejoin="round">
+        <path d="M14 12V42A10 10 0 0 0 24 52H42A10 10 0 0 0 42 32A10 10 0 1 1 52 22" stroke="#FFF" stroke-width="15"/>
+        <path d="M14 12V42A10 10 0 0 0 24 52H42A10 10 0 0 0 42 32A10 10 0 1 1 52 22" stroke="#000" stroke-width="9"/>
+        <path d="M14 12V42A10 10 0 0 0 24 52H42A10 10 0 0 0 42 32A10 10 0 1 1 52 22" stroke="#FFF" stroke-width="3"/>
+      </g>
+    </mask>
+  </defs>
+  <rect width="64" height="64" fill="#1B2B3C" mask="url(#m)"/>
+</svg>

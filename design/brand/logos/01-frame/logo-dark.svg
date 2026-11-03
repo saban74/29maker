@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 84" width="400" height="84" role="img" aria-label="J&amp;S ENGINEERING 제이에스 엔지니어링 (어두운 바탕용)">
+  <title>J&amp;S ENGINEERING 제이에스 엔지니어링 (어두운 바탕용)</title>
+  <rect width="400" height="84" fill="#0C1624"/>
+  <g transform="translate(4 6) scale(1.1)">
+    <rect width="64" height="64" rx="3" fill="#FFFFFF"/>
+    <g transform="translate(-5 0)" fill="none" stroke="#0B4F9E" stroke-width="6">
+      <path d="M25 16V40A8 8 0 0 1 17 48"/>
+      <path d="M54 24A8 8 0 1 0 46 32A8 8 0 1 1 38 40"/>
+    </g>
+  </g>
+  <text x="92" y="40" font-family="Pretendard, 'Noto Sans KR', 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif" font-size="27" font-weight="700" letter-spacing="1" fill="#FFFFFF">J&amp;S ENGINEERING</text>
+  <text x="92" y="66" font-family="Pretendard, 'Noto Sans KR', 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif" font-size="18" font-weight="500" letter-spacing="1" fill="#B9C4D3">제이에스 엔지니어링</text>
+</svg>
