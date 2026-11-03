@@ -1,0 +1,67 @@
+/* 02 뜨거움과 차가움: 청흑 바탕 + 열풍 같은 연한 호박색 한 점 */
+:root{--bg:#090c13;--bg2:#d8dadc;--acc:#ffd7a1;--ink:#f0f1f3}
+.sr{position:absolute;left:-9999px}
+
+/* 1 첫 화면 */
+.hero{min-height:100svh}
+.hero-fig{position:absolute;left:50%;top:50%;width:min(104vw,2000px);transform:translate(-50%,-55%)}
+.hero .h-xl{max-width:12em}
+.hero .dock.bl{display:grid;gap:18px;max-width:min(430px,44vw)}
+.hero .dock.bl .statement{text-shadow:0 0 18px #000,0 0 5px #000}
+.big-pair{font-size:clamp(56px,9.5vw,150px);text-align:right;line-height:.95}
+
+/* 2 온도 눈금 (밝은 구역) */
+.range{display:grid;gap:clamp(28px,4vw,56px);justify-items:start}
+.range-h{max-width:14em}
+.scale{width:100%;position:relative;padding-top:34px}
+.axis{position:absolute;left:230px;right:150px;top:0;height:28px}
+.axis span{position:absolute;left:var(--p);transform:translateX(-50%);font:600 11px/1 var(--mono);letter-spacing:.05em;color:var(--dim)}
+.scale ul{display:grid;gap:0}
+.scale li{display:grid;grid-template-columns:230px 1fr 150px;align-items:center;min-height:62px;border-top:1px solid rgba(16,22,26,.28)}
+.scale b{font-weight:600;font-size:16px;letter-spacing:-.01em}
+.scale em{font:600 12px/1.3 var(--mono);font-style:normal;letter-spacing:.04em;text-align:right;font-variant-numeric:tabular-nums}
+.bar{position:relative;height:12px;display:block}
+.bar u{position:absolute;left:var(--l);width:var(--w);top:5px;height:2px;background:var(--onl);text-decoration:none;transform-origin:left;transition:transform 1.4s var(--ease)}
+.bar i{position:absolute;top:0;width:12px;height:12px;background:var(--acc);outline:1px solid var(--onl)}
+.bar i{left:var(--l);transform:translateX(-50%)}
+.scale li::after{content:"";grid-column:2;grid-row:1}
+.js .scale:not(.in) .bar u{transform:scaleX(0)}
+/* 오른쪽 끝 사각형: li 변수로 계산 */
+.scale li .bar{--r:calc(var(--l) + var(--w))}
+.scale li .bar::after{content:"";position:absolute;top:0;left:var(--r);width:12px;height:12px;transform:translateX(-50%);background:var(--acc);outline:1px solid var(--onl)}
+.range-note{font-size:14px;max-width:46em}
+
+/* 3 세 칸 구조 */
+.zones{display:grid;grid-template-columns:minmax(300px,482px) 1fr;gap:clamp(32px,6vw,110px);align-items:center;background:#000}
+.zone-fig{width:100%;max-width:482px}
+.zone-text{display:grid;gap:clamp(24px,3vw,44px);max-width:46em}
+.readouts{display:grid;grid-template-columns:repeat(3,1fr);gap:var(--m);margin-top:12px}
+.readouts .num{display:block;font-size:clamp(44px,5vw,80px);margin-bottom:10px}
+.readouts .num small{font-size:.26em;letter-spacing:0;margin-left:4px}
+.readouts span{display:block;font-size:14px;line-height:1.55;color:var(--dim)}
+
+/* 4 모델표 */
+.models{display:grid;gap:clamp(28px,4vw,56px);background:var(--bg)}
+.tbl{overflow-x:auto}
+.tbl table{min-width:640px}
+.tbl tbody th{font:600 13px/1.4 var(--mono);letter-spacing:.04em;color:var(--acc);text-transform:none}
+.tbl td{font-size:16px}
+.models-note{font-size:14px}
+
+/* 5 맺음 */
+.close{display:grid;gap:36px;justify-items:start;background:#000}
+.close .statement{max-width:30em}
+
+@media (max-width:860px){
+  .hero-fig{width:230vw;transform:translate(-50%,-58%)}
+  .hero .dock.bl{max-width:calc(100% - 2*var(--m))}
+  .big-pair{display:none}
+  .zones{grid-template-columns:1fr}
+  .readouts{grid-template-columns:1fr}
+  .axis{left:0;right:0}
+  .scale{padding-top:34px}
+  .scale li{grid-template-columns:1fr auto;grid-template-rows:auto 28px;padding-top:12px}
+  .scale li .bar{grid-column:1/-1;grid-row:2}
+  .scale li em{grid-row:1;grid-column:2}
+  .scale li b{grid-row:1;grid-column:1}
+}
