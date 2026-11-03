@@ -1,0 +1,67 @@
+/* GD/03 흑백 도면: 글자와 선만으로. 사진 없음. */
+:root{--paper:#fff;--ink:#000;--grey:#555;--line:#000;--serif:"Instrument Serif","Pretendard Variable",serif}
+body{background:var(--paper);color:var(--ink)}
+.bar{display:flex;align-items:center;justify-content:space-between;gap:24px;padding:18px clamp(20px,4vw,56px);border-bottom:1.5px solid var(--ink)}
+.mark{font-weight:800;font-size:17px;letter-spacing:-.01em}
+.bar ul{display:flex;gap:26px;font-size:15px;font-weight:500}
+.bar ul a:hover{text-decoration:underline;text-underline-offset:6px}
+.btn{display:inline-block;padding:10px 20px;background:var(--ink);color:#fff;font-weight:600;font-size:15px;border:1.5px solid var(--ink);transition:background .15s,color .15s}
+.btn:hover{background:#fff;color:#000}
+.btn-lg{padding:20px 44px;font-size:22px}
+@media(max-width:900px){.bar ul{display:none}}
+
+/* 첫 화면: 계단식으로 어긋난 큰 세 줄 */
+.hero{position:relative;padding:clamp(48px,7vw,110px) clamp(20px,4vw,56px) clamp(64px,8vw,120px);overflow:hidden}
+h1{font-size:clamp(56px,13vw,210px);font-weight:900;line-height:.98;letter-spacing:-.06em;display:flex;flex-direction:column}
+h1 .in2{padding-left:12vw}
+h1 .in3{padding-left:30vw}
+.hero-sub{max-width:24em;margin-top:clamp(32px,4vw,56px);font-size:clamp(17px,1.5vw,20px);margin-left:auto;width:min(100%,24em)}
+.hero-year{position:absolute;left:clamp(20px,4vw,56px);bottom:clamp(8px,2vw,28px);font-family:var(--serif);font-style:italic;font-size:clamp(80px,16vw,260px);line-height:.8;color:transparent;-webkit-text-stroke:1.5px var(--ink);pointer-events:none}
+@media(max-width:700px){.hero-year{position:static;display:block;margin-top:32px}h1 .in2{padding-left:8vw}h1 .in3{padding-left:16vw}.hero-sub{margin-left:0}}
+
+/* 도면 */
+.drawing{display:grid;grid-template-columns:minmax(0,5fr) minmax(0,6fr);gap:clamp(24px,5vw,80px);padding:clamp(80px,10vw,160px) clamp(20px,4vw,56px);background:#f1f1f1;border-top:1.5px solid var(--ink);border-bottom:1.5px solid var(--ink)}
+.drawing h2,.index h2,.years h2{font-size:clamp(34px,5vw,76px);font-weight:900;letter-spacing:-.05em;line-height:1.05}
+.hint{margin-top:18px;color:var(--grey);font-size:17px}
+.explain{margin:clamp(32px,4vw,56px) 0 28px;padding:24px;background:#fff;border:1.5px solid var(--ink);min-height:150px}
+.explain h3{font-size:24px;font-weight:800;letter-spacing:-.03em}
+.explain p{margin-top:8px;font-size:18px}
+.parts{display:flex;flex-wrap:wrap;gap:10px}
+.parts button{cursor:pointer;padding:12px 20px;background:#fff;border:1.5px solid var(--ink);font-weight:600;font-size:16px;border-radius:0;transition:background .15s,color .15s}
+.parts button[aria-pressed="true"],.parts button:hover{background:#000;color:#fff}
+.draw-fig svg{width:100%;max-width:520px;margin:0 auto;display:block;fill:none;stroke:#000;stroke-width:1.6;stroke-linejoin:miter}
+.draw-fig .faint{stroke-width:1;stroke:#666}
+.draw-fig .thick{stroke-width:5}
+.draw-fig .dim{stroke-width:1;stroke-dasharray:4 4}
+.draw-fig .part{cursor:pointer;transition:fill .2s}
+.draw-fig .part rect,.draw-fig .part circle{fill:transparent}
+.draw-fig .part.on rect:first-child,.draw-fig .part.on circle{fill:rgba(0,0,0,.14)}
+.draw-fig .ghost{stroke-dasharray:3 3}
+.draw-fig figcaption{margin-top:14px;font-size:14px;color:var(--grey);text-align:center}
+@media(max-width:860px){.drawing{grid-template-columns:1fr}}
+
+/* 목록: 글자만으로 */
+.index{padding:clamp(100px,12vw,190px) clamp(20px,4vw,56px)}
+.list{margin-top:clamp(36px,5vw,72px);border-top:1.5px solid var(--ink)}
+.list a{display:grid;grid-template-columns:minmax(0,7fr) minmax(0,5fr);gap:20px;align-items:baseline;padding:clamp(20px,2.4vw,34px) 0;border-bottom:1.5px solid var(--ink);transition:padding .25s,background .15s}
+.list strong{font-size:clamp(24px,3.6vw,52px);font-weight:800;letter-spacing:-.045em;line-height:1.1}
+.list span{font-size:17px;color:#222}
+.list a:hover{background:#000;color:#fff;padding-left:20px}
+.list a:hover span{color:#fff}
+@media(max-width:700px){.list a{grid-template-columns:1fr;gap:6px}}
+
+/* 연혁: 서양식 이탤릭 숫자 */
+.years{padding:clamp(80px,10vw,160px) clamp(20px,4vw,56px);background:#000;color:#fff}
+.years h2{margin-bottom:clamp(36px,5vw,72px)}
+.years dl{margin:0}
+.years dl div{display:grid;grid-template-columns:minmax(0,4fr) minmax(0,7fr);gap:20px;align-items:baseline;padding:20px 0;border-top:1.5px solid #fff}
+.years dt{font-family:var(--serif);font-style:italic;font-size:clamp(56px,10vw,160px);line-height:.9;letter-spacing:-.02em}
+.years dd{margin:0;font-size:clamp(17px,1.6vw,22px);max-width:26em}
+.years dl div:nth-child(even) dt{order:2;text-align:right}
+@media(max-width:700px){.years dl div{grid-template-columns:1fr}.years dl div:nth-child(even) dt{order:0;text-align:left}}
+
+.contact{padding:clamp(100px,14vw,220px) clamp(20px,4vw,56px);display:flex;flex-direction:column;align-items:flex-start;gap:44px}
+.contact h2{font-size:clamp(48px,11vw,176px);font-weight:900;letter-spacing:-.06em;line-height:1}
+.foot{padding:40px clamp(20px,4vw,56px);border-top:1.5px solid var(--ink);display:grid;gap:8px;font-size:15px}
+.foot-name{font-family:var(--serif);font-style:italic;font-size:clamp(80px,22vw,360px);line-height:.85;letter-spacing:-.03em;margin-bottom:16px}
+.credit{color:var(--grey)}

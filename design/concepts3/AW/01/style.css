@@ -1,0 +1,83 @@
+/* AW/01 해 질 녘 슬레이트 (레퍼런스 A1 Seasats의 원리) */
+:root{
+  --frame:10px;
+  --slate:#6f7b86; --blush:#d8cdc6; --sage:#bccbc2; --blue:#94a6b6; --deep:#4f6070; --graphite:#2b3237; --ink:#1b2024;
+  --burnt:#a8481c; --paper:#f4f3f1;
+  --serif:"Noto Serif KR","Pretendard Variable",serif;
+}
+body{background:#fff;color:var(--ink);font-size:17px}
+
+/* 첫 화면 */
+.hero{display:grid;grid-template-columns:84fr 14fr;gap:var(--frame);padding:var(--frame);height:100vh;min-height:620px;background:#fff}
+.hero-photo{position:relative;border-radius:28px;overflow:hidden;background:#6a6f72;color:#fff}
+.hero-photo img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:50% 78%;filter:brightness(.62) contrast(1.05) saturate(.9)}
+.brand{position:absolute;left:32px;top:28px;font-weight:600;font-size:18px;letter-spacing:-.01em;z-index:2}
+.hero-text{position:absolute;left:clamp(24px,4vw,56px);top:clamp(80px,14vh,140px);max-width:min(880px,86%);z-index:2}
+h1{font-family:var(--serif);font-weight:200;font-size:clamp(40px,6.4vw,104px);line-height:1.12;letter-spacing:-.03em}
+.hero-text p{margin-top:28px;max-width:34em;font-size:18px;color:#fff}
+.swatches{display:flex;flex-direction:column;gap:var(--frame)}
+.sw{flex:1;display:flex;align-items:flex-end;padding:0 18px 16px;border-radius:14px;font-weight:500;font-size:16px;color:var(--ink);transition:transform .35s cubic-bezier(.2,.7,.2,1),filter .2s}
+.sw:hover{transform:translateX(-6px);filter:brightness(1.06)}
+.s1{background:var(--blush)} .s2{background:var(--sage)} .s3{background:var(--blue)} .s4{background:var(--slate);color:#fff}
+.s5{background:var(--deep);color:#fff} .s6{background:var(--graphite);color:#fff} .s7{background:#e8e3df;color:var(--ink);font-weight:700}
+
+/* 소개 */
+.intro{display:grid;grid-template-columns:1.5fr 1fr;gap:clamp(32px,6vw,96px);padding:clamp(100px,14vw,200px) clamp(20px,4vw,56px);align-items:end}
+.statement{font-family:var(--serif);font-weight:300;font-size:clamp(24px,2.5vw,36px);line-height:1.55;letter-spacing:-.02em}
+.facts{display:grid;gap:28px}
+.facts dt{font-size:16px;color:#444b51}
+.facts dd{font-family:var(--serif);font-weight:300;font-size:clamp(34px,3.6vw,52px);letter-spacing:-.03em;line-height:1.1}
+
+/* 고정 장면 */
+.scene{height:420vh;position:relative}
+.scene-stick{position:sticky;top:0;height:100vh;padding:var(--frame)}
+.scene-panel{position:relative;height:100%;border-radius:28px;overflow:hidden;background:#5d6266;color:#fff}
+.scene-img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:50% 70%;filter:brightness(.52) contrast(1.05)}
+.scene-title{position:absolute;left:clamp(20px,3vw,40px);top:28px;font-size:16px;font-weight:600;z-index:2}
+.claims{position:absolute;left:50%;top:clamp(70px,12vh,120px);transform:translateX(-50%);width:min(760px,88%);text-align:center;z-index:2;display:grid;gap:10px}
+.claims li{font-family:var(--serif);font-weight:300;font-size:clamp(20px,2.4vw,34px);line-height:1.35;opacity:1;transition:opacity .5s}
+.claims strong{font-weight:400}
+.js .claims li{opacity:.38}
+.js .claims li.on{opacity:1}
+.inset{position:absolute;bottom:clamp(24px,6vh,60px);width:clamp(120px,14vw,200px);z-index:2}
+.inset img{width:100%;aspect-ratio:1;object-fit:cover}
+.inset figcaption{background:#fff;color:var(--ink);font:12px/1.3 ui-monospace,Menlo,Consolas,monospace;padding:6px 8px;text-transform:uppercase}
+.inset-l{left:clamp(20px,5vw,80px)} .inset-r{right:clamp(20px,5vw,80px)}
+
+/* 제품 */
+.products{padding:clamp(100px,12vw,200px) var(--frame) clamp(80px,10vw,160px);background:var(--paper)}
+.products h2{font-family:var(--serif);font-weight:300;font-size:clamp(34px,4.4vw,64px);letter-spacing:-.03em;padding:0 clamp(10px,3vw,46px) 48px}
+.pgrid{display:grid;grid-template-columns:1.25fr 1fr 1fr;gap:var(--frame)}
+.pcard{position:relative;display:grid;grid-template-rows:1fr auto auto;border-radius:20px;overflow:hidden;padding:0 0 22px;background:#cfd2d4;min-height:520px}
+.pcard img{width:100%;height:100%;object-fit:cover;min-height:360px;transition:transform .8s cubic-bezier(.2,.7,.2,1)}
+.pcard:hover img{transform:scale(1.03)}
+.pname{padding:18px 22px 0;font-family:var(--serif);font-size:26px;font-weight:400;letter-spacing:-.02em}
+.pdesc{padding:6px 22px 0;font-size:16px;color:#2a3035}
+.p-a{background:#c3c8cb}.p-b{background:#d1d3d6}.p-c{background:#dcdcde}
+
+/* 푸터: 온도가 바뀐다 */
+.foot{background:var(--burnt);color:#fff;padding:clamp(80px,10vw,150px) clamp(20px,4vw,56px) 28px;overflow:hidden}
+.foot-grid{display:grid;grid-template-columns:1fr 1.4fr 1fr;gap:40px;align-items:start}
+.readout{font:14px/1.8 ui-monospace,Menlo,Consolas,monospace}
+.readout b{font-weight:700;font-size:22px}
+.foot h2{font-family:var(--serif);font-weight:300;font-size:clamp(30px,3.4vw,48px);letter-spacing:-.03em;margin-bottom:12px}
+.foot-links ul{display:flex;flex-wrap:wrap;gap:8px 26px;margin-top:36px;font-size:16px}
+.btn{display:inline-block;margin-top:18px;background:#fff;color:var(--burnt);font-weight:700;padding:14px 26px;border-radius:999px;transition:transform .25s}
+.btn:hover{transform:translateY(-2px)}
+.foot-info{font-size:16px;display:grid;gap:12px}
+.wordmark{margin:clamp(60px,9vw,130px) 0 16px;font-weight:600;font-size:clamp(40px,11.2vw,190px);letter-spacing:-.05em;line-height:.9;white-space:nowrap}
+.credit{color:#ffe9dc}
+
+@media (max-width:900px){
+  .hero{grid-template-columns:1fr;grid-template-rows:1fr auto;height:auto;min-height:100svh}
+  .hero-photo{min-height:68svh}
+  .swatches{flex-direction:row;flex-wrap:wrap}
+  .sw{flex:1 1 30%;min-height:64px;align-items:center;padding:0 12px;justify-content:center}
+  .sw:hover{transform:none}
+  .hero-text{top:84px}
+  .intro,.foot-grid,.pgrid{grid-template-columns:1fr}
+  .pcard{min-height:0}
+  .inset{display:none}
+  .claims{top:80px}
+  .scene{height:360vh}
+}

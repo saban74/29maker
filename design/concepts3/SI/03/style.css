@@ -1,0 +1,75 @@
+/* 단색(흑연) 한 가지 색의 명암만. 강조색 없음. */
+:root {
+  --g0: #0f1011;
+  --g1: #17191a;
+  --g2: #232627;
+  --g3: #3a3e40;
+  --g4: #8c9194;
+  --g5: #d5d8d9;
+  --g6: #f1f2f2;
+  --pad: clamp(20px, 4vw, 56px);
+}
+body { background: var(--g1); color: var(--g6); font-size: 17px; }
+
+.top { display: flex; align-items: center; gap: 32px; padding: 20px var(--pad); }
+.logo { font-weight: 900; letter-spacing: .02em; font-size: 17px; }
+.top nav { margin-left: auto; }
+.top nav ul { display: flex; gap: 26px; font-size: 15px; color: var(--g5); }
+.top nav a:hover { color: #fff; }
+
+/* 버튼: 사각, 흰 바탕 한 가지 */
+.btn { display: inline-block; background: var(--g6); color: var(--g0); font-weight: 800; padding: 13px 22px; transition: background .2s; }
+.btn:hover { background: var(--g4); }
+.btn-light { padding: 16px 28px; }
+
+/* 환기구 격자 패턴: 챔버 옆면 통풍구에서 따온 가로 줄무늬. 한 구역에만. */
+.vent { height: clamp(70px, 11vw, 150px); background: repeating-linear-gradient(0deg, var(--g5) 0 7px, transparent 7px 18px); margin: 0 var(--pad); }
+.vent.small { height: 60px; background: repeating-linear-gradient(0deg, var(--g3) 0 5px, transparent 5px 13px); margin: 0 0 28px; }
+
+.hero { padding: 6vh var(--pad) 0; }
+h1 { display: block; line-height: .86; letter-spacing: -.07em; font-weight: 900; margin-bottom: 36px; }
+.year { display: block; font-size: clamp(130px, 33vw, 560px); color: var(--g6); }
+.line { display: block; font-size: clamp(30px, 5.2vw, 84px); letter-spacing: -.05em; line-height: 1.05; color: var(--g4); margin-top: .1em; }
+.hero .vent { margin: 0 0 0; }
+.hero-foot { display: flex; justify-content: space-between; align-items: end; gap: 32px; padding: 36px 0 70px; }
+.hero-foot p { max-width: 28em; font-size: 19px; color: var(--g5); }
+
+.photo { background: var(--g0); }
+.photo img { width: 100%; max-height: 82vh; object-fit: cover; }
+
+.products { padding: 130px var(--pad); }
+h2 { font-size: clamp(32px, 4.6vw, 70px); line-height: 1.05; letter-spacing: -.05em; font-weight: 900; margin-bottom: 56px; }
+.grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; }
+.grid a { display: block; }
+.tile { display: block; background: var(--g5); aspect-ratio: 1 / 1; overflow: hidden; margin-bottom: 16px; }
+.tile img { width: 100%; height: 100%; object-fit: cover; mix-blend-mode: multiply; transition: transform .6s cubic-bezier(.2,.7,.2,1); }
+.grid a:hover img { transform: scale(1.05); }
+.grid b { display: block; font-size: 24px; letter-spacing: -.03em; margin-bottom: 2px; }
+.grid li span:last-child { color: var(--g4); font-size: 15px; }
+
+/* 연혁: 레트로 카탈로그 장부 */
+.ledger { background: var(--g6); color: var(--g0); padding: 120px var(--pad); display: grid; grid-template-columns: 1fr 1.3fr; gap: 64px; align-items: start; }
+.forty { font-size: clamp(160px, 26vw, 420px); font-weight: 900; letter-spacing: -.09em; line-height: .78; background: repeating-linear-gradient(0deg, var(--g0) 0 8px, transparent 8px 18px); -webkit-background-clip: text; background-clip: text; color: transparent; margin-bottom: 24px; }
+.ledger h2 { margin-bottom: 0; }
+.years li { display: grid; grid-template-columns: 120px 1fr; gap: 20px; padding: 22px 0; align-items: baseline; }
+.years li:nth-child(odd) { background: none; }
+.years li + li { border-top: 3px solid var(--g5); }
+.years b { font-size: 34px; letter-spacing: -.04em; font-weight: 900; }
+.years span { font-size: 18px; color: var(--g2); }
+
+.cta { padding: 130px var(--pad); display: flex; justify-content: space-between; align-items: end; gap: 32px; flex-wrap: wrap; background: var(--g2); }
+.cta h2 { margin: 0; }
+
+.foot { padding: 56px var(--pad) 28px; background: var(--g0); color: var(--g4); font-size: 14px; }
+.foot-row { display: flex; justify-content: space-between; flex-wrap: wrap; gap: 12px; }
+
+@media (max-width: 900px) {
+  .top nav { display: none; }
+  .top .btn { margin-left: auto; }
+  .hero-foot { flex-direction: column; align-items: start; }
+  .grid { grid-template-columns: 1fr 1fr; }
+  .ledger { grid-template-columns: 1fr; gap: 40px; padding: 80px var(--pad); }
+  .years li { grid-template-columns: 1fr; gap: 4px; }
+  .products, .cta { padding-top: 80px; padding-bottom: 80px; }
+}
+@media (max-width: 480px) { .grid { grid-template-columns: 1fr; } }

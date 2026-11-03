@@ -1,0 +1,123 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>제이에스 엔지니어링 | ESPEC 환경시험기 한국 단독 총대리점</title>
+<meta name="description" content="1981년부터 ESPEC 환경시험기를 한국에 공급해 온 제이에스 엔지니어링.">
+<link rel="stylesheet" href="../_base-si1.css">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<a class="skip" href="#main">본문으로 건너뛰기</a>
+
+<header class="top">
+  <a class="logo" href="#">제이에스 엔지니어링</a>
+  <nav aria-label="주 메뉴">
+    <ul>
+      <li><a href="#">회사소개</a></li>
+      <li><a href="#products">제품소개</a></li>
+      <li><a href="#">솔루션</a></li>
+      <li><a href="#">기술자료</a></li>
+      <li><a href="#">서비스</a></li>
+      <li><a href="#">고객지원</a></li>
+    </ul>
+  </nav>
+  <a class="quote" href="#">견적문의</a>
+</header>
+
+<main id="main">
+  <section class="hero" aria-labelledby="h1">
+    <h1 id="h1">환경시험기를<br>45년째 한국에<br>공급합니다.</h1>
+    <div class="hero-side">
+      <p>일본 ESPEC의 한국 단독 총대리점. 1981년에 시작해 장비를 들여오고, 설치하고, 고쳐 왔습니다.</p>
+    </div>
+  </section>
+
+  <section class="products" id="products" aria-labelledby="h-products">
+    <h2 id="h-products">제품</h2>
+    <div class="index">
+      <ul class="rows" id="rows">
+        <li class="row is-on" data-i="0">
+          <a href="#">
+            <span class="name">Platinous J</span>
+            <span class="kind">항온항습기</span>
+            <span class="data num">-70 ~ +100°C · 20 ~ 98%rh</span>
+          </a>
+          <img class="inline" src="../../../concepts2/assets/hires/platinous-j-lineup.jpg" alt="Platinous J 라인업" loading="lazy">
+        </li>
+        <li class="row" data-i="1">
+          <a href="#">
+            <span class="name">TSA</span>
+            <span class="kind">열충격 시험기</span>
+            <span class="data num">+60 ~ +200°C ⇄ -70 ~ 0°C</span>
+          </a>
+          <img class="inline" src="../../../concepts2/assets/hires/tsa-pair.jpg" alt="TSA 열충격 시험기" loading="lazy">
+        </li>
+        <li class="row" data-i="2">
+          <a href="#">
+            <span class="name">EHS</span>
+            <span class="kind">HAST 챔버</span>
+            <span class="data num">+105 ~ +162°C · 최대 0.392MPa</span>
+          </a>
+          <img class="inline" src="../../../concepts2/assets/hires/hast-ehs-lineup.jpg" alt="HAST 챔버 EHS 시리즈" loading="lazy">
+        </li>
+        <li class="row" data-i="3">
+          <a href="#">
+            <span class="name">E Series</span>
+            <span class="kind">워크인 챔버</span>
+            <span class="data num">-40 ~ +80°C · 4.2 ~ 52.7m³</span>
+          </a>
+          <img class="inline" src="../../../concepts2/assets/hires/walk-in-tbe.jpg" alt="워크인 챔버 E 시리즈" loading="lazy">
+        </li>
+      </ul>
+      <figure class="stage" aria-hidden="true">
+        <img class="on" src="../../../concepts2/assets/hires/platinous-j-lineup.jpg" alt="">
+        <img src="../../../concepts2/assets/hires/tsa-pair.jpg" alt="">
+        <img src="../../../concepts2/assets/hires/hast-ehs-lineup.jpg" alt="">
+        <img src="../../../concepts2/assets/hires/walk-in-tbe.jpg" alt="">
+      </figure>
+    </div>
+    <p class="more"><a href="#">전체 제품 보기</a></p>
+  </section>
+
+  <section class="company" aria-labelledby="h-co">
+    <h2 id="h-co">회사</h2>
+    <div class="co-body">
+      <p class="statement">장비는 팔아서 끝나는 물건이 아닙니다. 해마다 일본 ESPEC 기술진이 찾아와 서비스 기술을 나누고, 직원은 정기적으로 일본에서 연수를 받습니다.</p>
+      <dl class="facts">
+        <div><dt>설립</dt><dd class="num">1981년</dd></div>
+        <div><dt>지위</dt><dd>ESPEC 한국 단독 총대리점</dd></div>
+        <div><dt>세미나</dt><dd>ESPEC 연구진 국내 세미나, 매년 3~4회</dd></div>
+        <div><dt>대표이사</dt><dd>정창현</dd></div>
+      </dl>
+    </div>
+  </section>
+
+  <section class="contact" aria-labelledby="h-ct">
+    <h2 id="h-ct">문의</h2>
+    <a class="big-link" href="#">시험 조건을 알려 주시면 맞는 장비를 추천해 드립니다. 견적문의</a>
+  </section>
+</main>
+
+<footer class="foot">
+  <p>(주)제이에스 엔지니어링 · 주소와 전화 [확인 필요]</p>
+  <p>장비 이미지 출처: ESPEC Corp. 공식 웹사이트 및 제품 카탈로그</p>
+</footer>
+
+<script>
+(function () {
+  var rows = [].slice.call(document.querySelectorAll('.row'));
+  var imgs = [].slice.call(document.querySelectorAll('.stage img'));
+  function on(i) {
+    rows.forEach(function (r, j) { r.classList.toggle('is-on', i === j); });
+    imgs.forEach(function (m, j) { m.classList.toggle('on', i === j); });
+  }
+  rows.forEach(function (r, i) {
+    r.addEventListener('mouseenter', function () { on(i); });
+    r.addEventListener('focusin', function () { on(i); });
+  });
+})();
+</script>
+</body>
+</html>
