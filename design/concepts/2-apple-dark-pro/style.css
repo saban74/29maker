@@ -1,0 +1,152 @@
+/* 2. apple-dark-pro - 제이에스 엔지니어링 메인 시안 */
+:root{
+  --black:#000;
+  --panel:#111113;
+  --panel-2:#1c1c1f;
+  --ink:#f5f5f7;
+  --ink-2:#a8a8b0;
+  --cold:#6cc4ff;
+  --hot:#ff8a5c;
+  --damp:#7fe0cf;
+  --pad:clamp(20px,4vw,56px);
+  --max:1320px;
+  --font:"Pretendard Variable",Pretendard,-apple-system,"Apple SD Gothic Neo","Noto Sans KR","Malgun Gothic",sans-serif;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth;background:var(--black)}
+body{font-family:var(--font);background:var(--black);color:var(--ink);font-size:17px;line-height:1.6;-webkit-font-smoothing:antialiased;word-break:keep-all;overflow-x:hidden}
+img{display:block;max-width:100%;height:auto}
+a{color:inherit;text-decoration:none}
+:focus-visible{outline:3px solid var(--cold);outline-offset:3px;border-radius:4px}
+.wrap{max-width:var(--max);margin:0 auto;padding:0 var(--pad)}
+
+/* nav */
+.nav{position:sticky;top:0;z-index:30;background:#000;border-bottom:1px solid #222}
+.nav .wrap{display:flex;align-items:center;justify-content:space-between;height:56px;gap:24px}
+.logo{font-weight:800;font-size:17px;letter-spacing:-.01em;white-space:nowrap}
+.logo small{font-weight:500;color:var(--ink-2);margin-left:8px;font-size:13px}
+.menu{display:flex;gap:28px;font-size:15px;color:var(--ink-2)}
+.menu a:hover{color:#fff}
+.btn{display:inline-flex;align-items:center;justify-content:center;min-height:46px;padding:0 26px;border-radius:999px;background:#fff;color:#000;font-weight:700;font-size:16px;transition:transform .2s,background .2s}
+.btn:hover{background:#d9e8f7}
+.btn:active{transform:scale(.97)}
+.btn.sm{min-height:36px;padding:0 18px;font-size:14px}
+.btn.line{background:transparent;color:#fff;box-shadow:inset 0 0 0 2px #fff}
+.btn.line:hover{background:#fff;color:#000}
+.tl{color:var(--cold);font-weight:600}
+.tl:hover{text-decoration:underline}
+.mnav{display:none;position:relative}
+.mnav summary{list-style:none;cursor:pointer;min-height:44px;display:flex;align-items:center;padding:0 8px;font-weight:600}
+.mnav summary::-webkit-details-marker{display:none}
+.mnav div{position:absolute;right:0;top:48px;background:var(--panel-2);border-radius:18px;padding:12px 8px;min-width:190px}
+.mnav a{display:block;padding:12px 16px}
+
+/* hero: 큰 제목 + 조명을 받은 받침대 */
+.hero{position:relative;padding:88px 0 120px;background:radial-gradient(ellipse 60% 55% at 72% 55%,rgba(80,150,255,.20),transparent 70%),#000}
+.hero .wrap{display:grid;grid-template-columns:1fr 1.05fr;gap:clamp(32px,5vw,80px);align-items:center}
+.hero h1{font-size:clamp(40px,6vw,84px);font-weight:800;letter-spacing:-.045em;line-height:1.04}
+.hero .sub{color:var(--ink-2);font-size:clamp(18px,1.7vw,22px);margin-top:24px;max-width:26em}
+.hero .acts{display:flex;gap:20px;align-items:center;margin-top:32px;flex-wrap:wrap}
+.stage{background:#fff;border-radius:36px;padding:44px 24px 20px;display:flex;justify-content:center;align-items:flex-end;gap:clamp(8px,2vw,28px);box-shadow:0 0 140px rgba(90,160,255,.28)}
+.stage img{mix-blend-mode:multiply}
+.stage-cap{color:#555;font-size:14px;text-align:center;width:100%}
+.stage-wrap{display:flex;flex-direction:column;gap:0}
+.stage-wrap .stage{border-radius:36px 36px 0 0;padding-bottom:12px}
+.stage-wrap .cap{background:#fff;border-radius:0 0 36px 36px;color:#555;font-size:14px;padding:0 24px 20px;text-align:center}
+
+/* 거대한 숫자 */
+.nums{padding:40px 0 0}
+.nums>.wrap>h2{font-size:clamp(30px,4.4vw,56px);font-weight:800;letter-spacing:-.04em;line-height:1.12;max-width:16em}
+.nums .lead{color:var(--ink-2);margin-top:16px;max-width:36em}
+.num{display:grid;grid-template-columns:1.5fr 1fr;gap:clamp(24px,5vw,80px);align-items:center;min-height:78vh;padding:64px 0}
+.num .big{font-size:clamp(88px,19vw,300px);font-weight:800;letter-spacing:-.07em;line-height:.88;font-variant-numeric:tabular-nums;white-space:nowrap}
+.num .big small{font-size:.32em;letter-spacing:-.03em;margin-left:.04em}
+.num.cold .big{color:var(--cold)}
+.num.hot .big{color:var(--hot)}
+.num.damp .big{color:var(--damp)}
+.num.plain .big{color:#fff}
+.num h3{font-size:clamp(24px,2.6vw,34px);font-weight:700;letter-spacing:-.03em;line-height:1.25}
+.num p{color:var(--ink-2);margin-top:14px;max-width:26em}
+.num .model{display:inline-block;margin-top:18px;background:var(--panel-2);border-radius:999px;padding:6px 16px;font-size:15px;color:var(--ink)}
+.js .num .big{opacity:.12;transform:translateX(-4%) scale(.94);transform-origin:left center;transition:opacity .3s linear}
+.js .num .txt{opacity:.2}
+
+/* 칩에서 서버까지: 가로 스크롤 */
+.chain{padding:140px 0 0}
+.chain h2{font-size:clamp(30px,4.4vw,56px);font-weight:800;letter-spacing:-.04em;line-height:1.12;max-width:17em}
+.chain .lead{color:var(--ink-2);margin-top:16px;max-width:36em}
+.rail{display:flex;gap:20px;overflow-x:auto;scroll-snap-type:x mandatory;padding:48px var(--pad) 28px;margin-top:8px;scrollbar-color:#444 #000}
+.rail:focus-visible{outline-offset:-3px}
+.cardp{flex:0 0 min(86vw,500px);scroll-snap-align:center;border-radius:32px;overflow:hidden;background:var(--panel);display:flex;flex-direction:column}
+.cardp .pl{background:#fff;height:340px;display:flex;justify-content:center;align-items:flex-end;gap:12px;padding:24px 20px 0}
+.cardp .pl img{mix-blend-mode:multiply}
+.cardp .t{padding:28px 28px 32px;flex:1;display:flex;flex-direction:column}
+.cardp h3{font-size:26px;font-weight:800;letter-spacing:-.03em;line-height:1.2}
+.cardp .k{color:var(--cold);font-weight:700;margin-top:8px;font-size:18px}
+.cardp p{color:var(--ink-2);margin-top:12px;font-size:16px}
+.cardp .tl{margin-top:auto;padding-top:20px}
+
+/* 비교표 */
+.cmp{padding:150px 0 0}
+.cmp h2{font-size:clamp(30px,4.4vw,56px);font-weight:800;letter-spacing:-.04em;line-height:1.12}
+.cmp .lead{color:var(--ink-2);margin-top:16px;max-width:36em}
+.tbl-wrap{overflow-x:auto;margin-top:40px;border-radius:28px;background:var(--panel)}
+table{border-collapse:collapse;width:100%;min-width:720px;font-size:16px}
+th,td{padding:20px 28px;text-align:left;vertical-align:top}
+thead th{color:var(--ink-2);font-weight:600;font-size:15px;background:var(--panel-2)}
+tbody th{font-weight:700;color:#fff}
+tbody tr:nth-child(even){background:#161618}
+td.c{color:var(--cold);font-variant-numeric:tabular-nums;font-weight:600}
+td.h{color:var(--hot);font-variant-numeric:tabular-nums;font-weight:600}
+
+/* 회사 */
+.co{padding:160px 0}
+.co .wrap{display:grid;grid-template-columns:1fr 1fr;gap:clamp(32px,6vw,96px);align-items:center}
+.co h2{font-size:clamp(34px,5vw,64px);font-weight:800;letter-spacing:-.04em;line-height:1.1}
+.co p{color:var(--ink-2);margin-top:20px;max-width:32em}
+.co .acts{display:flex;gap:20px;align-items:center;margin-top:28px;flex-wrap:wrap}
+.ph{background:var(--panel);border-radius:32px;min-height:400px;display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center;padding:32px;color:var(--ink-2);gap:8px}
+.ph b{font-size:clamp(72px,11vw,150px);letter-spacing:-.06em;line-height:.9;color:#fff;font-weight:800}
+
+/* 소식 */
+.news{padding:0 0 140px}
+.news h2{font-size:clamp(28px,3.6vw,44px);font-weight:800;letter-spacing:-.03em}
+.nl{margin-top:32px;display:grid;gap:12px}
+.ni{display:grid;grid-template-columns:130px 1fr auto;gap:20px;align-items:center;background:var(--panel);border-radius:22px;padding:24px 28px}
+.ni time{color:var(--ink-2);font-size:15px}
+.ni h3{font-size:19px;letter-spacing:-.02em;line-height:1.35}
+.ni p{color:var(--ink-2);font-size:15px;margin-top:4px}
+
+.final{padding:150px 0;text-align:center;background:radial-gradient(ellipse 50% 70% at 50% 100%,rgba(80,150,255,.22),transparent 70%),#000}
+.final h2{font-size:clamp(36px,6vw,80px);font-weight:800;letter-spacing:-.045em;line-height:1.06}
+.final p{color:var(--ink-2);margin:20px auto 0;max-width:30em}
+.final .acts{display:flex;gap:16px;justify-content:center;margin-top:32px;flex-wrap:wrap}
+footer{background:#0a0a0b;padding:44px 0 36px;font-size:14px;color:var(--ink-2)}
+footer .cols{display:flex;justify-content:space-between;gap:28px;flex-wrap:wrap}
+footer b{color:#fff}
+footer .src{margin-top:24px;font-size:13px}
+
+@media (prefers-reduced-motion:reduce){
+  html{scroll-behavior:auto}
+  .js .num .big,.js .num .txt{opacity:1!important;transform:none!important;transition:none}
+}
+
+@media (max-width:980px){
+  .menu{display:none}.mnav{display:block}
+  .hero .wrap,.co .wrap{grid-template-columns:1fr}
+  .num{grid-template-columns:1fr;min-height:0;padding:56px 0;gap:24px}
+  .ni{grid-template-columns:1fr;gap:6px}
+}
+@media (max-width:700px){
+  body{font-size:16px}
+  .hero{padding:56px 0 80px}
+  .logo small{display:none}
+  .chain,.cmp{padding-top:90px}
+  .co{padding:100px 0}
+  .final{padding:100px 0}
+  .stage{padding:28px 14px 12px;border-radius:28px}
+  .stage-wrap .stage{border-radius:28px 28px 0 0}
+  .stage-wrap .cap{border-radius:0 0 28px 28px}
+  .cardp .pl{height:280px}
+  th,td{padding:16px 18px}
+}
