@@ -1,0 +1,72 @@
+/* AW/02 시험 관제 (레퍼런스 A2 USAvionix의 원리) */
+:root{--bg:#000;--panel:#0f0f0f;--ink:#fff;--dim:#b4b8bc;--cold:#7ad7ff;--hot:#ffb23f;--press:#ff6b6b;--m:clamp(18px,2.4vw,32px)}
+body{background:var(--bg);color:var(--ink);font-family:"Geist","Pretendard Variable",Pretendard,sans-serif;font-size:17px;font-variant-numeric:tabular-nums}
+
+.top{position:fixed;z-index:20;left:0;right:0;top:0;display:flex;justify-content:space-between;align-items:center;padding:16px var(--m)}
+.logo{font-weight:600;font-size:17px}
+.top nav{display:flex;gap:clamp(12px,1.8vw,26px);align-items:center;font-size:15px}
+.top nav a{opacity:.85;padding:6px 0}
+.top nav a:hover{opacity:1}
+.top .cta{opacity:1;background:#fff;color:#000;padding:8px 16px;font-weight:600}
+
+/* 고정 장면 */
+.story{height:560vh;position:relative}
+.stage{position:sticky;top:0;height:100vh;overflow:hidden;background:#000}
+.ch{position:absolute;inset:0;opacity:0;visibility:hidden;transition:opacity .25s,visibility 0s .25s}
+.ch.on{opacity:1;visibility:visible;transition:opacity .4s .2s,visibility 0s}
+.shot{position:absolute;inset:0;display:grid;place-items:center}
+.frame{position:relative;width:min(100vw,calc(100vh*var(--r-n,1.6)),var(--max));aspect-ratio:var(--r)}
+.frame img{width:100%;height:100%;object-fit:cover;filter:brightness(.78) contrast(1.1);-webkit-mask-image:radial-gradient(ellipse 62% 62% at 50% 52%,#000 55%,transparent 100%);mask-image:radial-gradient(ellipse 62% 62% at 50% 52%,#000 55%,transparent 100%)}
+.ch[data-ch="0"] .frame img{-webkit-mask-image:none;mask-image:none;filter:none}
+.box{position:absolute;border:1px solid #fff}
+.box i{position:absolute;left:-1px;bottom:100%;font-style:normal;font-size:13px;line-height:1;padding:4px 6px;background:#000;white-space:nowrap}
+.box.w{border-color:#fff} .box.w i{color:#fff;border:1px solid #fff;border-bottom:0}
+.box.c{border-color:var(--cold)} .box.c i{color:var(--cold);border:1px solid var(--cold);border-bottom:0}
+.box.h{border-color:var(--hot)} .box.h i{color:var(--hot);border:1px solid var(--hot);border-bottom:0}
+.box.p{border-color:var(--press)} .box.p i{color:var(--press);border:1px solid var(--press);border-bottom:0}
+.dash{position:absolute;border-top:1px dashed #fff}
+
+.t-title{position:absolute;left:var(--m);top:clamp(78px,13vh,120px);z-index:3;font-weight:600;font-size:clamp(34px,5.6vw,84px);line-height:1;letter-spacing:-.04em;max-width:min(980px,90%)}
+.t-lead{position:absolute;left:var(--m);bottom:calc(var(--m) + 28px);z-index:3;max-width:min(480px,calc(100% - 2*var(--m)));font-size:18px;line-height:1.55;color:#fff;font-weight:500;text-shadow:0 0 18px #000}
+.tele{position:absolute;right:var(--m);bottom:calc(var(--m) + 28px);z-index:3;display:grid;gap:4px;min-width:min(260px,44vw);font-size:15px;background:rgba(0,0,0,.55);padding:12px 14px}
+.tele div{display:flex;justify-content:space-between;gap:20px}
+.tele dt{color:var(--dim)}
+.tele dd{font-weight:500}
+.tele .c{color:var(--cold)} .tele .h{color:var(--hot)} .tele .p{color:var(--press)}
+.code{position:absolute;left:50%;transform:translateX(-50%);bottom:var(--m);z-index:3;font-size:14px;color:var(--dim)}
+
+/* 밝은 카드 */
+.cards{background:#e6e7e8;color:#111;padding:clamp(90px,11vw,170px) var(--m)}
+.cards-head{display:grid;grid-template-columns:1fr 1fr;gap:32px;align-items:end;margin-bottom:56px}
+.cards h2{font-weight:600;font-size:clamp(34px,5vw,72px);line-height:1;letter-spacing:-.04em}
+.cards-head p{max-width:30em;font-size:18px}
+.row{display:flex;gap:24px;height:min(628px,70vh)}
+.card{position:relative;flex:1 1 0;min-width:0;overflow:hidden;background:#d3d5d7;transition:flex-grow .6s cubic-bezier(.3,.7,.1,1);display:flex;flex-direction:column;justify-content:flex-end;border-radius:10px}
+.card.open{flex-grow:2.1}
+.card img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:50% 45%}
+.ct,.cd{position:relative;z-index:1;padding:0 22px;color:#111}
+.ct{padding-top:60px;font-weight:600;font-size:22px;letter-spacing:-.02em;padding-bottom:22px}
+.cd{max-height:0;overflow:hidden;opacity:0;transition:max-height .5s,opacity .4s;font-size:16px;line-height:1.5}
+.card.open .cd{max-height:120px;opacity:1;padding-bottom:22px;margin-top:-10px}
+.card::after{content:"";position:absolute;left:0;right:0;bottom:0;height:46%;background:linear-gradient(to top,rgba(230,231,232,.96),rgba(230,231,232,0));pointer-events:none}
+
+.foot{background:#000;padding:clamp(80px,10vw,140px) var(--m) 28px;display:grid;grid-template-columns:1.4fr 1fr;gap:40px}
+.foot h2{font-weight:600;font-size:clamp(34px,4.6vw,66px);letter-spacing:-.04em;line-height:1.05;margin-bottom:16px}
+.btn{display:inline-block;margin-top:20px;background:#fff;color:#000;padding:14px 26px;font-weight:600}
+.btn:hover{background:var(--cold)}
+.info{align-self:end;display:grid;gap:14px;color:var(--dim);font-size:16px}
+.foot .credit{grid-column:1/-1;color:var(--dim);margin-top:40px}
+
+@media (max-width:800px){
+  .top nav a:not(.cta){display:none}
+  .story{height:480vh}
+  .frame{width:200vw}
+  .shot{place-items:center}
+  .t-title{top:80px;font-size:clamp(32px,9vw,48px)}
+  .t-lead{bottom:190px;font-size:16px}
+  .tele{left:var(--m);right:var(--m);bottom:56px;grid-template-columns:1fr 1fr;gap:4px 24px}
+  .cards-head,.foot{grid-template-columns:1fr}
+  .row{flex-direction:column;height:auto}
+  .card{min-height:260px;flex:none}
+  .card .cd{max-height:120px;opacity:1;padding-bottom:22px;margin-top:-10px}
+}

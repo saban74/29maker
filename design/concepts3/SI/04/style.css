@@ -1,0 +1,71 @@
+:root {
+  --day: #eaf0f4;
+  --day-2: #dbe5ec;
+  --ink: #0c1a27;
+  --mute: #4c5d6c;
+  --night: #0b1622;
+  --sun: #ffb21a;
+  --pad: clamp(20px, 5vw, 72px);
+}
+body { background: var(--day); color: var(--ink); font-size: 18px; }
+
+.top { position: absolute; z-index: 5; left: 0; right: 0; display: flex; align-items: center; gap: 32px; padding: 24px var(--pad); }
+.logo { font-weight: 800; letter-spacing: -.02em; }
+.top nav { margin-left: auto; }
+.top nav ul { display: flex; gap: 26px; font-size: 15px; font-weight: 500; }
+.top nav a:hover { text-decoration: underline; text-underline-offset: 6px; }
+
+/* 버튼: 사각 한 가지 */
+.btn { display: inline-block; background: var(--sun); color: var(--ink); font-weight: 800; padding: 16px 28px; transition: transform .2s; }
+.btn:hover { transform: translateY(-3px); }
+.btn-sm { padding: 10px 18px; font-size: 15px; background: var(--ink); color: #fff; }
+
+.s { padding: 0 var(--pad); }
+h1, h2 { font-weight: 800; letter-spacing: -.055em; }
+
+/* 첫 화면: 문장 하나 */
+.s-hero { min-height: 100vh; display: flex; flex-direction: column; justify-content: end; padding-bottom: 9vh; }
+h1 { font-size: clamp(60px, 11.6vw, 190px); line-height: .96; max-width: 9em; margin-bottom: 40px; }
+h1 span { display: inline-block; opacity: 0; transform: translateY(24px); animation: up .9s cubic-bezier(.2,.7,.2,1) forwards; }
+h1 span:nth-child(2) { animation-delay: .2s; }
+h1 span:nth-child(3) { animation-delay: .4s; }
+@keyframes up { to { opacity: 1; transform: none; } }
+.sub { font-size: 20px; color: var(--mute); font-weight: 500; }
+
+/* 둘째 화면 */
+.s-two { padding-top: 140px; padding-bottom: 140px; display: grid; grid-template-columns: 1.15fr 1fr; gap: 72px; align-items: center; }
+.s-two h2 { font-size: clamp(40px, 6.2vw, 100px); line-height: 1.03; }
+.two-side figure { background: var(--day-2); margin-bottom: 28px; }
+.two-side img { width: 100%; aspect-ratio: 4 / 3; object-fit: cover; mix-blend-mode: multiply; }
+.two-side p { color: var(--mute); max-width: 26em; }
+
+/* 제품 문장 목록 */
+.s-prod { background: var(--day-2); padding-top: 140px; padding-bottom: 140px; }
+.s-prod h2 { font-size: clamp(34px, 5vw, 80px); line-height: 1.05; margin-bottom: 64px; max-width: 14em; }
+.plist li + li { margin-top: 4px; }
+.plist a { display: flex; justify-content: space-between; align-items: baseline; gap: 24px; padding: 22px 0; background: none; transition: padding .3s, background .3s; }
+.plist a:hover { padding-left: 24px; padding-right: 24px; background: var(--ink); color: #fff; }
+.pn { font-size: clamp(28px, 4vw, 58px); letter-spacing: -.045em; font-weight: 700; }
+.ps { font-size: 18px; color: var(--mute); }
+.plist a:hover .ps { color: var(--sun); }
+
+/* 밤 화면 */
+.s-dark { position: relative; background: var(--night); color: #fff; min-height: 100vh; display: flex; align-items: end; overflow: hidden; padding-bottom: 9vh; }
+.bgimg { position: absolute; top: 0; right: 0; width: 74%; height: 100%; object-fit: cover; object-position: 55% 50%; }
+.dark-text { position: relative; max-width: 640px; }
+.s-dark h2 { font-size: clamp(42px, 6.4vw, 104px); line-height: 1.02; margin-bottom: 20px; }
+.s-dark p { margin-bottom: 32px; color: #d3dde6; max-width: 24em; }
+
+.foot { display: flex; justify-content: space-between; flex-wrap: wrap; gap: 12px; padding: 28px var(--pad); background: var(--night); color: #9fb0bf; font-size: 14px; }
+
+@media (max-width: 900px) {
+  .top nav { display: none; }
+  .top .btn { margin-left: auto; }
+  .s-hero { min-height: 88vh; }
+  .s-two { grid-template-columns: 1fr; gap: 40px; padding-top: 90px; padding-bottom: 90px; }
+  .s-prod { padding-top: 90px; padding-bottom: 90px; }
+  .plist a { flex-direction: column; gap: 2px; }
+  .s-dark { min-height: 90vh; }
+  .bgimg { left: 0; width: 100%; object-position: 55% 30%; height: 56%; }
+  .s-dark { align-items: end; }
+}
