@@ -1,0 +1,43 @@
+/* 03: 숫자 포스터. 깊은 코발트 청흑, 오른쪽 정렬, 불이 켜지듯 드러나는 장비, 얼음색 강조 */
+:root { --d-bg: #0a0f1c; --d-ink: #eef1f6; --d-mute: #98a1b3; --l-bg: #e2e3e4; --tile: #cfd1d3; --accent: #8fd3ff; --accent-ink: #0a0f1c; }
+
+.hero { text-align: right; }
+.hero-label { position: absolute; left: var(--m); bottom: clamp(16px, 2.4vw, 36px); }
+.hero h1 { font-size: clamp(64px, 16.5vw, 300px); font-variant-numeric: tabular-nums; letter-spacing: -.06em; }
+
+.emerge { background: #0a0f1c; padding-bottom: 10px; }
+.js .emerge img.power[data-r] { opacity: 1; transform: none; filter: brightness(.08); }
+.js .emerge img.power[data-r].in { filter: brightness(1); transition: filter 2s var(--ease); }
+
+.select { padding: clamp(90px, 12vw, 180px) var(--m); }
+.sel-h { font-weight: 500; font-size: clamp(44px, 8vw, 140px); line-height: 1; letter-spacing: -.055em; max-width: 12em; margin-bottom: clamp(48px, 7vw, 100px); }
+.picks { display: grid; grid-template-columns: repeat(3, 1fr); gap: clamp(16px, 2vw, 32px); align-items: start; }
+.picks li:nth-child(2) { margin-top: clamp(40px, 8vw, 120px); }
+.picks a { display: block; }
+.shot { display: block; aspect-ratio: 4 / 5; overflow: hidden; border-radius: 12px; background: #b8bcc0; margin-bottom: 20px; }
+.shot img { width: 100%; height: 100%; object-fit: cover; object-position: 50% 62%; transition: transform 1.2s var(--ease); }
+.picks a:hover .shot img { transform: scale(1.04); }
+.picks h3 { font-weight: 600; font-size: clamp(22px, 2.2vw, 30px); line-height: 1.25; letter-spacing: -.03em; margin-bottom: 10px; }
+.picks p { max-width: 24em; margin-bottom: 14px; }
+
+.intro { padding: clamp(90px, 12vw, 180px) var(--m); }
+.intro-grid { display: grid; grid-template-columns: 5fr 4fr; gap: 32px var(--m); align-items: center; }
+.intro .big { font-size: clamp(20px, 2vw, 28px); line-height: 1.55; margin: 20px 0; letter-spacing: -.01em; max-width: 26em; }
+.who { color: var(--d-mute); font-size: 15px; margin-bottom: 26px; }
+.portrait { position: relative; aspect-ratio: 5 / 4; }
+.portrait .ph { height: 100%; background: #1b2236; color: #b6bdd0; }
+.portrait .sig { left: 20px; bottom: -22px; background: var(--d-bg); color: var(--d-ink); }
+
+.runner { padding: clamp(70px, 9vw, 130px) 0 clamp(80px, 10vw, 150px); overflow: hidden; }
+.track { display: flex; width: max-content; font-weight: 500; font-size: clamp(80px, 14vw, 240px); line-height: 1; letter-spacing: -.06em; white-space: nowrap; animation: run 70s linear infinite; }
+@keyframes run { to { transform: translateX(-50%); } }
+.run-t { font-size: clamp(19px, 1.9vw, 26px); line-height: 1.55; max-width: 24em; margin: clamp(40px, 6vw, 80px) 0 20px var(--m); }
+.runner .ulink { margin-left: var(--m); }
+
+@media (max-width: 900px) {
+  .hero-label { position: static; margin-top: 16px; text-align: left; }
+  .picks { grid-template-columns: 1fr; }
+  .picks li:nth-child(2) { margin-top: 0; }
+  .shot { aspect-ratio: 4 / 3; }
+  .intro-grid { grid-template-columns: 1fr; }
+}

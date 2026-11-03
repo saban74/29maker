@@ -1,0 +1,68 @@
+/* A01 - 흰 바탕, Platinous J 단독. 사진의 회색 배경을 마스크로 흰색에 녹입니다. */
+:root{--mist:#f3f3f5;--night:#111113}
+
+h1,h2,h3{font-weight:700;letter-spacing:-.04em;line-height:1.05}
+
+.hero{text-align:center;padding:clamp(56px,9vh,104px) var(--pad) 0;overflow:hidden}
+.hero h1{font-size:clamp(60px,12vw,168px);font-weight:700;letter-spacing:-.055em;line-height:.95}
+.hero .sub{font-size:clamp(22px,2.8vw,36px);font-weight:500;letter-spacing:-.03em;margin-top:22px;color:var(--ink-2)}
+.hero .cta{display:flex;gap:24px;justify-content:center;align-items:center;margin-top:28px;flex-wrap:wrap}
+.stage{width:min(100%,1467px);margin:clamp(0px,2vw,24px) auto 0;aspect-ratio:2/1}
+.stage img{width:100%;height:100%;object-fit:cover;object-position:50% 64%;
+  -webkit-mask-image:radial-gradient(ellipse 62% 78% at 50% 56%,#000 52%,transparent 100%);
+          mask-image:radial-gradient(ellipse 62% 78% at 50% 56%,#000 52%,transparent 100%)}
+
+.specs{padding:clamp(88px,12vw,160px) 0;background:var(--mist)}
+.specs h2{font-size:clamp(40px,6vw,84px)}
+.figs{display:grid;grid-template-columns:repeat(4,1fr);gap:clamp(20px,3vw,48px);margin-top:clamp(48px,7vw,96px)}
+.figs div{display:flex;flex-direction:column-reverse;justify-content:flex-end;gap:16px}
+.figs dd{font-size:clamp(56px,8vw,120px);font-weight:600;letter-spacing:-.06em;line-height:.9;font-variant-numeric:tabular-nums}
+.figs dd small{font-size:.32em;font-weight:600;letter-spacing:-.02em;margin-left:3px}
+.figs dt{font-size:16px;color:var(--ink-2);max-width:15em}
+
+.lineup{padding:clamp(88px,12vw,160px) 0 0}
+.lineup h2{font-size:clamp(36px,5.4vw,76px)}
+.lead{font-size:clamp(18px,2vw,24px);color:var(--ink-2);margin-top:16px;max-width:30em;letter-spacing:-.02em}
+.panels{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:clamp(40px,5vw,72px)}
+.panel{background:var(--mist);border-radius:32px;overflow:hidden;text-align:center;padding:clamp(32px,4vw,52px) 24px 0;display:flex;flex-direction:column;align-items:center}
+.panel.wide{grid-column:1/-1}
+.panel h3{font-size:clamp(28px,3.4vw,46px)}
+.panel .one{margin-top:10px;font-size:clamp(17px,1.7vw,21px);letter-spacing:-.015em}
+.panel .acts{display:flex;gap:26px;justify-content:center;flex-wrap:wrap;margin-top:6px}
+.panel img{width:100%;margin-top:-4%;
+  -webkit-mask-image:radial-gradient(ellipse 66% 74% at 50% 58%,#000 50%,transparent 100%);
+          mask-image:radial-gradient(ellipse 66% 74% at 50% 58%,#000 50%,transparent 100%)}
+.panel.wide img{width:min(100%,1100px)}
+
+.about{padding:clamp(100px,14vw,200px) 0}
+.about .wrap{display:grid;grid-template-columns:1fr 1fr;gap:clamp(32px,6vw,96px);align-items:center}
+.year{font-size:clamp(110px,22vw,320px);font-weight:200;letter-spacing:-.08em;line-height:.8;color:#d2d2d7}
+.about h2{font-size:clamp(34px,4.6vw,64px)}
+.about p:not(.year){margin-top:22px;color:var(--ink-2);max-width:32em}
+.about .acts{display:flex;gap:24px;align-items:center;margin-top:28px;flex-wrap:wrap}
+
+.final{background:var(--night);color:#fff;text-align:center;padding:clamp(100px,13vw,180px) 0;--ghost-ink:#fff;--ghost-on:#111113;--accent:#2f8cff;--accent-d:#5aa5ff}
+.final h2{font-size:clamp(36px,6vw,84px)}
+.final p{color:#b9b9c0;margin:22px auto 0;max-width:30em}
+.final .acts{display:flex;gap:16px;justify-content:center;flex-wrap:wrap;margin-top:34px}
+.final .btn{color:#fff}
+.final .btn.ghost:hover{color:#111113}
+
+/* 움직임: 첫 화면의 장비가 흰 바탕에서 천천히 드러납니다 */
+@media (prefers-reduced-motion:no-preference){
+  .stage img{animation:emerge 1.8s var(--ease) both .15s}
+  @keyframes emerge{from{opacity:0;transform:scale(1.06)}to{opacity:1;transform:none}}
+}
+
+@media (max-width:900px){
+  .figs{grid-template-columns:1fr 1fr;row-gap:44px}
+  .about .wrap{grid-template-columns:1fr}
+}
+@media (max-width:700px){
+  .stage{aspect-ratio:4/3;margin-top:8px}
+  .stage img{object-position:50% 60%;
+    -webkit-mask-image:radial-gradient(ellipse 80% 80% at 50% 56%,#000 50%,transparent 100%);
+            mask-image:radial-gradient(ellipse 80% 80% at 50% 56%,#000 50%,transparent 100%)}
+  .panels{grid-template-columns:1fr}
+  .panel{border-radius:24px}
+}

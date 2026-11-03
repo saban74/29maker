@@ -1,0 +1,42 @@
+/* 04: 계단식 포스터. 둥근 HAST 문처럼 원이 열리며 장비가 드러남, 연두 강조, 가로로 넘기는 장비 가족 */
+:root { --d-bg: #101319; --d-ink: #f1ece4; --l-bg: #dedad3; --tile: #cfcac2; --accent: #c8d94a; --accent-ink: #14151a; }
+
+.hero h1 { font-size: clamp(54px, 14vw, 250px); letter-spacing: -.06em; }
+.hero h1 span:nth-child(2) { padding-left: 11vw; }
+.hero h1 span:nth-child(3) { padding-left: 22vw; }
+
+.emerge { padding-bottom: 8px; }
+.stage { max-width: 1520px; margin: 0 auto; }
+.js .emerge img.iris[data-r] { opacity: 1; transform: none; clip-path: circle(0% at 46% 56%); }
+.js .emerge img.iris[data-r].in { clip-path: circle(80% at 46% 56%); transition: clip-path 2s var(--ease); }
+
+.intro { padding: clamp(90px, 12vw, 180px) var(--m); }
+.intro-grid { display: grid; grid-template-columns: repeat(12, 1fr); gap: 24px; margin-top: 28px; align-items: end; }
+.portrait { grid-column: 1 / span 6; position: relative; aspect-ratio: 4 / 3; }
+.portrait .ph { height: 100%; }
+.portrait .sig { right: -30px; bottom: 30px; }
+.intro-text { grid-column: 8 / span 5; }
+.intro .big { font-size: clamp(19px, 1.9vw, 26px); line-height: 1.55; margin-bottom: 18px; letter-spacing: -.01em; }
+.who { color: var(--l-mute); font-size: 15px; margin-bottom: 24px; }
+
+.products { padding: 0 0 clamp(90px, 12vw, 170px); overflow: hidden; }
+.mega { font-weight: 500; font-size: clamp(64px, 11vw, 200px); line-height: 1; letter-spacing: -.06em; white-space: nowrap; margin: 0 0 clamp(32px, 4vw, 56px) var(--m); }
+.strip { display: flex; gap: 16px; overflow-x: auto; scroll-snap-type: x mandatory; padding: 20px var(--m) 24px; scrollbar-width: thin; }
+.strip li { flex: 0 0 min(340px, 78vw); scroll-snap-align: start; }
+
+.history { padding: clamp(90px, 11vw, 170px) var(--m); display: grid; grid-template-columns: 1fr 2fr; gap: 24px var(--m); }
+.history ol { list-style: none; margin: 0; padding: 0; }
+.history li { display: grid; grid-template-columns: clamp(120px, 16vw, 260px) 1fr; align-items: baseline; gap: 16px; padding: 14px 0; }
+.history b { font-weight: 300; font-size: clamp(48px, 8vw, 130px); line-height: 1; letter-spacing: -.06em; font-variant-numeric: tabular-nums; }
+.history li span { font-size: clamp(16px, 1.5vw, 20px); max-width: 26em; }
+.history li:last-child b { color: var(--accent); }
+
+@media (max-width: 900px) {
+  .hero h1 span:nth-child(2) { padding-left: 8vw; }
+  .hero h1 span:nth-child(3) { padding-left: 14vw; }
+  .intro-grid { grid-template-columns: 1fr; }
+  .portrait, .intro-text { grid-column: 1; }
+  .portrait .sig { right: -4px; }
+  .history { grid-template-columns: 1fr; }
+  .history li { grid-template-columns: 1fr; gap: 0; }
+}

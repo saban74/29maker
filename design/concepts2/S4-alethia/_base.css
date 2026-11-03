@@ -1,0 +1,141 @@
+/* S4-alethia 공통 베이스: 4개 시안이 같이 쓰는 "측정 언어"
+   - 조준선(.ret) + 데이터 태그(.tag): 실제 사양 값만
+   - 모서리에 붙는 글자(.dock), 작은 사각형에만 쓰는 강조색(--acc)
+   - 맨 아래 큰 워드마크(.wm)
+   각 시안은 style.css에서 색 변수와 구성만 바꾼다. */
+:root{
+  --bg:#0d1114; --bg2:#d9dcdd; --ink:#eef1f2; --dim:#9aa3a8; --acc:#b8e6f2; --onl:#10161a;
+  --rl:rgba(238,241,242,.62);
+  --m:clamp(16px,2.1vw,30px);
+  --mono:ui-monospace,"SF Mono",Menlo,Consolas,"Pretendard Variable",Pretendard,monospace;
+  --sans:"Pretendard Variable",Pretendard,system-ui,-apple-system,"Segoe UI",sans-serif;
+  --ease:cubic-bezier(.44,0,.33,1);
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{background:var(--bg);scroll-behavior:smooth}
+body{font:400 16px/1.6 var(--sans);color:var(--ink);background:var(--bg);word-break:keep-all;overflow-wrap:break-word;-webkit-font-smoothing:antialiased;overflow-x:hidden}
+img,svg{display:block;max-width:100%}
+a{color:inherit}
+ul,ol{list-style:none}
+:focus-visible{outline:2px solid var(--acc);outline-offset:3px}
+.light :focus-visible{outline-color:var(--onl)}
+.skip{position:absolute;left:-999px;top:8px;background:var(--acc);color:#000;padding:8px 12px;z-index:100}
+.skip:focus{left:8px}
+
+/* 글자: 아주 큰 것 하나 + 작은 것. 중간 크기는 쓰지 않는다 */
+.mono{font:600 11px/1.5 var(--mono);letter-spacing:.07em;text-transform:uppercase}
+.h-xl{font-weight:500;letter-spacing:-.045em;line-height:1.02;font-size:clamp(38px,5.4vw,84px)}
+.statement{font-weight:400;letter-spacing:-.025em;line-height:1.42;font-size:clamp(20px,1.75vw,26px)}
+.dim{color:var(--dim)}
+.light{background:var(--bg2);color:var(--onl);--rl:rgba(16,22,26,.72);--dim:#47525a}
+
+/* 메뉴 */
+.nav{position:absolute;inset:0 0 auto 0;z-index:20;display:flex;align-items:center;justify-content:space-between;padding:18px var(--m);gap:24px}
+.logo{font:700 15px/1 var(--sans);letter-spacing:.02em;text-decoration:none;white-space:nowrap}
+.logo small{display:block;font:600 10px/1 var(--mono);letter-spacing:.1em;margin-top:5px;color:var(--dim)}
+.nav ul{display:flex;gap:clamp(14px,2vw,32px)}
+.nav ul a{font:600 12px/1 var(--mono);letter-spacing:.06em;text-decoration:none;padding:8px 0;display:inline-block}
+.nav ul a:hover{color:var(--acc)}
+.mm{display:none;position:relative}
+.mm summary{list-style:none;cursor:pointer;font:600 12px/1 var(--mono);letter-spacing:.08em;border:1px solid currentColor;padding:12px 14px}
+.mm summary::-webkit-details-marker{display:none}
+.mm ul{position:absolute;right:0;top:calc(100% + 8px);background:var(--bg);color:var(--ink);min-width:200px;padding:8px 18px;flex-direction:column;gap:0;border:1px solid var(--rl)}
+.mm li a{display:block;padding:12px 0}
+
+/* 버튼: 테두리 + 오른쪽 강조 사각형. 모양은 이것 하나만 */
+.btn{display:inline-flex;align-items:stretch;border:1px solid currentColor;text-decoration:none;font:600 12px/1 var(--mono);letter-spacing:.08em;text-transform:uppercase;color:inherit;background:transparent;cursor:pointer;min-height:44px}
+.btn>span{display:flex;align-items:center;padding:0 18px}
+.btn>.sq{background:var(--acc);color:#0d1114;border-left:1px solid currentColor;padding:0 14px;font-size:15px;transition:transform .35s var(--ease)}
+.btn:hover>.sq{transform:translate(2px,-2px)}
+.btn:hover{background:rgba(255,255,255,.07)}
+.light .btn:hover{background:rgba(0,0,0,.06)}
+
+/* 사진: 어둠 속에 떠 있는 장비 */
+.float{position:relative;container-type:inline-size}
+.float img{width:100%;height:auto}
+.fog img{filter:brightness(.72) contrast(1.18) saturate(.92);
+  -webkit-mask-image:radial-gradient(ellipse closest-side at 50% 50%,#000 56%,transparent 100%);
+          mask-image:radial-gradient(ellipse closest-side at 50% 50%,#000 56%,transparent 100%)}
+
+/* 조준선: 크기는 사진 너비 기준(cqw), 위치는 % */
+.ret{position:absolute;left:var(--x);top:var(--y);width:calc(var(--s,6)*1cqw);height:calc(var(--s,6)*1cqw);min-width:34px;min-height:34px;transform:translate(-50%,-50%);border:1px solid var(--rl)}
+.ret::before,.ret::after{content:"";position:absolute;background:var(--rl)}
+.ret::before{left:50%;top:-12px;bottom:-12px;width:1px}
+.ret::after{top:50%;left:-12px;right:-12px;height:1px}
+.ret>i{position:absolute;left:-4px;top:-4px;width:7px;height:7px;background:var(--acc);z-index:1}
+.light .ret>i{outline:1px solid var(--onl)}
+.ret.o{border-radius:50%}
+.tag{position:absolute;left:calc(100% + 22px);top:-8px;white-space:nowrap;font:500 11px/1.5 var(--mono);letter-spacing:.04em;color:var(--ink);padding-left:12px;border-left:1px solid var(--rl)}
+.light .tag{color:var(--onl)}
+.tag b{display:block;font-weight:700;color:var(--acc);letter-spacing:.06em}
+.light .tag b{color:var(--onl)}
+.tag span{display:block}
+.ret.l .tag{left:auto;right:calc(100% + 22px);padding:0 12px 0 0;border:0;border-right:1px solid var(--rl);text-align:right}
+.ret.d .tag{top:calc(100% + 18px);left:50%;transform:translateX(-50%);border:0;border-top:1px solid var(--rl);padding:8px 0 0;text-align:center}
+.ret.u .tag{top:auto;bottom:calc(100% + 18px);left:50%;transform:translateX(-50%);border:0;border-bottom:1px solid var(--rl);padding:0 0 8px;text-align:center}
+
+/* 모서리에 글자 붙이기 */
+.dock{position:absolute;z-index:5}
+.dock.tl{left:var(--m);top:clamp(84px,11vh,130px)}
+.dock.bl{left:var(--m);bottom:var(--m)}
+.dock.br{right:var(--m);bottom:var(--m)}
+.dock.tr{right:var(--m);top:clamp(84px,11vh,130px)}
+.hint{display:flex;align-items:center;gap:10px}
+.hint i{width:9px;height:9px;background:var(--acc);animation:blink 2.4s var(--ease) infinite}
+@keyframes blink{50%{opacity:.25}}
+
+/* 장면(섹션) */
+.scene{position:relative;overflow:hidden}
+.pad{padding:clamp(88px,12vw,200px) var(--m)}
+.rect-tag{display:inline-block;background:var(--acc);color:#0d1114;font:700 11px/1 var(--mono);letter-spacing:.08em;padding:7px 9px}
+.br-label{font:600 11px/1 var(--mono);letter-spacing:.08em}
+
+/* 큰 숫자 */
+.num{font-weight:200;letter-spacing:-.06em;line-height:.9;font-variant-numeric:tabular-nums}
+
+/* 표(실제 표라서 선 사용) */
+table{border-collapse:collapse;width:100%;font-variant-numeric:tabular-nums}
+th,td{text-align:left;padding:14px 12px 14px 0;border-bottom:1px solid var(--rl);font-size:15px;font-weight:400}
+th{font:600 11px/1.4 var(--mono);letter-spacing:.07em;color:var(--dim);text-transform:uppercase}
+
+/* 푸터: 이름이 화면 너비로 한 번 크게 */
+.foot{background:var(--bg);color:var(--ink);padding:clamp(72px,9vw,140px) var(--m) 22px}
+.wm{width:100%;height:auto;fill:var(--acc);margin-bottom:clamp(36px,5vw,72px)}
+.foot-grid{display:grid;grid-template-columns:1.2fr 2fr;gap:40px;align-items:start}
+.foot .cities{font-weight:400;letter-spacing:-.03em;line-height:1.25;font-size:clamp(22px,2.5vw,36px);color:var(--acc)}
+.foot .cities small{display:block;font:500 12px/1.6 var(--mono);letter-spacing:.04em;color:var(--dim);margin-top:10px}
+.foot-cols{display:grid;grid-template-columns:repeat(3,1fr);gap:28px 24px}
+.foot-cols a{display:block;font:600 12px/1 var(--mono);letter-spacing:.06em;text-decoration:none;padding:9px 0}
+.foot-cols a:hover{color:var(--acc)}
+.legal{margin-top:clamp(40px,5vw,72px);padding-top:16px;border-top:1px solid var(--rl);display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap;font:500 11px/1.6 var(--mono);letter-spacing:.04em;color:var(--dim)}
+.legal a{text-decoration:none;color:var(--ink)}
+
+/* 움직임: 한 번의 등장 + 스크롤 등장 */
+.js .rv{opacity:0;transform:translateY(40px);transition:opacity .8s var(--ease),transform .8s var(--ease)}
+.js .rv.in{opacity:1;transform:none}
+.intro-img{animation:fadeup 1.8s var(--ease) both}
+.intro-h{animation:rise .9s .7s var(--ease) both}
+.intro-ret{animation:lock 1s 1.2s var(--ease) both}
+@keyframes fadeup{from{opacity:0}to{opacity:1}}
+@keyframes rise{from{opacity:0;transform:translateY(40px)}to{opacity:1;transform:none}}
+@keyframes lock{from{opacity:0;transform:translate(-50%,-50%) scale(1.7)}to{opacity:1;transform:translate(-50%,-50%) scale(1)}}
+
+@media (max-width:860px){
+  .nav ul{display:none}
+  .nav>.btn{display:none}
+  .mm{display:block}
+  .foot-grid{grid-template-columns:1fr}
+  .tag{font-size:10px}
+  .tag span:nth-of-type(2){display:none}
+}
+@media (max-width:560px){
+  .foot-cols{grid-template-columns:repeat(2,1fr)}
+  .ret .tag{left:calc(100% + 14px)}
+}
+@media (prefers-reduced-motion:reduce){
+  html{scroll-behavior:auto}
+  .js .rv{opacity:1;transform:none;transition:none}
+  .intro-img,.intro-h,.intro-ret{animation:none}
+  .hint i{animation:none}
+  .btn>.sq{transition:none}
+}

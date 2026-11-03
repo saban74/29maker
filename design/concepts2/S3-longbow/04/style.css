@@ -1,0 +1,13 @@
+/* 04 에코: 거의 흰 회색 바탕, 장비 LED 초록 하나, 마키가 실제로 흐름 */
+:root{--ground:#e4e6e7;--ink:#17191a;--accent:#1f5c49;--node:#1f5c49;--line:rgba(23,25,26,.28)}
+.btn{background:var(--accent);border-color:var(--accent);color:#fff}
+.btn:hover{background:transparent;color:var(--accent)}
+.run{display:block;overflow:hidden}
+.track{display:flex;width:max-content;height:100%;align-items:flex-end;animation:run 38s linear infinite}
+.track.slow{animation-duration:60s}
+.track span{font-weight:800;text-transform:uppercase;letter-spacing:-.06em;white-space:nowrap;font-size:19vw;line-height:.8;padding-bottom:.02em;display:block;transform:scaleX(.78);transform-origin:left bottom;margin-right:-4vw}
+.track.slow span{font-size:11vw;font-weight:300}
+.num small{font-size:.4em;font-weight:300;letter-spacing:0}
+.chk{grid-auto-rows:minmax(calc(var(--u)*.9),auto)}
+.hist .num{font-size:clamp(48px,6.4vw,100px)}
+@media (max-width:820px){.track span{font-size:34vw}.track.slow span{font-size:20vw}.run{min-height:34vw}}

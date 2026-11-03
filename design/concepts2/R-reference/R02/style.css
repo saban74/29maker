@@ -1,0 +1,43 @@
+/* R02 심야 시험실: 전체가 짙은 남색. 어두운 사진 배경에 바탕을 맞춤 */
+:root { --ground: #070B14; --panel: #0D1424; --ink: #F1F4F9; --text: #C3CCDA; --muted: #9AA7BA; --accent: #8FB4E3; --line: rgba(255,255,255,.16); --hd-bg: #070B14; --hd-ink: #F1F4F9; --on-accent: #070B14; }
+body { background: var(--ground); color: var(--text); }
+.hd { border-bottom: 1px solid var(--line); }
+.btn { background: #F1F4F9; color: #070B14; border-color: #F1F4F9; }
+.btn:hover { background: transparent; color: #F1F4F9; }
+.lnk { color: #F1F4F9; }
+.hero { position: relative; min-height: 780px; display: flex; flex-direction: column; justify-content: space-between; background: #05070C; overflow: hidden; }
+.hero__photo { position: absolute; right: 0; top: 0; width: 76%; height: 100%; object-fit: cover; object-position: 60% 40%; -webkit-mask-image: linear-gradient(to right, transparent 0, #000 36%); mask-image: linear-gradient(to right, transparent 0, #000 36%); }
+.hero__in { position: relative; z-index: 2; padding-top: 112px; padding-bottom: 48px; }
+.hero__txt { max-width: 720px; color: #D4DBE7; }
+.hero h1 { font-size: clamp(36px, 4.6vw, 68px); font-weight: 600; line-height: 1.18; color: #fff; letter-spacing: -.04em; }
+.hero__sub { color: #fff; }
+.hero__desc { color: #C3CCDA; }
+.hero__foot { position: relative; z-index: 2; background: rgba(7,11,20,.82); color: #F1F4F9; border-top: 1px solid var(--line); }
+.hero__foot .quick a:hover { background: rgba(255,255,255,.06); }
+.specbar { padding: 80px 0 40px; }
+.specbar .nums div + div { border-color: var(--line); }
+.specbar .nums strong { font-size: 60px; }
+.sec--panel { background: var(--panel); }
+.sec h2, .feat h3, .specs strong, .specs b, .pt h3, .news h3 { color: #F1F4F9; }
+.sec h2 { font-weight: 600; }
+.tag { background: var(--accent); color: #070B14; }
+.feat__img { background: #05070C; }
+.specs { border-color: rgba(255,255,255,.4); }
+.pt article { background: #0D1424; border: 1px solid var(--line); }
+.sec--panel .pt article { background: #070B14; }
+.news a { border-top-color: #F1F4F9; }
+.ind a { background: #131C30; }
+.ind a:nth-child(even) { background: #19243B; }
+.ind a:hover { background: #28406A; }
+.cta { background: #12203A; }
+.ft { background: #05070C; }
+.nums div + div { border-color: var(--line); }
+@media (max-width: 760px) {
+  .hero { min-height: 0; }
+  .hero__photo { position: static; width: 100%; height: 220px; order: 2; -webkit-mask-image: none; mask-image: none; object-position: 50% 50%; }
+  .hero { display: block; }
+  .hero__in { padding-top: 40px; padding-bottom: 28px; }
+  .hero h1 { font-size: 30px; }
+  .specbar { padding: 56px 0 24px; }
+  .specbar .nums strong { font-size: 32px; }
+}

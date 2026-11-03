@@ -1,0 +1,67 @@
+/* A03 - 장비 가족을 옆으로 넘겨 보는 메인. 카드 한 장이 곧 사진이고, 글은 사진 위쪽 빈 회색 자리에 얹습니다. */
+:root{--bg:#e9e9ec;--mist:#f5f5f7;--night:#111113;--accent:#1d1d1f;--accent-d:#000;--link:#0a64c8;--card:min(82vw,820px)}
+h1,h2,h3{font-weight:700;letter-spacing:-.04em;line-height:1.08}
+
+.hero{padding:clamp(48px,8vh,96px) 0 0}
+.hero .top{display:flex;justify-content:space-between;align-items:flex-end;gap:24px}
+.hero h1{font-size:clamp(38px,6.6vw,96px);font-weight:700;letter-spacing:-.05em;line-height:1.02}
+.hero .sub{font-size:clamp(17px,1.8vw,22px);color:var(--ink-2);margin-top:18px}
+.ctrl{display:flex;gap:10px;flex:none}
+.arrow{width:52px;height:52px;border-radius:50%;border:0;background:#d2d2d7;color:#1d1d1f;font-size:30px;line-height:1;cursor:pointer;font-family:var(--font);display:grid;place-items:center;padding-bottom:4px;transition:background .25s,transform .2s}
+.arrow:hover:not(:disabled){background:#1d1d1f;color:#fff}
+.arrow:active:not(:disabled){transform:scale(.94)}
+.arrow:disabled{opacity:.35;cursor:default}
+
+.track{display:flex;gap:16px;overflow-x:auto;scroll-snap-type:x mandatory;padding:clamp(28px,4vw,48px) var(--pad) 8px;scroll-padding-inline:var(--pad);scrollbar-width:none;outline-offset:-4px}
+.track::-webkit-scrollbar{display:none}
+.card{position:relative;flex:none;width:var(--card);aspect-ratio:5/4;border-radius:32px;overflow:hidden;scroll-snap-align:start;background:#c9cacd}
+.card img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;transition:transform 1.2s var(--ease)}
+.card:hover img{transform:scale(1.03)}
+.card .t{position:absolute;left:clamp(22px,3vw,40px);top:clamp(20px,2.8vw,36px);right:20px}
+.card h2{font-size:clamp(24px,3vw,40px);letter-spacing:-.04em}
+.card p{margin-top:6px;font-size:clamp(15px,1.4vw,18px);color:#2a2a2e}
+.card .tlink{min-height:40px}
+.c1 img{object-position:50% 70%}
+.c2 img{object-position:60% 50%}
+.c3 img{object-position:50% 50%}
+.c4 img{object-position:40% 50%}
+.c5 img{object-position:50% 60%}
+.count{margin-top:18px;color:var(--ink-2);font-size:15px;font-variant-numeric:tabular-nums}
+
+.desk{background:#fff;padding:clamp(88px,11vw,150px) 0;margin-top:clamp(64px,8vw,112px)}
+.desk h2{font-size:clamp(34px,5vw,68px)}
+.lead{font-size:clamp(17px,1.8vw,22px);color:var(--ink-2);margin-top:14px;max-width:32em}
+.small{list-style:none;display:grid;grid-template-columns:repeat(5,1fr);gap:16px;margin-top:clamp(36px,5vw,64px)}
+.small a{display:flex;flex-direction:column;background:var(--mist);border-radius:24px;padding:20px 18px 22px;height:100%;transition:background .3s}
+.small a:hover{background:#ebebef}
+.small img{height:120px;width:100%;object-fit:contain;mix-blend-mode:multiply;margin-bottom:18px}
+.small b{font-size:18px;letter-spacing:-.02em}
+.small span{font-size:14px;color:var(--ink-2);margin-top:4px}
+
+.about{padding:clamp(100px,13vw,180px) 0}
+.about h2{font-size:clamp(36px,5.6vw,80px)}
+.about p{margin-top:24px;color:var(--ink-2);max-width:32em}
+.about .acts{display:flex;gap:24px;align-items:center;flex-wrap:wrap;margin-top:28px}
+
+.final{background:var(--night);color:#fff;text-align:center;padding:clamp(100px,13vw,170px) 0;--accent:#fff;--accent-d:#d2d2d7;--on-accent:#111113;--ghost-ink:#fff;--ghost-on:#111113}
+.final h2{font-size:clamp(36px,6vw,84px)}
+.final p{color:#b9b9c0;margin:22px auto 0;max-width:30em}
+.final .acts{display:flex;gap:16px;justify-content:center;flex-wrap:wrap;margin-top:34px}
+.final .btn.ghost{color:#fff}
+.final .btn.ghost:hover{color:#111113}
+
+@media (prefers-reduced-motion:no-preference){
+  .card:first-child img{animation:settle 1.6s var(--ease) both}
+  @keyframes settle{from{transform:scale(1.08);opacity:.5}to{transform:none;opacity:1}}
+}
+
+@media (max-width:1000px){.small{grid-template-columns:repeat(3,1fr)}}
+@media (max-width:700px){
+  :root{--card:84vw}
+  .card{aspect-ratio:4/5;border-radius:26px}
+  .c2 img{object-position:82% 50%}
+  .c4 img{object-position:55% 50%}
+  .c5 img{object-position:62% 50%}
+  .hero .top{align-items:flex-start;flex-direction:column}
+  .small{grid-template-columns:1fr 1fr}
+}
