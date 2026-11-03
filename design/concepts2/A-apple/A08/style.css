@@ -1,0 +1,113 @@
+/* A08 디테일 클로즈업 - 검정과 은색, 장비의 LED 초록 하나 */
+:root{
+  --ground:#050608;
+  --panel:#101216;
+  --paper:#e8e8e4;
+  --ink:#f3f3f1;
+  --ink2:#a4a8ad;
+  --dark:#16181c;
+  --led:#53d68f;
+  --pad:clamp(20px,4vw,56px);
+  --max:1240px;
+  --font:"Pretendard Variable",Pretendard,-apple-system,"Apple SD Gothic Neo","Noto Sans KR","Malgun Gothic",sans-serif;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:var(--font);background:var(--ground);color:var(--ink);font-size:17px;line-height:1.6;-webkit-font-smoothing:antialiased;word-break:keep-all}
+img{display:block;max-width:100%;height:auto}
+a{color:inherit;text-decoration:none}
+:focus-visible{outline:3px solid var(--led);outline-offset:3px;border-radius:4px}
+.wrap{max-width:var(--max);margin:0 auto;padding:0 var(--pad)}
+
+/* 크롭: 원본 픽셀을 확대하지 않고 일부만 보여 줌 */
+.crop{width:100%;aspect-ratio:calc(var(--w) / var(--h));background-image:var(--src);background-repeat:no-repeat;
+  background-size:calc(var(--iw) / var(--w) * 100%) auto;
+  background-position:calc(var(--x) / (var(--iw) - var(--w)) * 100%) calc(var(--y) / (var(--ih) - var(--h)) * 100%)}
+
+/* nav */
+.nav{position:sticky;top:0;z-index:20;background:var(--ground)}
+.nav .wrap{display:flex;align-items:center;justify-content:space-between;height:64px;gap:24px}
+.logo{font-weight:800;font-size:18px;letter-spacing:-.02em;white-space:nowrap}
+.logo small{font-weight:500;color:var(--ink2);margin-left:10px;font-size:13px}
+.menu{display:flex;gap:30px;font-size:15px;color:var(--ink2)}
+.menu a:hover{color:var(--ink)}
+.navr{display:flex;align-items:center;gap:8px}
+.mnav{display:none;position:relative}
+.mnav summary{list-style:none;cursor:pointer;min-height:44px;display:flex;align-items:center;padding:0 10px;font-weight:600}
+.mnav summary::-webkit-details-marker{display:none}
+.mnav div{position:absolute;right:0;top:48px;background:var(--panel);border-radius:14px;padding:10px 6px;min-width:180px;box-shadow:0 12px 32px rgba(0,0,0,.5)}
+.mnav a{display:block;padding:12px 16px}
+
+/* 버튼: 밝은 알약 한 가지 */
+.btn{display:inline-flex;align-items:center;justify-content:center;min-height:48px;padding:0 28px;border-radius:999px;background:var(--ink);color:#0a0b0d;font-weight:700;font-size:16px;transition:background .2s,transform .2s}
+.btn:hover{background:var(--led)}
+.btn:active{transform:scale(.97)}
+.btn.sm{min-height:38px;padding:0 20px;font-size:14px}
+.btn.ghost{background:transparent;color:var(--ink);box-shadow:inset 0 0 0 2px rgba(255,255,255,.55)}
+.btn.ghost:hover{background:var(--ink);color:#0a0b0d}
+.link{font-weight:600;text-decoration:underline;text-underline-offset:5px;text-decoration-thickness:2px;text-decoration-color:var(--led)}
+.acts{display:flex;gap:26px;align-items:center;flex-wrap:wrap;margin-top:34px}
+.lead{font-size:clamp(17px,1.5vw,20px);color:var(--ink2);max-width:30em;margin-top:24px}
+h1,h2{letter-spacing:-.045em;line-height:1.06;font-weight:800}
+h2{font-size:clamp(34px,4.8vw,68px)}
+
+/* hero */
+.hero{padding:clamp(24px,5vw,72px) 0 clamp(72px,9vw,128px);overflow:hidden}
+.hero-grid{display:grid;grid-template-columns:1fr 1.08fr;gap:clamp(24px,4vw,64px);align-items:center}
+.hero h1{font-size:clamp(44px,6.2vw,92px);letter-spacing:-.055em}
+.hero-crop .crop{max-width:760px;margin-left:auto;
+  -webkit-mask-image:radial-gradient(ellipse 72% 72% at 50% 50%,#000 55%,transparent 100%);
+  mask-image:radial-gradient(ellipse 72% 72% at 50% 50%,#000 55%,transparent 100%)}
+
+/* detail: 밝은 구역 */
+.detail{background:var(--paper);color:#17181a;padding:clamp(88px,11vw,160px) 0}
+.detail .lead{color:#4b4e53}
+.bento{display:grid;grid-template-columns:repeat(3,1fr);gap:clamp(20px,2.4vw,32px);margin-top:clamp(48px,6vw,80px);align-items:start}
+.bento figure{margin:0}
+.bento .crop{background-color:#cfd1d3}
+.bento figcaption{margin-top:14px;font-size:15px;color:#4b4e53;line-height:1.5}
+.bento figcaption b{display:block;color:#17181a;font-size:18px;letter-spacing:-.02em;margin-bottom:2px}
+.bento .c2,.bento .c5{margin-top:56px}
+.bento .c3{margin-top:24px}
+
+/* why */
+.why{padding:clamp(88px,11vw,160px) 0}
+.why-grid{display:grid;grid-template-columns:1.1fr 1fr;gap:clamp(32px,6vw,96px);align-items:center}
+dl{margin-top:44px;display:grid;gap:28px}
+dt{font-size:clamp(24px,2.8vw,38px);font-weight:800;letter-spacing:-.04em;line-height:1.15;color:var(--ink)}
+dd{color:var(--ink2);margin-top:6px;font-size:16px;max-width:28em}
+dt::before{content:"";display:inline-block;width:10px;height:10px;border-radius:50%;background:var(--led);margin-right:14px;vertical-align:middle}
+.why-pics{display:grid;gap:16px}
+.why-pics figure{margin:0}
+.why-pics img{width:100%;max-width:440px;border-radius:20px}
+.why-pics figure:nth-child(2) img{margin-left:auto}
+
+.final{background:var(--panel);text-align:center;padding:clamp(88px,11vw,150px) 0}
+.final h2{font-size:clamp(34px,5.4vw,76px)}
+.final p{color:var(--ink2);margin:24px auto 0;max-width:30em}
+.final .acts{justify-content:center}
+
+footer{padding:48px 0 40px;font-size:14px;color:var(--ink2)}
+footer .cols{display:flex;justify-content:space-between;gap:32px;flex-wrap:wrap}
+footer b{color:var(--ink)}
+footer .src{margin-top:28px;font-size:13px}
+
+/* 움직임: 사진이 어둠에서 천천히 드러남 (한 번) */
+@media (prefers-reduced-motion:no-preference){
+  .js .reveal{opacity:0;transform:scale(1.04);transition:opacity 1.4s ease,transform 1.8s cubic-bezier(.2,.7,.2,1)}
+  .js .reveal.in{opacity:1;transform:none}
+}
+
+@media (max-width:980px){
+  .menu{display:none}
+  .mnav{display:block}
+  .hero-grid,.why-grid{grid-template-columns:1fr}
+  .hero-crop .crop{margin:0 auto}
+  .bento{grid-template-columns:1fr 1fr}
+  .bento .c2,.bento .c5,.bento .c3{margin-top:0}
+}
+@media (max-width:700px){
+  body{font-size:16px}
+  .logo small{display:none}
+  .bento{grid-template-columns:1fr}
+}

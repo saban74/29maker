@@ -18,7 +18,8 @@ h1,h2{font-weight:600;letter-spacing:-.045em;line-height:1.08}
 .hero .bignum{position:absolute;left:var(--pad);bottom:clamp(20px,5vw,72px);z-index:1}
 .hero .prod{position:absolute;right:max(0px,calc(50% - 760px));bottom:-6%;width:min(66vw,980px);z-index:2}
 
-.row{padding:clamp(80px,10vw,150px) 0 clamp(60px,8vw,120px);position:relative}
+.row{padding:clamp(80px,10vw,150px) 0 clamp(60px,8vw,120px);position:relative;overflow:hidden}
+.r3 .prod{position:relative;z-index:1}
 .row .wrap{position:relative}
 .r2 .bignum{margin-bottom:calc(clamp(120px,27vw,420px)*-.34)}
 .r2 .wideimg{position:relative;width:100%;max-width:1180px;margin:0 auto}
