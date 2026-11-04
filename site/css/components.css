@@ -551,3 +551,29 @@ body[data-hero="r"] .only-aw { display: none; }
 
 /* Michroma에는 °·% 모양이 어색하게 그려져서, 단위 기호만 본문 글꼴로 (메인 감독자 수정) */
 .lines .u { font-family: var(--font-body); font-weight: 300; letter-spacing: 0; }
+
+/* 태블릿(761~1023px)에서도 메뉴 6개 + 견적문의가 한 줄에 다 들어가지 않아 페이지가 옆으로 넘쳤음.
+   머리말만 1023px 이하부터 햄버거 메뉴로 바꾼다 (메인 감독자 수정, 760px 이하 규칙과 같은 내용) */
+@media (max-width: 1023px) {
+  .site-header__in { gap: 12px; }
+  .site-header__r { display: none; }
+  .nav-toggle { display: block; position: absolute; right: var(--pad); top: 10px; width: 42px; height: 42px; margin: 0; opacity: 0; z-index: 2; cursor: pointer; }
+  .nav-burger { display: block; position: relative; width: 42px; height: 42px; margin-left: auto; }
+  .nav-burger span, .nav-burger span::before, .nav-burger span::after { position: absolute; left: 10px; width: 22px; height: 2px; background: var(--ink); content: ""; }
+  .nav-burger span { top: 20px; } .nav-burger span::before { left: 0; top: -7px; } .nav-burger span::after { left: 0; top: 7px; }
+  .nav-toggle:focus-visible + .nav-burger { outline: 3px solid var(--brass); outline-offset: 0; }
+  .nav { display: none; position: absolute; top: 100%; left: 0; right: 0; height: auto; background: var(--studio-100); border-bottom: 1px solid var(--line); }
+  .nav-toggle:checked ~ .nav { display: block; }
+  .nav > ul { flex-direction: column; gap: 0; }
+  .nav a { padding: 16px var(--pad); width: 100%; border-bottom: 1px solid var(--line); }
+  .nav-cta-m { display: flex !important; }
+  .nav-cta-m a { font-weight: 700; }
+}
+
+/* 태블릿(1023px 이하)에서 바로가기 4칸이 내용 폭보다 좁아 넘치던 문제: 2칸 x 2줄로 (메인 감독자 수정) */
+@media (max-width: 1023px) and (min-width: 761px) {
+  .b-r-shortcuts__in { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .b-r-shortcuts a:nth-child(3) { border-left: 0; padding-left: 0; }
+  .b-r-shortcuts a:nth-child(n+3) { border-top: 1px solid var(--line-dark); }
+}
+.b-r-shortcuts__in > a { min-width: 0; }
