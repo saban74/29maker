@@ -6,3 +6,9 @@ research/espec/files/*.pdf
 
 # 참고용으로 받은 다른 회사 로고(상표). 저장소에 올리지 않음 (목록과 출처는 research/brand/references.md)
 research/brand/logobook/
+
+# ESPEC 3D 모델과 설계 자료: 공개 허락 확인 전이라 저장소에 올리지 않음
+design/system/assets/3d/
+*.stp
+*.step
+*.glb
