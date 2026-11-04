@@ -49,6 +49,11 @@
 .spec-more p { margin-top: var(--sp-2); color: var(--fg-2); max-width: 680px; }
 .spec-more .btn { margin-top: var(--sp-4); }
 
+/* ---------- 핵심 수치(keynums): 글자가 긴 항목은 줄을 바꿔 칸 밖으로 넘치지 않게 ---------- */
+.keynums div { min-width: 0; }
+.keynums strong { white-space: normal; overflow-wrap: anywhere; font-size: clamp(18px, 1.7vw, 24px); line-height: 1.25; }
+@media (max-width: 760px) { .keynums strong { font-size: 17px; } }
+
 /* ---------- 6. 자잘한 보정 ---------- */
 .doc-list span a { text-decoration: underline; text-decoration-color: var(--brass); text-underline-offset: 3px; }
 .b-product-related .card-prod__temp { min-height: 3.2em; }
