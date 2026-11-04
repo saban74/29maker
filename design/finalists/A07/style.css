@@ -198,7 +198,12 @@ footer a:hover{color:var(--ink);text-decoration:underline}
 /* 관련 제품 */
 .trio{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-top:12px}
 .trio .tile{min-height:520px}
-.trio .tile h2{font-size:clamp(28px,3vw,40px)}
+.tile h3{font-size:clamp(28px,3vw,40px);font-weight:800;letter-spacing:-.045em;line-height:1.05}
+.tile.feat h3{font-size:clamp(22px,2.4vw,30px);font-weight:700;letter-spacing:-.03em;line-height:1.25}
+.eco .bt .sm{margin-top:12px;font-size:15px;color:var(--ink2)}
+.blk.flush{padding-bottom:0}
+.blk.flush .trio{margin-top:48px}
+.uses li{min-height:120px}
 .trio .pic img{max-width:78%}
 
 /* ============ 회사소개 ============ */
