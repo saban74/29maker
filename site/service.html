@@ -4,7 +4,9 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>서비스 | 제이에스 엔지니어링</title>
-<meta name="description" content="A/S·기술 지원, 위탁 시험소, 기술 세미나·교육, 기술 연구소. 장비를 들여놓은 뒤에도 제이에스 엔지니어링이 곁에 있습니다.">
+<meta name="description" content="A/S·기술 지원, 위탁 시험소, 기술 세미나, 기술 연구소. 장비를 들여놓은 뒤에도 제이에스 엔지니어링이 곁에 있습니다.">
+<meta name="theme-color" content="#e8e8e8">
+<link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -14,16 +16,16 @@
 <link rel="stylesheet" href="css/pages.css">
 </head>
 <body>
-<!-- 서비스: 제목 > 바로가기 4개 > A/S > 위탁 시험소 > 세미나·교육 > 기술 연구소 > 견적 띠 -->
+<!-- 서비스: 제목 > 바로가기 4개 > A/S > 위탁 시험소 > 세미나 > 기술 연구소 > 견적 띠 -->
 <a class="skip" href="#main">본문 바로가기</a>
 
 <!-- 공통 머리말 -->
 <header class="site-header">
   <div class="wrap site-header__in">
     <a class="brand" href="index.html"><strong>J&amp;S ENGINEERING</strong><small>제이에스 엔지니어링</small></a>
-    <input type="checkbox" id="nav-toggle" class="nav-toggle" aria-label="메뉴 열기">
+    <input type="checkbox" id="nav-toggle" class="nav-toggle" aria-label="메뉴 열기" aria-expanded="false" aria-controls="site-nav">
     <label for="nav-toggle" class="nav-burger" aria-hidden="true"><span></span></label>
-    <nav class="nav" aria-label="주 메뉴">
+    <nav class="nav" id="site-nav" aria-label="주 메뉴">
       <ul>
         <li><a href="about.html">회사소개</a></li>
         <li><a href="products/index.html">제품소개</a></li>
@@ -48,7 +50,7 @@
       <h1 class="b-r-hero__title" id="pg-title">Support after<br>installation</h1>
     </div>
     <div>
-      <p class="b-r-hero__sub"><strong>장비를 들여놓은 뒤에도, 제이에스 엔지니어링이 곁에 있습니다.</strong>ESPEC 본사와의 정기 기술 협력으로 쌓은 노하우로 A/S, 위탁 시험, 기술 교육을 제공합니다.</p>
+      <p class="b-r-hero__sub"><strong>장비를 들여놓은 뒤에도, 제이에스 엔지니어링이 곁에 있습니다.</strong>ESPEC 본사와의 정기 기술 협력으로 쌓은 노하우로 A/S, 위탁 시험, 기술 세미나를 안내합니다.</p>
     </div>
   </div>
 </section>
@@ -58,7 +60,7 @@
   <div class="wrap b-r-shortcuts__in">
     <a href="#as"><span class="b-r-shortcuts__no">01</span><strong>A/S·기술 지원</strong><small>After Service</small><span class="b-r-shortcuts__arrow" aria-hidden="true">→</span></a>
     <a href="#lab"><span class="b-r-shortcuts__no">02</span><strong>위탁 시험소</strong><small>Testing Laboratory</small><span class="b-r-shortcuts__arrow" aria-hidden="true">→</span></a>
-    <a href="#seminar"><span class="b-r-shortcuts__no">03</span><strong>기술 세미나·교육</strong><small>Seminar &amp; Training</small><span class="b-r-shortcuts__arrow" aria-hidden="true">→</span></a>
+    <a href="#seminar"><span class="b-r-shortcuts__no">03</span><strong>기술 세미나</strong><small>Seminar</small><span class="b-r-shortcuts__arrow" aria-hidden="true">→</span></a>
     <a href="#rnd"><span class="b-r-shortcuts__no">04</span><strong>기술 연구소</strong><small>Technical Center</small><span class="b-r-shortcuts__arrow" aria-hidden="true">→</span></a>
   </div>
 </nav>
@@ -111,13 +113,13 @@
   </div>
 </section>
 
-<!-- 5. 기술 세미나·교육 -->
+<!-- 5. 기술 세미나 -->
 <section class="blk tone-studio" id="seminar" aria-labelledby="seminar-h">
   <div class="wrap">
     <div class="two-col">
       <div>
-        <span class="label">Seminar &amp; Training</span>
-        <h2 class="h-sec" id="seminar-h">기술 세미나·교육</h2>
+        <span class="label">Seminar</span>
+        <h2 class="h-sec" id="seminar-h">기술 세미나</h2>
       </div>
       <div>
         <div class="prose">

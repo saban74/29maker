@@ -5,6 +5,8 @@
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>반도체·전자부품 평가 시스템 AMI-SPM · AMR-SPM | 제이에스 엔지니어링</title>
 <meta name="description" content="ESPEC 반도체·전자부품 평가 시스템. 저전압 절연 신뢰성 평가 AMI-SPM, 저전류 도체 신뢰성 평가 AMR-SPM. 사양과 견적 문의.">
+<meta name="theme-color" content="#e8e8e8">
+<link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -21,9 +23,9 @@
 <header class="site-header">
   <div class="wrap site-header__in">
     <a class="brand" href="../index.html"><strong>J&amp;S ENGINEERING</strong><small>제이에스 엔지니어링</small></a>
-    <input type="checkbox" id="nav-toggle" class="nav-toggle" aria-label="메뉴 열기">
+    <input type="checkbox" id="nav-toggle" class="nav-toggle" aria-label="메뉴 열기" aria-expanded="false" aria-controls="site-nav">
     <label for="nav-toggle" class="nav-burger" aria-hidden="true"><span></span></label>
-    <nav class="nav" aria-label="주 메뉴">
+    <nav class="nav" id="site-nav" aria-label="주 메뉴">
       <ul>
         <li><a href="../about.html">회사소개</a></li>
         <li><a href="index.html" aria-current="page">제품소개</a></li>
@@ -51,10 +53,10 @@
   <section class="tone-studio b-r-product-hero__pdp" aria-labelledby="pdp-title">
     <div class="wrap pdp__grid">
       <div class="pdp__gallery">
-        <div class="pdp__main pdp__main--pack"><img id="main-photo" src="../assets/img/web/semicon-ami-mv.png" alt="ESPEC 반도체 평가 시스템 AMI. 항온항습 챔버 옆에 측정 랙이 놓인 모습"></div>
+        <div class="pdp__main pdp__main--pack"><img id="main-photo" src="../assets/img/web/semicon-ami-mv.png" width="371" height="293" fetchpriority="high" alt="ESPEC 반도체 평가 시스템 AMI. 항온항습 챔버 옆에 측정 랙이 놓인 모습"></div>
         <div class="pdp__thumbs" role="group" aria-label="제품 사진 고르기">
-          <button type="button" aria-pressed="true" data-src="../assets/img/web/semicon-ami-mv.png" data-alt="ESPEC 반도체 평가 시스템 AMI. 항온항습 챔버 옆에 측정 랙이 놓인 모습"><img src="../assets/img/web/semicon-ami-mv.png" alt="AMI 사진 보기"></button>
-          <button type="button" aria-pressed="false" data-src="../assets/img/web/semicon-amr-mv.png" data-alt="ESPEC 반도체 평가 시스템 AMR 제품 사진"><img src="../assets/img/web/semicon-amr-mv.png" alt="AMR 사진 보기"></button>
+          <button type="button" aria-pressed="true" data-src="../assets/img/web/semicon-ami-mv.png" data-w="371" data-h="293" data-alt="ESPEC 반도체 평가 시스템 AMI. 항온항습 챔버 옆에 측정 랙이 놓인 모습"><img src="../assets/img/web/semicon-ami-mv.png" width="371" height="293" alt="AMI 사진 보기"></button>
+          <button type="button" aria-pressed="false" data-src="../assets/img/web/semicon-amr-mv.png" data-w="306" data-h="293" data-alt="ESPEC 반도체 평가 시스템 AMR 제품 사진"><img src="../assets/img/web/semicon-amr-mv.png" width="306" height="293" alt="AMR 사진 보기"></button>
         </div>
         <p class="src-note" style="margin-top:12px">제품 사진은 ESPEC 공식 자료입니다.</p>
       </div>
@@ -75,9 +77,9 @@
           <li>시험 중 와이블 분석 소프트웨어 표준</li>
         </ul>
         <div class="btn-row">
-          <a class="btn" href="../contact.html">견적문의</a>
+          <a class="btn" href="../contact.html?type=quote&amp;product=AMI-SPM/AMR-SPM">견적문의</a>
           <a class="btn btn--ghost" href="#docs">카탈로그 보기</a>
-          <a class="btn btn--ghost" href="../contact.html">사양서 요청</a>
+          <a class="btn btn--ghost" href="../contact.html?type=material&amp;item=AMI-SPM/AMR-SPM+사양서">사양서 요청</a>
         </div>
       </div>
     </div>
@@ -113,7 +115,7 @@
       </div>
       <figure class="line-fig line-fig--pack">
         <svg class="bg-word" viewBox="0 0 1000 170" aria-hidden="true"><text x="0" y="132" font-size="150" textLength="875" lengthAdjust="spacingAndGlyphs">SEMICON</text></svg>
-        <img class="float-photo" src="../assets/img/web/semicon-ami-mv.png" alt="반도체 평가 시스템 AMI" style="width:min(100%,440px)" loading="lazy">
+        <img class="float-photo" src="../assets/img/web/semicon-ami-mv.png" width="371" height="293" alt="반도체 평가 시스템 AMI" style="width:min(100%,440px)" loading="lazy">
       </figure>
     </div>
   </div>
@@ -178,11 +180,11 @@
 
     <div class="spec-more">
       <h3>그 밖의 평가 시스템 라인업</h3>
-      <p>아래 장비도 상담할 수 있습니다. 자세한 사양은 문의해 주세요.</p>
+      <p>아래 장비도 상담할 수 있습니다. 자세한 사양은 문의해 주세요. 국내 공급 가능 여부는 상담 때 안내합니다. <span class="tbd">[확인 필요]</span></p>
       <ul class="name-list" aria-label="그 밖의 평가 시스템 라인업">
         <li>전기화학 마이그레이션 평가</li><li>고전압 바이어스 절연 저항</li><li>커패시터 누설</li><li>HTRB (H3TRB, HTGB)</li><li>TDDB</li><li>일렉트로마이그레이션</li><li>PV 열-바이어스 복합</li><li>반도체 파라메트릭</li><li>커패시터·인덕터 온도 특성</li><li>PV I-V</li><li>파워 사이클</li><li>스태틱 번인</li><li>번인 챔버</li><li>THB</li><li>차량용 센서 번인</li>
       </ul>
-      <a class="btn btn--ghost" href="../contact.html">라인업 문의</a>
+      <a class="btn btn--ghost" href="../contact.html?type=consult&amp;item=반도체+평가+시스템+라인업">라인업 문의</a>
     </div>
     <p class="note">출처: <a href="https://www.espec.co.jp/english/products/measure-semicon/" target="_blank" rel="noopener">ESPEC 공식 측정·평가 시스템 페이지 (영문, 새 창)</a>, <a href="https://www.espec.co.jp/english/products/measure-semicon/ami/" target="_blank" rel="noopener">AMI</a>, <a href="https://www.espec.co.jp/english/products/measure-semicon/amr/" target="_blank" rel="noopener">AMR</a>. 수집일 2026-10-29</p>
   </div>
@@ -227,7 +229,7 @@
       <li><div><strong>ESPEC 공식 카탈로그 (영문 PDF)</strong><span>반도체 평가 시스템 라인업 종합 · 약 9.1MB · 새 창</span></div><a class="btn btn--ghost" href="https://www.espec.co.jp/english/products/catalog/semiconductor_line_up.pdf" target="_blank" rel="noopener">카탈로그 보기</a></li>
       <li><div><strong>ESPEC 공식 카탈로그 (영문 PDF)</strong><span>AMI 절연 신뢰성 평가 · 약 4.3MB · 새 창</span></div><a class="btn btn--ghost" href="https://www.espec.co.jp/english/products/catalog/ami.pdf" target="_blank" rel="noopener">카탈로그 보기</a></li>
       <li><div><strong>ESPEC 공식 카탈로그 (영문 PDF)</strong><span>AMR 도체 저항 평가 · 약 2.8MB · 새 창</span></div><a class="btn btn--ghost" href="https://www.espec.co.jp/english/products/catalog/amr.pdf" target="_blank" rel="noopener">카탈로그 보기</a></li>
-      <li><div><strong>한국어 상담 자료</strong><span>문의 양식으로 연결됩니다.</span></div><a class="btn" href="../contact.html">한국어 상담 자료 요청</a></li>
+      <li><div><strong>자료 요청</strong><span>문의 양식으로 연결됩니다.</span></div><a class="btn" href="../contact.html?type=material&amp;item=AMI-SPM/AMR-SPM+자료">자료 요청</a></li>
     </ul>
   </div>
 </section>
@@ -237,8 +239,8 @@
   <div class="wrap">
     <div class="sec-head"><h2 class="h-big" id="rel-h">함께 보는 장비</h2><a class="link-arrow" href="index.html">전체 제품 보기</a></div>
     <div class="prod-grid prod-grid--3">
-      <a class="card-prod" href="hast.html"><div class="pack"><img src="../assets/img/web/hast-ehs-mv.png" alt="HAST 가속수명 시험기 EHS" loading="lazy"></div><div class="card-prod__body"><h3>HAST 시험기 EHS</h3><div class="card-prod__type">가속수명 시험기</div><div class="card-prod__temp">+105 ~ +162.2°C</div></div></a>
-      <a class="card-prod" href="tcc-series.html"><div class="pack"><img src="../assets/img/web/tcc150-mv.png" alt="TCC 시리즈 급속 온도 사이클 시험기" loading="lazy"></div><div class="card-prod__body"><h3>TCC 시리즈</h3><div class="card-prod__type">급속 온도 사이클 시험기</div><div class="card-prod__temp">-70 ~ +180°C</div></div></a>
+      <a class="card-prod" href="hast.html"><div class="pack"><img src="../assets/img/web/hast-ehs-mv.png" alt="HAST 가속수명 시험기 EHS" width="277" height="294" loading="lazy"></div><div class="card-prod__body"><h3>HAST 시험기 EHS</h3><div class="card-prod__type">가속수명 시험기</div><div class="card-prod__temp">+105 ~ +162.2°C</div></div></a>
+      <a class="card-prod" href="tcc-series.html"><div class="pack"><img src="../assets/img/web/tcc150-mv.png" alt="TCC 시리즈 급속 온도 사이클 시험기" width="274" height="303" loading="lazy"></div><div class="card-prod__body"><h3>TCC 시리즈</h3><div class="card-prod__type">급속 온도 사이클 시험기</div><div class="card-prod__temp">-70 ~ +180°C</div></div></a>
     </div>
   </div>
 </section>
@@ -247,7 +249,7 @@
 <section class="blk tone-graphite b-cta" id="quote" aria-labelledby="cta-h">
   <div class="wrap b-cta__in">
     <div><h2 id="cta-h">반도체 평가 시스템 견적을 받아 보세요</h2><p>평가 조건만 알려 주시면 맞는 시스템을 안내해 드립니다. 전화 상담 <span class="tbd">[확인 필요: 번호]</span></p></div>
-    <a class="btn btn--light" href="../contact.html">견적문의</a>
+    <a class="btn btn--light" href="../contact.html?type=quote&amp;product=AMI-SPM/AMR-SPM">견적문의</a>
   </div>
 </section>
 </main>

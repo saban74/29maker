@@ -62,6 +62,8 @@
 /* 오시는 길 */
 .loc { display: grid; grid-template-columns: minmax(0, 7fr) minmax(0, 5fr); gap: var(--sp-7); margin-top: var(--sp-7); align-items: stretch; }
 .loc .ph { min-height: 340px; }
+.loc--solo { grid-template-columns: minmax(0, 1fr); } /* 지도 칸 없이 주소 목록만 쓸 때 */
+.loc--solo dl { max-width: 760px; }
 .loc dl { display: grid; grid-template-columns: auto 1fr; gap: 14px 20px; align-content: start; }
 .loc dt { font-weight: 800; white-space: nowrap; }
 .loc dd { color: var(--fg); }

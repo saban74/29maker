@@ -5,6 +5,8 @@
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>솔루션 | 제이에스 엔지니어링</title>
 <meta name="description" content="산업 분야별, 시험 목적별로 맞는 ESPEC 장비를 찾아보세요. 반도체, 전기전자, 배터리, 자동차·모빌리티, 항공우주·방산, 소재·기타.">
+<meta name="theme-color" content="#e8e8e8">
+<link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -21,9 +23,9 @@
 <header class="site-header">
   <div class="wrap site-header__in">
     <a class="brand" href="../index.html"><strong>J&amp;S ENGINEERING</strong><small>제이에스 엔지니어링</small></a>
-    <input type="checkbox" id="nav-toggle" class="nav-toggle" aria-label="메뉴 열기">
+    <input type="checkbox" id="nav-toggle" class="nav-toggle" aria-label="메뉴 열기" aria-expanded="false" aria-controls="site-nav">
     <label for="nav-toggle" class="nav-burger" aria-hidden="true"><span></span></label>
-    <nav class="nav" aria-label="주 메뉴">
+    <nav class="nav" id="site-nav" aria-label="주 메뉴">
       <ul>
         <li><a href="../about.html">회사소개</a></li>
         <li><a href="../products/index.html">제품소개</a></li>
@@ -54,19 +56,19 @@
   </div>
 </section>
 
-<!-- 2. 산업 분야별 (산업 카드 6개, 사진은 아직 없어 회색 자리표시) -->
+<!-- 2. 산업 분야별 (산업 카드 6개. 카드 배경은 글자 없는 단색 톤 칸이며, 산업 사진이 준비되면 .ph 칸을 사진으로 바꾸세요) -->
 <section class="blk tone-studio b-r-industries" id="industry" aria-labelledby="industry-h">
   <div class="wrap">
     <div class="sec-head">
       <div><span class="label">By industry</span><h2 class="h-sec" id="industry-h">산업 분야별</h2><p>장비 이름을 몰라도 괜찮습니다. 산업 분야를 고르면 필요한 시험과 맞는 장비를 보여 드립니다.</p></div>
     </div>
     <div class="b-r-industries__grid b-r-industries__grid--3">
-      <a class="ind-card" href="semiconductor.html"><div class="ph ph--dark">반도체 웨이퍼 사진 들어갈 자리</div><div class="ind-card__txt"><div><strong>반도체</strong><small>Semiconductor</small></div><span aria-hidden="true">→</span></div></a>
-      <a class="ind-card" href="electronics.html"><div class="ph ph--mid">전자 기판(PCB) 사진 들어갈 자리</div><div class="ind-card__txt"><div><strong>전기전자</strong><small>Electronics</small></div><span aria-hidden="true">→</span></div></a>
-      <a class="ind-card" href="battery.html"><div class="ph ph--dark">배터리 셀·팩 사진 들어갈 자리</div><div class="ind-card__txt"><div><strong>배터리</strong><small>Battery</small></div><span aria-hidden="true">→</span></div></a>
-      <a class="ind-card" href="mobility.html"><div class="ph ph--mid">자동차 차체 사진 들어갈 자리</div><div class="ind-card__txt"><div><strong>자동차·모빌리티</strong><small>Automotive</small></div><span aria-hidden="true">→</span></div></a>
-      <a class="ind-card" href="aerospace-defense.html"><div class="ph ph--dark">항공기 사진 들어갈 자리</div><div class="ind-card__txt"><div><strong>항공우주·방산</strong><small>Aerospace &amp; Defense</small></div><span aria-hidden="true">→</span></div></a>
-      <a class="ind-card" href="materials.html"><div class="ph ph--mid">소재 시편 사진 들어갈 자리</div><div class="ind-card__txt"><div><strong>소재·기타</strong><small>Materials</small></div><span aria-hidden="true">→</span></div></a>
+      <a class="ind-card" href="semiconductor.html"><div class="ph ph--dark" aria-hidden="true"></div><div class="ind-card__txt"><div><strong>반도체</strong><small>Semiconductor</small></div><span aria-hidden="true">→</span></div></a>
+      <a class="ind-card" href="electronics.html"><div class="ph ph--mid" aria-hidden="true"></div><div class="ind-card__txt"><div><strong>전기전자</strong><small>Electronics</small></div><span aria-hidden="true">→</span></div></a>
+      <a class="ind-card" href="battery.html"><div class="ph ph--dark" aria-hidden="true"></div><div class="ind-card__txt"><div><strong>배터리</strong><small>Battery</small></div><span aria-hidden="true">→</span></div></a>
+      <a class="ind-card" href="mobility.html"><div class="ph ph--mid" aria-hidden="true"></div><div class="ind-card__txt"><div><strong>자동차·모빌리티</strong><small>Automotive</small></div><span aria-hidden="true">→</span></div></a>
+      <a class="ind-card" href="aerospace-defense.html"><div class="ph ph--dark" aria-hidden="true"></div><div class="ind-card__txt"><div><strong>항공우주·방산</strong><small>Aerospace &amp; Defense</small></div><span aria-hidden="true">→</span></div></a>
+      <a class="ind-card" href="materials.html"><div class="ph ph--mid" aria-hidden="true"></div><div class="ind-card__txt"><div><strong>소재·기타</strong><small>Materials</small></div><span aria-hidden="true">→</span></div></a>
     </div>
   </div>
 </section>

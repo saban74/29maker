@@ -5,6 +5,8 @@
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>배터리 시험 솔루션 | 제이에스 엔지니어링</title>
 <meta name="description" content="배터리 셀과 팩의 충방전, 안전 시험 장비. ESPEC 한국 단독 총대리점 제이에스 엔지니어링이 안내합니다.">
+<meta name="theme-color" content="#e8e8e8">
+<link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -20,9 +22,9 @@
 <header class="site-header">
   <div class="wrap site-header__in">
     <a class="brand" href="../index.html"><strong>J&amp;S ENGINEERING</strong><small>제이에스 엔지니어링</small></a>
-    <input type="checkbox" id="nav-toggle" class="nav-toggle" aria-label="메뉴 열기">
+    <input type="checkbox" id="nav-toggle" class="nav-toggle" aria-label="메뉴 열기" aria-expanded="false" aria-controls="site-nav">
     <label for="nav-toggle" class="nav-burger" aria-hidden="true"><span></span></label>
-    <nav class="nav" aria-label="주 메뉴">
+    <nav class="nav" id="site-nav" aria-label="주 메뉴">
       <ul>
         <li><a href="../about.html">회사소개</a></li>
         <li><a href="../products/index.html">제품소개</a></li>
@@ -52,7 +54,7 @@
       <div class="b-r-hero__cta"><a class="btn" href="../contact.html">배터리 시험 상담하기</a><a class="link-arrow" href="#equip">추천 장비 보기</a></div>
     </div>
     <figure class="sol-hero__fig">
-      <div class="ph ph--dark">배터리 셀·팩 사진 들어갈 자리</div>
+      <div class="ph ph--dark" aria-hidden="true"></div>
     </figure>
   </div>
 </section>
@@ -75,9 +77,9 @@
   <div class="wrap">
     <div class="sec-head"><div><span class="label">Equipment</span><h2 class="h-sec" id="equip-h">추천 장비</h2></div><a class="link-arrow" href="../products/index.html">전체 제품 보기</a></div>
     <div class="prod-grid prod-grid--3">
-      <a class="card-prod" href="../products/battery.html"><div class="pack"><img src="../assets/img/web/advanced-battery-tester-mv.png" alt="배터리 시험 장비 Advanced Battery Tester" width="300" height="300"></div><div class="card-prod__body"><h3>배터리 시험 장비</h3><div class="card-prod__type">충방전·안전 시험</div><div class="card-prod__temp">-40 ~ +100°C</div></div></a>
-      <a class="card-prod" href="../products/platinous-j.html"><div class="crop" style="--s:1.2;--ox:50%;--oy:52%"><img src="../assets/img/hires/platinous-j-lineup.jpg" alt="Platinous J 시리즈" width="1812" height="1359"></div><div class="card-prod__body"><h3>Platinous J 시리즈 (ECO형)</h3><div class="card-prod__type">항온항습기</div><div class="card-prod__temp">-70 ~ +100°C</div></div></a>
-      <a class="card-prod" href="../products/walk-in.html"><div class="crop" style="--s:1.15;--ox:55%;--oy:55%"><img src="../assets/img/hires/walk-in-tbe-side-door.jpg" alt="워크인 챔버 E 시리즈" width="1615" height="1076"></div><div class="card-prod__body"><h3>워크인 챔버</h3><div class="card-prod__type">대형 항온항습 시험실 (배터리 팩용 모델은 문의)</div><div class="card-prod__temp">-40 ~ +80°C (E 시리즈)</div></div></a>
+      <a class="card-prod" href="../products/battery.html"><div class="pack"><img src="../assets/img/web/advanced-battery-tester-mv.png" alt="배터리 시험 장비 Advanced Battery Tester" width="390" height="298" loading="lazy"></div><div class="card-prod__body"><h3>배터리 시험 장비</h3><div class="card-prod__type">충방전·안전 시험</div><div class="card-prod__temp">-40 ~ +100°C</div></div></a>
+      <a class="card-prod" href="../products/platinous-j.html"><div class="crop" style="--s:1.2;--ox:50%;--oy:52%"><img src="../assets/img/hires/platinous-j-lineup.jpg" alt="Platinous J 시리즈" width="1812" height="1359" loading="lazy"></div><div class="card-prod__body"><h3>Platinous J 시리즈 (ECO형)</h3><div class="card-prod__type">항온항습기</div><div class="card-prod__temp">-70 ~ +100°C</div></div></a>
+      <a class="card-prod" href="../products/walk-in.html"><div class="crop" style="--s:1.15;--ox:55%;--oy:55%"><img src="../assets/img/hires/walk-in-tbe-side-door.jpg" alt="워크인 챔버 E 시리즈" width="1615" height="1213" loading="lazy"></div><div class="card-prod__body"><h3>워크인 챔버</h3><div class="card-prod__type">대형 항온항습 시험실 (배터리 팩용 모델은 문의)</div><div class="card-prod__temp">-40 ~ +80°C (E 시리즈)</div></div></a>
     </div>
     <p class="src-note sol-note">제품 사양은 ESPEC 공개 자료(수집일 2026-10-29) 기준입니다. 셀 크기, 충방전 전류, 안전 옵션은 시험 조건에 따라 달라지므로 문의해 주세요.</p>
   </div>

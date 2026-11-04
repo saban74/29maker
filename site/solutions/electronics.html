@@ -5,6 +5,8 @@
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>전기전자 신뢰성 시험 솔루션 | 제이에스 엔지니어링</title>
 <meta name="description" content="전기전자 기판과 부품의 온도 사이클, HAST, AI 서버 고발열 시험 장비. ESPEC 한국 단독 총대리점 제이에스 엔지니어링이 안내합니다.">
+<meta name="theme-color" content="#e8e8e8">
+<link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -20,9 +22,9 @@
 <header class="site-header">
   <div class="wrap site-header__in">
     <a class="brand" href="../index.html"><strong>J&amp;S ENGINEERING</strong><small>제이에스 엔지니어링</small></a>
-    <input type="checkbox" id="nav-toggle" class="nav-toggle" aria-label="메뉴 열기">
+    <input type="checkbox" id="nav-toggle" class="nav-toggle" aria-label="메뉴 열기" aria-expanded="false" aria-controls="site-nav">
     <label for="nav-toggle" class="nav-burger" aria-hidden="true"><span></span></label>
-    <nav class="nav" aria-label="주 메뉴">
+    <nav class="nav" id="site-nav" aria-label="주 메뉴">
       <ul>
         <li><a href="../about.html">회사소개</a></li>
         <li><a href="../products/index.html">제품소개</a></li>
@@ -52,7 +54,7 @@
       <div class="b-r-hero__cta"><a class="btn" href="../contact.html">전기전자 시험 상담하기</a><a class="link-arrow" href="#equip">추천 장비 보기</a></div>
     </div>
     <figure class="sol-hero__fig">
-      <div class="crop crop--color"><img src="../assets/img/hires/walk-in-tbe-side-door.jpg" width="1615" height="1076" alt="옆문이 열린 워크인 항온항습실"></div>
+      <div class="crop crop--color"><img src="../assets/img/hires/walk-in-tbe-side-door.jpg" width="1615" height="1213" fetchpriority="high" alt="옆문이 열린 워크인 항온항습실"></div>
       <figcaption>워크인 챔버 (고발열 부하 대응 모델 포함)</figcaption>
     </figure>
   </div>
@@ -76,11 +78,11 @@
   <div class="wrap">
     <div class="sec-head"><div><span class="label">Equipment</span><h2 class="h-sec" id="equip-h">추천 장비</h2></div><a class="link-arrow" href="../products/index.html">전체 제품 보기</a></div>
     <div class="prod-grid">
-      <a class="card-prod" href="../products/tcc-series.html"><div class="pack"><img src="../assets/img/web/tcc150-mv.png" alt="TCC 시리즈 온도 사이클 시험기" width="270" height="300"></div><div class="card-prod__body"><h3>TCC 시리즈</h3><div class="card-prod__type">온도 사이클 시험기</div><div class="card-prod__temp">-70 ~ +180°C</div></div></a>
-      <a class="card-prod" href="../products/ar-series.html"><div class="crop" style="--s:1.6;--ox:49%;--oy:52%"><img src="../assets/img/hires/ar-series-pair.jpg" alt="AR 시리즈 급속 온도변화 시험기" width="1714" height="1143"></div><div class="card-prod__body"><h3>AR 시리즈</h3><div class="card-prod__type">급속 온도변화 시험기</div><div class="card-prod__temp">-70 ~ +180°C</div></div></a>
-      <a class="card-prod" href="../products/hast.html"><div class="crop" style="--s:1.9;--ox:50%;--oy:50%"><img src="../assets/img/hires/hast-ehs-lineup.jpg" alt="EHS 시리즈 HAST 가속수명 시험기" width="1268" height="905"></div><div class="card-prod__body"><h3>EHS 시리즈</h3><div class="card-prod__type">HAST 가속수명 시험기</div><div class="card-prod__temp">+105 ~ +162.2°C</div></div></a>
-      <a class="card-prod" href="../products/walk-in.html"><div class="crop" style="--s:1.15;--ox:55%;--oy:55%"><img src="../assets/img/hires/walk-in-tbe-side-door.jpg" alt="워크인 챔버 E 시리즈" width="1615" height="1076"></div><div class="card-prod__body"><h3>워크인 챔버 E 시리즈</h3><div class="card-prod__type">대형 항온항습 시험실</div><div class="card-prod__temp">-40 ~ +80°C</div></div></a>
-      <a class="card-prod" href="../products/mtp-101.html"><div class="pack"><img src="../assets/img/web/mtp-101-news.webp" alt="MTP-101 원디바이스 항온 시험기" width="540" height="380"></div><div class="card-prod__body"><h3>MTP-101</h3><div class="card-prod__type">원디바이스 항온 시험기</div><div class="card-prod__temp">-30 ~ +150°C</div></div></a>
+      <a class="card-prod" href="../products/tcc-series.html"><div class="pack"><img src="../assets/img/web/tcc150-mv.png" alt="TCC 시리즈 온도 사이클 시험기" width="274" height="303" loading="lazy"></div><div class="card-prod__body"><h3>TCC 시리즈</h3><div class="card-prod__type">온도 사이클 시험기</div><div class="card-prod__temp">-70 ~ +180°C</div></div></a>
+      <a class="card-prod" href="../products/ar-series.html"><div class="crop" style="--s:1.6;--ox:49%;--oy:52%"><img src="../assets/img/hires/ar-series-pair.jpg" alt="AR 시리즈 급속 온도변화 시험기" width="1714" height="1143" loading="lazy"></div><div class="card-prod__body"><h3>AR 시리즈</h3><div class="card-prod__type">급속 온도변화 시험기</div><div class="card-prod__temp">-70 ~ +180°C</div></div></a>
+      <a class="card-prod" href="../products/hast.html"><div class="crop" style="--s:1.9;--ox:50%;--oy:50%"><img src="../assets/img/hires/hast-ehs-lineup.jpg" alt="EHS 시리즈 HAST 가속수명 시험기" width="1268" height="906" loading="lazy"></div><div class="card-prod__body"><h3>EHS 시리즈</h3><div class="card-prod__type">HAST 가속수명 시험기</div><div class="card-prod__temp">+105 ~ +162.2°C</div></div></a>
+      <a class="card-prod" href="../products/walk-in.html"><div class="crop" style="--s:1.15;--ox:55%;--oy:55%"><img src="../assets/img/hires/walk-in-tbe-side-door.jpg" alt="워크인 챔버 E 시리즈" width="1615" height="1213" loading="lazy"></div><div class="card-prod__body"><h3>워크인 챔버 E 시리즈</h3><div class="card-prod__type">대형 항온항습 시험실</div><div class="card-prod__temp">-40 ~ +80°C</div></div></a>
+      <a class="card-prod" href="../products/mtp-101.html"><div class="pack"><img src="../assets/img/web/mtp-101-news.webp" alt="MTP-101 원디바이스 항온 시험기" width="539" height="381" loading="lazy"></div><div class="card-prod__body"><h3>MTP-101</h3><div class="card-prod__type">원디바이스 항온 시험기</div><div class="card-prod__temp">-30 ~ +150°C</div></div></a>
     </div>
     <p class="src-note sol-note">제품 사양은 ESPEC 공개 자료(수집일 2026-10-29) 기준입니다. 열충격 시험 등 다른 시험이 필요하면 시험 조건을 알려 주세요. 맞는 장비를 안내합니다.</p>
   </div>

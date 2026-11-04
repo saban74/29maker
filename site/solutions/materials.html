@@ -5,6 +5,8 @@
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>소재·연구 시험 솔루션 | 제이에스 엔지니어링</title>
 <meta name="description" content="소재 열처리, 고온 시험, 연구실용 소형 항온항습기. ESPEC 한국 단독 총대리점 제이에스 엔지니어링이 안내합니다.">
+<meta name="theme-color" content="#e8e8e8">
+<link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -20,9 +22,9 @@
 <header class="site-header">
   <div class="wrap site-header__in">
     <a class="brand" href="../index.html"><strong>J&amp;S ENGINEERING</strong><small>제이에스 엔지니어링</small></a>
-    <input type="checkbox" id="nav-toggle" class="nav-toggle" aria-label="메뉴 열기">
+    <input type="checkbox" id="nav-toggle" class="nav-toggle" aria-label="메뉴 열기" aria-expanded="false" aria-controls="site-nav">
     <label for="nav-toggle" class="nav-burger" aria-hidden="true"><span></span></label>
-    <nav class="nav" aria-label="주 메뉴">
+    <nav class="nav" id="site-nav" aria-label="주 메뉴">
       <ul>
         <li><a href="../about.html">회사소개</a></li>
         <li><a href="../products/index.html">제품소개</a></li>
@@ -52,7 +54,7 @@
       <div class="b-r-hero__cta"><a class="btn" href="../contact.html">소재·연구 시험 상담하기</a><a class="link-arrow" href="#equip">추천 장비 보기</a></div>
     </div>
     <figure class="sol-hero__fig">
-      <div class="ph ph--mid">소재 시편 사진 들어갈 자리</div>
+      <div class="ph ph--mid" aria-hidden="true"></div>
     </figure>
   </div>
 </section>
@@ -74,9 +76,9 @@
   <div class="wrap">
     <div class="sec-head"><div><span class="label">Equipment</span><h2 class="h-sec" id="equip-h">추천 장비</h2></div><a class="link-arrow" href="../products/index.html">전체 제품 보기</a></div>
     <div class="prod-grid prod-grid--3">
-      <a class="card-prod" href="../products/industrial-oven.html"><div class="pack"><img src="../assets/img/web/industrial-oven-pvph-mv.png" alt="산업용 오븐 PH·PV 시리즈" width="300" height="300"></div><div class="card-prod__body"><h3>산업용 오븐 PH · PV 시리즈</h3><div class="card-prod__type">고온 시험·열처리·건조</div><div class="card-prod__temp">(주위온도+20) ~ +200°C</div></div></a>
-      <a class="card-prod" href="../products/sh-series.html"><div class="pack"><img src="../assets/img/web/sh-benchtop-mv.png" alt="SH 시리즈 벤치탑 항온항습기" width="300" height="300"></div><div class="card-prod__body"><h3>SH 시리즈</h3><div class="card-prod__type">벤치탑 항온항습기</div><div class="card-prod__temp">-60 ~ +150°C</div></div></a>
-      <a class="card-prod" href="../products/platinous-j.html"><div class="crop" style="--s:1.2;--ox:50%;--oy:52%"><img src="../assets/img/hires/platinous-j-lineup.jpg" alt="Platinous J 시리즈" width="1812" height="1359"></div><div class="card-prod__body"><h3>Platinous J 시리즈</h3><div class="card-prod__type">항온항습기</div><div class="card-prod__temp">-70 ~ +100°C</div></div></a>
+      <a class="card-prod" href="../products/industrial-oven.html"><div class="pack"><img src="../assets/img/web/industrial-oven-pvph-mv.png" alt="산업용 오븐 PH·PV 시리즈" width="553" height="304" loading="lazy"></div><div class="card-prod__body"><h3>산업용 오븐 PH · PV 시리즈</h3><div class="card-prod__type">고온 시험·열처리·건조</div><div class="card-prod__temp">(주위온도+20) ~ +200°C</div></div></a>
+      <a class="card-prod" href="../products/sh-series.html"><div class="pack"><img src="../assets/img/web/sh-benchtop-mv.png" alt="SH 시리즈 벤치탑 항온항습기" width="405" height="269" loading="lazy"></div><div class="card-prod__body"><h3>SH 시리즈</h3><div class="card-prod__type">벤치탑 항온항습기</div><div class="card-prod__temp">-60 ~ +150°C</div></div></a>
+      <a class="card-prod" href="../products/platinous-j.html"><div class="crop" style="--s:1.2;--ox:50%;--oy:52%"><img src="../assets/img/hires/platinous-j-lineup.jpg" alt="Platinous J 시리즈" width="1812" height="1359" loading="lazy"></div><div class="card-prod__body"><h3>Platinous J 시리즈</h3><div class="card-prod__type">항온항습기</div><div class="card-prod__temp">-70 ~ +100°C</div></div></a>
     </div>
     <p class="src-note sol-note">제품 사양은 ESPEC 공개 자료(수집일 2026-10-29) 기준입니다. 보관 안정성 시험기 등 다른 장비가 필요하면 시험 조건을 알려 주세요. 맞는 장비를 안내합니다.</p>
   </div>

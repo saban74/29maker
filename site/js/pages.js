@@ -1,6 +1,6 @@
 /* 일반 페이지용 작은 동작 (순수 JS). 이 파일이 없어도 내용은 모두 보이고, 아래 기능만 빠집니다.
    1) 거르기 버튼: 제품 목록, 기술자료 표, 뉴스 목록
-   2) 문의 폼: 문의 유형에 따라 입력칸 보이기/숨기기, 주소(?type=…&product=…)로 미리 채우기, 보내기 연결 전 안내 */
+   2) 문의 폼: 문의 유형에 따라 입력칸 보이기/숨기기, 주소(?type=…&product=…)로 미리 채우기, 보내기 연결 전 "준비 중" 안내 */
 (function () {
   'use strict';
   var d = document;
@@ -58,10 +58,19 @@
     var checked = radios.filter(function (r) { return r.checked; })[0];
     showFor(checked ? checked.value : 'quote');
 
-    /* 보내기 연결 전: 실제로 전송하지 않고 접수 완료 안내 페이지로만 이동한다 */
+    /* 보내기 연결 전: 실제로 전송하지 않고, 페이지 이동 없이 "준비 중" 안내만 다시 읽어 준다.
+       (안내 문구 자체는 contact.html 의 #form-notice 에 처음부터 들어 있습니다. 접수 방법이 연결되면 이 부분을 고치세요.) */
+    var notice = d.getElementById('form-notice');
     form.addEventListener('submit', function (e) {
       e.preventDefault();
-      window.location.href = 'contact-done.html';
+      if (!notice) return;
+      var html = notice.innerHTML;
+      notice.innerHTML = '';
+      /* 잠깐 비웠다가 다시 채우면 화면 읽기 프로그램이 안내를 다시 읽는다 */
+      window.setTimeout(function () {
+        notice.innerHTML = html;
+        notice.scrollIntoView({ block: 'center' });
+      }, 50);
     });
   }
 })();

@@ -1,7 +1,7 @@
 /* 제이에스 엔지니어링 디자인 시스템 스크립트 (순수 JS, 라이브러리 없음)
    이 파일이 없어도 페이지 내용은 모두 보입니다. 아래 기능만 빠집니다.
    1) 머리말이 스크롤하면 불투명해짐  2) 큰 글자 목록에서 사진 바꾸기  3) 제품 갤러리 썸네일
-   4) 제품 탭 현재 위치 표시          5) 3D 보기 (실패하면 사진으로)    6) 스타일 미리보기 전환 버튼 */
+   4) 제품 탭 현재 위치 표시          5) 3D 보기 (실패하면 사진으로)    6) 스타일 미리보기 전환 버튼 (+ 모바일 메뉴 접근성, Esc 로 닫기) */
 (function () {
   'use strict';
   var d = document;
@@ -17,7 +17,21 @@
   }
   window.addEventListener('scroll', syncHeader, { passive: true });
   var navToggle = d.querySelector('.nav-toggle');
-  if (navToggle) navToggle.addEventListener('change', syncHeader);
+  /* 모바일 메뉴: 열림 상태를 화면 읽기 프로그램에 알리고, Esc 키로 닫는다 */
+  function syncNavLabel() {
+    if (!navToggle) return;
+    navToggle.setAttribute('aria-expanded', navToggle.checked ? 'true' : 'false');
+    navToggle.setAttribute('aria-label', navToggle.checked ? '메뉴 닫기' : '메뉴 열기');
+  }
+  if (navToggle) {
+    navToggle.addEventListener('change', function () { syncHeader(); syncNavLabel(); });
+    d.addEventListener('keydown', function (e) {
+      if ((e.key === 'Escape' || e.key === 'Esc') && navToggle.checked) {
+        navToggle.checked = false; syncHeader(); syncNavLabel(); navToggle.focus();
+      }
+    });
+    syncNavLabel();
+  }
   syncHeader();
 
   /* 2) b-aw-bigword-list: 단어에 올리거나 포커스를 주면 오른쪽 사진이 바뀐다 */
@@ -39,7 +53,12 @@
   var thumbs = d.querySelectorAll('.pdp__thumbs button');
   [].forEach.call(thumbs, function (b) {
     b.addEventListener('click', function () {
-      if (main) { main.src = b.getAttribute('data-src'); main.alt = b.getAttribute('data-alt'); }
+      if (main) {
+        main.src = b.getAttribute('data-src'); main.alt = b.getAttribute('data-alt');
+        /* 사진마다 가로·세로 크기가 다르므로 속성도 함께 바꾼다 (버튼의 data-w / data-h) */
+        if (b.getAttribute('data-w')) main.setAttribute('width', b.getAttribute('data-w'));
+        if (b.getAttribute('data-h')) main.setAttribute('height', b.getAttribute('data-h'));
+      }
       [].forEach.call(thumbs, function (x) { x.setAttribute('aria-pressed', x === b ? 'true' : 'false'); });
     });
   });
@@ -68,7 +87,11 @@
     var mv = stage.querySelector('model-viewer');
     var url = stage.getAttribute('data-model');
     var rot = d.querySelector('[data-3d-rotate]');
-    function set(s) { stage.setAttribute('data-state', s); if (rot) rot.disabled = (s !== 'ready'); }
+    var sec3d = stage.closest ? stage.closest('.b-aw-3d') : null;
+    function set(s) {
+      stage.setAttribute('data-state', s); if (rot) rot.disabled = (s !== 'ready');
+      if (sec3d) sec3d.setAttribute('data-3d-state', s); /* 안내 문장([data-3d-hint])을 상태에 맞게 바꾸는 신호 */
+    }
     set('fallback');
     if (!mv || !url || !window.fetch || !window.customElements) return;
 
