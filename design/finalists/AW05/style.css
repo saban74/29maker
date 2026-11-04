@@ -324,3 +324,6 @@ button{font:inherit;color:inherit;background:none;border:0;padding:0;cursor:poin
   .name-wall p,.name-wall.ko p{font-size:9vw}
   .way{grid-template-columns:1fr;padding:90px 20px 90px;gap:30px}
 }
+
+/* 화면 낭독기용 숨김 글자가 사양표 가로 스크롤 상자 밖으로 빠져나가 휴대폰 화면을 넓히던 문제 수정 (메인 감독자) */
+th, td { position: relative; }

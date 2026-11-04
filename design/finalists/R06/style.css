@@ -363,3 +363,6 @@ h3 { font-size: 20px; line-height: 1.4; font-weight: 700; letter-spacing: -.01em
   .tl-group li { grid-template-columns: 60px 1fr; }
   .tabs a { padding: 14px 18px; }
 }
+
+/* 화면 낭독기용 숨김 글자가 사양표 가로 스크롤 상자 밖으로 빠져나가 휴대폰 화면을 넓히던 문제 수정 (메인 감독자) */
+th, td { position: relative; }
