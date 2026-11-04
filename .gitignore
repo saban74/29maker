@@ -12,3 +12,7 @@ design/system/assets/3d/
 *.stp
 *.step
 *.glb
+
+# Eleventy 빌드 결과와 설치 폴더 (자동 생성)
+node_modules/
+_site/

@@ -50,4 +50,47 @@ Claude Code에서 이렇게 부탁하세요. 메인 Claude가 감독자가 되�
 @agent-web-designer 메인 시안을 더 밝은 분위기로 다시 만들어줘
 ```
 
-완성된 홈페이지는 `site/index.html`을 브라우저로 열면 볼 수 있습니다.
+## 홈페이지 만드는 구조 (2026-11-04부터: Eleventy + 관리자 화면)
+
+홈페이지는 이제 **틀(site/) + 정보 파일(content/)** 을 합쳐 자동으로 만듭니다. 그래서 `site/index.html`을 더블클릭해서 바로 볼 수는 없고, 아래 명령으로 만든 결과(`_site/`)를 웹 서버로 봅니다.
+
+```
+npm install          # 처음 한 번 (필요한 프로그램 설치)
+npm run build        # 홈페이지 만들기 → _site/ 폴더
+npm start            # 만들면서 미리보기: http://localhost:8080/
+```
+
+관리자 화면을 내 컴퓨터에서 시험하려면 창 두 개에서 `npm start` 와 `npm run cms`(= `npx decap-server`)를 켜고 `http://localhost:8080/admin/` 을 엽니다. GitHub 로그인 없이 내 컴퓨터 파일에 바로 저장됩니다.
+
+| 폴더·파일 | 하는 일 |
+|---|---|
+| `content/products/*.md` | 제품 11개 (관리자 화면 "제품") |
+| `content/news/*.md` | 뉴스·공지 (관리자 화면 "뉴스·공지") |
+| `content/catalogs/*.md` | 기술자료 카탈로그 표의 줄 (관리자 화면 "카탈로그 자료") |
+| `content/solutions.yml` | 산업 솔루션 페이지의 추천 장비 목록 |
+| `site/` | 페이지 틀. 주소(파일 이름)는 예전과 같음. `.html` 파일 맨 위 `---` 사이는 페이지 정보, 아래는 본문 |
+| `site/products/product.njk` | 제품 상세 페이지 **틀 하나** → 제품 정보 파일마다 `products/(주소용이름).html` 생성 |
+| `site/_includes/layouts/base.njk` | 모든 페이지 공통 `<head>`·머리말·꼬리말 (`partials/header.njk`, `partials/footer.njk`) |
+| `site/_includes/partials/card.njk` | 제품 카드 한 장 (목록·메인·관련 제품·솔루션 추천 장비에 공통) |
+| `site/_data/*.js` | 제품군, 산업, 뉴스 분류, 카탈로그 분류 이름 |
+| `site/admin/` | 관리자 화면(Decap CMS 3.17.1)과 설정 `config.yml` |
+| `site/assets/img/uploads/` | 관리자 화면에서 올린 사진 |
+| `eleventy.config.js`, `lib/content.js` | 만드는 규칙 (정보 파일 읽기, 주소 계산 등) |
+| `netlify.toml` | Netlify 배포 설정 (빌드 명령, 출력 폴더) |
+| `_site/`, `node_modules/` | 자동 생성. 저장소에 올리지 않음 |
+
+### 정한 것과 이유
+- **site/ 를 입력 폴더로 유지**: 문서들(CLAUDE.md, BUILD.md, INTEGRATION.md)이 site/ 를 가리키고, 페이지 주소도 그대로 유지하려고.
+- **content/ 는 site/ 밖**: 관리자 화면이 저장하는 "정보"와 개발자가 고치는 "틀"을 나누려고. Eleventy 는 `lib/content.js` 로 읽어 씁니다.
+- **주소는 상대 주소**: 모든 페이지 안 주소를 "지금 페이지 기준"(`../css/...`)으로 자동 계산합니다(`rel` 필터). 그래서 도메인 맨 위(Netlify)든 하위 폴더(GitHub Pages `/29maker/`)든 `pathPrefix` 설정 없이 그대로 동작합니다.
+- **글 안의 `[확인 필요...]`** 는 자동으로 노란 표시(`span.tbd`)가 됩니다. 정보 파일에는 그냥 글자로 씁니다.
+- **사진 가로·세로 크기**를 비워 두면 만들 때 사진 파일에서 읽어 채웁니다(`image-size`).
+- **뉴스 분류**: 브리프의 "ESPEC 소식"은 지금 사이트처럼 `ESPEC 신제품`(new)·`ESPEC 회사 소식`(corp) 둘로 나눠 두었고, `제이에스 엔지니어링 소식`(js), `세미나·전시회`(event), **`공지사항`(notice)** 이 있습니다. news.html 분류 버튼에 "공지사항"이 하나 늘었습니다.
+- **목록 순서 규칙**
+  - 제품 목록: "정렬 순서" 작은 숫자부터. 메인 대표 제품: "메인 대표 제품으로 표시"를 켠 제품을 "메인 표시 순서"대로.
+  - 뉴스 목록: "맨 위에 고정"한 글 → 날짜 최신순.
+  - 메인 최신 소식 3개: 고정한 글 먼저, 그다음 "메인 '최신 소식'에 보이기"를 켠 글을 최신순으로. (공지사항도 이 규칙대로 섞입니다. 중요한 공지는 고정을 켜면 메인 맨 앞에 나옵니다.)
+  - "홈페이지에 공개"를 끈 글·제품·카탈로그는 어디에도 나오지 않습니다(초안). 예시 공지 `content/news/2026-11-04-notice-example.md` 가 초안입니다.
+- **카드 글자가 페이지마다 조금 다른 경우**(예: 배터리 솔루션의 "Platinous J 시리즈 (ECO형)")는 예전 화면을 그대로 지키려고 "이 페이지에서만 다르게" 칸으로 옮겼습니다(제품의 `card_home`, `card_related`, 관련 제품·솔루션 목록의 덮어쓰기 칸).
+
+자세한 사용법은 `ADMIN-GUIDE.md`, 인터넷에 올리는 방법은 `DEPLOY.md`.

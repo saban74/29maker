@@ -1,0 +1,19 @@
+{#
+  제품 카드 한 장. 사용법:
+    {% from "partials/card.njk" import productCard %}
+    {{ productCard(product, card, cat, page.url) }}
+  card 는 cardOf 필터로 만든 값 (제품의 기본 카드 + 덮어쓸 값)
+  frame: crop(사진 일부를 확대해 보여 줌, scale·pos_x·pos_y) / pack(사진 전체를 칸 안에 맞춤)
+#}
+{% macro productCard(product, c, cat, base) %}
+<a class="card-prod"{% if cat %} data-cat="{{ cat }}"{% endif %} href="{{ ('products/' + product.slug + '.html') | rel(base) }}">
+{%- if c.frame == 'crop' -%}
+<div class="crop" style="--s:{{ c.scale }};--ox:{{ c.pos_x }};--oy:{{ c.pos_y }}">
+{%- else -%}
+<div class="pack">
+{%- endif -%}
+{%- for im in c.images -%}
+<img src="{{ im.src | rel(base) }}" alt="{{ im.alt }}" width="{{ im.width }}" height="{{ im.height }}"{% if c.images.length > 1 %} style="max-width:46%"{% endif %} loading="lazy">
+{%- endfor -%}
+</div><div class="card-prod__body"><h3>{{ c.name | h | safe }}</h3><div class="card-prod__type">{{ c.type | h | safe }}</div><div class="card-prod__temp">{{ c.temp | h | safe }}</div></div></a>
+{%- endmacro %}

@@ -1,0 +1,26 @@
+{# 공통 머리말. 메뉴를 바꾸려면 아래 menu 목록만 고치면 모든 페이지에 반영됩니다. #}
+{% set menu = [
+  { key: "about", href: "about.html", text: "회사소개" },
+  { key: "products", href: "products/index.html", text: "제품소개" },
+  { key: "solutions", href: "solutions/index.html", text: "솔루션" },
+  { key: "resources", href: "resources.html", text: "기술자료" },
+  { key: "service", href: "service.html", text: "서비스" },
+  { key: "contact", href: "contact.html", text: "고객지원" }
+] %}
+<!-- 공통 머리말{% if overlay and overlay != "false" %}: 첫 화면이 큰 글자 사진이라 투명하게 겹치는 형태(site-header--overlay){% endif %} -->
+<header class="site-header{% if overlay and overlay != "false" %} site-header--overlay{% endif %}">
+  <div class="wrap site-header__in">
+    <a class="brand" href="{{ 'index.html' | rel }}"><strong>J&amp;S ENGINEERING</strong><small>제이에스 엔지니어링</small></a>
+    <input type="checkbox" id="nav-toggle" class="nav-toggle" aria-label="메뉴 열기" aria-expanded="false" aria-controls="site-nav">
+    <label for="nav-toggle" class="nav-burger" aria-hidden="true"><span></span></label>
+    <nav class="nav" id="site-nav" aria-label="주 메뉴">
+      <ul>
+{% for m in menu %}
+        <li><a href="{{ m.href | rel }}"{% if nav == m.key %} aria-current="page"{% endif %}>{{ m.text }}</a></li>
+{% endfor %}
+        <li class="nav-cta-m"><a href="{{ 'contact.html' | rel }}">견적문의</a></li>
+      </ul>
+    </nav>
+    <div class="site-header__r"><a class="btn btn--sm" href="{{ 'contact.html' | rel }}">견적문의</a></div>
+  </div>
+</header>

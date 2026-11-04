@@ -15,6 +15,11 @@
 | ④ 제작 | `web-builder` | `site/` |
 | ⑤ 검수 | `web-reviewer` | (보고만) |
 
+## 사이트 구조 (2026-11-04부터: 관리자 페이지 방식)
+- 제품·뉴스·공지사항·카탈로그는 `content/` 의 정보 파일(Markdown)이고, 관리자 화면(`/admin/`, Decap CMS)에서 입력합니다. 페이지는 Eleventy가 `site/`(템플릿) + `content/`(정보)를 합쳐 `_site/` 에 만듭니다.
+- 빌드: `npm install` 후 `npm run build`. 미리보기: `npm start`(http://localhost:8080/). 관리자 로컬 시험: `npm start` 와 `npm run cms` 를 함께.
+- 제품을 추가·수정할 때는 `site/` 의 HTML을 직접 만들지 말고 `content/products/` 정보 파일(또는 관리자 화면)로 합니다. 사용법은 `ADMIN-GUIDE.md`, 배포는 `DEPLOY.md`.
+
 ## 운영 규칙
 - 팀원끼리는 직접 대화하지 못합니다. 앞 단계의 결과물 폴더를 다음 팀원이 읽는 방식으로 이어집니다.
 - 각 단계가 끝나면 사용자에게 짧게 진행 상황을 알립니다.

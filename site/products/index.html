@@ -1,48 +1,17 @@
-<!doctype html>
-<html lang="ko">
-<head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
-<title>제품소개 | 제이에스 엔지니어링</title>
-<meta name="description" content="제이에스 엔지니어링이 공급하는 ESPEC 환경시험·평가 장비 목록. 항온항습기, 열충격 시험기, HAST, 워크인 챔버, 2차전지 시험 장비 등.">
-<meta name="theme-color" content="#e8e8e8">
-<link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Michroma&display=swap">
-<link rel="stylesheet" href="../css/tokens.css">
-<link rel="stylesheet" href="../css/components.css">
-<link rel="stylesheet" href="../css/pages.css">
-</head>
-<body>
-<!-- 제품소개 목록: 제목 > 제품군 거르기 + 제품 카드 12장 > 그 밖의 라인업 > 견적 띠.
-     제품 카드를 추가하려면 <a class="card-prod" ...> 한 장을 복사하고 data-cat 에 제품군 이름(영문 코드)을 적으세요. -->
-<a class="skip" href="#main">본문 바로가기</a>
-
-<!-- 공통 머리말 (하위 폴더라 경로 앞에 ../) -->
-<header class="site-header">
-  <div class="wrap site-header__in">
-    <a class="brand" href="../index.html"><strong>J&amp;S ENGINEERING</strong><small>제이에스 엔지니어링</small></a>
-    <input type="checkbox" id="nav-toggle" class="nav-toggle" aria-label="메뉴 열기" aria-expanded="false" aria-controls="site-nav">
-    <label for="nav-toggle" class="nav-burger" aria-hidden="true"><span></span></label>
-    <nav class="nav" id="site-nav" aria-label="주 메뉴">
-      <ul>
-        <li><a href="../about.html">회사소개</a></li>
-        <li><a href="index.html" aria-current="page">제품소개</a></li>
-        <li><a href="../solutions/index.html">솔루션</a></li>
-        <li><a href="../resources.html">기술자료</a></li>
-        <li><a href="../service.html">서비스</a></li>
-        <li><a href="../contact.html">고객지원</a></li>
-        <li class="nav-cta-m"><a href="../contact.html">견적문의</a></li>
-      </ul>
-    </nav>
-    <div class="site-header__r"><a class="btn btn--sm" href="../contact.html">견적문의</a></div>
-  </div>
-</header>
-
-<main id="main">
-
+---
+title: 제품소개 | 제이에스 엔지니어링
+description: 제이에스 엔지니어링이 공급하는 ESPEC 환경시험·평가 장비 목록. 항온항습기, 열충격 시험기, HAST, 워크인 챔버, 2차전지 시험 장비 등.
+css: pages
+nav: products
+scripts:
+  - js/pages.js
+layout: layouts/base.njk
+---
+{% from "partials/card.njk" import productCard %}
+{#
+  제품소개 목록: 제목 > 제품군 거르기 + 제품 카드 12장 > 그 밖의 라인업 > 견적 띠.
+     제품 카드는 관리자 화면(제품)에서 제품을 추가하면 자동으로 생깁니다. 제품군 버튼은 site/_data/productCategories.js 에서 만듭니다.
+#}
 <!-- 1. 제목 영역 -->
 <section class="b-r-hero pg-head" aria-labelledby="pg-title">
   <div class="wrap b-r-hero__top">
@@ -65,30 +34,17 @@
     </div>
     <div class="filters" role="group" aria-label="제품군으로 거르기" data-filter-for="#prod-list">
       <button type="button" data-filter="all" aria-pressed="true">전체 제품</button>
-      <button type="button" data-filter="th" aria-pressed="false">항온항습기</button>
-      <button type="button" data-filter="rt" aria-pressed="false">급속 온도변화·온도 사이클</button>
-      <button type="button" data-filter="ts" aria-pressed="false">열충격</button>
-      <button type="button" data-filter="hast" aria-pressed="false">HAST</button>
-      <button type="button" data-filter="wi" aria-pressed="false">워크인 챔버</button>
-      <button type="button" data-filter="ov" aria-pressed="false">산업용 오븐</button>
-      <button type="button" data-filter="bt" aria-pressed="false">2차전지 시험</button>
-      <button type="button" data-filter="sc" aria-pressed="false">반도체·전자부품 평가</button>
-      <button type="button" data-filter="vib" aria-pressed="false">진동 시험기</button>
+{% for c in productCategories %}
+      <button type="button" data-filter="{{ c.code }}" aria-pressed="false">{{ c.label }}</button>
+{% endfor %}
     </div>
 
     <div id="prod-list">
       <div class="prod-grid prod-grid--4">
-        <a class="card-prod" data-cat="th" href="platinous-j.html"><div class="crop" style="--s:1.2;--ox:50%;--oy:52%"><img src="../assets/img/hires/platinous-j-lineup.jpg" alt="Platinous J 시리즈 항온항습기" width="1812" height="1359" loading="lazy"></div><div class="card-prod__body"><h3>Platinous J 시리즈</h3><div class="card-prod__type">항온항습기</div><div class="card-prod__temp">-70 ~ +100°C</div></div></a>
-        <a class="card-prod" data-cat="th" href="sh-series.html"><div class="pack"><img src="../assets/img/web/sh-benchtop-mv.png" alt="SH 시리즈 벤치탑 항온항습기" width="405" height="269" loading="lazy"></div><div class="card-prod__body"><h3>SH 시리즈</h3><div class="card-prod__type">벤치탑 항온항습기</div><div class="card-prod__temp">-60 ~ +150°C</div></div></a>
-        <a class="card-prod" data-cat="th" href="mtp-101.html"><div class="pack"><img src="../assets/img/web/mtp-101-news.webp" alt="MTP-101 원디바이스 항온 시험기" width="539" height="381" loading="lazy"></div><div class="card-prod__body"><h3>MTP-101</h3><div class="card-prod__type">원디바이스 항온 시험기</div><div class="card-prod__temp">-30 ~ +150°C</div></div></a>
-        <a class="card-prod" data-cat="rt" href="ar-series.html"><div class="crop" style="--s:1.6;--ox:49%;--oy:52%"><img src="../assets/img/hires/ar-series-pair.jpg" alt="AR 시리즈 급속 온도변화 시험기" width="1714" height="1143" loading="lazy"></div><div class="card-prod__body"><h3>AR 시리즈</h3><div class="card-prod__type">급속 온도변화 시험기</div><div class="card-prod__temp">-70 ~ +180°C</div></div></a>
-        <a class="card-prod" data-cat="rt" href="tcc-series.html"><div class="pack"><img src="../assets/img/web/tcc150-mv.png" alt="TCC 시리즈 온도 사이클 시험기" width="274" height="303" loading="lazy"></div><div class="card-prod__body"><h3>TCC 시리즈</h3><div class="card-prod__type">온도 사이클 시험기</div><div class="card-prod__temp">-70 ~ +180°C</div></div></a>
-        <a class="card-prod" data-cat="ts" href="thermal-shock.html"><div class="crop" style="--s:1.3;--ox:50%;--oy:57%"><img src="../assets/img/hires/tsa-pair.jpg" alt="TSA 시리즈 열충격 시험기" width="2000" height="1501" loading="lazy"></div><div class="card-prod__body"><h3>TSA / TSE / TSD 시리즈</h3><div class="card-prod__type">열충격 시험기</div><div class="card-prod__temp">고온측 최대 +200°C (TSD +205°C)</div></div></a>
-        <a class="card-prod" data-cat="hast" href="hast.html"><div class="crop" style="--s:1.9;--ox:50%;--oy:50%"><img src="../assets/img/hires/hast-ehs-lineup.jpg" alt="EHS 시리즈 HAST 가속수명 시험기" width="1268" height="906" loading="lazy"></div><div class="card-prod__body"><h3>EHS 시리즈</h3><div class="card-prod__type">HAST 가속수명 시험기</div><div class="card-prod__temp">+105 ~ +162.2°C</div></div></a>
-        <a class="card-prod" data-cat="wi" href="walk-in.html"><div class="crop" style="--s:1.1;--ox:50%;--oy:55%"><img src="../assets/img/hires/walk-in-tbe.jpg" alt="Walk-In Chamber E 시리즈 워크인 항온항습실" width="1867" height="1245" loading="lazy"></div><div class="card-prod__body"><h3>Walk-In Chamber E 시리즈</h3><div class="card-prod__type">워크인 챔버 (고발열 서버 시험형 포함)</div><div class="card-prod__temp">-40 ~ +80°C</div></div></a>
-        <a class="card-prod" data-cat="ov" href="industrial-oven.html"><div class="pack"><img src="../assets/img/web/industrial-oven-pvph-mv.png" alt="PH/PV 시리즈 산업용 오븐" width="553" height="304" loading="lazy"></div><div class="card-prod__body"><h3>PH / PV 시리즈</h3><div class="card-prod__type">산업용 오븐</div><div class="card-prod__temp">최대 +200°C (PHH/PVH +300°C)</div></div></a>
-        <a class="card-prod" data-cat="bt" href="battery.html"><div class="pack"><img src="../assets/img/web/advanced-battery-tester-mv.png" alt="Advanced Battery Tester 2차전지 시험 장비" width="390" height="298" loading="lazy"></div><div class="card-prod__body"><h3>2차전지 시험 장비</h3><div class="card-prod__type">충방전 평가, 안전 시험</div><div class="card-prod__temp">-40 ~ +100°C</div></div></a>
-        <a class="card-prod" data-cat="sc" href="semiconductor-evaluation.html"><div class="pack"><img src="../assets/img/web/semicon-ami-mv.png" alt="AMI-SPM 반도체 절연 신뢰성 평가 시스템" width="371" height="293" style="max-width:46%" loading="lazy"><img src="../assets/img/web/semicon-amr-mv.png" alt="AMR-SPM 반도체 도체 저항 평가 시스템" width="306" height="293" style="max-width:46%" loading="lazy"></div><div class="card-prod__body"><h3>AMI-SPM / AMR-SPM</h3><div class="card-prod__type">반도체·전자부품 평가 시스템</div><div class="card-prod__temp">AMR-SPM 1mΩ 수준 저항 변화 검출</div></div></a>
+{# 제품 카드: content/products 의 공개된 제품이 "정렬 순서"대로 자동으로 나옵니다 #}
+{% for prod in products %}
+        {{ productCard(prod, prod | cardOf, prod.category, page.url) }}
+{% endfor %}
         <!-- SHINKEN 진동 시험기: 제품 자료가 없어 상담 카드로만 둡니다 -->
         <a class="card-prod card-prod--consult" data-cat="vib" href="../contact.html?type=consult&amp;item=SHINKEN+진동+시험기"><div class="ph ph--mid" aria-hidden="true"></div><div class="card-prod__body"><h3>SHINKEN 진동 시험기</h3><div class="card-prod__type">진동 시험기</div><div class="card-prod__temp">사양은 문의해 주세요 <span class="tbd">[확인 필요]</span></div></div></a>
       </div>
@@ -127,27 +83,3 @@
     <a class="btn btn--light" href="../contact.html?type=consult">시험 조건으로 상담하기</a>
   </div>
 </section>
-</main>
-
-<!-- 공통 꼬리말 -->
-<footer class="site-footer">
-  <div class="wrap">
-    <div class="footer-grid">
-      <div><div class="footer-brand">J&amp;S ENGINEERING<small>제이에스 엔지니어링</small></div>
-        <p>(주)제이에스 엔지니어링 (J&S Engineering) · 대표이사 정창현<br>1981년부터 ESPEC Corp.의 한국 단독 총대리점입니다.</p>
-        <p>사업자등록번호 <span class="tbd">[확인 필요]</span><br>본사·공장 충남 아산시 둔포면 관대안길 31<br>서울사무소 서울시 강남구 삼성로82길 26 제이에스B/D 3층<br>대표전화 <a href="tel:0255570505">02-557-0505</a> · 팩스 02-557-2253<br>이메일 <span class="tbd">[확인 필요: 이메일]</span></p></div>
-      <div><h4>COMPANY</h4><ul><li><a href="../about.html">회사소개</a></li><li><a href="../network.html">파트너 네트워크</a></li><li><a href="index.html">제품소개</a></li><li><a href="../solutions/index.html">솔루션</a></li></ul></div>
-      <div><h4>SUPPORT</h4><ul><li><a href="../resources.html">기술자료</a></li><li><a href="../service.html">서비스</a></li><li><a href="../contact.html">견적·문의</a></li><li><a href="../news.html">뉴스·공지</a></li></ul></div>
-      <div><h4>LINK</h4><ul><li><a href="../privacy.html">개인정보처리방침</a></li><li><a href="https://www.espec.co.jp/english/" target="_blank" rel="noopener">ESPEC 공식 사이트 (영문, 새 창)</a></li></ul></div>
-    </div>
-    <svg class="footer-mark" viewBox="0 0 1000 80" role="img" aria-label="J&amp;S ENGINEERING"><text x="0" y="70" font-size="76" textLength="1000" lengthAdjust="spacingAndGlyphs">J&amp;S ENGINEERING</text></svg>
-    <div class="footer-legal">
-      <p>ESPEC 및 각 제품명은 ESPEC Corp.의 상표입니다. 제품 정보는 ESPEC 공개 자료를 바탕으로 제이에스 엔지니어링이 정리했습니다.</p>
-      <p>장비 이미지 출처: ESPEC Corp. 공식 웹사이트 및 제품 카탈로그</p>
-    </div>
-  </div>
-</footer>
-<script src="../js/script.js" defer></script>
-<script src="../js/pages.js" defer></script>
-</body>
-</html>
