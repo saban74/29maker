@@ -15,6 +15,16 @@
 .sol-hero__fig .ph { min-height: 0; }
 .sol-hero__fig figcaption { margin-top: var(--sp-2); font-size: var(--fs-caption); }
 
+/* ---------- 산업 장면 사진 상자 (ESPEC 사이트 사진은 작아서 키우지 않고 카드처럼 배치) ----------
+   사진 크기는 style="--mw:최대가로px" 로 정합니다 (원본 가로의 1.2배 이하). */
+.sol-scene { display: flex; flex-direction: column; align-items: center; gap: 12px; margin: 0; padding: 24px; background: #2b2e31; color: rgba(255, 255, 255, .88); }
+.sol-scene img { display: block; width: 100%; max-width: var(--mw, 400px); height: auto; }
+.sol-scene figcaption, .sol-scene p { margin: 0; font-size: var(--fs-caption); line-height: 1.5; text-align: center; }
+.sol-scene--light { background: #e9ebec; color: var(--fg-2); }
+.sol-scene--light img { mix-blend-mode: multiply; }
+.sol-scenes { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: var(--sp-4); margin-top: var(--sp-6); }
+.sol-scenes .sol-scene { justify-content: flex-start; }
+
 /* ---------- 이 산업에서 하는 시험 (2열 목록) ---------- */
 .sol-tests { display: grid; grid-template-columns: 1fr 1fr; column-gap: var(--sp-7); }
 .sol-tests li { min-width: 0; }
@@ -58,7 +68,7 @@ th, td { position: relative; }
 @media (max-width: 900px) {
   .sol-hero__in { grid-template-columns: 1fr; gap: 32px; padding-top: 36px; }
   .sol-hero__fig { justify-self: stretch; max-width: none; }
-  .sol-tests, .sol-std, .sol-service { grid-template-columns: 1fr; }
+  .sol-tests, .sol-std, .sol-service, .sol-scenes { grid-template-columns: 1fr; }
   .sol-service { gap: var(--sp-6); }
 }
 @media (max-width: 600px) {

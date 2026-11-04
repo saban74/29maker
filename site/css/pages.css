@@ -152,6 +152,18 @@
 
 /* ---------- 솔루션 목록 ---------- */
 .ind-card .ph { aspect-ratio: auto; }
+/* 산업 카드 사진 (ESPEC 사이트 사진. 작은 원본이라 카드 크기에서만 쓰고 키우지 않음)
+   ph--photo: 칸을 채우는 사진 / ph--fit: 원본이 작아 위쪽에 맞춰 놓는 사진 / ph--pack: 흰 배경 장비 사진 */
+.ind-card .ph--photo, .ind-card .ph--fit, .ind-card .ph--pack { padding: 0; align-items: stretch; }
+.ind-card .ph--photo img, .ind-card .ph--fit img, .ind-card .ph--pack img { display: block; width: 100%; height: 100%; }
+.ind-card .ph--photo img { object-fit: cover; }
+.ind-card .ph--fit img { object-fit: contain; object-position: 50% 0; }
+.ind-card .ph--pack { background: #e9ebec; }
+.ind-card .ph--pack img { object-fit: contain; padding: 14px 14px 64px; mix-blend-mode: multiply; }
+/* 화면이 좁아 카드가 커지는 구간에서는 가로로 넓은 카드로 (작은 사진이 너무 커지지 않게) */
+@media (max-width: 1180px) {
+  .b-r-industries__grid .ind-card { aspect-ratio: 4 / 3; }
+}
 .b-r-industries__grid--3 { grid-template-columns: repeat(3, 1fr); }
 .b-r-industries__grid--3 .ind-card { aspect-ratio: 4 / 3; }
 .tbl-links a { text-decoration: underline; text-decoration-color: var(--accent); text-underline-offset: 4px; }
@@ -163,7 +175,6 @@
 /* ---------- 화면 크기별 ---------- */
 @media (max-width: 1180px) {
   .prod-grid--4 { grid-template-columns: repeat(3, 1fr); }
-  .b-r-industries__grid--3 { grid-template-columns: repeat(2, 1fr); }
 }
 @media (max-width: 1024px) {
   .two-col, .greet, .loc, .contact-grid { grid-template-columns: 1fr; gap: var(--sp-6); }
