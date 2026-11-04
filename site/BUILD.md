@@ -14,9 +14,8 @@
   - 제품 담당: `site/css/products.css`
   - 솔루션 담당: `site/css/solutions.css`
 - `site/js/script.js`: 디자인 시스템 스크립트(고치지 말 것). 추가 동작이 필요하면 담당별 `site/js/pages.js`, `products.js`, `solutions.js`.
-- `site/js/vendor/model-viewer.min.js`: 3D 뷰어(Apache-2.0).
+- 3D 보기는 2026-11-04 사용자 결정으로 사이트에서 뺐음(CAD 모델이 실사처럼 보이지 않음). 3D 블록과 뷰어는 `design/system/`에만 남아 있음.
 - `site/assets/img/hires/`, `site/assets/img/web/`: 장비 사진(출처 `SOURCES.md`). 원본 가로 1.2배 넘게 키우지 않기.
-- `site/assets/3d/pr-3j.glb`: PR-3J 3D 모델. **작업 컴퓨터에만 있고 저장소에서 제외**(ESPEC 공개 허락 확인 전). 3D 블록은 파일이 없으면 사진으로 대체되므로 그대로 둬도 된다.
 
 ## 공통 머리말·꼬리말
 `design/system/templates/main-a.html`의 `<header class="site-header ...">`와 `<footer class="site-footer">`를 기준으로 모든 페이지에 같은 내용을 넣는다. 링크는 실제 파일로:
@@ -30,7 +29,6 @@
 - **aw**: platinous-j, ar-series, thermal-shock(TSA), hast(EHS), walk-in — 고해상도 회색 배경 사진이 있는 제품. 큰 단어는 제품 계열명(예: PLATINOUS, AR SERIES, TSA, HAST/EHS, WALK-IN). 
 - **r**: sh-series, mtp-101, tcc-series, industrial-oven, battery, semiconductor-evaluation — 작은 웹 사진만 있는 제품.
 - 실제 사이트에는 "스타일 미리보기" 전환 버튼(`style-switch`)을 넣지 않는다(템플릿 주석 참고).
-- 3D 블록(`b-aw-3d`)은 **platinous-j에만** 넣는다(모델이 PR-3J). 다른 제품은 3D 블록 대신 사진 블록.
 
 ## 공통 규칙
 - 사실만. 사양은 `research/espec/products/`, 회사 내용은 `company.md`. 모르는 값은 `[확인 필요]`. 판독 불가 연혁 항목은 쓰지 않는다. 방문자에게 개발자용 문장("수집 자료에 없어" 등)을 보이지 않는다.

@@ -52,7 +52,23 @@
     <img src="assets/img/hires/platinous-j-single-a.jpg" width="1467" height="988" fetchpriority="high" alt="ESPEC Platinous J 항온항습기">
     <h1 class="b-aw-wordcut-hero__h">
       <svg class="b-aw-wordcut-hero__word" viewBox="0 0 1000 160" role="img" aria-label="PLATINOUS J. 제이에스 엔지니어링, ESPEC 한국 단독 총대리점">
-        <text x="0" y="120" font-size="132" textLength="1000" lengthAdjust="spacingAndGlyphs">PLATINOUS</text>
+        <!-- 메탈릭 글자: 위는 밝고 가운데에 어두운 반사선이 지나가는 크롬 느낌의 세로 그라데이션 (사용자 요청) -->
+        <defs>
+          <linearGradient id="hero-metal" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0" stop-color="#dfe3e8"/>
+            <stop offset="0.22" stop-color="#a3aab3"/>
+            <stop offset="0.46" stop-color="#5a616b"/>
+            <stop offset="0.52" stop-color="#2f343b"/>
+            <stop offset="0.6" stop-color="#7d848d"/>
+            <stop offset="0.8" stop-color="#c3c8ce"/>
+            <stop offset="1" stop-color="#666c74"/>
+          </linearGradient>
+          <linearGradient id="hero-metal-edge" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0" stop-color="#ffffff" stop-opacity=".9"/>
+            <stop offset="1" stop-color="#4a4f56" stop-opacity=".9"/>
+          </linearGradient>
+        </defs>
+        <text x="0" y="120" font-size="132" textLength="1000" lengthAdjust="spacingAndGlyphs" style="fill: url(#hero-metal); stroke: url(#hero-metal-edge); stroke-width: 1.1; paint-order: stroke">PLATINOUS</text>
       </svg>
     </h1>
     <img class="b-aw-wordcut-hero__cut" src="assets/img/hires/platinous-j-single-a.jpg" width="1467" height="988" alt="" aria-hidden="true">
@@ -176,7 +192,7 @@
 <!-- 9. 견적 띠 -->
 <section class="blk tone-graphite b-cta" id="quote" aria-labelledby="cta-h">
   <div class="wrap b-cta__in">
-    <div><h2 id="cta-h">시험 조건을 알려 주시면 맞는 장비와 견적을 안내합니다.</h2><p>전화 상담 <span class="tbd">[확인 필요: 번호]</span></p><p class="cta-sub">카탈로그가 필요하시면 <a class="link" href="resources.html">기술자료</a>에서 ESPEC 공식 카탈로그를 보실 수 있습니다.</p></div>
+    <div><h2 id="cta-h">시험 조건을 알려 주시면 맞는 장비와 견적을 안내합니다.</h2><p>전화 상담 <a href="tel:0255570505" style="color:inherit;text-decoration:underline">02-557-0505</a></p><p class="cta-sub">카탈로그가 필요하시면 <a class="link" href="resources.html">기술자료</a>에서 ESPEC 공식 카탈로그를 보실 수 있습니다.</p></div>
     <a class="btn btn--light" href="contact.html">견적문의</a>
   </div>
 </section>
@@ -187,7 +203,7 @@
   <div class="wrap">
     <div class="footer-grid">
       <div><div class="footer-brand">J&amp;S ENGINEERING<small>제이에스 엔지니어링</small></div>
-        <p>(주)제이에스 엔지니어링 (JS Engineering) · 대표이사 정창현<br>1981년부터 ESPEC Corp.의 한국 단독 총대리점입니다.</p>
+        <p>(주)제이에스 엔지니어링 (J&S Engineering) · 대표이사 정창현<br>1981년부터 ESPEC Corp.의 한국 단독 총대리점입니다.</p>
         <p>사업자등록번호 <span class="tbd">[확인 필요]</span><br>본사·공장 충남 아산시 둔포면 관대안길 31<br>서울사무소 서울시 강남구 삼성로82길 26 제이에스B/D 3층<br>대표전화 <a href="tel:0255570505">02-557-0505</a> · 팩스 02-557-2253<br>이메일 <span class="tbd">[확인 필요: 이메일]</span></p></div>
       <div><h4>COMPANY</h4><ul><li><a href="about.html">회사소개</a></li><li><a href="network.html">파트너 네트워크</a></li><li><a href="products/index.html">제품소개</a></li><li><a href="solutions/index.html">솔루션</a></li></ul></div>
       <div><h4>SUPPORT</h4><ul><li><a href="resources.html">기술자료</a></li><li><a href="service.html">서비스</a></li><li><a href="contact.html">견적·문의</a></li><li><a href="news.html">뉴스·공지</a></li></ul></div>

@@ -51,7 +51,7 @@
       <h1 class="b-r-hero__title" id="pg-title">Request<br>a quote</h1>
     </div>
     <div>
-      <p class="b-r-hero__sub"><strong>견적·문의</strong>온라인 접수는 준비 중입니다. 아래 항목을 미리 정리해 두시면 전화·이메일 상담이 빨라집니다. 응답 시간은 <span class="tbd">[확인 필요: 영업일 기준 ○일 이내]</span>입니다.</p>
+      <p class="b-r-hero__sub"><strong>견적·문의</strong>온라인 접수는 준비 중입니다. 아래 항목을 미리 정리해 두시면 전화 상담이 빨라집니다. 응답 시간은 <span class="tbd">[확인 필요: 영업일 기준 ○일 이내]</span>입니다.</p>
     </div>
   </div>
 </section>
@@ -62,10 +62,16 @@
     <h2 class="sr-only" id="form-h">문의 양식</h2>
     <div class="contact-grid">
 
-      <!-- action 이 없는 이유: 접수 방법이 연결되기 전이라 보낼 곳이 없습니다. 연결되면 action 과 method 를 여기에 쓰고 pages.js 의 submit 부분을 고치세요. -->
-      <form class="cform" id="contact-form">
+      <!-- data-endpoints : 문의를 받을 주소들. 비워 두면 "온라인 접수 준비 중" 안내만 나옵니다.
+           주소를 쉼표로 여러 개 쓰면 모두에게 보내고(예: 이메일 받는 곳, 그룹웨어 받는 곳), 하나라도 성공하면 "접수되었습니다"가 나옵니다.
+           예) data-endpoints="https://example.com/mail-hook, https://example.com/groupware-hook"
+           자세한 설명은 site/INTEGRATION.md 를 보세요. -->
+      <form class="cform" id="contact-form" data-endpoints="">
         <!-- 안내·오류 영역 (aria-live): JS 가 없어도 처음부터 보이고, 보내기 버튼을 누르면 JS 가 다시 읽어 줍니다 -->
-        <p class="callout" id="form-notice" aria-live="polite" style="margin-bottom:var(--sp-7)">온라인 문의 접수는 준비 중입니다. 전화·이메일로 문의해 주세요. <span class="tbd">[확인 필요: 연락처]</span> <span class="tbd">[확인 필요: 문의 접수 방법 연결 전]</span></p>
+        <p class="callout" id="form-notice" aria-live="polite" style="margin-bottom:var(--sp-7)">온라인 문의 접수는 준비 중입니다. 대표전화 <a class="link" href="tel:0255570505">02-557-0505</a>로 문의해 주세요. <span class="tbd">[확인 필요: 문의 접수 방법 연결 전]</span></p>
+
+        <!-- 스팸 방지용 숨김 칸: 사람은 보지 못하고 비워 두며, 자동 입력 프로그램이 채우면 JS 가 보내지 않습니다. 지우지 마세요. -->
+        <div class="hp" aria-hidden="true"><label>이 칸은 비워 두세요 <input type="text" name="website" tabindex="-1" autocomplete="off"></label></div>
 
         <fieldset>
           <legend><span>01</span>문의 유형</legend>
@@ -170,19 +176,20 @@
           </div>
         </fieldset>
 
-        <!-- 접수 방법이 연결되면 버튼 문구를 "문의 보내기"로 되돌린다 (메인 감독자) -->
-        <button class="btn" type="submit">입력 내용 확인</button>
+        <!-- 버튼 문구: data-endpoints 가 비어 있으면 "입력 내용 확인", 주소가 있으면 JS 가 "문의 보내기"로 바꿉니다 -->
+        <button class="btn" type="submit" id="form-submit">입력 내용 확인</button>
       </form>
 
       <!-- 옆 상자: 폼을 쓰기 싫은 방문자용 연락처 -->
       <aside class="contact-side" aria-labelledby="side-h">
         <h2 id="side-h">전화·이메일로 문의하기</h2>
         <dl>
-          <dt>전화</dt><dd><span class="tbd">[확인 필요]</span></dd>
-          <dt>이메일</dt><dd><span class="tbd">[확인 필요]</span></dd>
+          <dt>대표전화</dt><dd><a class="link" href="tel:0255570505">02-557-0505</a></dd>
+          <dt>팩스</dt><dd>02-557-2253</dd>
+          <dt>이메일</dt><dd><span class="tbd">[확인 필요: 이메일]</span></dd>
           <dt>업무 시간</dt><dd><span class="tbd">[확인 필요]</span></dd>
         </dl>
-        <p>본사는 충남 아산, 서울 사무소는 삼성동에 있습니다. 주소는 <a class="link" href="about.html#location">오시는 길</a>에서 확인해 주세요.</p>
+        <p>본사·공장은 충남 아산시 둔포면, 서울사무소는 서울 강남구 삼성로, 지사는 대구와 광주에 있습니다. 주소는 <a class="link" href="about.html#location">오시는 길</a>에서 확인해 주세요.</p>
         <p>필요한 카탈로그는 <a class="link" href="resources.html">기술자료</a>에서 ESPEC 공식 사이트로 바로 볼 수 있습니다.</p>
       </aside>
     </div>
@@ -195,7 +202,7 @@
   <div class="wrap">
     <div class="footer-grid">
       <div><div class="footer-brand">J&amp;S ENGINEERING<small>제이에스 엔지니어링</small></div>
-        <p>(주)제이에스 엔지니어링 (JS Engineering) · 대표이사 정창현<br>1981년부터 ESPEC Corp.의 한국 단독 총대리점입니다.</p>
+        <p>(주)제이에스 엔지니어링 (J&S Engineering) · 대표이사 정창현<br>1981년부터 ESPEC Corp.의 한국 단독 총대리점입니다.</p>
         <p>사업자등록번호 <span class="tbd">[확인 필요]</span><br>본사·공장 충남 아산시 둔포면 관대안길 31<br>서울사무소 서울시 강남구 삼성로82길 26 제이에스B/D 3층<br>대표전화 <a href="tel:0255570505">02-557-0505</a> · 팩스 02-557-2253<br>이메일 <span class="tbd">[확인 필요: 이메일]</span></p></div>
       <div><h4>COMPANY</h4><ul><li><a href="about.html">회사소개</a></li><li><a href="network.html">파트너 네트워크</a></li><li><a href="products/index.html">제품소개</a></li><li><a href="solutions/index.html">솔루션</a></li></ul></div>
       <div><h4>SUPPORT</h4><ul><li><a href="resources.html">기술자료</a></li><li><a href="service.html">서비스</a></li><li><a href="contact.html">견적·문의</a></li><li><a href="news.html">뉴스·공지</a></li></ul></div>
