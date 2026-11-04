@@ -1,0 +1,292 @@
+/* A07 apple.com 홈 구조 - 공통 CSS (index / products / about 가 함께 씀) */
+:root{
+  --ground:#fff;
+  --mist:#f5f5f7;
+  --ink:#1d1d1f;
+  --ink2:#515154;
+  --blue:#0066cc;
+  --blue-d:#004f9f;
+  --night:#000;
+  --coal:#161618;
+  --photo:#d9dbdc; /* 제품 사진 배경 회색에 이어지는 배너 바탕 */
+  --font:"Pretendard Variable",Pretendard,-apple-system,"Apple SD Gothic Neo","Noto Sans KR","Malgun Gothic",sans-serif;
+  --pad:clamp(20px,4vw,48px);
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth;scroll-padding-top:104px}
+body{font-family:var(--font);background:var(--mist);color:var(--ink);font-size:17px;line-height:1.5;-webkit-font-smoothing:antialiased;word-break:keep-all;overflow-wrap:break-word}
+img{display:block;max-width:100%;height:auto}
+a{color:inherit;text-decoration:none}
+ol,ul{list-style:none}
+:focus-visible{outline:3px solid var(--blue);outline-offset:3px;border-radius:6px}
+.dark :focus-visible,.night :focus-visible,.final :focus-visible{outline-color:#6cb2ff}
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)}
+.wrap{max-width:1100px;margin:0 auto;padding:0 var(--pad)}
+
+/* 위 메뉴: 얇고 단순 */
+.nav{position:sticky;top:0;z-index:30;background:#fff;height:48px}
+.nav .wrap{max-width:1280px;display:flex;align-items:center;justify-content:space-between;height:48px}
+.logo{font-weight:800;font-size:16px;letter-spacing:-.02em}
+.menu{display:flex;gap:clamp(18px,2.6vw,38px);font-size:14px;color:var(--ink2)}
+.menu a:hover,.menu a[aria-current]{color:var(--ink)}
+.menu a[aria-current]{font-weight:600}
+.menu .q{color:var(--blue);font-weight:600}
+.mnav{display:none;position:relative}
+.mnav summary{list-style:none;cursor:pointer;min-height:44px;display:flex;align-items:center;padding:0 8px;font-weight:600;font-size:15px}
+.mnav summary::-webkit-details-marker{display:none}
+.mnav div{position:absolute;right:0;top:46px;background:#fff;border-radius:14px;padding:8px;min-width:180px;box-shadow:0 12px 32px rgba(0,0,0,.14)}
+.mnav a{display:block;padding:12px 14px}
+
+.promo{background:#fff;text-align:center;font-size:14px;padding:10px var(--pad);min-height:44px;display:flex;align-items:center;justify-content:center}
+.promo span{color:var(--blue);font-weight:600;margin-left:6px}
+.promo a:hover span{text-decoration:underline}
+
+/* 버튼 한 가지: 알약. 채운 것과 윤곽만 있는 것 */
+.acts{display:flex;gap:14px;justify-content:center;flex-wrap:wrap;margin-top:22px}
+.btn{display:inline-flex;align-items:center;justify-content:center;min-height:44px;padding:0 22px;border-radius:999px;background:var(--blue);color:#fff;font-weight:600;font-size:16px;transition:background .2s,color .2s;text-align:center}
+.btn:hover{background:var(--blue-d)}
+.btn.o{background:transparent;color:var(--blue);box-shadow:inset 0 0 0 1.5px var(--blue)}
+.btn.o:hover{background:var(--blue);color:#fff}
+.btn.s{min-height:36px;padding:0 16px;font-size:14px}
+.dark .btn,.night .btn,.final .btn{background:#0a84ff}
+.dark .btn.o,.night .btn.o,.final .btn.o{background:transparent;color:#6cb2ff;box-shadow:inset 0 0 0 1.5px #6cb2ff}
+.dark .btn.o:hover,.night .btn.o:hover,.final .btn.o:hover{background:#6cb2ff;color:#000}
+
+/* 배너: 사진이 배경, 글은 위 가운데. 사진 위쪽 회색이 글 바탕. */
+.banner{position:relative;margin-top:12px;min-height:min(92vh,880px);text-align:center;overflow:hidden;background:var(--photo);color:var(--ink)}
+.banner::before{content:"";position:absolute;inset:0;background-size:cover;background-repeat:no-repeat}
+.bt{position:relative;z-index:1;padding:clamp(40px,6vw,72px) var(--pad) 0}
+.banner h1,.banner h2,.tile h2{font-size:clamp(40px,6vw,80px);font-weight:800;letter-spacing:-.045em;line-height:1.05}
+.banner .one,.tile .one{font-size:clamp(19px,2.3vw,30px);font-weight:500;letter-spacing:-.02em;margin-top:10px;line-height:1.3}
+.b1::before{background-image:url(../../concepts2/assets/hires/platinous-j-lineup.jpg);background-position:center 0}
+.b2{background:#04050a;color:#f5f5f7}
+.b2::before{background-image:url(../../concepts2/assets/hires/walk-in-tbe-dark.jpg);background-position:center bottom}
+.b3::before{background-image:url(../../concepts2/assets/hires/tsa-pair.jpg);background-position:center 22%}
+.b4{background:#dcdee0}
+.b4::before{background-image:url(../../concepts2/assets/hires/hast-ehs-lineup.jpg);background-position:center 0}
+.b5::before{background-image:url(../../concepts2/assets/hires/ar-series-pair.jpg);background-position:center 0}
+.b2.dark .bt{padding-top:clamp(40px,6vw,72px)}
+
+/* 두 장씩 나란히 */
+.pair{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:12px}
+.tile{background:#fff;text-align:center;padding:clamp(40px,5vw,60px) 20px 0;min-height:min(78vh,700px);display:flex;flex-direction:column;overflow:hidden}
+.tile h2{font-size:clamp(32px,3.8vw,52px)}
+.tile .one{font-size:clamp(17px,1.7vw,22px)}
+.tile.night{background:var(--coal);color:#f5f5f7}
+.tile.night .btn{background:#0a84ff}
+.tile.night .btn.o{background:transparent;color:#6cb2ff;box-shadow:inset 0 0 0 1.5px #6cb2ff}
+.pic{margin-top:auto;display:flex;justify-content:center;align-items:flex-end;gap:clamp(8px,3vw,40px);padding-top:28px}
+.pic img{mix-blend-mode:multiply;max-width:48%;width:auto;height:auto;max-height:340px}
+.pic.w{background:#fff;margin-left:-20px;margin-right:-20px;padding:28px 20px 0}
+.pic.w img{max-width:70%}
+.tile:not(.night) .pic:only-child img{max-width:80%}
+
+.company{background:#fff;margin-top:12px;padding:clamp(80px,10vw,140px) 0;text-align:center}
+.company h2{font-size:clamp(32px,5vw,64px);letter-spacing:-.04em;line-height:1.1;font-weight:800}
+.company p{color:var(--ink2);max-width:34em;margin:20px auto 0}
+
+.news{padding:clamp(72px,9vw,120px) 0}
+.news h2{font-size:clamp(28px,3.4vw,44px);letter-spacing:-.03em;font-weight:800}
+.ng{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-top:36px}
+.ng article{background:#fff;border-radius:22px;padding:32px 28px;display:flex;flex-direction:column;min-height:280px}
+.ng time{color:var(--ink2);font-size:14px}
+.ng h3{font-size:22px;letter-spacing:-.025em;line-height:1.3;margin-top:10px;font-weight:700}
+.ng p{color:var(--ink2);margin-top:10px;font-size:16px}
+.lk{color:var(--blue);font-weight:600;margin-top:auto;padding-top:18px}
+.lk:hover{text-decoration:underline}
+
+.final{background:#000;color:#f5f5f7;text-align:center;padding:clamp(90px,11vw,150px) var(--pad);margin-top:12px}
+.final h2{font-size:clamp(36px,6vw,76px);letter-spacing:-.045em;line-height:1.08;font-weight:800}
+.final p:not(.acts){color:#a1a1a6;margin:18px auto 0;max-width:32em}
+
+footer{background:var(--mist);padding:36px 0 40px;font-size:14px;color:var(--ink2)}
+footer p+p{margin-top:8px}
+footer b{color:var(--ink)}
+footer a:hover{color:var(--ink);text-decoration:underline}
+
+/* ============ 하위 페이지 공통 ============ */
+/* 길 표시 */
+.crumb{background:#fff;font-size:14px;color:var(--ink2)}
+.crumb .wrap{max-width:1280px;display:flex;justify-content:space-between;gap:8px 24px;flex-wrap:wrap;padding-top:11px;padding-bottom:11px}
+.crumb a:hover{color:var(--ink);text-decoration:underline}
+.crumb b{color:var(--ink);font-weight:600}
+
+/* 제품 안쪽 메뉴: 위에 붙어 따라옴 (apple 제품 페이지) */
+.sub{position:sticky;top:48px;z-index:20;background:#f5f5f7;margin-top:0}
+.sub .wrap{max-width:1280px;display:flex;align-items:center;justify-content:space-between;min-height:52px;gap:16px}
+.sub strong{font-size:19px;font-weight:700;letter-spacing:-.025em;white-space:nowrap}
+.sub nav{display:flex;align-items:center;gap:clamp(14px,2.2vw,30px);font-size:14px;color:var(--ink2)}
+.sub nav a:hover{color:var(--ink)}
+.sub nav a.btn{color:#fff;margin-left:6px}
+.sub nav a.btn:hover{color:#fff}
+
+/* 제품 머리 배너 */
+.pj{margin-top:0;min-height:min(94vh,900px)}
+.pj::before{background-image:url(../../concepts2/assets/hires/platinous-j-single-a.jpg);background-position:center 82%}
+.pj .tag{display:inline-block;margin-top:16px;font-size:15px;color:var(--ink2)}
+.eco::before{background-image:url(../../concepts2/assets/hires/platinous-j-single-b.jpg);background-position:center 85%}
+.pj,.eco{background:var(--photo)}
+
+/* 섹션 틀: 흰 면 / 검은 면 */
+.blk{background:#fff;margin-top:12px;padding:clamp(72px,9vw,120px) 0}
+.blk.mist{background:var(--mist)}
+.blk.dark{background:#000;color:#f5f5f7}
+.blk.coal{background:var(--coal);color:#f5f5f7}
+.head{text-align:center;max-width:820px;margin:0 auto}
+.head h2{font-size:clamp(32px,4.6vw,56px);font-weight:800;letter-spacing:-.04em;line-height:1.1}
+.head p{font-size:clamp(17px,1.8vw,21px);color:var(--ink2);margin-top:14px;line-height:1.45}
+.dark .head p,.coal .head p{color:#a1a1a6}
+
+/* 핵심 수치 3개 */
+.nums{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-top:48px}
+.nums li{background:var(--mist);border-radius:22px;padding:clamp(28px,4vw,48px) 20px;text-align:center}
+.nums b{display:block;font-size:clamp(34px,4.4vw,60px);font-weight:800;letter-spacing:-.045em;line-height:1.05}
+.nums span{display:block;margin-top:10px;color:var(--ink2);font-size:16px}
+
+/* 용도 */
+.uses{display:grid;grid-template-columns:repeat(5,1fr);gap:12px;margin-top:48px}
+.uses li{background:var(--coal);border-radius:22px;padding:28px 20px;min-height:170px;display:flex;flex-direction:column;justify-content:flex-end}
+.uses b{font-size:22px;letter-spacing:-.03em;line-height:1.25;font-weight:700}
+.uses span{display:block;color:#a1a1a6;font-size:15px;margin-top:8px;line-height:1.4}
+
+/* 특징 타일: 큰 수 + 설명 */
+.feat{min-height:0;padding:clamp(44px,5vw,64px) clamp(24px,4vw,56px);justify-content:center;gap:0}
+.feat .big{font-size:clamp(48px,7vw,96px);font-weight:800;letter-spacing:-.05em;line-height:1}
+.feat h3{font-size:clamp(22px,2.4vw,30px);font-weight:700;letter-spacing:-.03em;margin-top:14px;line-height:1.25}
+.feat p{color:var(--ink2);max-width:26em;margin:12px auto 0}
+.feat small{display:block;margin-top:16px;font-size:14px;color:var(--ink2)}
+.feat.night p,.feat.night small{color:#a1a1a6}
+
+/* 사양 표 */
+.sheet{margin-top:44px;background:var(--mist);border-radius:22px;padding:clamp(8px,2vw,20px)}
+.scroll{overflow-x:auto}
+.scroll:focus-visible{outline-offset:-3px}
+.sheet table{width:100%;border-collapse:collapse;min-width:760px;text-align:left;font-size:16px}
+.sheet th,.sheet td{padding:16px 14px;vertical-align:top}
+.sheet thead th{font-size:14px;font-weight:600;color:var(--ink2);padding-bottom:12px}
+.sheet tbody tr{border-top:1px solid #d2d2d7}
+.sheet tbody th{font-weight:700;letter-spacing:-.02em}
+.sheet td:last-child{text-align:right;white-space:nowrap}
+.sheet .n{display:block;font-weight:400;color:var(--ink2);font-size:14px;margin-top:2px}
+.note{max-width:820px;margin:28px auto 0;text-align:center;color:var(--ink2);font-size:15px}
+.note a{color:var(--blue)}
+.note a:hover{text-decoration:underline}
+.modelpic{margin-top:48px;display:flex;justify-content:center}
+.modelpic img{mix-blend-mode:multiply;max-width:min(760px,100%)}
+
+/* 규격·수상 */
+.awards{display:grid;grid-template-columns:repeat(2,1fr);gap:12px;margin-top:48px}
+.awards li{background:var(--coal);border-radius:22px;padding:30px 28px}
+.awards b{display:block;font-size:24px;font-weight:700;letter-spacing:-.03em;line-height:1.25}
+.awards span{display:block;color:#a1a1a6;margin-top:8px;font-size:16px}
+
+/* 지원 흐름 */
+.flow{display:grid;grid-template-columns:repeat(5,1fr);gap:12px;margin-top:48px;counter-reset:s}
+.flow li{background:var(--mist);border-radius:22px;padding:28px 20px;min-height:190px;counter-increment:s}
+.flow li::before{content:counter(s);display:block;font-size:40px;font-weight:800;letter-spacing:-.04em;color:var(--blue);line-height:1}
+.flow b{display:block;font-size:21px;font-weight:700;letter-spacing:-.03em;margin-top:18px}
+.flow span{display:block;color:var(--ink2);font-size:15px;margin-top:6px}
+
+/* 자료 */
+.docs{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:48px}
+.docs article{background:var(--mist);border-radius:22px;padding:32px 28px;display:flex;flex-direction:column;align-items:flex-start;min-height:230px}
+.docs h3{font-size:24px;letter-spacing:-.03em;font-weight:700;line-height:1.25}
+.docs p{color:var(--ink2);margin-top:8px;font-size:16px}
+.docs .btn{margin-top:auto}
+.docs p+.btn{margin-top:24px}
+
+/* 관련 제품 */
+.trio{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-top:12px}
+.trio .tile{min-height:520px}
+.trio .tile h2{font-size:clamp(28px,3vw,40px)}
+.trio .pic img{max-width:78%}
+
+/* ============ 회사소개 ============ */
+.hero-t{background:#000;color:#f5f5f7;text-align:center;padding:clamp(90px,12vw,170px) var(--pad);margin-top:0}
+.hero-t h1{font-size:clamp(44px,7.4vw,104px);font-weight:800;letter-spacing:-.05em;line-height:1.04}
+.hero-t p{color:#a1a1a6;font-size:clamp(18px,2vw,26px);margin:18px auto 0;max-width:24em;line-height:1.4;letter-spacing:-.02em}
+.stat4{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-top:48px}
+.stat4 li{background:var(--mist);border-radius:22px;padding:34px 20px;text-align:center}
+.stat4 b{display:block;font-size:clamp(40px,5.2vw,72px);font-weight:800;letter-spacing:-.05em;line-height:1}
+.stat4 span{display:block;margin-top:12px;color:var(--ink2);font-size:16px;line-height:1.4}
+.greet{max-width:760px;margin:0 auto}
+.greet .draft{display:inline-block;background:var(--mist);color:var(--ink2);font-size:14px;border-radius:999px;padding:4px 14px;margin-bottom:22px}
+.greet h2{font-size:clamp(32px,4.6vw,56px);font-weight:800;letter-spacing:-.04em;line-height:1.1}
+.greet blockquote{margin-top:30px}
+.greet blockquote p{font-size:clamp(18px,1.8vw,21px);line-height:1.7;color:var(--ink)}
+.greet blockquote p+p{margin-top:16px}
+.greet .sign{margin-top:32px;font-size:16px;color:var(--ink2)}
+.greet .sign b{display:block;color:var(--ink);font-size:22px;letter-spacing:-.03em;margin-top:2px}
+.coop{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-top:48px}
+.coop li{background:var(--coal);border-radius:22px;padding:28px 22px;min-height:200px}
+.coop b{display:block;font-size:22px;font-weight:700;letter-spacing:-.03em;line-height:1.25}
+.coop span{display:block;color:#a1a1a6;font-size:15px;margin-top:10px}
+.eras{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:12px}
+.era{background:#fff;padding:clamp(36px,5vw,64px) clamp(24px,4vw,56px)}
+.era h3{font-size:clamp(34px,4.4vw,56px);font-weight:800;letter-spacing:-.045em;line-height:1}
+.era ul{margin-top:28px}
+.era li{display:grid;grid-template-columns:64px 1fr;gap:12px;padding:10px 0;font-size:17px;line-height:1.45}
+.era li b{color:var(--blue);font-weight:700;font-variant-numeric:tabular-nums}
+.era.now{background:var(--coal);color:#f5f5f7}
+.era.now li b{color:#6cb2ff}
+.names{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-top:48px}
+.names section{background:#fff;border-radius:22px;padding:30px 26px}
+.names h3{font-size:22px;font-weight:700;letter-spacing:-.03em}
+.names p{margin-top:14px;font-size:20px;font-weight:600;letter-spacing:-.02em;line-height:1.7;color:var(--ink)}
+.names p span{display:inline-block;margin-right:16px}
+.names small{display:block;margin-top:10px;color:var(--ink2);font-size:14px}
+.visit{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:48px}
+.visit .info{background:var(--mist);border-radius:22px;padding:32px 28px}
+.visit dl{display:grid;grid-template-columns:90px 1fr;gap:14px 12px}
+.visit dt{color:var(--ink2)}
+.visit dd{font-weight:600}
+.visit .info p{margin-top:22px;color:var(--ink2);font-size:15px}
+.ph{background:#d9dbdc;border-radius:22px;min-height:320px;display:flex;align-items:center;justify-content:center;text-align:center;color:var(--ink2);padding:24px}
+
+/* 움직임: 첫 배너의 글만 천천히 나타남 */
+@media (prefers-reduced-motion:no-preference){
+  .b1 .bt,.pj .bt,.hero-t>*{animation:rise 1s cubic-bezier(.2,.7,.2,1) both .1s}
+  @keyframes rise{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:none}}
+}
+@media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}.btn{transition:none}}
+
+@media (max-width:1100px){
+  .uses,.flow{grid-template-columns:repeat(3,1fr)}
+  .coop,.stat4{grid-template-columns:repeat(2,1fr)}
+}
+@media (max-width:980px){
+  .menu{display:none}
+  .mnav{display:block}
+  .sub nav a:not(.btn){display:none}
+  .trio{grid-template-columns:1fr}
+  .trio .tile{min-height:0}
+  .names{grid-template-columns:1fr}
+}
+/* 휴대폰: 배너는 글을 위에, 사진을 아래쪽 절반에 */
+@media (max-width:760px){
+  body{font-size:16px}
+  .banner{min-height:640px}
+  .banner::before{inset:auto 0 0 0;height:56%;background-size:cover;-webkit-mask-image:linear-gradient(to bottom,transparent,#000 22%);mask-image:linear-gradient(to bottom,transparent,#000 22%)}
+  .b1::before{background-position:center 40%}
+  .b3::before{background-position:center 55%}
+  .b4::before{background-position:center 40%}
+  .b5::before{background-position:center 45%}
+  .b2::before{background-position:center 60%}
+  .pj::before{background-position:center 70%}
+  .eco::before{background-position:center 75%}
+  .pj{min-height:680px}
+  .pair,.eras,.docs,.awards,.visit{grid-template-columns:1fr}
+  .tile{min-height:0;padding-bottom:0}
+  .pic img{max-height:240px}
+  .ng{grid-template-columns:1fr}
+  .ng article{min-height:0}
+  .nums{grid-template-columns:1fr}
+  .uses,.flow,.coop,.stat4{grid-template-columns:1fr 1fr}
+  .uses li,.flow li,.coop li{min-height:0}
+  .sub strong{font-size:17px}
+  .crumb .wrap{font-size:13px}
+  .era li{grid-template-columns:54px 1fr}
+}
+@media (max-width:430px){
+  .uses,.flow,.coop{grid-template-columns:1fr}
+}
