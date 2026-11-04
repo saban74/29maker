@@ -1,0 +1,75 @@
+/* =====================================================================
+   제이에스 엔지니어링 디자인 토큰 (AW05 + R06 통합)
+   색, 글꼴, 글자 크기, 간격, 움직임 값을 여기 한 곳에서만 정합니다.
+   블록(components.css)은 이 값만 가져다 쓰므로, 여기를 바꾸면 사이트 전체가 같이 바뀝니다.
+   ===================================================================== */
+:root {
+  /* ---------- 색: 무채색 + 황동 한 점 ---------- */
+  --studio-50:  #f7f7f7;   /* 흰 면 (카드, 흰 구역) */
+  --studio-100: #e8e8e8;   /* 기본 바탕 (스튜디오 회색) */
+  --studio-150: #dcdcdc;   /* 표 줄무늬, 한 단계 어두운 면 */
+  --studio-200: #c9c9c9;   /* 은회색 면 (큰 글자 구역) */
+  --silver-400: #a9abad;   /* R 첫 화면 면 */
+  --silver-500: #8a8a8a;   /* 큰 글자 줄의 가장 연한 단계 */
+  --graphite-600: #5d5f63; /* 큰 글자 중간 단계 */
+  --graphite-700: #43484d; /* 보조 글자 (밝은 바탕 위) */
+  --graphite-800: #2b2e31;
+  --graphite-900: #0e0f10; /* 어두운 띠 */
+  --ink: #0b0c0d;          /* 제일 진한 글자 */
+  --white: #ffffff;
+  --line: #bfc3c6;                       /* 밝은 바탕의 가는 선 */
+  --line-dark: rgba(255, 255, 255, .2);  /* 어두운 바탕의 가는 선 */
+  --brass: #9a7a3c;        /* 강조색 1개. 링크 밑줄, 포커스, 현재 위치 표시에만 */
+  --brass-light: #c9a566;  /* 어두운 바탕에서 쓰는 황동 */
+  --tbd-bg: #fff3d6;       /* [확인 필요] 표시 (노란색은 이것 하나뿐) */
+  --tbd-fg: #7a5200;
+
+  /* ---------- 글꼴 ---------- */
+  --font-body: "Pretendard Variable", Pretendard, -apple-system, "Noto Sans KR", "Apple SD Gothic Neo", "Malgun Gothic", system-ui, sans-serif;
+  --font-display: "Michroma", "Pretendard Variable", Pretendard, sans-serif; /* 영문·숫자 큰 글자 전용 */
+
+  /* ---------- 글자 크기 (본문 16px 이상, 설명 글자 14px) ---------- */
+  --fs-caption: 14px;
+  --fs-body: 16px;
+  --fs-lead: 18px;
+  --fs-h3: clamp(18px, 1.6vw, 22px);
+  --fs-h2: clamp(28px, 3.1vw, 44px);          /* R 계열 구역 제목 */
+  --fs-hero-en: clamp(20px, 3vw, 42px);       /* R 첫 화면 영문 큰 문구 (Michroma) */
+  --fs-num: clamp(32px, 4.4vw, 64px);         /* 숫자 줄 */
+  --fs-word: clamp(34px, 5.6vw, 92px);        /* 큰 글자 목록의 단어 */
+  --fs-big: clamp(40px, 8vw, 128px);          /* AW 구역 제목 */
+  --fs-giant: clamp(52px, 11vw, 176px);       /* AW 가장 큰 글자 */
+  --lh-body: 1.7;
+  --lh-tight: 1.05;
+  --ls-ko-display: -.045em;   /* 한글 큰 글자 자간 */
+  --ls-en: .02em;             /* 영문 Michroma 자간 */
+
+  /* ---------- 간격 (4px 단위) ---------- */
+  --sp-1: 4px;  --sp-2: 8px;   --sp-3: 12px;  --sp-4: 16px;
+  --sp-5: 24px; --sp-6: 32px;  --sp-7: 48px;  --sp-8: 64px;
+  --sp-9: 96px; --sp-10: 128px;
+  --pad: clamp(20px, 3.6vw, 56px);        /* 화면 좌우 여백 (두 스타일 공통) */
+  --sec-y: clamp(72px, 9vw, 140px);       /* 블록 위아래 여백 */
+  --maxw: 1440px;                         /* 내용 최대 폭 */
+  --head-h: 76px;                         /* 머리말 높이 (휴대폰 62px) */
+
+  /* ---------- 모양 ---------- */
+  --r: 0px;                               /* 모서리: 모두 사각 */
+  --photo-bw: grayscale(1) contrast(1.05);/* R 블록의 흑백 사진 처리 */
+
+  /* ---------- 움직임 ---------- */
+  --ease: cubic-bezier(.2, .7, .2, 1);
+  --dur-fast: .2s;
+  --dur: .3s;
+  --dur-slow: .6s;
+  --dur-hero: 1.8s;
+
+  /* ---------- 겹침 순서 ---------- */
+  --z-tabs: 90;
+  --z-header: 100;
+  --z-switch: 200;
+}
+
+@media (max-width: 760px) {
+  :root { --head-h: 62px; }
+}

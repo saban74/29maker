@@ -1,0 +1,769 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>부품 견본집 | 제이에스 엔지니어링 디자인 시스템</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Michroma&display=swap">
+<link rel="stylesheet" href="tokens.css">
+<link rel="stylesheet" href="components.css">
+<script type="module" src="vendor/model-viewer.min.js"></script>
+<style>
+/* 이 견본집 페이지에서만 쓰는 꾸밈 (cat- 로 시작). 사이트 본 페이지에는 필요 없습니다. */
+.cat-top { padding: 56px 0 32px; }
+.cat-top h1 { font-size: clamp(32px, 4vw, 56px); font-weight: 800; letter-spacing: -.04em; line-height: 1.1; }
+.cat-top p { margin-top: 14px; max-width: 760px; color: var(--graphite-700); }
+.cat-index { display: flex; flex-wrap: wrap; gap: 8px 18px; margin-top: 24px; font-size: 15px; }
+.cat-index a { text-decoration: underline; text-decoration-color: var(--brass); text-underline-offset: 5px; }
+.cat-group { margin: 64px 0 0; padding: 14px 0; border-top: 3px solid var(--ink); font-size: 22px; font-weight: 800; }
+.cat-item { margin-top: 40px; }
+.cat-head { display: grid; grid-template-columns: 1fr 2fr; gap: 24px; align-items: start; padding-bottom: 16px; }
+.cat-head h2 { font-family: var(--font-display); font-weight: 400; font-size: 20px; line-height: 1.3; word-break: break-all; }
+.cat-head dl { display: grid; grid-template-columns: auto 1fr; gap: 4px 16px; font-size: 15px; }
+.cat-head dt { font-weight: 700; }
+.cat-head dd { color: var(--graphite-700); }
+.cat-stage { position: relative; isolation: isolate; background: #fff; }
+.cat-stage .site-header, .cat-stage .b-product-tabs { position: relative; top: auto; margin-bottom: 0; }
+.cat-stage .b-aw-wordcut-hero { height: min(100svh, 760px); }
+.cat-code { margin-top: 10px; background: var(--graphite-900); color: #e8e8e8; }
+.cat-code summary { cursor: pointer; padding: 12px 16px; font-weight: 600; }
+.cat-code pre { margin: 0; padding: 0 16px 16px; max-height: 420px; overflow: auto; font: 13px/1.55 ui-monospace, Menlo, Consolas, monospace; white-space: pre; }
+.cat-code button { margin: 0 16px 12px; padding: 8px 16px; background: #e8e9ea; color: var(--ink); font-weight: 700; font-size: 14px; }
+.cat-code summary:focus-visible, .cat-code button:focus-visible { outline-color: var(--brass-light); }
+.cat-swatches { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 12px; margin-top: 20px; }
+.cat-sw { font-size: 14px; }
+.cat-sw i { display: block; height: 64px; border: 1px solid var(--line); }
+.cat-sw b { display: block; margin-top: 6px; }
+.cat-type { display: grid; gap: 14px; margin-top: 28px; }
+.cat-type p { margin: 0; }
+.cat-space { display: flex; flex-wrap: wrap; align-items: flex-end; gap: 14px; margin-top: 24px; font-size: 13px; }
+.cat-space i { display: block; background: var(--graphite-600); margin-bottom: 4px; width: 24px; }
+@media (max-width: 760px) { .cat-head { grid-template-columns: 1fr; } }
+</style>
+</head>
+<body>
+<a class="skip" href="#cat-main">본문 바로가기</a>
+<main id="cat-main">
+
+<div class="wrap cat-top">
+  <h1>부품 견본집</h1>
+  <p>제이에스 엔지니어링 홈페이지를 만드는 블록(섹션 부품) 모음입니다. AW05(큰 글자, 장식 없는 회색)와 R06(흑백 사진, 가는 선)에서 온 블록이 같은 토큰을 써서 섞어도 한 사이트처럼 보입니다. 각 블록 아래의 "HTML 보기"를 열어 복사해 붙이면 됩니다. 복사한 코드는 templates 폴더 기준 경로입니다.</p>
+  <p>3D 블록은 model-viewer 를 쓰기 때문에 이 파일을 더블클릭해서 열면 사진으로 보이고, 웹 서버로 열고 3D 파일이 있을 때만 3D 로 움직입니다.</p>
+  <nav class="cat-index" aria-label="블록 바로가기">
+    <a href="#tokens">토큰</a><a href="#c-header">머리말·꼬리말</a><a href="#c-ui">버튼·링크·라벨</a>
+    <a href="#c-aw-wordcut-hero">b-aw-wordcut-hero</a><a href="#c-r-hero">b-r-hero</a><a href="#c-r-shortcuts">b-r-shortcuts</a><a href="#c-r-industries">b-r-industries</a><a href="#c-aw-bigword-list">b-aw-bigword-list</a><a href="#c-r-products">b-r-products</a><a href="#c-aw-numbers">b-aw-numbers</a><a href="#c-aw-exploded">b-aw-exploded</a><a href="#c-r-stats">b-r-stats</a><a href="#c-r-partners">b-r-partners</a><a href="#c-r-news">b-r-news</a><a href="#c-cta">b-cta</a>
+    <a href="#c-aw-product-hero">b-aw-product-hero</a><a href="#c-r-product-hero">b-r-product-hero</a><a href="#c-product-tabs">b-product-tabs</a><a href="#c-product-kpi">b-product-kpi</a><a href="#c-product-overview">b-product-overview</a><a href="#c-aw-3d">b-aw-3d</a><a href="#c-product-features">b-product-features</a><a href="#c-product-spec">b-product-spec</a><a href="#c-product-awards">b-product-awards</a><a href="#c-product-support">b-product-support</a><a href="#c-product-docs">b-product-docs</a><a href="#c-product-related">b-product-related</a>
+  </nav>
+</div>
+
+<!-- ============ 토큰 ============ -->
+<div class="wrap" id="tokens">
+  <h2 class="cat-group">토큰 (tokens.css)</h2>
+  <div class="cat-swatches" aria-label="색상 견본">
+    <div class="cat-sw"><i style="background:#f7f7f7"></i><b>--studio-50</b>#f7f7f7 흰 면</div>
+    <div class="cat-sw"><i style="background:#e8e8e8"></i><b>--studio-100</b>#e8e8e8 기본 바탕</div>
+    <div class="cat-sw"><i style="background:#dcdcdc"></i><b>--studio-150</b>#dcdcdc 줄무늬</div>
+    <div class="cat-sw"><i style="background:#c9c9c9"></i><b>--studio-200</b>#c9c9c9 은회색 면</div>
+    <div class="cat-sw"><i style="background:#a9abad"></i><b>--silver-400</b>#a9abad 첫 화면 면</div>
+    <div class="cat-sw"><i style="background:#8a8a8a"></i><b>--silver-500</b>#8a8a8a</div>
+    <div class="cat-sw"><i style="background:#5d5f63"></i><b>--graphite-600</b>#5d5f63</div>
+    <div class="cat-sw"><i style="background:#43484d"></i><b>--graphite-700</b>#43484d 보조 글자</div>
+    <div class="cat-sw"><i style="background:#0e0f10"></i><b>--graphite-900</b>#0e0f10 어두운 띠</div>
+    <div class="cat-sw"><i style="background:#0b0c0d"></i><b>--ink</b>#0b0c0d 글자</div>
+    <div class="cat-sw"><i style="background:#9a7a3c"></i><b>--brass</b>#9a7a3c 강조 한 점</div>
+    <div class="cat-sw"><i style="background:#fff3d6"></i><b>--tbd-bg</b>#fff3d6 [확인 필요]</div>
+  </div>
+  <div class="cat-type">
+    <p style="font-family:var(--font-display);font-size:clamp(28px,4vw,56px);letter-spacing:.02em">PLATINOUS J 1981 -70°C</p>
+    <p style="font-size:clamp(28px,4vw,56px);font-weight:800;letter-spacing:-.045em;line-height:1.1">항온항습기 45년, 신뢰성 시험</p>
+    <p>본문은 Pretendard 16px, 줄 간격 1.7. 설명 글자는 14px. 영문·숫자 큰 글자는 Michroma.</p>
+  </div>
+  <div class="cat-space" aria-label="간격 단계">
+    <span><i style="height:4px"></i>sp-1 4</span><span><i style="height:8px"></i>sp-2 8</span><span><i style="height:12px"></i>sp-3 12</span><span><i style="height:16px"></i>sp-4 16</span><span><i style="height:24px"></i>sp-5 24</span><span><i style="height:32px"></i>sp-6 32</span><span><i style="height:48px"></i>sp-7 48</span><span><i style="height:64px"></i>sp-8 64</span><span><i style="height:96px"></i>sp-9 96</span><span><i style="height:128px"></i>sp-10 128</span>
+  </div>
+</div>
+
+<!-- ============ 공통 부품 ============ -->
+<div class="wrap">
+  <h2 class="cat-group">공통 부품 (두 스타일이 같이 씀)</h2>
+
+  <section class="cat-item" id="c-header">
+    <div class="cat-head"><h2>site-header · site-footer</h2><dl><dt>출처</dt><dd>R06 머리말 + AW05 투명 겹침 + AW05 꼬리말의 큰 워드마크</dd><dt>쓰는 곳</dt><dd>모든 페이지</dd><dt>변형</dt><dd>첫 화면이 AW 이면 <code>site-header--overlay</code> 추가(투명, 스크롤하면 불투명)</dd></dl></div>
+    <div class="cat-stage" data-block>
+<header class="site-header">
+  <div class="wrap site-header__in">
+    <a class="brand" href="main-a.html"><strong>J&amp;S ENGINEERING</strong><small>제이에스 엔지니어링</small></a>
+    <input type="checkbox" id="nav-toggle" class="nav-toggle" aria-label="메뉴 열기">
+    <label for="nav-toggle" class="nav-burger" aria-hidden="true"><span></span></label>
+    <nav class="nav" aria-label="주 메뉴">
+      <ul>
+        <li><a href="#">회사소개</a></li>
+        <li><a href="product.html" aria-current="page">제품소개</a></li>
+        <li><a href="#">솔루션</a></li>
+        <li><a href="#">기술자료</a></li>
+        <li><a href="#">서비스</a></li>
+        <li><a href="#">고객지원</a></li>
+        <li class="nav-cta-m"><a href="#quote">견적문의</a></li>
+      </ul>
+    </nav>
+    <div class="site-header__r"><a class="btn btn--sm" href="#quote">견적문의</a></div>
+  </div>
+</header>
+<footer class="site-footer">
+  <div class="wrap">
+    <div class="footer-grid">
+      <div><div class="footer-brand">J&amp;S ENGINEERING<small>제이에스 엔지니어링</small></div>
+        <p>(주)제이에스 엔지니어링 · 대표이사 정창현<br>1981년부터 ESPEC Corp.의 한국 단독 총대리점입니다.</p>
+        <p>사업자등록번호 <span class="tbd">[확인 필요]</span><br>주소 <span class="tbd">[확인 필요]</span><br>전화 <span class="tbd">[확인 필요]</span> · 이메일 <span class="tbd">[확인 필요]</span></p></div>
+      <div><h4>COMPANY</h4><ul><li><a href="#">회사소개</a></li><li><a href="#">파트너 네트워크</a></li><li><a href="#">제품소개</a></li><li><a href="#">솔루션</a></li></ul></div>
+      <div><h4>SUPPORT</h4><ul><li><a href="#">기술자료</a></li><li><a href="#">서비스</a></li><li><a href="#quote">견적·문의</a></li><li><a href="#">뉴스·공지</a></li></ul></div>
+      <div><h4>LINK</h4><ul><li><a href="#">개인정보처리방침</a></li><li><a href="https://www.espec.co.jp/english/" target="_blank" rel="noopener">ESPEC 공식 사이트 (영문, 새 창)</a></li></ul></div>
+    </div>
+    <svg class="footer-mark" viewBox="0 0 1000 80" role="img" aria-label="J&amp;S ENGINEERING"><text x="0" y="70" font-size="76" textLength="1000" lengthAdjust="spacingAndGlyphs">J&amp;S ENGINEERING</text></svg>
+    <div class="footer-legal">
+      <p>ESPEC 및 각 제품명은 ESPEC Corp.의 상표입니다. 제품 정보는 ESPEC 공개 자료를 바탕으로 제이에스 엔지니어링이 정리했습니다.</p>
+      <p>장비 이미지 출처: ESPEC Corp. 공식 웹사이트 및 제품 카탈로그</p>
+    </div>
+  </div>
+</footer>
+    </div>
+  </section>
+
+  <section class="cat-item" id="c-ui">
+    <div class="cat-head"><h2>btn · link · label · chip · tbd · crumbs · ph</h2><dl><dt>출처</dt><dd>두 스타일 공통(모서리 사각, 채움 한 가지, 링크는 황동 밑줄)</dd><dt>쓰는 곳</dt><dd>어디서나. 톤 클래스 안에서 색이 자동으로 바뀜</dd></dl></div>
+    <div class="cat-stage" data-block>
+<div>
+  <section class="blk tone-studio"><div class="wrap">
+    <div class="btn-row"><a class="btn" href="#">견적문의</a><a class="btn btn--ghost" href="#">카탈로그 보기</a><a class="btn btn--sm" href="#">작은 버튼</a><a class="link" href="#">밑줄 링크</a><a class="link-arrow" href="#">화살표 링크</a></div>
+    <p style="margin-top:24px"><span class="label">Label</span> <span class="chip">2025 굿디자인상</span> <span class="chip chip--gray">신제품</span> <span class="tbd">[확인 필요]</span></p>
+    <nav class="crumbs" aria-label="현재 위치" style="margin-top:24px"><div class="wrap"><ol><li><a href="#">Home</a></li><li><a href="#">제품소개</a></li><li><b aria-current="page">Platinous J</b></li></ol><span>ESPEC 한국 단독 총대리점 <b>제이에스 엔지니어링</b></span></div></nav>
+    <div class="ph" style="margin-top:24px;height:120px">제품 사진 들어갈 자리</div>
+  </div></section>
+  <section class="blk tone-graphite"><div class="wrap"><div class="btn-row"><a class="btn btn--light" href="#">견적문의</a><a class="btn btn--ghost" href="#">어두운 바탕의 빈 버튼</a><a class="link-arrow" href="#">어두운 바탕 링크</a><span class="tbd">[확인 필요]</span></div></div></section>
+</div>
+    </div>
+  </section>
+</div>
+
+<!-- ============ 메인 블록 ============ -->
+<div class="wrap">
+  <h2 class="cat-group">메인용 블록</h2>
+</div>
+<div class="wrap">
+  <section class="cat-item" id="c-aw-wordcut-hero">
+    <div class="cat-head"><h2>b-aw-wordcut-hero</h2><dl><dt>출처</dt><dd>AW05 첫 화면</dd><dt>쓰는 곳</dt><dd>메인 A안 첫 화면. 머리말은 overlay 형태</dd><dt>조정</dt><dd>장비 위치가 어긋나면 <code>--cut</code>, <code>--word-top</code> 값만 고친다</dd></dl></div>
+  </section>
+</div>
+<div class="cat-stage" data-block>
+<section class="b-aw-wordcut-hero" aria-label="첫 화면">
+  <div class="b-aw-wordcut-hero__stage">
+    <img src="../concepts2/assets/hires/platinous-j-single-a.jpg" width="1467" height="988" alt="ESPEC Platinous J 항온항습기">
+    <h1 class="b-aw-wordcut-hero__h">
+      <svg class="b-aw-wordcut-hero__word" viewBox="0 0 1000 160" role="img" aria-label="PLATINOUS J. 제이에스 엔지니어링, ESPEC 한국 단독 총대리점">
+        <text x="0" y="120" font-size="132" textLength="1000" lengthAdjust="spacingAndGlyphs">PLATINOUS</text>
+      </svg>
+    </h1>
+    <img class="b-aw-wordcut-hero__cut" src="../concepts2/assets/hires/platinous-j-single-a.jpg" width="1467" height="988" alt="" aria-hidden="true">
+  </div>
+  <p class="b-aw-wordcut-hero__note"><b>제이에스 엔지니어링, ESPEC 한국 단독 총대리점</b>1981년 설립, 올해로 45년. Platinous J 항온항습기를 비롯한 환경시험 장비를 공급합니다.</p>
+  <div class="b-aw-wordcut-hero__acts">
+    <a class="btn" href="#quote">견적문의</a>
+    <a class="link" href="#products">대표 제품 보기</a>
+  </div>
+</section>
+</div>
+
+<div class="wrap">
+  <section class="cat-item" id="c-r-hero">
+    <div class="cat-head"><h2>b-r-hero</h2><dl><dt>출처</dt><dd>R06 첫 화면</dd><dt>쓰는 곳</dt><dd>메인 B안 첫 화면. 바로 아래 b-r-shortcuts 를 붙이는 것을 권장</dd></dl></div>
+  </section>
+</div>
+<div class="cat-stage" data-block>
+<section class="b-r-hero" aria-labelledby="c-hero-title">
+  <div class="wrap b-r-hero__top">
+    <div>
+      <p class="b-r-hero__tag">ESPEC 한국 단독 총대리점 &nbsp;/&nbsp; SINCE 1981</p>
+      <h1 class="b-r-hero__title" id="c-hero-title">Reliability for<br>a better tomorrow</h1>
+    </div>
+    <div>
+      <p class="b-r-hero__sub">1981년부터 45년, 신뢰성 시험의 기준을 제이에스 엔지니어링이 함께 만듭니다.</p>
+      <div class="b-r-hero__cta"><a class="btn" href="#quote">견적문의</a><a class="link-arrow" href="#">회사소개 보기</a></div>
+    </div>
+  </div>
+  <figure class="b-r-hero__photo">
+    <img src="../concepts2/assets/hires/platinous-j-lineup.jpg" alt="ESPEC Platinous J 시리즈 항온항습기 4대가 나란히 서 있는 모습" width="1812" height="1359">
+    <figcaption><div class="wrap"><strong>Platinous J 시리즈</strong><span>항온항습기 · -70 ~ +100°C</span></div></figcaption>
+  </figure>
+</section>
+</div>
+
+<div class="wrap">
+  <section class="cat-item" id="c-r-shortcuts">
+    <div class="cat-head"><h2>b-r-shortcuts</h2><dl><dt>출처</dt><dd>R06 (01~04 바로가기)</dd><dt>쓰는 곳</dt><dd>메인 첫 화면 바로 아래</dd></dl></div>
+  </section>
+</div>
+<div class="cat-stage" data-block>
+<nav class="b-r-shortcuts" aria-label="바로가기">
+  <div class="wrap b-r-shortcuts__in">
+    <a href="#"><span class="b-r-shortcuts__no">01</span><strong>환경시험기</strong><small>Environmental Test Chamber</small><span class="b-r-shortcuts__arrow" aria-hidden="true">→</span></a>
+    <a href="#"><span class="b-r-shortcuts__no">02</span><strong>신뢰성 솔루션</strong><small>Reliability Test Solution</small><span class="b-r-shortcuts__arrow" aria-hidden="true">→</span></a>
+    <a href="#"><span class="b-r-shortcuts__no">03</span><strong>글로벌 파트너십</strong><small>Global Partnership</small><span class="b-r-shortcuts__arrow" aria-hidden="true">→</span></a>
+    <a href="#"><span class="b-r-shortcuts__no">04</span><strong>기술지원 서비스</strong><small>Technical Support</small><span class="b-r-shortcuts__arrow" aria-hidden="true">→</span></a>
+  </div>
+</nav>
+</div>
+
+<div class="wrap">
+  <section class="cat-item" id="c-r-industries">
+    <div class="cat-head"><h2>b-r-industries</h2><dl><dt>출처</dt><dd>R06 산업 카드</dd><dt>쓰는 곳</dt><dd>메인. 산업 사진은 아직 없어 회색 자리표시</dd><dt>톤</dt><dd>studio 또는 white</dd></dl></div>
+  </section>
+</div>
+<div class="cat-stage" data-block>
+<section class="blk tone-studio b-r-industries" aria-labelledby="c-solution-h">
+  <div class="wrap">
+    <div class="sec-head">
+      <div><span class="label">Solution</span><h2 class="h-sec" id="c-solution-h">산업별 신뢰성 솔루션</h2><p>장비 이름을 몰라도 괜찮습니다. 산업 분야를 고르면 필요한 시험과 맞는 장비를 보여 드립니다.</p></div>
+      <a class="link-arrow" href="#">전체 솔루션 보기</a>
+    </div>
+    <div class="b-r-industries__grid">
+      <a class="ind-card" href="#"><div class="ph ph--dark">반도체 웨이퍼 사진 들어갈 자리</div><div class="ind-card__txt"><div><strong>반도체</strong><small>Semiconductor</small></div><span aria-hidden="true">→</span></div></a>
+      <a class="ind-card" href="#"><div class="ph ph--mid">전자 기판(PCB) 사진 들어갈 자리</div><div class="ind-card__txt"><div><strong>전기전자</strong><small>Electronics</small></div><span aria-hidden="true">→</span></div></a>
+      <a class="ind-card" href="#"><div class="ph ph--dark">배터리 셀·팩 사진 들어갈 자리</div><div class="ind-card__txt"><div><strong>배터리</strong><small>Battery</small></div><span aria-hidden="true">→</span></div></a>
+      <a class="ind-card" href="#"><div class="ph ph--mid">자동차 차체 사진 들어갈 자리</div><div class="ind-card__txt"><div><strong>자동차·모빌리티</strong><small>Automotive</small></div><span aria-hidden="true">→</span></div></a>
+      <a class="ind-card" href="#"><div class="ph ph--dark">항공기 사진 들어갈 자리</div><div class="ind-card__txt"><div><strong>항공우주·방산</strong><small>Aerospace &amp; Defense</small></div><span aria-hidden="true">→</span></div></a>
+      <a class="ind-card" href="#"><div class="ph ph--mid">소재 시편 사진 들어갈 자리</div><div class="ind-card__txt"><div><strong>소재·기타</strong><small>Materials</small></div><span aria-hidden="true">→</span></div></a>
+    </div>
+  </div>
+</section>
+</div>
+
+<div class="wrap">
+  <section class="cat-item" id="c-aw-bigword-list">
+    <div class="cat-head"><h2>b-aw-bigword-list</h2><dl><dt>출처</dt><dd>AW05 큰 글자 줄 + 부분 사진</dd><dt>쓰는 곳</dt><dd>메인(제품군 목록). 단어에 올리거나 키보드로 이동하면 오른쪽 사진이 바뀜(script.js). 스크립트가 없으면 첫 사진만 보임</dd><dt>톤</dt><dd>studio</dd></dl></div>
+  </section>
+</div>
+<div class="cat-stage" data-block>
+<section class="blk tone-studio b-aw-bigword-list" aria-labelledby="c-bw-h">
+  <div class="wrap">
+    <h2 class="h-sec" id="c-bw-h">어떤 시험이 필요하세요?</h2>
+    <div class="b-aw-bigword-list__grid">
+      <ul class="bw-list">
+        <li><a class="is-on" href="#"><span class="bw-word">항온항습기</span><span class="bw-meta">-70 ~ +100°C</span></a></li>
+        <li><a href="#"><span class="bw-word">열충격 시험기</span><span class="bw-meta">-77 ~ +200°C <span class="tbd">[확인 필요]</span></span></a></li>
+        <li><a href="#"><span class="bw-word">급속 온도변화 시험기</span><span class="bw-meta">-70 ~ +180°C</span></a></li>
+        <li><a href="#"><span class="bw-word">HAST 시험기</span><span class="bw-meta">+105 ~ +162.2°C</span></a></li>
+        <li><a href="#"><span class="bw-word">워크인 챔버</span><span class="bw-meta">-40 ~ +80°C</span></a></li>
+      </ul>
+      <div class="bw-photo">
+        <img class="is-on" src="../concepts2/assets/hires/platinous-j-lineup.jpg" width="1812" height="1359" alt="Platinous J 항온항습기 네 대">
+        <img src="../concepts2/assets/hires/tsa-pair.jpg" width="2000" height="1500" alt="TSA 열충격 시험기 두 대" loading="lazy">
+        <img src="../concepts2/assets/hires/ar-series-pair.jpg" width="1714" height="1143" alt="AR 시리즈 급속 온도변화 시험기" loading="lazy">
+        <img src="../concepts2/assets/hires/hast-ehs-lineup.jpg" width="1268" height="905" alt="EHS 시리즈 HAST 시험기" loading="lazy">
+        <img src="../concepts2/assets/hires/walk-in-tbe.jpg" width="1867" height="1245" alt="워크인 항온항습실" loading="lazy">
+      </div>
+    </div>
+  </div>
+</section>
+</div>
+
+<div class="wrap">
+  <section class="cat-item" id="c-r-products">
+    <div class="cat-head"><h2>b-r-products</h2><dl><dt>출처</dt><dd>R06 제품 카드 줄 (card-prod 는 b-product-related 와 공용)</dd><dt>쓰는 곳</dt><dd>메인</dd><dt>톤</dt><dd>studio 또는 white</dd></dl></div>
+  </section>
+</div>
+<div class="cat-stage" data-block>
+<section class="blk tone-white b-r-products" aria-labelledby="c-products-h">
+  <div class="wrap">
+    <div class="sec-head">
+      <div><span class="label">Products</span><h2 class="h-sec" id="c-products-h">대표 제품</h2></div>
+      <a class="link-arrow" href="#">전체 제품 보기</a>
+    </div>
+    <div class="prod-grid">
+      <a class="card-prod" href="#"><div class="crop" style="--s:1.2;--ox:50%;--oy:52%"><img src="../concepts2/assets/hires/platinous-j-lineup.jpg" alt="Platinous J 시리즈" width="1812" height="1359"></div><div class="card-prod__body"><h3>Platinous J 시리즈</h3><div class="card-prod__type">항온항습기</div><div class="card-prod__temp">-70 ~ +100°C</div></div></a>
+      <a class="card-prod" href="#"><div class="crop" style="--s:1.3;--ox:50%;--oy:57%"><img src="../concepts2/assets/hires/tsa-pair.jpg" alt="TSA 시리즈 열충격 시험기" width="2000" height="1500"></div><div class="card-prod__body"><h3>TSA 시리즈</h3><div class="card-prod__type">열충격 시험기</div><div class="card-prod__temp">-77 ~ +200°C <span class="tbd">[확인 필요]</span></div></div></a>
+      <a class="card-prod" href="#"><div class="pack"><img src="../concepts2/assets/web/tcc150-mv.png" alt="TCC 시리즈 온도 사이클 시험기" width="270" height="300"></div><div class="card-prod__body"><h3>TCC 시리즈</h3><div class="card-prod__type">온도 사이클 시험기</div><div class="card-prod__temp">-70 ~ +180°C</div></div></a>
+      <a class="card-prod" href="#"><div class="crop" style="--s:1.6;--ox:49%;--oy:52%"><img src="../concepts2/assets/hires/ar-series-pair.jpg" alt="AR 시리즈 급속 온도변화 시험기" width="1714" height="1143"></div><div class="card-prod__body"><h3>AR 시리즈</h3><div class="card-prod__type">급속 온도변화 시험기</div><div class="card-prod__temp">-70 ~ +180°C</div></div></a>
+      <a class="card-prod" href="#"><div class="crop" style="--s:1.9;--ox:50%;--oy:50%"><img src="../concepts2/assets/hires/hast-ehs-lineup.jpg" alt="EHS 시리즈 HAST 가속수명 시험기" width="1268" height="905"></div><div class="card-prod__body"><h3>EHS 시리즈</h3><div class="card-prod__type">HAST 가속수명 시험기</div><div class="card-prod__temp">+105 ~ +162.2°C</div></div></a>
+    </div>
+  </div>
+</section>
+</div>
+
+<div class="wrap">
+  <section class="cat-item" id="c-aw-numbers">
+    <div class="cat-head"><h2>b-aw-numbers</h2><dl><dt>출처</dt><dd>AW05 큰 글자 네 줄(-70°C / +200°C / 98%rh / 45년)</dd><dt>쓰는 곳</dt><dd>메인. 큰 글자 줄은 장식이라 aria-hidden, 같은 내용을 옆 목록(dl)이 글로 담는다</dd><dt>톤</dt><dd>silver</dd></dl></div>
+  </section>
+</div>
+<div class="cat-stage" data-block>
+<section class="blk tone-silver b-aw-numbers" aria-labelledby="c-num-h">
+  <div class="wrap b-aw-numbers__in">
+    <div class="lines" aria-hidden="true">
+      <span class="l1">-70<span class="u">°C</span></span>
+      <span class="l2">+200<span class="u">°C</span></span>
+      <span class="l3">98<span class="u">%rh</span></span>
+      <span class="l4">45년</span>
+    </div>
+    <img class="b-aw-numbers__float float-photo" src="../concepts2/assets/hires/tsa-pair.jpg" width="2000" height="1500" alt="열충격 시험기 TSA 두 대">
+    <div class="micro">
+      <h2 id="c-num-h">숫자로 보는 시험 범위</h2>
+      <dl>
+        <dt>-70°C</dt><dd>초저온 항온항습기, 열충격 시험기 저온측</dd>
+        <dt>+200°C</dt><dd>TSA 열충격 시험기 고온측</dd>
+        <dt>98%rh</dt><dd>Platinous J 최대 습도</dd>
+        <dt>45년</dt><dd>1981년 설립, ESPEC 한국 총대리점</dd>
+      </dl>
+    </div>
+  </div>
+</section>
+</div>
+
+<div class="wrap">
+  <section class="cat-item" id="c-aw-exploded">
+    <div class="cat-head"><h2>b-aw-exploded</h2><dl><dt>출처</dt><dd>AW05 부분 사진 가로 분해도</dd><dt>쓰는 곳</dt><dd>메인 / 제품 소개 사이의 어두운 쉬어가기</dd><dt>톤</dt><dd>graphite</dd></dl></div>
+  </section>
+</div>
+<div class="cat-stage" data-block>
+<section class="blk tone-graphite b-aw-exploded" aria-labelledby="c-ex-h">
+  <div class="wrap">
+    <h2 class="h-big" id="c-ex-h">장비를 열어 보면</h2>
+    <ul class="specimens" tabindex="0" aria-label="장비 부분 사진 목록, 좌우로 밀어서 보기">
+      <li><img src="../concepts2/assets/hires/tsa-cutaway-dark.jpg" width="482" height="353" alt="열충격 시험기의 고온조, 시험부, 저온조 단면도"><span>열충격 시험기 단면</span></li>
+      <li><img src="../concepts2/assets/hires/hast-ehs-dark.jpg" width="209" height="350" alt="HAST 시험기 EHS 시리즈"><span>HAST 시험기 EHS</span></li>
+      <li><img src="../concepts2/assets/hires/hast-ehs-door-detail.jpg" width="381" height="255" alt="HAST 시험기 문을 열어 본 시험조 내부"><span>HAST 시험조 내부</span></li>
+      <li><img src="../concepts2/assets/hires/walk-in-tbe-open.jpg" width="702" height="431" alt="문을 연 워크인 챔버"><span>워크인 챔버 내부</span></li>
+    </ul>
+    <div class="micro"><p>시험 조건, 시료 크기, 규격에 맞는 장비를 함께 고릅니다. 한국어 상담부터 설치, A/S까지 한곳에서 맡습니다.</p></div>
+  </div>
+</section>
+</div>
+
+<div class="wrap">
+  <section class="cat-item" id="c-r-stats">
+    <div class="cat-head"><h2>b-r-stats</h2><dl><dt>출처</dt><dd>R06 숫자 줄</dd><dt>쓰는 곳</dt><dd>메인(회사 소개 요약). 수치는 [확인 필요] 칸을 채워 쓴다</dd><dt>톤</dt><dd>graphite</dd></dl></div>
+  </section>
+</div>
+<div class="cat-stage" data-block>
+<section class="blk tone-graphite b-r-stats" aria-labelledby="c-about-h">
+  <div class="wrap">
+    <div class="b-r-stats__head">
+      <span class="label">About Us</span>
+      <h2 class="h-sec" id="c-about-h">1981년부터, ESPEC 장비의 한국 공식 창구</h2>
+      <p>제이에스 엔지니어링은 1981년 설립과 함께 ESPEC(당시 TABAI)과 한국 총판 계약을 맺고, 45년 동안 국내 산업 현장에 환경시험 장비를 공급해 왔습니다.</p>
+    </div>
+    <div class="b-r-stats__row">
+      <div class="stat"><strong>1981</strong><span>설립 · ESPEC 한국 총판 계약</span></div>
+      <div class="stat"><strong>45년</strong><span>업력 (2026년 기준)</span></div>
+      <div class="stat"><strong>연 3~4회</strong><span>ESPEC 연구진 국내 세미나·기술 강연</span></div>
+      <div class="stat"><strong><span class="tbd" style="font-size:20px;margin:0">[확인 필요]</span></strong><span>공개 가능한 납품 대수·고객사 수</span></div>
+    </div>
+    <div class="b-r-stats__foot"><a class="link-arrow" href="#">회사소개 보기</a></div>
+  </div>
+</section>
+</div>
+
+<div class="wrap">
+  <section class="cat-item" id="c-r-partners">
+    <div class="cat-head"><h2>b-r-partners</h2><dl><dt>출처</dt><dd>R06 파트너</dd><dt>쓰는 곳</dt><dd>메인, 회사소개. 국내 거래처 로고는 사용 허락 확인 전이라 넣지 않음</dd></dl></div>
+  </section>
+</div>
+<div class="cat-stage" data-block>
+<section class="blk tone-studio b-r-partners" aria-labelledby="c-partner-h">
+  <div class="wrap">
+    <div class="sec-head">
+      <div><span class="label">Partnership</span><h2 class="h-sec" id="c-partner-h">45년을 함께해 온 파트너</h2></div>
+      <a class="link-arrow" href="#">파트너 네트워크 보기</a>
+    </div>
+    <div class="partner-grid">
+      <div class="partner-card"><small>JAPAN</small><h3>ESPEC</h3><p>환경시험기기. 1981년 한국 총판 대리점 계약, 1994년 항온기 기술 제휴.</p></div>
+      <div class="partner-card"><small>JAPAN <span class="tbd">[확인 필요: 국가]</span></small><h3>SHINKEN</h3><p>진동 시험기. 1981년 한국 대리점 계약.</p></div>
+    </div>
+    <p class="src-note" style="margin-top:18px">국내 거래처 로고 띠는 각 회사의 사용 허락을 확인하기 전까지 표시하지 않습니다. <span class="tbd">[확인 필요]</span></p>
+  </div>
+</section>
+</div>
+
+<div class="wrap">
+  <section class="cat-item" id="c-r-news">
+    <div class="cat-head"><h2>b-r-news</h2><dl><dt>출처</dt><dd>R06 뉴스 카드 3장</dd><dt>쓰는 곳</dt><dd>메인</dd><dt>톤</dt><dd>white</dd></dl></div>
+  </section>
+</div>
+<div class="cat-stage" data-block>
+<section class="blk tone-white b-r-news" aria-labelledby="c-news-h">
+  <div class="wrap">
+    <div class="sec-head"><div><span class="label">News</span><h2 class="h-sec" id="c-news-h">최신 소식</h2></div><a class="link-arrow" href="#">뉴스 전체 보기</a></div>
+    <div class="news-grid">
+      <a class="news-card" href="#"><time datetime="2026-10-26">2026.10.26</time> <span class="chip chip--gray">신제품</span><h3>원디바이스 항온 시험기 MTP-101, 2026 굿디자인상 수상</h3><div class="pack"><img src="../concepts2/assets/web/mtp-101-news.webp" alt="ESPEC MTP-101 원디바이스 항온 시험기" width="540" height="380"></div></a>
+      <a class="news-card" href="#"><time datetime="2026-08-28">2026.08.28</time> <span class="chip chip--gray">신제품</span><h3>AI 반도체 패키지용 평가 시스템 AMR-SPM·AMI-SPM 출시</h3><div class="pack"><img src="../concepts2/assets/web/semicon-ami-mv.png" alt="AMI-SPM" width="370" height="300" style="max-width:46%"><img src="../concepts2/assets/web/semicon-amr-mv.png" alt="AMR-SPM" width="310" height="300" style="max-width:46%"></div></a>
+      <a class="news-card" href="#"><time datetime="2026-02-04">2026.02.04</time> <span class="chip chip--gray">신제품</span><h3>AI 서버 시험용 고발열 워크인 항온항습실 출시</h3><div class="crop" style="--s:1.15;--ox:55%;--oy:55%"><img src="../concepts2/assets/hires/walk-in-tbe-side-door.jpg" alt="워크인 항온항습실" width="1615" height="1076"></div></a>
+    </div>
+  </div>
+</section>
+</div>
+
+<div class="wrap">
+  <section class="cat-item" id="c-cta">
+    <div class="cat-head"><h2>b-cta</h2><dl><dt>출처</dt><dd>R06 견적 띠 + AW05 큰 글자 제목</dd><dt>쓰는 곳</dt><dd>모든 페이지 꼬리말 바로 위. id="quote" 를 달아 견적문의 버튼이 여기로 오게 한다</dd></dl></div>
+  </section>
+</div>
+<div class="cat-stage" data-block>
+<section class="blk tone-graphite b-cta" id="quote" aria-labelledby="c-cta-h">
+  <div class="wrap b-cta__in">
+    <div><h2 id="c-cta-h">시험 조건을 알려 주시면 맞는 장비와 견적을 안내합니다.</h2><p>전화 상담 <span class="tbd">[확인 필요: 번호]</span></p></div>
+    <a class="btn btn--light" href="#">견적문의</a>
+  </div>
+</section>
+</div>
+
+<!-- ============ 제품 상세 블록 ============ -->
+<div class="wrap">
+  <h2 class="cat-group">제품 상세용 블록</h2>
+  <section class="cat-item" id="c-aw-product-hero">
+    <div class="cat-head"><h2>b-aw-product-hero</h2><dl><dt>출처</dt><dd>AW05 제품 첫 화면 (b-aw-wordcut-hero + 경로 + 버튼 3개)</dd><dt>쓰는 곳</dt><dd>제품 상세 첫 화면 ①. body data-hero="aw"</dd></dl></div>
+  </section>
+</div>
+<div class="cat-stage" data-block>
+<section class="b-aw-wordcut-hero b-aw-product-hero" aria-label="제품 첫 화면">
+  <div class="b-aw-wordcut-hero__crumb">
+    <p>Home &gt; 제품소개 &gt; 항온항습기 &gt; Platinous J</p>
+    <p>ESPEC 한국 단독 총대리점 제이에스 엔지니어링</p>
+  </div>
+  <div class="b-aw-wordcut-hero__stage">
+    <img src="../concepts2/assets/hires/platinous-j-single-a.jpg" width="1467" height="988" alt="ESPEC Platinous J 항온항습기">
+    <h1 class="b-aw-wordcut-hero__h">
+      <svg class="b-aw-wordcut-hero__word" viewBox="0 0 1000 160" role="img" aria-label="PLATINOUS J 항온(항습)기">
+        <text x="0" y="120" font-size="132" textLength="1000" lengthAdjust="spacingAndGlyphs">PLATINOUS</text>
+      </svg>
+    </h1>
+    <img class="b-aw-wordcut-hero__cut" src="../concepts2/assets/hires/platinous-j-single-a.jpg" width="1467" height="988" alt="" aria-hidden="true">
+  </div>
+  <p class="b-aw-wordcut-hero__note"><b>Platinous J 항온(항습)기</b>온도와 습도를 함께 걸어 신뢰성을 확인하는 ESPEC 대표 시리즈. 2025 굿디자인상(ECO형).</p>
+  <div class="b-aw-wordcut-hero__acts">
+    <a class="btn" href="#quote">견적문의</a>
+    <a class="link" href="#docs">카탈로그 보기</a>
+    <a class="link" href="#docs">사양서 요청</a>
+  </div>
+</section>
+</div>
+
+<div class="wrap">
+  <section class="cat-item" id="c-r-product-hero">
+    <div class="cat-head"><h2>b-r-product-hero</h2><dl><dt>출처</dt><dd>R06 제품 상세 첫 화면 (갤러리 + 핵심 수치 + 체크 목록 + 버튼)</dd><dt>쓰는 곳</dt><dd>제품 상세 첫 화면 ②. body data-hero="r". 썸네일을 누르면 큰 사진이 바뀜</dd></dl></div>
+  </section>
+</div>
+<div class="cat-stage" data-block>
+<div class="b-r-product-hero">
+  <nav class="crumbs" aria-label="현재 위치">
+    <div class="wrap">
+      <ol><li><a href="#">Home</a></li><li><a href="#">제품소개</a></li><li><a href="#">항온항습기</a></li><li><b aria-current="page">Platinous J</b></li></ol>
+      <span>ESPEC 한국 단독 총대리점 <b>제이에스 엔지니어링</b></span>
+    </div>
+  </nav>
+  <section class="tone-studio b-r-product-hero__pdp" aria-labelledby="pdp-title">
+    <div class="wrap pdp__grid">
+      <div class="pdp__gallery">
+        <div class="pdp__main"><img id="main-photo" src="../concepts2/assets/hires/platinous-j-lineup.jpg" alt="ESPEC Platinous J 시리즈 항온항습기 4대가 나란히 서 있는 모습" width="1812" height="1359"></div>
+        <div class="pdp__thumbs" role="group" aria-label="제품 사진 고르기">
+          <button type="button" aria-pressed="true" data-src="../concepts2/assets/hires/platinous-j-lineup.jpg" data-alt="ESPEC Platinous J 시리즈 항온항습기 4대가 나란히 서 있는 모습"><img src="../concepts2/assets/hires/platinous-j-lineup.jpg" alt="라인업 사진 보기" width="1812" height="1359"></button>
+          <button type="button" aria-pressed="false" data-src="../concepts2/assets/hires/platinous-j-single-a.jpg" data-alt="ESPEC Platinous J ECO 항온항습기 1대"><img src="../concepts2/assets/hires/platinous-j-single-a.jpg" alt="단품 사진 A 보기" width="1467" height="988"></button>
+          <button type="button" aria-pressed="false" data-src="../concepts2/assets/hires/platinous-j-single-b.jpg" data-alt="ESPEC Platinous J 항온항습기 1대, 다른 각도"><img src="../concepts2/assets/hires/platinous-j-single-b.jpg" alt="단품 사진 B 보기" width="1467" height="988"></button>
+        </div>
+        <p class="src-note" style="margin-top:12px">제품 사진은 ESPEC 공식 자료입니다. 컨트롤러 화면 등 확대 사진 <span class="tbd">[확인 필요]</span></p>
+      </div>
+      <div class="pdp__info">
+        <span class="chip">2025 굿디자인상 (ECO형)</span>
+        <h1 class="pdp__name" id="pdp-title">Platinous J Series</h1>
+        <p class="pdp__type">항온항습기</p>
+        <p class="pdp__lead">온도, 습도, 보관, 성능 평가, 배터리 충방전까지. 다양한 신뢰성 시험을 한 시리즈로 폭넓게 맡는 ESPEC 대표 항온항습기입니다.</p>
+        <div class="keynums" role="group" aria-label="핵심 수치">
+          <div><strong>-70~+100°C</strong><span>온도 범위 (모델별)</span></div>
+          <div><strong>20~98%rh</strong><span>습도 범위</span></div>
+          <div><strong>120~800L</strong><span>내용적</span></div>
+        </div>
+        <ul class="checks">
+          <li>ECO 형: 0°C 이하 운전에서 최대 70% 에너지 절감 (PL-4J-ECO 기준)</li>
+          <li>저 GWP 냉매 R-449A 선택 가능, GWP 3920에서 1397로 64% 감소</li>
+          <li>냉각·가열 능력을 최소로 제어하는 Smart R&amp;D System (일본 특허 5514787)</li>
+          <li>옵션으로 +150/+180°C까지 확장 가능 (모델별 상이)</li>
+          <li>3년 보증 표기 (카탈로그 표지)</li>
+        </ul>
+        <div class="btn-row">
+          <a class="btn" href="#quote">견적문의</a>
+          <a class="btn btn--ghost" href="#docs">카탈로그 보기</a>
+          <a class="btn btn--ghost" href="#docs">사양서 요청</a>
+        </div>
+      </div>
+    </div>
+  </section>
+</div>
+</div>
+
+<div class="wrap">
+  <section class="cat-item" id="c-product-tabs">
+    <div class="cat-head"><h2>b-product-tabs</h2><dl><dt>출처</dt><dd>R06 탭 줄 + AW05 황동 밑줄</dd><dt>쓰는 곳</dt><dd>제품 상세 첫 화면 바로 아래. 스크롤하면 머리말 밑에 붙고, 지금 보는 구역 탭에 밑줄 (script.js). href 는 아래 블록의 id 와 맞춘다</dd></dl></div>
+  </section>
+</div>
+<div class="cat-stage" data-block>
+<nav class="b-product-tabs tone-graphite" aria-label="제품 안내 목차">
+  <div class="wrap"><ul>
+    <li><a href="#overview">개요</a></li>
+    <li><a href="#viewer3d">3D 보기</a></li>
+    <li><a href="#features">특징</a></li>
+    <li><a href="#specs">주요 사양</a></li>
+    <li><a href="#awards">규격·수상</a></li>
+    <li><a href="#support">지원</a></li>
+    <li><a href="#docs">자료</a></li>
+    <li><a href="#related">관련 제품</a></li>
+  </ul></div>
+</nav>
+</div>
+
+<div class="wrap">
+  <section class="cat-item" id="c-product-kpi">
+    <div class="cat-head"><h2>b-product-kpi</h2><dl><dt>출처</dt><dd>AW05 핵심 수치 큰 글자</dd><dt>쓰는 곳</dt><dd>제품 상세. AW 첫 화면 때만 보이게 <code>only-aw</code> 를 붙임(R 첫 화면은 핵심 수치가 이미 있음)</dd><dt>톤</dt><dd>silver</dd></dl></div>
+  </section>
+</div>
+<div class="cat-stage" data-block>
+<section class="blk tone-silver b-product-kpi only-aw" aria-labelledby="kpi-h">
+  <div class="wrap b-product-kpi__in">
+    <h2 id="kpi-h">핵심 수치 (모델에 따라 다릅니다)</h2>
+    <div class="b-product-kpi__box">
+      <div class="lines" aria-hidden="true">
+        <span class="l1">-70~+100<span class="u">°C</span></span>
+        <span class="l2">20~98<span class="u">%rh</span></span>
+        <span class="l3">120~800L</span>
+      </div>
+    </div>
+    <div class="micro">
+      <dl>
+        <dt>온도</dt><dd>-70 ~ +100°C. 모델에 따라 -20, -40, -70°C까지 내려갑니다.</dd>
+        <dt>습도</dt><dd>20 ~ 98%rh. 저습형은 5%rh부터, 고온형은 40%rh부터.</dd>
+        <dt>용량</dt><dd>120 ~ 800L. 요청 시 816L, 1000L 제작.</dd>
+      </dl>
+    </div>
+  </div>
+</section>
+</div>
+
+<div class="wrap">
+  <section class="cat-item" id="c-product-overview">
+    <div class="cat-head"><h2>b-product-overview</h2><dl><dt>출처</dt><dd>R06 용도 목록 + AW05 "사진이 뒤의 큰 글자를 가린다"</dd><dt>쓰는 곳</dt><dd>제품 상세 개요 (id="overview")</dd><dt>톤</dt><dd>studio</dd></dl></div>
+  </section>
+</div>
+<div class="cat-stage" data-block>
+<section class="blk tone-studio b-product-overview" id="overview" aria-labelledby="ov-h">
+  <div class="wrap">
+    <h2 class="h-big" id="ov-h">이런 시험에 씁니다</h2>
+    <div class="b-product-overview__grid">
+      <div>
+        <ul class="use-list">
+          <li><strong>온도·습도 시험</strong>저온에서 고온, 저습에서 고습까지 조건을 바꿔 가며 제품의 변화를 확인합니다.</li>
+          <li><strong>보관 시험</strong>정해진 조건에 제품을 오래 두고 상태가 어떻게 달라지는지 봅니다.</li>
+          <li><strong>성능 평가</strong>온도와 습도가 정해진 환경에서 제품이 제대로 동작하는지 확인합니다.</li>
+          <li><strong>배터리 충방전</strong>오래 돌리는 시험에는 에너지를 아끼는 ECO 형이 알맞습니다.</li>
+        </ul>
+        <div class="tags" aria-label="어울리는 산업"><a href="#">반도체</a><a href="#">전기전자</a><a href="#">배터리</a><a href="#">자동차·모빌리티</a></div>
+        <p class="src-note" style="margin-top:14px">산업 분류는 제이에스 엔지니어링 솔루션 구분입니다. 산업별 적합 모델 안내 <span class="tbd">[확인 필요]</span></p>
+      </div>
+      <figure class="line-fig">
+        <svg class="bg-word" viewBox="0 0 1000 170" aria-hidden="true"><text x="0" y="132" font-size="150" textLength="1000" lengthAdjust="spacingAndGlyphs">J SERIES</text></svg>
+        <img class="float-photo" src="../concepts2/assets/hires/platinous-j-lineup.jpg" width="1812" height="1359" alt="Platinous J 시리즈 장비 네 대">
+      </figure>
+    </div>
+  </div>
+</section>
+</div>
+
+<div class="wrap">
+  <section class="cat-item" id="c-aw-3d">
+    <div class="cat-head"><h2>b-aw-3d</h2><dl><dt>출처</dt><dd>AW05 계열(새 블록). Google model-viewer</dd><dt>쓰는 곳</dt><dd>제품 상세 (id="viewer3d"). 3D 파일 assets/3d/pr-3j.glb 가 없거나 스크립트가 실패하면 "3D 모델 준비 중" + 정면 사진</dd><dt>주의</dt><dd>웹 서버로 열어야 3D 가 동작. ESPEC 3D 모델은 공개 허락 확인 전이라 저장소에 올리지 않음</dd></dl></div>
+  </section>
+</div>
+<div class="cat-stage" data-block>
+<section class="blk tone-silver b-aw-3d" id="viewer3d" aria-labelledby="v3d-h">
+  <div class="wrap b-aw-3d__grid">
+    <div class="b-aw-3d__text">
+      <h2 class="h-big" id="v3d-h">돌려서 보기</h2>
+      <p>PR-3J (-20 ~ +100°C, 20 ~ 98%rh, 408L). 끌어서 돌리고, 두 손가락이나 스크롤로 확대합니다.</p>
+      <button type="button" class="btn btn--ghost btn--sm" data-3d-rotate aria-pressed="true" disabled>자동 회전 끄기</button>
+      <p class="note"><span class="tbd">[확인 필요]</span> ESPEC 3D 모델은 공개 허락을 확인하기 전이라, 이 파일은 작업 컴퓨터에서만 보입니다. 파일이 없으면 정면 사진이 대신 보입니다.</p>
+    </div>
+    <div class="b-aw-3d__stage" data-state="fallback" data-model="assets/3d/pr-3j.glb">
+      <img class="b-aw-3d__photo" src="../concepts2/assets/hires/platinous-j-single-a.jpg" width="1467" height="988" alt="Platinous J 항온항습기 정면 사진">
+      <model-viewer alt="ESPEC PR-3J 항온항습기 3D 모델" camera-controls auto-rotate auto-rotate-delay="1500" interaction-prompt="none" shadow-intensity="0.6" environment-image="neutral" exposure="1" touch-action="pan-y"></model-viewer>
+      <p class="b-aw-3d__status" role="status"><span class="st-fallback">3D 모델 준비 중 · 정면 사진을 보여 드립니다</span><span class="st-loading">3D 모델을 불러오는 중</span></p>
+    </div>
+  </div>
+</section>
+</div>
+
+<div class="wrap">
+  <section class="cat-item" id="c-product-features">
+    <div class="cat-head"><h2>b-product-features</h2><dl><dt>출처</dt><dd>AW05 큰 수치(기본) / R06 카드(<code>b-product-features--cards</code>)</dd><dt>쓰는 곳</dt><dd>제품 상세 특징. 기본은 graphite, 카드형은 studio 톤으로</dd></dl></div>
+  </section>
+</div>
+<div class="cat-stage" data-block>
+<section class="blk tone-graphite b-product-features" id="features" aria-labelledby="ft-h">
+  <div class="wrap">
+    <h2 class="h-big" id="ft-h">특징</h2>
+    <ul class="facts">
+      <li><b>70%</b><h3>ECO형은 전기를 덜 씁니다</h3><p>0°C 이하 운전에서 표준 J 시리즈보다 최대 70% 에너지 절감(PL-4J-ECO 기준). 배터리 충방전, 보관처럼 오래 도는 시험에 맞습니다.</p></li>
+      <li><b>64%</b><h3>낮은 GWP 냉매를 고를 수 있습니다</h3><p>R-449A는 GWP가 R-404A의 3920에서 1397로 64% 줄어듭니다. PR, PL, PSL, PCR, PU, PG에서 요청 시 선택.</p></li>
+      <li><b>특허</b><h3>Smart R&amp;D System</h3><p>냉각과 가열 능력을 필요한 만큼만 제어해 온도와 습도를 정밀하게 맞춥니다. 일본 특허 5514787.</p></li>
+      <li><b>3년</b><h3>보증 표기</h3><p>카탈로그 표지에 3년 보증이 적혀 있습니다. 국내 적용 조건은 <span class="tbd">[확인 필요]</span></p></li>
+    </ul>
+  </div>
+</section>
+</div>
+<div class="cat-stage" data-block style="margin-top:24px">
+<section class="blk tone-studio b-product-features b-product-features--cards" aria-labelledby="ft2-h">
+  <div class="wrap">
+    <h2 class="h-big" id="ft2-h">특징 (카드형)</h2>
+    <ul class="facts">
+      <li><b>오래 돌릴수록 커지는 절감</b><h3>PL-4J-ECO 기준</h3><p>ECO 형은 0°C 이하 운전에서 표준 J 시리즈보다 전력을 최대 70% 덜 씁니다. 장시간 연속 시험에 맞습니다.</p></li>
+      <li><b>환경을 생각한 냉매 선택</b><h3>PR/PL/PSL/PCR/PU/PG 요청 시</h3><p>요청하면 저 GWP 냉매 R-449A를 고를 수 있습니다. 기존 R-404A보다 지구온난화 영향이 64% 줄어듭니다.</p></li>
+      <li><b>필요한 만큼만 냉각·가열</b><h3>Smart R&amp;D System, 일본 특허 5514787</h3><p>냉각과 가열 능력을 최소한으로 제어해 온도와 습도를 정밀하게 맞춥니다.</p></li>
+      <li><b>용도에 맞는 폭넓은 구성</b><h3>120~800L, 일부 모델 816L/1000L 요청 제작</h3><p>항온항습기, 저온·초저온형, 고온형, 저습형, 클린형, 항온기까지 모델을 고를 수 있습니다.</p></li>
+    </ul>
+  </div>
+</section>
+</div>
+
+<div class="wrap">
+  <section class="cat-item" id="c-product-spec">
+    <div class="cat-head"><h2>b-product-spec</h2><dl><dt>출처</dt><dd>두 스타일 통합(R06 표 머리 + AW05 줄무늬)</dd><dt>쓰는 곳</dt><dd>제품 상세 모델별 사양. 표는 반드시 가로 스크롤 상자(table-scroll) 안에. 행은 같은 모양으로 추가</dd></dl></div>
+  </section>
+</div>
+<div class="cat-stage" data-block>
+<section class="blk tone-studio b-product-spec" id="specs" aria-labelledby="sp-h">
+  <div class="wrap">
+    <h2 class="h-big" id="sp-h">모델별 사양</h2>
+    <div class="table-scroll" tabindex="0" role="region" aria-label="모델별 사양표, 좌우로 밀어서 보기">
+      <table class="spec">
+        <thead><tr><th scope="col">구분 / 모델</th><th scope="col">온도 범위</th><th scope="col">습도</th><th scope="col">내용적</th><th scope="col"><span class="sr-only">견적</span></th></tr></thead>
+        <tbody>
+          <tr><th scope="row">항온항습기<span class="sub">PR-1J / 2J / 3J / 4J</span></th><td>-20 ~ +100°C</td><td>20 ~ 98%rh</td><td>Type1 120L / Type2 225L / Type3 408L / Type4 800L</td><td><a class="link" href="#quote">이 모델 견적</a></td></tr>
+          <tr><th scope="row">초저온 항온항습기<span class="sub">PSL-2J / PSL-4J</span></th><td>-70 ~ +100°C</td><td>20 ~ 98%rh</td><td>Type2 306L / Type4 800L</td><td><a class="link" href="#quote">이 모델 견적</a></td></tr>
+          <tr><th scope="row">고온 항온항습기<span class="sub">PHP-2J / 3J / 4J</span></th><td>주위온도 +10 ~ +100°C</td><td>40 ~ 98%rh</td><td>219L / 398L / 784L</td><td><a class="link" href="#quote">이 모델 견적</a></td></tr>
+          <tr><th scope="row">클린 항온항습기<span class="sub">PCR-3J (클린도 Class5, HEPA 필터)</span></th><td>-20 ~ +100°C</td><td>30 ~ 90%rh</td><td>312L</td><td><a class="link" href="#quote">이 모델 견적</a></td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p class="note">옵션으로 +150 / +180°C까지 넓힐 수 있고(모델별로 다름), 요청 시 최대 200°C입니다. 외형 치수와 전원 사양은 <span class="tbd">[확인 필요]</span> 출처: <a href="https://www.espec.co.jp/english/products/env-test/pj/" target="_blank" rel="noopener">ESPEC 공식 제품 페이지 (영문, 새 창)</a>, 카탈로그 CAT.NO.E15110-Q2504, 수집일 2026-10-29</p>
+  </div>
+</section>
+</div>
+
+<div class="wrap">
+  <section class="cat-item" id="c-product-awards">
+    <div class="cat-head"><h2>b-product-awards</h2><dl><dt>출처</dt><dd>AW05 규격·수상 큰 글자 목록</dd><dt>쓰는 곳</dt><dd>제품 상세 (id="awards")</dd><dt>톤</dt><dd>silver</dd></dl></div>
+  </section>
+</div>
+<div class="cat-stage" data-block>
+<section class="blk tone-silver b-product-awards" id="awards" aria-labelledby="aw-h">
+  <div class="wrap">
+    <h2 class="h-big" id="aw-h">규격과 수상</h2>
+    <ul class="award-list">
+      <li><b>2025 굿디자인상</b><p class="micro">ECO형. 2025년 10월 17일 ESPEC 소식 기준.</p></li>
+      <li><b>2012 굿디자인상</b><p class="micro">Platinous J. ESPEC 과거 수상 표 기준.</p></li>
+      <li><b>에너지 절약 기계 수상</b><p class="micro">일본 기계진흥협회(Japan Machinery Federation) 수상 표시, 카탈로그 5쪽.</p></li>
+      <li><b>저 GWP 냉매 R-449A</b><p class="micro">선택 사양. 옵션과 맞춤 사양은 문의 시 안내해 드립니다.</p></li>
+    </ul>
+  </div>
+</section>
+</div>
+
+<div class="wrap">
+  <section class="cat-item" id="c-product-support">
+    <div class="cat-head"><h2>b-product-support</h2><dl><dt>출처</dt><dd>R06 지원 5단계(순서가 있어 번호 사용) + AW05 회색에서 흰색 글자</dd><dt>쓰는 곳</dt><dd>제품 상세 (id="support"). 각 단계 범위는 확인 후 채움</dd><dt>톤</dt><dd>graphite</dd></dl></div>
+  </section>
+</div>
+<div class="cat-stage" data-block>
+<section class="blk tone-graphite b-product-support" id="support" aria-labelledby="sup-h">
+  <div class="wrap">
+    <h2 class="h-big" id="sup-h">도입부터 A/S까지</h2>
+    <ol class="flow">
+      <li><b>도입 상담</b><span>시험 조건 확인 <span class="tbd">[확인 필요]</span></span></li>
+      <li><b>사양 확정</b><span>모델·옵션 선택 <span class="tbd">[확인 필요]</span></span></li>
+      <li><b>견적</b><span>견적서 안내 <span class="tbd">[확인 필요]</span></span></li>
+      <li><b>납품·설치</b><span>설치 범위 <span class="tbd">[확인 필요]</span></span></li>
+      <li><b>A/S</b><span>사후 관리 범위 <span class="tbd">[확인 필요]</span></span></li>
+    </ol>
+    <div class="micro">
+      <p>ESPEC 기술진과 정기적으로 기술 협력하는 제이에스 엔지니어링 서비스 조직이 사후 관리를 맡습니다.</p>
+      <p style="margin-top:14px"><a class="link-arrow" href="#">서비스 보기</a></p>
+    </div>
+  </div>
+</section>
+</div>
+
+<div class="wrap">
+  <section class="cat-item" id="c-product-docs">
+    <div class="cat-head"><h2>b-product-docs</h2><dl><dt>출처</dt><dd>R06 자료 목록 + AW05 큰 제목</dd><dt>쓰는 곳</dt><dd>제품 상세 (id="docs"). 자료 한 건이 한 줄</dd><dt>톤</dt><dd>studio</dd></dl></div>
+  </section>
+</div>
+<div class="cat-stage" data-block>
+<section class="blk tone-studio b-product-docs" id="docs" aria-labelledby="doc-h">
+  <div class="wrap">
+    <h2 class="h-big" id="doc-h">자료</h2>
+    <ul class="doc-list">
+      <li><div><strong>ESPEC 공식 카탈로그 (영문 PDF)</strong><span>Platinous J Series, CAT.NO.E15110-Q2504 · 5.0MB 표기 · 새 창</span></div><a class="btn btn--ghost" href="https://www.espec.co.jp/english/products/catalog/pj.pdf" target="_blank" rel="noopener">카탈로그 보기</a></li>
+      <li><div><strong>한국어 상담 자료</strong><span>제품명이 자동으로 입력된 문의 양식으로 연결됩니다.</span></div><a class="btn" href="#quote">한국어 상담 자료 요청</a></li>
+    </ul>
+  </div>
+</section>
+</div>
+
+<div class="wrap">
+  <section class="cat-item" id="c-product-related">
+    <div class="cat-head"><h2>b-product-related</h2><dl><dt>출처</dt><dd>R06 제품 카드(card-prod) + AW05 큰 제목</dd><dt>쓰는 곳</dt><dd>제품 상세 마지막 (id="related")</dd><dt>톤</dt><dd>white</dd></dl></div>
+  </section>
+</div>
+<div class="cat-stage" data-block>
+<section class="blk tone-white b-product-related" id="related" aria-labelledby="rel-h">
+  <div class="wrap">
+    <div class="sec-head"><h2 class="h-big" id="rel-h">함께 보는 장비</h2><a class="link-arrow" href="#">전체 제품 보기</a></div>
+    <div class="prod-grid prod-grid--3">
+      <a class="card-prod" href="#"><div class="pack"><img src="../concepts2/assets/web/sh-benchtop-mv.png" alt="SH 시리즈 벤치탑 항온항습기" width="300" height="300"></div><div class="card-prod__body"><h3>SH 시리즈</h3><div class="card-prod__type">벤치탑 항온항습기</div><div class="card-prod__temp">-60 ~ +150°C</div></div></a>
+      <a class="card-prod" href="#"><div class="pack"><img src="../concepts2/assets/web/advanced-battery-tester-mv.png" alt="배터리 시험 장비" width="300" height="300"></div><div class="card-prod__body"><h3>배터리 시험 장비</h3><div class="card-prod__type">충방전·안전 시험</div><div class="card-prod__temp">-40 ~ +100°C</div></div></a>
+      <a class="card-prod" href="#"><div class="crop" style="--s:1.6;--ox:49%;--oy:52%"><img src="../concepts2/assets/hires/ar-series-pair.jpg" alt="AR 시리즈 급속 온도변화 시험기" width="1714" height="1143"></div><div class="card-prod__body"><h3>AR 시리즈</h3><div class="card-prod__type">급속 온도변화 시험기</div><div class="card-prod__temp">-70 ~ +180°C</div></div></a>
+    </div>
+  </div>
+</section>
+</div>
+
+<div class="wrap" style="padding-block:48px">
+  <p class="src-note">장비 이미지 출처: ESPEC Corp. 공식 웹사이트 및 제품 카탈로그</p>
+</div>
+</main>
+
+<script>
+/* 견본집 전용: 위 블록의 HTML 을 그대로 읽어 "HTML 보기·복사" 창을 만든다 (script.js 보다 먼저 실행되어 깨끗한 원본을 얻는다).
+   보여 주는 코드는 templates 폴더 기준 경로로 바꿔 둔다. */
+(function () {
+  [].forEach.call(document.querySelectorAll('.cat-stage[data-block]'), function (stage, n) {
+    var code = stage.innerHTML.trim()
+      .replace(/(["'(])\.\.\/concepts2\//g, '$1../../concepts2/')
+      .replace(/data-model="assets\/3d\//g, 'data-model="../assets/3d/');
+    var det = document.createElement('details');
+    det.className = 'cat-code';
+    var sum = document.createElement('summary'); sum.textContent = 'HTML 보기·복사';
+    var btn = document.createElement('button'); btn.type = 'button'; btn.textContent = '복사';
+    var pre = document.createElement('pre'); var c = document.createElement('code'); c.textContent = code; pre.appendChild(c);
+    pre.tabIndex = 0;
+    btn.addEventListener('click', function () {
+      var done = function () { btn.textContent = '복사했습니다'; setTimeout(function () { btn.textContent = '복사'; }, 1500); };
+      if (navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText(code).then(done, function () { btn.textContent = '복사 실패: 직접 선택해 복사하세요'; });
+      else { var r = document.createRange(); r.selectNodeContents(c); var s = getSelection(); s.removeAllRanges(); s.addRange(r); btn.textContent = '선택됨: Ctrl+C 로 복사'; }
+    });
+    det.appendChild(sum); det.appendChild(btn); det.appendChild(pre);
+    var wrap = document.createElement('div'); wrap.className = 'wrap'; wrap.appendChild(det);
+    stage.parentNode.insertBefore(wrap, stage.nextSibling);
+  });
+})();
+</script>
+<script src="script.js" defer></script>
+</body>
+</html>
