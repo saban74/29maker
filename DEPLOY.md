@@ -37,7 +37,7 @@
 
 **Deploy** 를 누르고 1~3분 기다리면 `https://(임의 이름).netlify.app` 주소가 생깁니다.
 - 이름 바꾸기: Site configuration → **Change site name** (예: `js-engineering` → `https://js-engineering.netlify.app`)
-- 회사 도메인 연결: Domain management → **Add a domain** (도메인 관리 업체에서 DNS 설정 필요. 도메인 주소는 [확인 필요])
+- 회사 도메인 연결: 아래 **7장 (www.espec.co.kr, 가비아)** 을 보세요. 먼저 이 임시 주소로 모든 것이 잘 되는지 확인한 뒤에 연결합니다.
 
 이 주소를 아래 4장에서 씁니다.
 
@@ -69,6 +69,57 @@
 4. 시험: 뉴스·공지에서 예시 공지를 열어 글자 하나를 바꾸고 "게시" → GitHub 저장소에 "관리자 화면: ... 고침" 기록이 생기고 → 2~3분 뒤 Netlify Deploys 에 새 배포가 성공(Published)하는지 확인. 확인 뒤 원래대로 되돌리세요.
 
 로그인할 수 있는 사람은 **29maker 저장소에 쓰기 권한이 있는 GitHub 계정**뿐입니다. 다른 직원도 쓰게 하려면 GitHub 저장소 → Settings → Collaborators 에서 그 사람의 GitHub 계정을 초대하세요.
+
+## 7. 도메인 연결: www.espec.co.kr (가비아)
+
+대표 주소는 **https://www.espec.co.kr** 입니다(사이트 설정 `site/_data/site.js` 에 이미 적혀 있음). 도메인은 가비아에서 사용자 명의로 관리합니다.
+가비아·Netlify 화면의 메뉴 이름과 위치는 바뀔 수 있습니다. 비슷한 이름을 찾으세요.
+
+### 7-1. 시작 전에 꼭 확인 (메일)
+- 가비아 **DNS 관리** 화면에서 지금 있는 기록을 **캡처해 두세요**(되돌릴 때 필요).
+- **MX** 라고 적힌 줄(회사 메일)과 **TXT** 줄은 **절대 지우거나 바꾸지 않습니다.** 이번에 바꾸는 것은 홈페이지용 줄(호스트 `www` 와 `@`)뿐입니다.
+- 네임서버를 Netlify 로 옮기는 방법(Netlify DNS)은 쓰지 않습니다. 메일 설정까지 옮겨야 해서 실수 위험이 큽니다.
+
+### 7-2. Netlify 에 도메인 등록
+1. Netlify 사이트 → **Domain management** → **Add a domain** → `www.espec.co.kr` 입력 → 확인.
+2. "espec.co.kr 도 함께 추가할까요?" 같은 안내가 나오면 추가합니다. Netlify 가 `espec.co.kr` 로 들어온 사람을 `www.espec.co.kr` 로 보내 줍니다.
+3. 화면에 "DNS 설정이 필요합니다(Awaiting External DNS)" 같은 안내가 보이면 정상입니다. 이제 가비아에서 설정합니다.
+
+### 7-3. 가비아 DNS 설정
+1. 가비아 로그인 → **My가비아** → **도메인 관리**(또는 DNS 관리툴) → `espec.co.kr` → **DNS 설정** / **레코드 수정**.
+2. 아래 두 줄을 **추가하거나, 같은 호스트의 기존 줄이 있으면 값만 바꿉니다.**
+
+| 타입 | 호스트 | 값 | 뜻 |
+|---|---|---|---|
+| CNAME | `www` | `(내 사이트 이름).netlify.app` (끝에 점이 필요하다고 나오면 `.` 붙임) | www.espec.co.kr → 새 홈페이지 |
+| A | `@` | Netlify 화면이 알려 주는 IP (Netlify 문서 기준 `75.2.60.5`) | espec.co.kr(앞에 www 없이) → 새 홈페이지 |
+
+3. 저장. 가비아 기본 TTL(보통 3600초)이면 **보통 몇 분~몇 시간**, 길면 하루까지 걸립니다.
+4. Netlify **Domain management** 에서 도메인 옆 표시가 확인 완료로 바뀌면, **HTTPS** 칸에서 인증서가 자동 발급됩니다(무료, 자동 갱신). 안 되면 **Verify DNS configuration** / **Provision certificate** 를 누릅니다.
+5. `https://www.espec.co.kr` 와 `https://espec.co.kr` 둘 다 새 홈페이지로 열리면 끝입니다.
+
+### 7-4. 도메인 연결 뒤 한 번만 할 일
+- **Primary domain(대표 도메인)** 을 `www.espec.co.kr` 로 지정(Domain management).
+- 관리자 주소는 `https://www.espec.co.kr/admin/` 이 됩니다. 4장의 GitHub OAuth 앱 **Homepage URL** 을 이 주소(`https://www.espec.co.kr`)로 바꿔도 됩니다(콜백 주소 `https://api.netlify.com/auth/done` 은 그대로).
+- 검색 노출: 구글 서치 콘솔·네이버 서치어드바이저에 사이트를 등록하고 `https://www.espec.co.kr/sitemap.xml` 을 제출합니다(사이트맵은 자동 생성됨).
+
+### 7-5. 나중에: jsec.co.kr 도 같은 홈페이지로 (완성 후)
+1. Netlify → Domain management → **Add a domain alias** → `www.jsec.co.kr` (그리고 `jsec.co.kr`).
+2. jsec.co.kr 을 관리하는 업체의 DNS 에서 7-3 과 같은 방식으로 CNAME(`www`)·A(`@`) 를 설정합니다. 이때도 **MX(메일) 줄은 그대로.**
+3. 대표 주소는 www.espec.co.kr 로 두고, jsec.co.kr 로 들어오면 www.espec.co.kr 로 보내려면 `netlify.toml` 맨 아래에 아래를 추가합니다(메인 감독자/Claude 에게 부탁해도 됩니다).
+```
+[[redirects]]
+  from = "https://www.jsec.co.kr/*"
+  to = "https://www.espec.co.kr/:splat"
+  status = 301
+  force = true
+[[redirects]]
+  from = "https://jsec.co.kr/*"
+  to = "https://www.espec.co.kr/:splat"
+  status = 301
+  force = true
+```
+4. 기존 jsec.co.kr 서버(옛 홈페이지)는 이 연결이 끝나고 새 주소가 잘 열리는 것을 확인한 뒤 정리합니다.
 
 ## 문제가 생기면
 

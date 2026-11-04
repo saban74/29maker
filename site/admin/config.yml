@@ -18,6 +18,10 @@ backend:
 # 내 컴퓨터에서 시험할 때(주소가 localhost)만 쓰는 설정. npx decap-server 를 켜 두면 GitHub 로그인 없이 내 컴퓨터 파일에 바로 저장됩니다.
 local_backend: true
 
+# 관리자 화면 왼쪽 위 "사이트 보기" 주소
+site_url: https://www.espec.co.kr
+display_url: https://www.espec.co.kr
+
 locale: ko
 publish_mode: simple
 
