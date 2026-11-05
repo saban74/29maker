@@ -92,6 +92,8 @@
 /* 제품 목록 */
 .l-title{text-align:center;font-size:32px;font-weight:700;padding:48px 0 36px}
 .l-grid{display:grid;grid-template-columns:260px minmax(0,1fr);gap:44px;padding-bottom:80px;align-items:start}
+.l-grid>aside{grid-column:1;grid-row:1}
+.l-grid>:not(aside){grid-column:2}
 .cat{border-top:2px solid var(--ink)}
 .cat a{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:14px 8px;border-bottom:1px solid var(--line);font-size:15px;color:var(--ink)}
 .cat a[aria-current]{background:var(--bg-gray);font-weight:700;color:var(--navy)}
@@ -112,12 +114,13 @@
 .l-sec+.l-sec{margin-top:48px}
 
 @media (max-width:1023px){
-  .p-band{grid-template-columns:1fr}
+  .p-band{grid-template-columns:minmax(0,1fr)}
   .p-band-t{padding:32px 24px 8px}
   .p-band-t h1{font-size:36px}
-  .p-main{grid-template-columns:1fr;gap:0}
+  .p-main{grid-template-columns:minmax(0,1fr);gap:0}
   .p-side{position:static;order:-1;margin-bottom:8px}
-  .l-grid{grid-template-columns:1fr;gap:28px}
+  .l-grid{grid-template-columns:minmax(0,1fr);gap:28px}
+  .l-grid>aside,.l-grid>:not(aside){grid-column:1;grid-row:auto}
   .cards{grid-template-columns:repeat(2,minmax(0,1fr))}
 }
 @media (max-width:640px){
