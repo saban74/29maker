@@ -1,0 +1,133 @@
+/* 제품 상세·제품 목록 전용 CSS (base.css와 함께 사용) */
+.crumb{border-bottom:1px solid var(--line);font-size:13px;color:var(--muted)}
+.crumb .wrap{display:flex;flex-wrap:wrap;align-items:center;gap:6px 0;min-height:44px}
+.crumb a{color:var(--text)}
+.crumb a:hover{color:var(--link)}
+.crumb i{display:inline-block;width:6px;height:6px;border-top:1.5px solid #8a929a;border-right:1.5px solid #8a929a;transform:rotate(45deg);margin:0 12px 0 8px}
+
+/* 첫 화면 띠 */
+.p-hero{margin:36px 0 0}
+.p-band{display:grid;grid-template-columns:minmax(0,5fr) minmax(0,7fr);align-items:stretch;background:linear-gradient(180deg,#d4d7db 0%,#f1f2f4 100%);overflow:hidden}
+.p-band-t{padding:44px 40px;display:flex;flex-direction:column;justify-content:center;gap:14px;position:relative}
+.p-band-t h1{font-size:44px;line-height:1.12;font-weight:800;letter-spacing:.01em;color:var(--ink)}
+.p-band-t .ko{font-size:20px;font-weight:600;color:var(--ink);margin-top:-4px}
+.p-band-t .sub{font-size:14px;color:var(--text);max-width:30em}
+.badges{display:flex;flex-wrap:wrap;gap:8px;margin-top:6px}
+.badge{display:inline-flex;align-items:center;gap:8px;min-height:36px;padding:4px 12px;background:#fff;border:1px solid var(--line);font-size:13px;font-weight:600;color:var(--ink)}
+.badge b{display:inline-grid;place-items:center;width:22px;height:22px;border-radius:50%;background:var(--accent);color:#fff;font-size:12px}
+.p-band-i{align-self:stretch;display:flex;align-items:flex-end}
+.p-band-i img{width:100%;height:auto;display:block}
+
+/* 본문 2단 */
+.p-main{display:grid;grid-template-columns:minmax(0,1fr) 300px;gap:48px;padding:36px 0 72px;align-items:start}
+.p-nav{display:flex;flex-wrap:wrap;gap:8px 28px;margin-bottom:12px}
+.p-nav a{display:inline-flex;align-items:center;gap:8px;font-weight:600;color:var(--ink);font-size:15px;padding:6px 0}
+.p-nav a::after{content:"";width:6px;height:6px;border-right:2px solid var(--accent);border-bottom:2px solid var(--accent);transform:rotate(45deg) translateY(-2px)}
+.p-sec{padding-top:44px;scroll-margin-top:12px}
+.p-sec>h2{font-size:24px;font-weight:500;color:var(--ink);padding-bottom:10px;border-bottom:2px solid var(--line);margin-bottom:20px}
+.p-lead{font-size:17px;line-height:1.7;font-weight:600;color:var(--navy);margin-bottom:14px}
+.p-sec p{max-width:44em}
+.kpis{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;margin-top:24px}
+.kpi{background:var(--bg-gray);padding:18px 20px}
+.kpi b{display:block;font-size:28px;line-height:1.2;color:var(--navy);font-weight:800}
+.kpi span{font-size:13px;color:var(--text)}
+.range-img{margin-top:22px;background:var(--bg-gray)}
+.range-img img{width:100%}
+
+/* 사양표 */
+.tbl-wrap{overflow-x:auto;-webkit-overflow-scrolling:touch}
+.spec{width:100%;border-collapse:collapse;font-size:14px;min-width:620px}
+.spec th,.spec td{padding:11px 12px;border:1px solid var(--line);text-align:left;vertical-align:top;line-height:1.55}
+.spec thead th{background:var(--navy);color:#fff;font-weight:600;border-color:var(--navy)}
+.spec tbody th{background:var(--bg-gray);color:var(--ink);font-weight:600;width:30%}
+.spec th small{display:block;font-weight:400;color:var(--muted);font-size:12px}
+.note{font-size:13px;color:var(--muted);margin-top:12px;line-height:1.7}
+.note a{color:var(--link);text-decoration:underline}
+
+/* 특징 */
+.feat{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}
+.feat-i{border:1px solid var(--line);padding:20px 22px}
+.feat-i b{display:block;font-size:26px;color:var(--accent);font-weight:800;line-height:1.25}
+.feat-i h3{font-size:16px;margin:6px 0 6px}
+.feat-i p{font-size:14px}
+
+/* 갤러리 */
+.gal{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+.gal figure{margin:0;background:var(--bg-gray)}
+.gal figcaption{padding:8px 12px;font-size:13px;color:var(--text);background:#fff;border:1px solid var(--line);border-top:0}
+.gal img{width:100%}
+
+/* 자료 */
+.docs a{display:flex;justify-content:space-between;align-items:center;gap:16px;padding:14px 4px;border-bottom:1px solid var(--line);font-size:14px}
+.docs a span small{display:block;color:var(--muted);font-size:12px}
+.docs a::after{content:"";width:6px;height:6px;border-top:1.5px solid var(--accent);border-right:1.5px solid var(--accent);transform:rotate(45deg);flex:none}
+
+/* 관련 제품 */
+.rel{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px}
+.rel a{display:block;border:1px solid var(--line);background:#fff}
+.rel a:hover{border-color:var(--navy)}
+.rel .ph{background:var(--bg-gray);aspect-ratio:4/3;display:grid;place-items:center;padding:12px}
+.rel .ph img{max-height:100%;width:auto;object-fit:contain}
+.rel p{padding:10px 12px 12px;font-size:14px;font-weight:600;color:var(--ink)}
+
+/* 사이드 박스 */
+.p-side{position:sticky;top:16px;display:flex;flex-direction:column;gap:14px}
+.dl{display:block;background:var(--accent);color:#fff;padding:20px 20px 18px;border-radius:2px}
+.dl:hover{background:#bf3f0b;color:#fff}
+.dl-top{display:flex;align-items:center;gap:12px}
+.dl-ico{flex:none;width:44px;height:54px;background:#fff;color:var(--accent);display:grid;place-items:end center;padding-bottom:6px;font-weight:800;font-size:13px;position:relative}
+.dl-ico::before{content:"";position:absolute;top:0;right:0;border-style:solid;border-width:0 14px 14px 0;border-color:transparent #f3c2ad transparent transparent}
+.dl strong{font-size:18px;line-height:1.35;display:block}
+.dl-meta{display:flex;justify-content:space-between;margin-top:12px;padding-top:10px;border-top:1px solid rgba(255,255,255,.4);font-size:13px}
+.dl em{font-style:normal;font-weight:700}
+.side-box{background:var(--bg-gray);padding:16px 18px}
+.side-box a.l{display:flex;justify-content:space-between;align-items:center;padding:9px 0;font-size:14px;color:var(--ink);font-weight:500}
+.side-box a.l::after{content:"";width:6px;height:6px;border-top:1.5px solid var(--accent);border-right:1.5px solid var(--accent);transform:rotate(45deg)}
+.side-box small{display:block;color:var(--muted);font-size:12px;margin-top:-4px;padding-bottom:6px}
+.side-box .btn{width:100%;margin-top:8px}
+.tel{background:#fff;border:1px solid var(--line);padding:14px 18px;text-align:center}
+.tel small{display:block;font-size:12px;color:var(--muted)}
+.tel b{font-size:24px;color:var(--navy);font-weight:800;letter-spacing:.02em}
+
+/* 제품 목록 */
+.l-title{text-align:center;font-size:32px;font-weight:700;padding:48px 0 36px}
+.l-grid{display:grid;grid-template-columns:260px minmax(0,1fr);gap:44px;padding-bottom:80px;align-items:start}
+.cat{border-top:2px solid var(--ink)}
+.cat a{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:14px 8px;border-bottom:1px solid var(--line);font-size:15px;color:var(--ink)}
+.cat a[aria-current]{background:var(--bg-gray);font-weight:700;color:var(--navy)}
+.cat a::after{content:"+";color:var(--accent);font-weight:700;font-size:16px}
+.cat a:hover{color:var(--navy)}
+.l-h{font-size:22px;font-weight:500;color:var(--ink);padding-bottom:10px;border-bottom:2px solid var(--line);margin:0 0 24px;display:flex;justify-content:space-between;align-items:baseline;gap:12px}
+.l-h span{font-size:13px;color:var(--muted);font-weight:400}
+.cards{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:28px 22px}
+.card{display:block}
+.card .ph{aspect-ratio:4/3;background:var(--bg-gray);display:grid;place-items:center;overflow:hidden}
+.card .ph img{max-width:100%;max-height:100%;width:auto;height:auto;object-fit:contain}
+.card .ph.full img{width:100%;height:100%;object-fit:cover}
+.card h3{font-size:15px;font-weight:600;margin:10px 0 2px;color:var(--ink);display:flex;align-items:center;gap:8px}
+.card h3::after{content:"";width:6px;height:6px;border-top:1.5px solid var(--accent);border-right:1.5px solid var(--accent);transform:rotate(45deg);flex:none}
+.card p{font-size:13px;color:var(--muted);line-height:1.6}
+.card:hover h3{color:var(--link)}
+.tag{font-size:12px;font-weight:700;color:var(--accent)}
+.l-sec+.l-sec{margin-top:48px}
+
+@media (max-width:1023px){
+  .p-band{grid-template-columns:1fr}
+  .p-band-t{padding:32px 24px 8px}
+  .p-band-t h1{font-size:36px}
+  .p-main{grid-template-columns:1fr;gap:0}
+  .p-side{position:static;order:-1;margin-bottom:8px}
+  .l-grid{grid-template-columns:1fr;gap:28px}
+  .cards{grid-template-columns:repeat(2,minmax(0,1fr))}
+}
+@media (max-width:640px){
+  .p-hero{margin-top:20px}
+  .p-band-t h1{font-size:30px}
+  .p-band-t .ko{font-size:17px}
+  .kpis,.feat,.gal,.rel{grid-template-columns:minmax(0,1fr)}
+  .rel{grid-template-columns:minmax(0,1fr) minmax(0,1fr)}
+  .rel a:last-child{display:none}
+  .cards{gap:22px 12px}
+  .l-title{font-size:26px;padding:32px 0 24px}
+  .p-sec>h2{font-size:21px}
+}
