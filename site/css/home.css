@@ -1,0 +1,156 @@
+/* =====================================================================
+   메인 전용 규칙 (2026-11-05 밝은 시안 b01 + b05 합본, design/concepts4 참고)
+   - 메인 페이지에서만 base.njk 가 불러옵니다 (index.html 앞부분 extraCss: home).
+   - 모든 규칙은 body.home 안에서만 적용되어 다른 페이지에 영향이 없습니다.
+   - 색·글꼴은 tokens.css 변수를 씁니다.
+   ===================================================================== */
+
+/* ---------- 단위 글자(°C, %rh, ~)는 넓은 영문 글꼴이 아니라 본문 글꼴로 ---------- */
+.home .u { font-family: var(--font-body); font-style: normal; font-weight: inherit; font-size: .82em; letter-spacing: 0; }
+
+/* ---------- 머리말: 둥근 틀 안에 얹힘 (메인에서만) ----------
+   공통 머리말(partials/header.njk)은 그대로 두고, 메인에서만 투명하게 만들어 히어로 틀 맨 위에 겹칩니다.
+   틀 폭(--home-frame)과 안쪽 여백(--pad)을 히어로와 똑같이 맞춥니다. */
+.home { --home-frame: 1320px; --home-gap: 16px; }
+.home .site-header {
+  position: relative; /* 메인에서는 따라다니지 않음 (틀 안에 고정) */
+  width: calc(100% - var(--home-gap) * 2); max-width: var(--home-frame);
+  margin: var(--home-gap) auto calc(var(--head-h) * -1);
+  background: transparent; border-bottom: 0;
+}
+.home .site-header__in { padding-inline: var(--pad); max-width: none; }
+.home .nav > ul { justify-content: center; }
+
+/* ---------- 1. 첫 화면 (b01): 연회색 둥근 틀 ---------- */
+.home-hero {
+  position: relative; overflow: hidden;
+  width: calc(100% - var(--home-gap) * 2); max-width: var(--home-frame);
+  margin: 0 auto;
+  border-radius: 22px;
+  background: linear-gradient(180deg, #dcdedf 0%, #eceded 55%, #f6f6f6 100%);
+  padding: calc(var(--head-h) + 44px) var(--pad) 0;
+}
+.home-hero__top { position: relative; z-index: 2; display: grid; grid-template-columns: 1.15fr .85fr; gap: 40px; align-items: start; }
+.home-kicker { font-size: 13px; font-weight: 600; color: var(--ink); letter-spacing: .02em; }
+.home-kicker em { font-style: normal; color: var(--graphite-700); font-weight: 500; margin: 0 8px; }
+.home-hero__h { margin: 14px 0 0; font-family: var(--font-display); font-weight: 400; font-size: clamp(19px, 3vw, 42px); line-height: 1.22; letter-spacing: .005em; color: #2a2e32; }
+.home-hero__r { padding-top: 30px; justify-self: end; }
+.home-hero__intro { max-width: 420px; font-size: 15px; color: var(--graphite-800); }
+.home-hero__acts { display: flex; flex-wrap: wrap; gap: 14px 22px; align-items: center; margin-top: 18px; }
+.home-hero__acts .btn { min-height: 42px; }
+.home-hero__acts .link { font-size: 14px; }
+
+/* 장비 4대 사진: 가운데 띠만 보여 주고 위·아래·좌우 가장자리는 배경으로 녹임 (원본 1812px 폭, 1.2배 넘게 키우지 않음) */
+.home-hero__shot {
+  position: relative; z-index: 1; overflow: hidden; aspect-ratio: 2.2 / 1;
+  margin: -34px calc(var(--pad) * -1) 0;
+  -webkit-mask-image: linear-gradient(to bottom, transparent 0, #000 16%, #000 90%, transparent 100%);
+  mask-image: linear-gradient(to bottom, transparent 0, #000 16%, #000 90%, transparent 100%);
+}
+.home-hero__shot img {
+  width: 100%; margin-top: -16.5%;
+  -webkit-mask-image: linear-gradient(to right, transparent 0, #000 7%, #000 93%, transparent 100%);
+  mask-image: linear-gradient(to right, transparent 0, #000 7%, #000 93%, transparent 100%);
+}
+.home-hero__cap { position: absolute; left: var(--pad); bottom: 104px; z-index: 3; font-size: 13px; line-height: 1.5; color: var(--ink); }
+.home-hero__cap b { display: block; font-weight: 700; }
+.home-hero__cap span { color: var(--graphite-700); }
+
+/* 바로가기 4칸: 히어로 아래 검은 띠 */
+.home-quick { margin: 0 calc(var(--pad) * -1); background: #121518; position: relative; z-index: 2; }
+.home-quick ul { display: grid; grid-template-columns: repeat(4, 1fr); }
+.home-quick li { min-width: 0; }
+.home-quick a { display: flex; align-items: center; gap: 14px; height: 100%; padding: 20px 24px; color: #fff; transition: background var(--dur-fast); }
+.home-quick li + li a { border-left: 1px solid rgba(255, 255, 255, .14); }
+.home-quick a:hover { background: #2a3036; }
+.home-quick a:focus-visible { outline-color: #fff; outline-offset: -3px; }
+.home-quick .n { font-family: var(--font-display); font-size: 12px; line-height: 1; color: #9aa2ab; }
+.home-quick .t { display: block; font-size: 15px; font-weight: 700; line-height: 1.35; }
+.home-quick .e { display: block; font-size: 12px; line-height: 1.4; color: #aab1b9; }
+.home-quick .go { margin-left: auto; font-size: 16px; }
+
+/* ---------- 2. 3칸 정보 줄 (b05): 흰 바탕 + 얇은 선 ---------- */
+.home-cells { background: #fff; border-bottom: 1px solid var(--line); }
+.home-cells__in { display: grid; grid-template-columns: repeat(3, 1fr); }
+.home-cells__in > div { min-width: 0; padding: 22px 24px; }
+.home-cells__in > div + div { border-left: 1px solid var(--line); }
+.home-cells__in > div:first-child { padding-left: 0; }
+.home-cells h2 { font-size: 15px; font-weight: 700; margin-bottom: 10px; color: var(--ink); }
+.home-mini { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; }
+.home-mini b { display: block; font-family: var(--font-display); font-weight: 400; font-size: 15px; line-height: 1.3; color: var(--ink); overflow-wrap: anywhere; }
+.home-mini span { font-size: 12px; color: var(--graphite-700); }
+.home-cells ul li { padding: 3px 0; font-size: 14px; }
+.home-cells ul a:hover { text-decoration: underline; text-decoration-color: var(--brass); text-underline-offset: 4px; }
+.home-cells time { margin-right: 8px; font-size: 12px; color: var(--graphite-700); font-variant-numeric: tabular-nums; }
+.home-cells .tel { font-size: 20px; font-weight: 700; line-height: 1.3; color: var(--ink); }
+.home-cells .tel:hover { text-decoration: underline; text-underline-offset: 4px; }
+.home-cells .sub { font-size: 14px; color: var(--graphite-700); }
+
+/* ---------- 3. 나머지 구역: 흰 바탕 + 얇은 선 ---------- */
+.home .blk { padding-block: 72px; }
+.home .home-line { background: #fff; border-top: 1px solid var(--line); }
+.home .home-line.tone-white + .home-line.tone-white { padding-top: 72px; } /* 같은 톤이 이어져도 위 여백 유지 */
+.home .h-sec { font-size: 28px; }
+.home .sec-head { margin-bottom: 28px; }
+.home .sec-head p { font-size: 14px; }
+.home .card-prod, .home .ind-card { border-radius: 0; }
+
+/* 신뢰 숫자 (b05 stats) */
+.home-stats { display: grid; grid-template-columns: repeat(4, 1fr); background: #fff; border: 1px solid var(--line); }
+.home-stats > div { min-width: 0; padding: 26px 24px; }
+.home-stats > div + div { border-left: 1px solid var(--line); }
+.home-stats strong { display: block; font-family: var(--font-display); font-weight: 400; font-size: 30px; line-height: 1.2; color: var(--ink); }
+.home-stats strong small { margin-left: 4px; font-family: var(--font-body); font-size: 15px; font-weight: 600; }
+.home-stats p { margin-top: 8px; font-size: 14px; color: var(--graphite-700); }
+
+/* 최신 소식 목록 (b05 news) */
+.home-news li { border-top: 1px solid var(--line); }
+.home-news li:last-child { border-bottom: 1px solid var(--line); }
+.home-news a { display: grid; grid-template-columns: 110px 1fr auto; gap: 20px; align-items: center; padding: 16px 4px; }
+.home-news time { font-size: 13px; color: var(--graphite-700); font-variant-numeric: tabular-nums; }
+.home-news h3 { font-size: 15px; font-weight: 600; line-height: 1.5; color: var(--ink); }
+.home-news a:hover h3 { text-decoration: underline; text-decoration-color: var(--brass); text-underline-offset: 4px; }
+
+/* 문의 띠 */
+.home .b-cta { padding-block: 44px; }
+.home .b-cta h2 { font-size: 26px; line-height: 1.35; font-weight: 700; letter-spacing: -.02em; }
+.home .b-cta .tel { font-size: 20px; font-weight: 700; color: var(--ink); }
+.home .b-cta .btn { min-height: 42px; }
+
+/* ---------- 태블릿·휴대폰 ---------- */
+@media (max-width: 980px) {
+  .home-hero__top { grid-template-columns: 1fr; gap: 18px; }
+  .home-hero__r { padding-top: 0; justify-self: start; }
+  .home-hero { padding-top: calc(var(--head-h) + 28px); }
+  .home-hero__cap { bottom: 184px; }
+  .home-quick ul { grid-template-columns: repeat(2, 1fr); }
+  .home-quick li:nth-child(3) a { border-left: 0; }
+  .home-quick li:nth-child(n+3) a { border-top: 1px solid rgba(255, 255, 255, .14); }
+  .home-cells__in { grid-template-columns: 1fr; }
+  .home-cells__in > div { padding: 18px 0; }
+  .home-cells__in > div + div { border-left: 0; border-top: 1px solid var(--line); }
+  .home-stats { grid-template-columns: repeat(2, 1fr); }
+  .home-stats > div:nth-child(3) { border-left: 0; }
+  .home-stats > div:nth-child(n+3) { border-top: 1px solid var(--line); }
+}
+@media (max-width: 760px) {
+  .home { --home-gap: 8px; }
+  .home-hero { border-radius: 16px; }
+  .home-hero__shot { aspect-ratio: 1.6 / 1; }
+  .home-hero__shot img { width: 120%; max-width: none; margin-left: -10%; margin-top: -19.8%; }
+  .home-hero__cap { position: static; padding: 4px 0 16px; }
+  .home-quick a { padding: 16px 14px; gap: 8px; }
+  .home-quick .e { display: none; }
+  .home-quick .t { font-size: 14px; }
+  .home .blk { padding-block: 52px; }
+  .home .h-sec { font-size: 24px; }
+  .home-stats strong { font-size: 24px; }
+  .home-stats > div { padding: 20px 16px; }
+  .home-news a { grid-template-columns: 1fr; gap: 2px; }
+  .home-news .chip { display: none; }
+  .home .b-cta h2 { font-size: 22px; }
+}
+@media (max-width: 420px) {
+  .home-mini { grid-template-columns: 1fr 1fr 1fr; gap: 6px; }
+  .home-mini b { font-size: 13px; }
+}
