@@ -1,0 +1,77 @@
+/* ==========================================================
+   solutions.css : 산업별 솔루션 페이지(site/solutions/*.html) 전용 추가 규칙
+   tokens.css / components.css 는 고치지 않고, 여기서만 덧붙입니다.
+   ========================================================== */
+
+/* ---------- 산업 페이지 첫 화면 (b-r-hero 색을 쓰되 사진은 오른쪽 작은 칸) ---------- */
+.sol-hero { padding-bottom: var(--sp-9, 72px); }
+.sol-hero__in { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 56px; align-items: center; padding-top: 56px; }
+.sol-hero .b-r-hero__title { font-size: clamp(24px, 3.1vw, 46px); overflow-wrap: anywhere; }
+.sol-hero__ko { display: block; margin-top: var(--sp-3); font-family: var(--font-body); font-size: clamp(26px, 3vw, 40px); font-weight: 800; letter-spacing: -.03em; text-transform: none; }
+.sol-hero .b-r-hero__sub { max-width: 520px; margin-top: var(--sp-4); }
+.sol-hero__fig { margin: 0; width: 100%; max-width: 720px; justify-self: end; }
+.sol-hero__fig .crop, .sol-hero__fig .ph { aspect-ratio: 4 / 3; }
+.sol-hero__fig .crop img { transform: none; }
+.sol-hero__fig .ph { min-height: 0; }
+.sol-hero__fig figcaption { margin-top: var(--sp-2); font-size: var(--fs-caption); }
+
+/* ---------- 산업 장면 사진 상자 (ESPEC 사이트 사진은 작아서 키우지 않고 카드처럼 배치) ----------
+   사진 크기는 style="--mw:최대가로px" 로 정합니다 (원본 가로의 1.2배 이하). */
+.sol-scene { display: flex; flex-direction: column; align-items: center; gap: 12px; margin: 0; padding: 24px; background: #2b2e31; color: rgba(255, 255, 255, .88); }
+.sol-scene img { display: block; width: 100%; max-width: var(--mw, 400px); height: auto; }
+.sol-scene figcaption, .sol-scene p { margin: 0; font-size: var(--fs-caption); line-height: 1.5; text-align: center; }
+.sol-scene--light { background: #e9ebec; color: var(--fg-2); }
+.sol-scene--light img { mix-blend-mode: multiply; }
+.sol-scenes { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: var(--sp-4); margin-top: var(--sp-6); }
+.sol-scenes .sol-scene { justify-content: flex-start; }
+
+/* ---------- 이 산업에서 하는 시험 (2열 목록) ---------- */
+.sol-tests { display: grid; grid-template-columns: 1fr 1fr; column-gap: var(--sp-7); }
+.sol-tests li { min-width: 0; }
+.sol-tests .link { display: inline-block; margin-top: 8px; font-size: 15px; }
+
+/* ---------- 추천 장비 카드 줄 (개수에 맞춘 열 수) ---------- */
+.prod-grid--1 { grid-template-columns: minmax(0, 360px); }
+.prod-grid--2 { grid-template-columns: repeat(2, 1fr); }
+.prod-grid--4 { grid-template-columns: repeat(4, 1fr); }
+.card-consult { display: flex; flex-direction: column; justify-content: space-between; gap: var(--sp-4); padding: 24px; border: 1px dashed var(--fg); color: var(--fg); min-height: 220px; transition: background var(--dur), color var(--dur); }
+.card-consult:hover { background: var(--fg); color: var(--bg); }
+.card-consult h3 { font-size: 18px; line-height: 1.4; font-weight: 700; }
+.card-consult p { margin-top: var(--sp-2); font-size: 15px; line-height: 1.6; }
+.card-consult span { font-weight: 600; text-decoration: underline; text-decoration-color: var(--accent); text-decoration-thickness: 2px; text-underline-offset: 6px; }
+.sol-note { margin-top: 18px; }
+
+/* ---------- 관련 규격 목록 ---------- */
+.sol-std { display: grid; grid-template-columns: repeat(2, 1fr); column-gap: var(--sp-7); border-top: 1px solid var(--fg); margin-top: var(--sp-6); }
+.sol-std li { min-width: 0; padding: 16px 0; border-bottom: 1px solid var(--line-c); overflow-wrap: anywhere; }
+.sol-std strong { display: block; font-size: 18px; }
+.sol-std span { color: var(--fg-2); font-size: 15px; }
+.sol-std-none { margin-top: var(--sp-5); max-width: 640px; font-size: var(--fs-lead); }
+
+/* ---------- 서비스 연결 2칸 ---------- */
+.sol-service { display: grid; grid-template-columns: 1fr 1fr; gap: var(--sp-7); margin-top: var(--sp-6); }
+.sol-service > div { padding-top: 16px; border-top: 1px solid var(--fg); min-width: 0; }
+.sol-service h3 { font-size: 20px; font-weight: 700; margin-bottom: var(--sp-2); }
+.sol-service p { color: var(--fg-2); margin-bottom: var(--sp-4); }
+
+/* ---------- 다른 산업 바로가기 ---------- */
+.sol-other { margin-top: var(--sp-6); }
+
+/* ---------- 표/긴 글자가 휴대폰에서 넘치지 않게 ---------- */
+.sol-hero, .sol-tests, .sol-std { word-break: keep-all; }
+th, td { position: relative; }
+
+/* ---------- 반응형 ---------- */
+@media (max-width: 1100px) {
+  .prod-grid--4 { grid-template-columns: repeat(2, 1fr); }
+}
+@media (max-width: 900px) {
+  .sol-hero__in { grid-template-columns: 1fr; gap: 32px; padding-top: 36px; }
+  .sol-hero__fig { justify-self: stretch; max-width: none; }
+  .sol-tests, .sol-std, .sol-service, .sol-scenes { grid-template-columns: 1fr; }
+  .sol-service { gap: var(--sp-6); }
+}
+@media (max-width: 600px) {
+  .prod-grid--1 { grid-template-columns: minmax(0, 1fr); }
+  .card-consult { padding: 16px; min-height: 0; }
+}

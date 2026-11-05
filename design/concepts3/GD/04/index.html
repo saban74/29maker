@@ -1,0 +1,102 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>제이에스 엔지니어링 | GD/04 남색 입자</title>
+<meta name="description" content="1981년부터 일본 ESPEC의 한국 단독 총대리점. 환경시험기 상담과 공급.">
+<link rel="stylesheet" href="../_base-gd1.css">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<a class="skip" href="#main">본문으로 건너뛰기</a>
+
+<header class="bar">
+  <a class="mark" href="#">J&amp;S 엔지니어링</a>
+  <nav aria-label="주 메뉴">
+    <ul>
+      <li><a href="#">회사소개</a></li>
+      <li><a href="#">제품소개</a></li>
+      <li><a href="#">솔루션</a></li>
+      <li><a href="#">기술자료</a></li>
+      <li><a href="#">서비스</a></li>
+      <li><a href="#">고객지원</a></li>
+    </ul>
+  </nav>
+  <a class="btn" href="#contact">견적문의</a>
+</header>
+
+<main id="main">
+  <section class="hero" aria-labelledby="h1">
+    <canvas id="field" aria-hidden="true"></canvas>
+    <div class="hero-in">
+      <h1 id="h1">극한의 온도를<br>정확하게 만듭니다</h1>
+      <p class="sub">제이에스 엔지니어링은 1981년부터 일본 ESPEC 환경시험기를 한국에 공급해 온 단독 총대리점입니다.</p>
+      <div class="dial">
+        <label for="temp">시험실 온도를 움직여 보세요 (AR 시리즈 범위)</label>
+        <div class="dial-row">
+          <input id="temp" type="range" min="-70" max="180" step="1" value="25">
+          <output id="temp-out" for="temp">+25°C</output>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="say" aria-labelledby="h-say">
+    <h2 id="h-say">시험이 정확해야 제품이 믿을 만합니다</h2>
+    <p>온도, 습도, 압력. 시험실이 약속한 조건을 지켜야 개발한 부품의 수명과 안전을 믿을 수 있습니다. 그 조건을 만드는 장비를 45년 동안 공급해 왔습니다.</p>
+  </section>
+
+  <section class="scene" aria-labelledby="h-walk">
+    <img src="../../../concepts2/assets/hires/walk-in-tbe-dark.jpg" alt="어두운 공간의 워크인 챔버" width="2000" height="1003" loading="lazy">
+    <div class="scene-txt">
+      <h2 id="h-walk">사람이 들어가는 시험실도</h2>
+      <p>워크인 챔버는 큰 시험품을 통째로 넣고 시험합니다.</p>
+    </div>
+  </section>
+
+  <section class="products" aria-labelledby="h-prod">
+    <h2 id="h-prod">시험 목적에 맞는 장비</h2>
+    <div class="prod-grid">
+      <a class="prod-main" href="#">
+        <div class="photo"><img src="../../../concepts2/assets/hires/platinous-j-lineup.jpg" alt="Platinous J 항온항습기 라인업" width="1812" height="900" loading="lazy"></div>
+        <h3>항온항습기 Platinous J</h3>
+        <p>ECO형은 0°C 이하 운전에서 최대 70% 에너지를 줄입니다.</p>
+      </a>
+      <a class="prod-side" href="#">
+        <div class="photo"><img src="../../../concepts2/assets/hires/tsa-pair.jpg" alt="열충격 시험기 TSA" width="2000" height="1500" loading="lazy"></div>
+        <h3>열충격 시험기 TSA</h3>
+        <p>고온 +200°C, 저온 -70°C까지.</p>
+      </a>
+      <a class="prod-side" href="#">
+        <div class="photo"><img src="../../../concepts2/assets/hires/hast-ehs-lineup.jpg" alt="HAST 시험기 EHS" width="1268" height="905" loading="lazy"></div>
+        <h3>HAST 시험기 EHS</h3>
+        <p>고온·고습에 압력을 더한 시험.</p>
+      </a>
+    </div>
+  </section>
+
+  <section class="facts" aria-labelledby="h-facts">
+    <h2 id="h-facts">45년의 약속</h2>
+    <dl>
+      <div><dt>1981</dt><dd>제이에스 엔지니어링 설립, ESPEC 한국 총판 계약</dd></div>
+      <div><dt>45년</dt><dd>같은 제조사, 같은 책임</dd></div>
+      <div><dt>연 3~4회</dt><dd>ESPEC 연구진 국내 세미나</dd></div>
+    </dl>
+  </section>
+
+  <section class="contact" id="contact" aria-labelledby="h-contact">
+    <h2 id="h-contact">시험 조건을 알려 주세요</h2>
+    <a class="btn btn-lg" href="#">견적문의</a>
+  </section>
+</main>
+
+<footer class="foot">
+  <p class="foot-name">J&amp;S 엔지니어링</p>
+  <p>(주)제이에스 엔지니어링 · 대표이사 정창현 · 주소·전화 [확인 필요]</p>
+  <p class="credit">장비 이미지 출처: ESPEC Corp. 공식 웹사이트 및 제품 카탈로그</p>
+</footer>
+
+<script src="script.js"></script>
+</body>
+</html>

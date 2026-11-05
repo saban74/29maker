@@ -1,0 +1,13 @@
+/* 03 열충격: 밝은 은회색 + 장비의 남색 하나만 강조 */
+:root{--ground:#d3d5d7;--ink:#17181b;--accent:#3d4f78;--node:#3d4f78;--line:rgba(23,24,27,.3)}
+.btn{background:var(--accent);border-color:var(--accent);color:#fff}
+.btn:hover{background:transparent;color:var(--accent)}
+.btn.inv{background:#fff;color:#111;border-color:#fff}
+.btn.inv:hover{background:transparent;color:#fff}
+.show .card{display:flex;flex-direction:column;justify-content:center;gap:16px;background:rgba(18,19,24,.74);border-color:rgba(255,255,255,.35)}
+.show .bg{min-height:calc(var(--u)*2)}
+.tbl{grid-auto-rows:auto}
+.tbl .cell{padding:22px 20px;font-size:16px}
+.tbl .cell b{font-family:var(--serif);font-weight:400;font-size:20px}
+.tbl a{font-weight:600;text-underline-offset:4px}
+@media (max-width:820px){.tbl>.cell:not(:first-child){grid-column:auto!important}.tbl .cell{padding:14px 20px}.hero .cell.m{min-height:34vw}}

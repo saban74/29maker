@@ -1,0 +1,127 @@
+/* A07 apple.com 홈 구조 - 화면 폭 배너가 위아래로 쌓임 */
+:root{
+  --ground:#fff;
+  --mist:#f5f5f7;
+  --ink:#1d1d1f;
+  --ink2:#515154;
+  --blue:#0066cc;
+  --blue-d:#004f9f;
+  --night:#000;
+  --font:"Pretendard Variable",Pretendard,-apple-system,"Apple SD Gothic Neo","Noto Sans KR","Malgun Gothic",sans-serif;
+  --pad:clamp(20px,4vw,48px);
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:var(--font);background:var(--mist);color:var(--ink);font-size:17px;line-height:1.5;-webkit-font-smoothing:antialiased;word-break:keep-all}
+img{display:block;max-width:100%;height:auto}
+a{color:inherit;text-decoration:none}
+:focus-visible{outline:3px solid var(--blue);outline-offset:3px;border-radius:6px}
+.dark :focus-visible,.night :focus-visible,.final :focus-visible{outline-color:#6cb2ff}
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)}
+.wrap{max-width:1100px;margin:0 auto;padding:0 var(--pad)}
+
+/* nav: 얇고 단순 */
+.nav{position:sticky;top:0;z-index:30;background:#fff;height:48px}
+.nav .wrap{max-width:1280px;display:flex;align-items:center;justify-content:space-between;height:48px}
+.logo{font-weight:800;font-size:16px;letter-spacing:-.02em}
+.menu{display:flex;gap:clamp(18px,2.6vw,38px);font-size:14px;color:var(--ink2)}
+.menu a:hover{color:var(--ink)}
+.menu .q{color:var(--blue);font-weight:600}
+.mnav{display:none;position:relative}
+.mnav summary{list-style:none;cursor:pointer;min-height:44px;display:flex;align-items:center;padding:0 8px;font-weight:600;font-size:15px}
+.mnav summary::-webkit-details-marker{display:none}
+.mnav div{position:absolute;right:0;top:46px;background:#fff;border-radius:14px;padding:8px;min-width:180px;box-shadow:0 12px 32px rgba(0,0,0,.14)}
+.mnav a{display:block;padding:12px 14px}
+
+.promo{background:#fff;text-align:center;font-size:14px;padding:10px var(--pad);min-height:44px;display:flex;align-items:center;justify-content:center}
+.promo span{color:var(--blue);font-weight:600;margin-left:6px}
+.promo a:hover span{text-decoration:underline}
+
+/* 버튼 한 가지: 알약. 채운 것과 윤곽만 있는 것 */
+.acts{display:flex;gap:14px;justify-content:center;flex-wrap:wrap;margin-top:22px}
+.btn{display:inline-flex;align-items:center;justify-content:center;min-height:44px;padding:0 22px;border-radius:999px;background:var(--blue);color:#fff;font-weight:600;font-size:16px;transition:background .2s,color .2s}
+.btn:hover{background:var(--blue-d)}
+.btn.o{background:transparent;color:var(--blue);box-shadow:inset 0 0 0 1.5px var(--blue)}
+.btn.o:hover{background:var(--blue);color:#fff}
+.dark .btn,.night .btn,.final .btn{background:#0a84ff}
+.dark .btn.o,.night .btn.o,.final .btn.o{background:transparent;color:#6cb2ff;box-shadow:inset 0 0 0 1.5px #6cb2ff}
+.dark .btn.o:hover,.night .btn.o:hover,.final .btn.o:hover{background:#6cb2ff;color:#000}
+
+/* 배너: 사진이 배경, 글은 위 가운데. 사진 위쪽 회색이 글 바탕. */
+.banner{position:relative;margin-top:12px;min-height:min(92vh,880px);text-align:center;overflow:hidden;background:#d9dbdc;color:var(--ink)}
+.banner::before{content:"";position:absolute;inset:0;background-size:cover;background-repeat:no-repeat}
+.bt{position:relative;z-index:1;padding:clamp(40px,6vw,72px) var(--pad) 0}
+.banner h1,.banner h2,.tile h2{font-size:clamp(40px,6vw,80px);font-weight:800;letter-spacing:-.045em;line-height:1.05}
+.banner .one,.tile .one{font-size:clamp(19px,2.3vw,30px);font-weight:500;letter-spacing:-.02em;margin-top:10px;line-height:1.3}
+.b1::before{background-image:url(../../assets/hires/platinous-j-lineup.jpg);background-position:center 0}
+.b2{background:#04050a;color:#f5f5f7}
+.b2::before{background-image:url(../../assets/hires/walk-in-tbe-dark.jpg);background-position:center bottom}
+.b3::before{background-image:url(../../assets/hires/tsa-pair.jpg);background-position:center 22%}
+.b4{background:#dcdee0}
+.b4::before{background-image:url(../../assets/hires/hast-ehs-lineup.jpg);background-position:center 0}
+.b5::before{background-image:url(../../assets/hires/ar-series-pair.jpg);background-position:center 0}
+.b2.dark .bt{padding-top:clamp(40px,6vw,72px)}
+
+/* 두 장씩 나란히 */
+.pair{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:12px}
+.tile{background:#fff;text-align:center;padding:clamp(40px,5vw,60px) 20px 0;min-height:min(78vh,700px);display:flex;flex-direction:column;overflow:hidden}
+.tile h2{font-size:clamp(32px,3.8vw,52px)}
+.tile .one{font-size:clamp(17px,1.7vw,22px)}
+.tile.night{background:#161618;color:#f5f5f7}
+.tile.night .btn{background:#0a84ff}
+.tile.night .btn.o{background:transparent;color:#6cb2ff;box-shadow:inset 0 0 0 1.5px #6cb2ff}
+.pic{margin-top:auto;display:flex;justify-content:center;align-items:flex-end;gap:clamp(8px,3vw,40px);padding-top:28px}
+.pic img{mix-blend-mode:multiply;max-width:48%;width:auto;height:auto;max-height:340px}
+.pic.w{background:#fff;margin-left:-20px;margin-right:-20px;padding:28px 20px 0}
+.pic.w img{max-width:70%}
+.tile:not(.night) .pic:only-child img{max-width:80%}
+
+.company{background:#fff;margin-top:12px;padding:clamp(80px,10vw,140px) 0;text-align:center}
+.company h2{font-size:clamp(32px,5vw,64px);letter-spacing:-.04em;line-height:1.1;font-weight:800}
+.company p{color:var(--ink2);max-width:34em;margin:20px auto 0}
+.company .acts{color:inherit}
+
+.news{padding:clamp(72px,9vw,120px) 0}
+.news h2{font-size:clamp(28px,3.4vw,44px);letter-spacing:-.03em;font-weight:800}
+.ng{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-top:36px}
+.ng article{background:#fff;border-radius:22px;padding:32px 28px;display:flex;flex-direction:column;min-height:280px}
+.ng time{color:var(--ink2);font-size:14px}
+.ng h3{font-size:22px;letter-spacing:-.025em;line-height:1.3;margin-top:10px;font-weight:700}
+.ng p{color:var(--ink2);margin-top:10px;font-size:16px}
+.lk{color:var(--blue);font-weight:600;margin-top:auto;padding-top:18px}
+.lk:hover{text-decoration:underline}
+
+.final{background:#000;color:#f5f5f7;text-align:center;padding:clamp(90px,11vw,150px) var(--pad)}
+.final h2{font-size:clamp(36px,6vw,76px);letter-spacing:-.045em;line-height:1.08;font-weight:800}
+.final p:not(.acts){color:#a1a1a6;margin:18px auto 0;max-width:32em}
+
+footer{background:var(--mist);padding:36px 0 40px;font-size:13px;color:var(--ink2)}
+footer p+p{margin-top:8px}
+footer b{color:var(--ink)}
+
+/* 움직임: 첫 배너의 글만 천천히 나타남 */
+@media (prefers-reduced-motion:no-preference){
+  .b1 .bt{animation:rise 1s cubic-bezier(.2,.7,.2,1) both .1s}
+  @keyframes rise{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:none}}
+}
+
+@media (max-width:980px){
+  .menu{display:none}
+  .mnav{display:block}
+}
+/* 휴대폰: 배너는 글을 위에, 사진을 아래쪽 절반에 */
+@media (max-width:760px){
+  body{font-size:16px}
+  .banner{min-height:640px}
+  .banner::before{inset:auto 0 0 0;height:56%;background-size:cover;-webkit-mask-image:linear-gradient(to bottom,transparent,#000 22%);mask-image:linear-gradient(to bottom,transparent,#000 22%)}
+  .b1::before{background-position:center 40%}
+  .b3::before{background-position:center 55%}
+  .b4::before{background-position:center 40%}
+  .b5::before{background-position:center 45%}
+  .b2::before{background-position:center 60%}
+  .pair{grid-template-columns:1fr}
+  .tile{min-height:0;padding-bottom:0}
+  .pic img{max-height:240px}
+  .ng{grid-template-columns:1fr}
+  .ng article{min-height:0}
+}

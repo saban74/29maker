@@ -1,0 +1,73 @@
+/* 04 장: 스크롤하면 바탕색이 남색 -> 얼음색 -> 코발트 -> 검정으로 바뀐다 */
+body { transition: background-color .7s var(--ease); }
+.sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); }
+.bar { position: absolute; inset: 0 0 auto 0; }
+h2 { font-size: clamp(28px, 3.1vw, 54px); }
+.btns { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 32px; }
+.chap { padding-block: var(--gap-sec); }
+.js .chap { background: transparent; }
+.c1 { background: #050c17; }
+.c2 { background: #e6edf7; }
+.c3 { background: #0e3f97; }
+.c4 { background: #000; }
+.light { color: var(--ink-on-ice); }
+.light h2 { color: #2f4470; }
+
+/* 장 1 */
+.c1 { padding-block: 0; min-height: 100vh; display: flex; }
+.c1__in { display: grid; grid-template-columns: 44% 1fr; align-items: center; width: 100%; padding-top: 90px; }
+.c1__txt p { max-width: 24em; margin-top: 28px; }
+.c1 h1 { font-size: clamp(38px, 5.2vw, 96px); }
+.c1__fig { position: relative; margin-right: 0; }
+.scan img { -webkit-mask-image: radial-gradient(ellipse 52% 56% at 50% 58%, #000 38%, transparent 100%); mask-image: radial-gradient(ellipse 52% 56% at 50% 58%, #000 38%, transparent 100%); }
+.scan .trk { transition: opacity .5s var(--ease), transform .6s var(--ease); }
+.js .scan .trk { opacity: 0; transform: scale(1.1); }
+.js .scan .trk.on { opacity: 1; transform: none; }
+@media (max-width: 900px) {
+  .c1__in { grid-template-columns: 1fr; padding-top: 150px; gap: 20px; }
+  .c1 h1 { font-size: clamp(34px, 10vw, 54px); }
+  .c1__fig { margin: 0; }
+}
+
+/* 장 2 */
+.c2__in { display: grid; grid-template-columns: 1fr 1.3fr; gap: 6%; align-items: start; }
+.c2__head p { margin-top: 24px; max-width: 24em; }
+table { width: 100%; border-collapse: collapse; font-size: 16px; }
+th, td { text-align: left; padding: 14px 12px 14px 0; vertical-align: top; }
+thead th { font-size: 13px; letter-spacing: .06em; color: var(--cobalt); font-weight: 700; }
+tbody tr:nth-child(odd) { background: rgba(14,63,151,.07); }
+tbody th, tbody td { padding-left: 12px; }
+tbody th { font-weight: 700; }
+.c2__eco { display: grid; grid-template-columns: 1fr 1.3fr; gap: 6%; align-items: end; margin-top: clamp(72px, 10vw, 160px); }
+.eco__n { font-size: clamp(120px, 24vw, 420px); font-weight: 200; letter-spacing: -.07em; line-height: .8; color: var(--cobalt); }
+.eco__n small { font-size: .4em; letter-spacing: 0; }
+.c2__eco h3 { font-size: clamp(22px, 2vw, 34px); margin-bottom: 14px; max-width: 18em; }
+.c2__eco p { max-width: 32em; }
+.c2__lineup { margin-top: clamp(40px, 6vw, 90px); }
+.c2__lineup img { mix-blend-mode: multiply; -webkit-mask-image: radial-gradient(ellipse 60% 60% at 50% 55%, #000 50%, transparent 100%); mask-image: radial-gradient(ellipse 60% 60% at 50% 55%, #000 50%, transparent 100%); }
+@media (max-width: 900px) {
+  .c2__in, .c2__eco { grid-template-columns: 1fr; gap: 36px; }
+  table { display: block; overflow-x: auto; font-size: 15px; }
+}
+
+/* 장 3 */
+.rail { display: flex; gap: 0; overflow-x: auto; scroll-snap-type: x proximity; margin-top: clamp(40px, 6vw, 90px); padding: 0 var(--m) 24px; }
+.rail li { flex: none; width: clamp(230px, 22vw, 340px); scroll-snap-align: start; padding-right: 32px; }
+.rail .sq { display: block; margin: 0 0 28px; }
+.rail b { display: block; font-size: clamp(48px, 5.4vw, 96px); font-weight: 200; letter-spacing: -.05em; line-height: 1; margin-bottom: 14px; }
+.rail p { max-width: 14em; }
+.rail::-webkit-scrollbar { height: 6px; }
+.rail::-webkit-scrollbar-thumb { background: rgba(255,255,255,.4); }
+
+/* 장 4 */
+.c4__in { display: grid; grid-template-columns: 1.2fr 1fr; gap: 6%; align-items: center; }
+.c4 h2 { font-size: clamp(30px, 3.8vw, 66px); }
+.c4__sub { margin-top: 24px; max-width: 28em; color: #aab6c9; }
+.wire { width: 100%; max-width: 420px; height: auto; justify-self: end; }
+@media (max-width: 800px) { .c4__in { grid-template-columns: 1fr; } .wire { justify-self: start; } }
+
+.foot { background: #000; padding-top: clamp(48px, 7vw, 100px); }
+.foot__in { display: grid; grid-template-columns: 1fr 1fr; gap: 6%; margin-bottom: clamp(40px, 7vw, 100px); }
+.foot__cols { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
+.foot__cols li + li { margin-top: 10px; }
+@media (max-width: 700px) { .foot__in { grid-template-columns: 1fr; gap: 28px; } }

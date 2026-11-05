@@ -1,0 +1,120 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>글꼴 견본 4. 첨단 기술형 (Space Grotesk + Wanted Sans) - 제이에스 엔지니어링</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400..700&family=Space+Mono&display=swap">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/wanteddev/wanted-sans@v1.0.3/packages/wanted-sans/fonts/webfonts/variable/split/WantedSansVariable.css">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<a class="skip" href="#main">본문으로 건너뛰기</a>
+
+<header class="top">
+  <a class="logo" href="#main"><span class="mark">JS</span><span>제이에스 엔지니어링</span></a>
+  <nav aria-label="주 메뉴">
+    <a href="#hero" aria-current="page">회사 소개</a>
+    <a href="#spec">제품</a>
+    <a href="#ui">자료실</a>
+    <a href="#ui">뉴스</a>
+    <a class="btn btn-sm" href="#ui">문의하기</a>
+  </nav>
+</header>
+
+<main id="main">
+  <section class="hero" id="hero" aria-labelledby="h1">
+    <p class="cap mono">견본 4. 첨단 기술형</p>
+    <h1 id="h1" class="t-display">ESPEC 한국 단독 총대리점, 1981년부터 45년</h1>
+    <div class="hero-grid">
+      <div>
+        <p class="lead">-70°C 초저온에서 +180°C 고온, 98%rh 고습까지. 환경시험 장비의 선정부터 설치와 사후 관리까지 제이에스 엔지니어링이 맡습니다.</p>
+        <p class="actions"><a class="btn" href="#spec">제품 보기</a> <a class="btn btn-ghost" href="#ui">견적 문의</a></p>
+      </div>
+      <figure class="range" aria-label="시험 온도 범위 -70도에서 +180도">
+        <div class="bar"><span class="cold">-70°C</span><span class="zero">0</span><span class="hot">+180°C</span></div>
+        <figcaption class="cap mono">시험 온도 범위. 습도는 최대 98%rh</figcaption>
+      </figure>
+    </div>
+  </section>
+
+  <section class="sec" aria-labelledby="s-about">
+    <h2 id="s-about">이 조합은 이런 회사에 어울립니다</h2>
+    <div class="cols">
+    <p>Space Grotesk는 글자 모양에 개성이 있어 젊고 앞선 기술 회사로 보이게 합니다. 다만 45년 회사에는 다소 가벼울 수 있어, 큰 제목과 숫자에만 쓰고 본문은 차분한 Wanted Sans에 맡기는 구성입니다. 수치 라벨은 Space Mono로 맞춥니다.</p>
+    <table class="info">
+      <caption class="sr">글꼴 정보</caption>
+      <tbody>
+        <tr><th scope="row">영문 글꼴</th><td>Space Grotesk (400~700), Space Mono (400) &middot; SIL OFL</td></tr>
+        <tr><th scope="row">한글 글꼴</th><td>Wanted Sans Variable &middot; SIL OFL</td></tr>
+        <tr><th scope="row">영문 로딩</th><td>Google Fonts<br><code>https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400..700&amp;family=Space+Mono&amp;display=swap</code></td></tr>
+        <tr><th scope="row">한글 로딩</th><td>jsDelivr (Wanted Sans v1.0.3)<br><code>https://cdn.jsdelivr.net/gh/wanteddev/wanted-sans@v1.0.3/packages/wanted-sans/fonts/webfonts/variable/split/WantedSansVariable.css</code></td></tr>
+        <tr><th scope="row">글꼴 지정</th><td><code>font-family: "Space Grotesk", "Wanted Sans Variable", sans-serif;</code></td></tr>
+      </tbody>
+    </table>
+    </div>
+  </section>
+
+  <section class="sec" aria-labelledby="s-scale">
+    <h2 id="s-scale">글자 크기 체계</h2>
+    <div class="tablewrap">
+    <table class="scale">
+      <thead><tr><th scope="col">역할</th><th scope="col">PC</th><th scope="col">휴대폰</th><th scope="col">굵기 / 줄 간격</th><th scope="col">견본</th></tr></thead>
+      <tbody>
+        <tr><th scope="row">디스플레이</th><td class="mono">76px</td><td class="mono">40px</td><td>500 / 1.05</td><td><span class="t-display">-70°C Aa</span></td></tr>
+        <tr><th scope="row">제목</th><td class="mono">30px</td><td class="mono">24px</td><td>600 / 1.25</td><td><span class="t-title">환경시험 장비 -70°C</span></td></tr>
+        <tr><th scope="row">본문</th><td class="mono">16px</td><td class="mono">16px</td><td>400 / 1.7</td><td><span class="t-body">45년간 쌓은 설치와 점검의 기록</span></td></tr>
+        <tr><th scope="row">캡션 (Mono)</th><td class="mono">14px</td><td class="mono">14px</td><td>400 / 1.5</td><td><span class="cap mono">EHS-412 / 0.392MPa</span></td></tr>
+      </tbody>
+    </table>
+    </div>
+  </section>
+
+  <section class="sec" id="spec" aria-labelledby="s-spec">
+    <h2 id="s-spec">사양표</h2>
+    <div class="tablewrap">
+    <table class="spec">
+      <caption class="sr">ESPEC 대표 모델 사양</caption>
+      <thead><tr><th scope="col">모델</th><th scope="col" class="r">온도 (°C)</th><th scope="col" class="r">습도 (%rh)</th><th scope="col" class="r">내용적 (L)</th><th scope="col" class="r">최대 압력 (MPa)</th></tr></thead>
+      <tbody>
+        <tr><th scope="row">PR-1J</th><td class="r">-20 ~ +100</td><td class="r">20 ~ 98</td><td class="r">120</td><td class="r">-</td></tr>
+        <tr><th scope="row">PSL-2J</th><td class="r">-70 ~ +100</td><td class="r">20 ~ 98</td><td class="r">306</td><td class="r">-</td></tr>
+        <tr><th scope="row">PHP-3J</th><td class="r">+10 ~ +100</td><td class="r">40 ~ 98</td><td class="r">398</td><td class="r">-</td></tr>
+        <tr><th scope="row">EHS-212</th><td class="r">+105.0 ~ +142.9</td><td class="r">75 ~ 100</td><td class="r">-</td><td class="r">0.196</td></tr>
+        <tr><th scope="row">EHS-412</th><td class="r">+105.0 ~ +162.2</td><td class="r">75 ~ 100</td><td class="r">-</td><td class="r">0.392</td></tr>
+      </tbody>
+    </table>
+    </div>
+    <p class="cap mono">출처: ESPEC 카탈로그 기준 정리. 압력은 게이지 압력.</p>
+  </section>
+
+  <section class="sec" id="ui" aria-labelledby="s-ui">
+    <h2 id="s-ui">버튼, 메뉴, 라벨</h2>
+    <p class="row"><a class="btn" href="#ui">견적 문의</a> <a class="btn btn-ghost" href="#ui">카탈로그 받기</a> <button class="btn btn-sm" type="button">제품 비교</button></p>
+    <p class="row"><span class="tag mono">NEW</span> <span class="tag mono">-70°C</span> <span class="tag mono">HAST</span> <span class="tag tag-on">열충격 시험기</span></p>
+    <p class="row menu"><a href="#ui">항온항습기</a><a href="#ui">열충격 시험기</a><a href="#ui">HAST</a><a href="#ui">워크인 챔버</a><a href="#ui">산업용 오븐</a></p>
+  </section>
+
+  <section class="sec" aria-labelledby="s-mix">
+    <h2 id="s-mix">한글과 영문, 숫자가 섞인 문장</h2>
+    <p class="mix1">ESPEC 한국 단독 총대리점, 1981년부터 45년</p>
+    <p>Platinous J 시리즈는 -70°C부터 +100°C까지, 습도는 20~98%rh 범위에서 제어합니다. EHS-412는 +162.2°C, 0.392MPa(게이지)의 고온 고습 가압 조건에서 전자부품 수명을 평가합니다. TSA-73ES 열충격 시험기는 +200°C와 -70°C 사이를 오갑니다.</p>
+    <p class="cap">숫자와 영문 제목은 Space Grotesk의 개성 있는 모양, 한글 설명은 Wanted Sans의 차분한 모양으로 대비를 둡니다.</p>
+  </section>
+
+  <section class="sec" aria-labelledby="s-ref">
+    <h2 id="s-ref">참고한 fontsinuse 사례</h2>
+    <ul class="refs">
+      <li><a href="https://fontsinuse.com/uses/71234/ronan-space-systems">Ronan Space Systems</a> (PP Monument, Basis Grotesque Mono, 유료) <span>캐나다 우주 발사 기술 스타트업. 빌린 점: 어두운 바탕에 큰 영문 제목과 모노 라벨을 쓰는 방식. 무료 대체로 Space Grotesk와 Space Mono를 씁니다.</span></li>
+      <li><a href="https://fontsinuse.com/uses/80363/kokybiska-svetaine-portfolio-website">Kokybiska Svetaine portfolio website</a> (Space Grotesk, HK Grotesk) <span>fontsinuse 기술 주제 웹사이트. 빌린 점: Space Grotesk를 제목에만 쓰고 본문은 다른 차분한 글꼴에 맡기는 짝짓기.</span></li>
+    </ul>
+  </section>
+</main>
+
+<footer class="foot">
+  <p class="mono">(주)제이에스 엔지니어링 JS Engineering Corp. &middot; 글꼴 견본 4 &middot; <a href="../index.html">5종 비교로 돌아가기</a></p>
+</footer>
+</body>
+</html>

@@ -1,0 +1,213 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>글꼴 조합 5종 비교 - 제이에스 엔지니어링</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=IBM+Plex+Sans:wght@400;600&family=IBM+Plex+Sans+KR:wght@400;600&family=IBM+Plex+Mono:wght@400&family=Barlow:wght@400;600&family=Barlow+Condensed:wght@600&family=Space+Grotesk:wght@400..700&family=Space+Mono&family=Instrument+Sans:wght@400..700&family=Instrument+Serif&family=Noto+Serif+KR:wght@500;700&display=swap">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/sun-typeface/SUIT@v2.0.5/fonts/variable/woff2/SUIT-Variable.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/wanteddev/wanted-sans@v1.0.3/packages/wanted-sans/fonts/webfonts/variable/split/WantedSansVariable.css">
+<style>
+:root{--ink:#14181f;--sub:#4a5260;--bg:#f4f5f7;--blue:#1747c9}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:400 16px/1.7 "Pretendard Variable",Pretendard,system-ui,-apple-system,"Segoe UI",sans-serif}
+a{color:var(--blue)}
+:focus-visible{outline:3px solid var(--blue);outline-offset:3px}
+.skip{position:absolute;left:-999px}.skip:focus{left:16px;top:8px;background:#000;color:#fff;padding:8px 12px;z-index:9}
+.wrap{max-width:1280px;margin:0 auto;padding:0 32px}
+header.head{padding:56px 0 32px}
+header.head h1{font-size:40px;line-height:1.2;margin:0 0 12px;letter-spacing:-.02em;font-weight:700;word-break:keep-all}
+header.head p{margin:0;max-width:44em;color:var(--sub);word-break:keep-all}
+.jump{display:flex;gap:10px;flex-wrap:wrap;margin:24px 0 0;padding:0;list-style:none}
+.jump a{display:inline-block;background:#fff;border:1.5px solid var(--ink);color:var(--ink);padding:9px 16px;text-decoration:none;font-weight:600;font-size:15px}
+.jump a:hover{background:var(--ink);color:#fff}
+
+.combo{background:#fff;margin:0 0 28px;padding:36px 32px 32px}
+.combo h2{margin:0 0 4px;font:700 24px/1.3 "Pretendard Variable",Pretendard,sans-serif;word-break:keep-all}
+.combo .names{margin:0 0 4px;color:var(--sub);font-size:15px}
+.combo .use{margin:0 0 24px;font-size:15px}
+.combo .go{margin:20px 0 0}
+.combo .go a{display:inline-block;background:var(--ink);color:#fff;padding:12px 22px;text-decoration:none;font-weight:600}
+.combo .go a:hover{background:var(--blue)}
+.demo{display:grid;grid-template-columns:1fr 1fr;gap:40px;align-items:start}
+.demo .big{font-size:40px;line-height:1.2;margin:0 0 14px;word-break:keep-all}
+.demo .body{margin:0 0 14px;max-width:34em;word-break:keep-all}
+.demo .nums{margin:0;font-size:28px;line-height:1.3}
+.tablewrap{overflow-x:auto}
+table{border-collapse:collapse;width:100%}
+th,td{padding:9px 12px;text-align:left;border-bottom:1px solid #d5d9df;white-space:nowrap}
+thead th{border-bottom:2px solid var(--ink);font-size:14px}
+.r{text-align:right!important;font-variant-numeric:tabular-nums}
+
+/* 조합별 글꼴 */
+.c1 .demo,.c1 table{font-family:Inter,"Pretendard Variable",Pretendard,sans-serif}
+.c1 .big{font-weight:700;letter-spacing:-.035em}
+.c2 .demo,.c2 table{font-family:"IBM Plex Sans","IBM Plex Sans KR",sans-serif}
+.c2 .big{font-weight:600;letter-spacing:-.015em}
+.c2 .nums,.c2 td.r,.c2 tbody th{font-family:"IBM Plex Mono","IBM Plex Sans KR",monospace}
+.c3 .demo,.c3 table{font-family:Barlow,"SUIT Variable",SUIT,sans-serif}
+.c3 .big{font-family:"Barlow Condensed","SUIT Variable",SUIT,sans-serif;font-weight:600;font-size:48px;line-height:1.05}
+.c3 .nums{font-family:"Barlow Condensed","SUIT Variable",sans-serif;font-weight:600;font-size:34px}
+.c3 td.r{font-weight:600}
+.c4 .demo,.c4 table{font-family:"Space Grotesk","Wanted Sans Variable","Wanted Sans",sans-serif}
+.c4 .big{font-weight:500;letter-spacing:-.04em}
+.c4 .nums,.c4 td.r{font-family:"Space Mono","Wanted Sans Variable",monospace}
+.c4 .nums{font-size:24px}
+.c5 .demo,.c5 table{font-family:"Instrument Sans","Pretendard Variable",Pretendard,sans-serif}
+.c5 .big{font-family:"Instrument Serif","Noto Serif KR",serif;font-weight:500;font-size:44px;line-height:1.15}
+.c5 .nums{font-family:"Instrument Serif","Noto Serif KR",serif;font-size:32px}
+
+.summary{background:#fff;margin:0 0 28px;padding:32px}
+.summary h2{font-size:24px;margin:0 0 16px}
+.summary td,.summary th{white-space:normal;vertical-align:top}
+footer.foot{padding:32px 0 56px;color:var(--sub);font-size:14px}
+@media (max-width:860px){
+  .wrap{padding:0 16px}
+  header.head h1{font-size:28px}
+  .demo{grid-template-columns:1fr;gap:20px}
+  .demo .big,.c3 .big,.c5 .big{font-size:28px}
+  .combo,.summary{padding:24px 16px}
+  .demo .nums{font-size:22px}
+}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+</style>
+</head>
+<body>
+<a class="skip" href="#main">본문으로 건너뛰기</a>
+<div class="wrap">
+<header class="head">
+  <h1>제이에스 엔지니어링 글꼴 조합 5종 비교</h1>
+  <p>같은 문장, 같은 숫자, 같은 사양표를 다섯 조합으로 나란히 놓았습니다. 각 조합의 전체 견본 페이지는 아래 버튼으로 이동합니다.</p>
+  <ul class="jump" aria-label="견본 바로가기">
+    <li><a href="01-swiss/index.html">1 스위스 정밀형</a></li>
+    <li><a href="02-plex-doc/index.html">2 엔지니어링 문서형</a></li>
+    <li><a href="03-signage/index.html">3 산업 표지판형</a></li>
+    <li><a href="04-space/index.html">4 첨단 기술형</a></li>
+    <li><a href="05-heritage/index.html">5 45년 전통형</a></li>
+  </ul>
+</header>
+
+<main id="main">
+
+<section class="summary" aria-labelledby="sum">
+  <h2 id="sum">한눈에 보기</h2>
+  <div class="tablewrap">
+  <table>
+    <thead><tr><th scope="col">조합</th><th scope="col">영문 + 한글</th><th scope="col">성격</th><th scope="col">추천 용도</th></tr></thead>
+    <tbody>
+      <tr><th scope="row">1 스위스 정밀형</th><td>Inter + Pretendard</td><td>군더더기 없는 정밀과 신뢰</td><td>어떤 디자인에도 맞는 기본값. 사진과 사양표가 많은 사이트</td></tr>
+      <tr><th scope="row">2 엔지니어링 문서형</th><td>IBM Plex Sans / Mono + Plex Sans KR</td><td>설계도와 사양서 같은 문서 느낌</td><td>사양표와 자료실이 중심인 사이트. 숫자 줄 맞춤이 가장 중요할 때</td></tr>
+      <tr><th scope="row">3 산업 표지판형</th><td>Barlow (+ Condensed) + SUIT</td><td>공장 안내판, 장비 명판처럼 단단하고 실용적</td><td>제품명과 모델명을 크게 내세우는 제품 목록, 현장 느낌의 홍보</td></tr>
+      <tr><th scope="row">4 첨단 기술형</th><td>Space Grotesk / Mono + Wanted Sans</td><td>앞서가는 신기술 회사 느낌</td><td>신제품·반도체·배터리 같은 첨단 분야 소개 페이지의 제목과 숫자</td></tr>
+      <tr><th scope="row">5 45년 전통형</th><td>Instrument Serif / Sans + Noto Serif KR / Pretendard</td><td>오랜 역사의 품격과 현대적 정돈</td><td>회사 소개, 연혁, 창립 기념 같은 신뢰를 말하는 화면. 로딩은 가장 무거움</td></tr>
+    </tbody>
+  </table>
+  </div>
+</section>
+
+<section class="combo c1" aria-labelledby="t1">
+  <h2 id="t1">1. 스위스 정밀형</h2>
+  <p class="names">Inter + Pretendard &middot; 모두 SIL OFL</p>
+  <p class="use"><strong>추천 용도:</strong> 전체 기본 글꼴. 가장 안전하고 무난합니다.</p>
+  <div class="demo">
+    <div>
+      <p class="big">ESPEC 한국 단독 총대리점, 1981년부터 45년</p>
+      <p class="body">환경시험 장비의 선정부터 설치와 사후 관리까지 제이에스 엔지니어링이 맡습니다.</p>
+      <p class="nums">-70°C &nbsp;+180°C &nbsp;98%rh &nbsp;0.392MPa</p>
+    </div>
+    <div class="tablewrap" data-spec></div>
+  </div>
+  <p class="go"><a href="01-swiss/index.html">견본 1 전체 보기</a></p>
+</section>
+
+<section class="combo c2" aria-labelledby="t2">
+  <h2 id="t2">2. 엔지니어링 문서형</h2>
+  <p class="names">IBM Plex Sans / Mono + IBM Plex Sans KR &middot; 모두 SIL OFL</p>
+  <p class="use"><strong>추천 용도:</strong> 사양표, 자료실, 제품 상세. 숫자와 모델명은 Mono로.</p>
+  <div class="demo">
+    <div>
+      <p class="big">ESPEC 한국 단독 총대리점, 1981년부터 45년</p>
+      <p class="body">환경시험 장비의 선정부터 설치와 사후 관리까지 제이에스 엔지니어링이 맡습니다.</p>
+      <p class="nums">-70°C &nbsp;+180°C &nbsp;98%rh &nbsp;0.392MPa</p>
+    </div>
+    <div class="tablewrap" data-spec></div>
+  </div>
+  <p class="go"><a href="02-plex-doc/index.html">견본 2 전체 보기</a></p>
+</section>
+
+<section class="combo c3" aria-labelledby="t3">
+  <h2 id="t3">3. 산업 표지판형</h2>
+  <p class="names">Barlow (+ Barlow Condensed) + SUIT &middot; 모두 SIL OFL</p>
+  <p class="use"><strong>추천 용도:</strong> 제품 목록, 모델명 강조, 현장 느낌의 첫 화면.</p>
+  <div class="demo">
+    <div>
+      <p class="big">ESPEC 한국 단독 총대리점, 1981년부터 45년</p>
+      <p class="body">환경시험 장비의 선정부터 설치와 사후 관리까지 제이에스 엔지니어링이 맡습니다.</p>
+      <p class="nums">-70°C &nbsp;+180°C &nbsp;98%rh &nbsp;0.392MPa</p>
+    </div>
+    <div class="tablewrap" data-spec></div>
+  </div>
+  <p class="go"><a href="03-signage/index.html">견본 3 전체 보기</a></p>
+</section>
+
+<section class="combo c4" aria-labelledby="t4">
+  <h2 id="t4">4. 첨단 기술형</h2>
+  <p class="names">Space Grotesk / Space Mono + Wanted Sans &middot; 모두 SIL OFL</p>
+  <p class="use"><strong>추천 용도:</strong> 신제품·반도체 소개의 제목과 숫자. 사이트 전체에는 가벼울 수 있음.</p>
+  <div class="demo">
+    <div>
+      <p class="big">ESPEC 한국 단독 총대리점, 1981년부터 45년</p>
+      <p class="body">환경시험 장비의 선정부터 설치와 사후 관리까지 제이에스 엔지니어링이 맡습니다.</p>
+      <p class="nums">-70°C &nbsp;+180°C &nbsp;98%rh &nbsp;0.392MPa</p>
+    </div>
+    <div class="tablewrap" data-spec></div>
+  </div>
+  <p class="go"><a href="04-space/index.html">견본 4 전체 보기</a></p>
+</section>
+
+<section class="combo c5" aria-labelledby="t5">
+  <h2 id="t5">5. 45년 전통형</h2>
+  <p class="names">Instrument Serif / Sans + Noto Serif KR / Pretendard &middot; 모두 SIL OFL</p>
+  <p class="use"><strong>추천 용도:</strong> 회사 소개, 연혁, 창립 기념. 글꼴 4개라 로딩은 가장 무거움.</p>
+  <div class="demo">
+    <div>
+      <p class="big">ESPEC 한국 단독 총대리점, 1981년부터 45년</p>
+      <p class="body">환경시험 장비의 선정부터 설치와 사후 관리까지 제이에스 엔지니어링이 맡습니다.</p>
+      <p class="nums">-70°C &nbsp;+180°C &nbsp;98%rh &nbsp;0.392MPa</p>
+    </div>
+    <div class="tablewrap" data-spec></div>
+  </div>
+  <p class="go"><a href="05-heritage/index.html">견본 5 전체 보기</a></p>
+</section>
+</main>
+
+<footer class="foot">
+  <p>jsDelivr로 불러오는 한글 글꼴(Pretendard, SUIT, Wanted Sans)은 인터넷이 막힌 환경의 미리보기에서 대체 글꼴로 보일 수 있습니다. 사양 수치는 ESPEC 카탈로그 기준 정리입니다.</p>
+</footer>
+</div>
+
+<!-- 사양표는 한 번만 쓰고 다섯 곳에 같은 내용을 채워 넣습니다 (같은 표로 비교하기 위함). -->
+<template id="spec-tpl">
+<table>
+  <caption class="sr" style="position:absolute;width:1px;height:1px;overflow:hidden">ESPEC 대표 모델 사양</caption>
+  <thead><tr><th scope="col">모델</th><th scope="col" class="r">온도 (°C)</th><th scope="col" class="r">습도 (%rh)</th><th scope="col" class="r">내용적 (L)</th><th scope="col" class="r">압력 (MPa)</th></tr></thead>
+  <tbody>
+    <tr><th scope="row">PR-1J</th><td class="r">-20 ~ +100</td><td class="r">20 ~ 98</td><td class="r">120</td><td class="r">-</td></tr>
+    <tr><th scope="row">PSL-2J</th><td class="r">-70 ~ +100</td><td class="r">20 ~ 98</td><td class="r">306</td><td class="r">-</td></tr>
+    <tr><th scope="row">PHP-3J</th><td class="r">+10 ~ +100</td><td class="r">40 ~ 98</td><td class="r">398</td><td class="r">-</td></tr>
+    <tr><th scope="row">EHS-212</th><td class="r">+105.0 ~ +142.9</td><td class="r">75 ~ 100</td><td class="r">-</td><td class="r">0.196</td></tr>
+    <tr><th scope="row">EHS-412</th><td class="r">+105.0 ~ +162.2</td><td class="r">75 ~ 100</td><td class="r">-</td><td class="r">0.392</td></tr>
+  </tbody>
+</table>
+</template>
+<script>
+  // 같은 사양표를 다섯 칸에 복사합니다. 스크립트가 꺼져 있으면 칸이 비어 보이므로 안내 문구를 둡니다.
+  var t = document.getElementById('spec-tpl');
+  document.querySelectorAll('[data-spec]').forEach(function (el) { el.appendChild(t.content.cloneNode(true)); });
+</script>
+<noscript><p style="text-align:center">이 비교 페이지의 사양표는 스크립트가 켜져 있어야 보입니다. 각 견본 페이지에서는 표가 그대로 보입니다.</p></noscript>
+</body>
+</html>

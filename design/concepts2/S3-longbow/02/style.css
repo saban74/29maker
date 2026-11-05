@@ -1,0 +1,17 @@
+/* 02 챔버: 중간 회색과 검정이 번갈아 바뀌는 바탕 */
+:root{--ground:#8a8e91;--ink:#16171a;--line:rgba(22,23,26,.34);--node:#16171a}
+body{background:var(--ground)}
+.dark{--line:rgba(255,255,255,.3);--node:#fff;background:#0f1011;color:#fff}
+.dark .btn{background:#fff;color:#111;border-color:#fff}
+.dark .btn:hover{background:transparent;color:#fff}
+.dark .h,.dark .body,.dark .small,.dark .num{color:#fff}
+.dark .small{color:#e0e2e3}
+.hero .bg,.hero .cell{min-height:0}
+.hero .bg{min-height:calc(var(--u)*2)}
+.num small{font-size:.32em;letter-spacing:0;margin-left:.05em;font-weight:300}
+.pc{display:block;text-decoration:none;color:#fff;background:#d6d8d9}
+.pc img{transition:transform .9s cubic-bezier(.2,.7,.2,1)}
+.pc:hover img,.pc:focus-visible img{transform:scale(1.04)}
+.pc .cap{position:absolute;left:0;right:0;bottom:0;z-index:2;padding:14px 20px;background:rgba(15,16,17,.78);font-size:14px;line-height:1.5}
+.pc .cap b{display:block;font-family:var(--serif);font-weight:300;font-size:22px;letter-spacing:-.01em}
+@media (max-width:820px){.dark.over .cell{background:#0f1011!important}.hero .cell{padding-top:20px}.num{font-size:26vw}}

@@ -1,0 +1,63 @@
+/* GD/01 영화 같은 한 장면: 차분한 회색, 사진 고정 + 큰 문장 */
+:root{--ink:#0c0e11;--paper:#cfd1d3;--text:#e9ebed;--mute:#9aa3ab;--steel:#6f7b86}
+body{background:var(--ink);color:var(--text)}
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)}
+.wrap{padding:0 clamp(20px,4vw,56px);max-width:1440px;margin:0 auto}
+
+.bar{position:fixed;inset:0 0 auto 0;z-index:20;display:flex;align-items:center;justify-content:space-between;gap:24px;padding:20px clamp(20px,4vw,56px);color:#fff;mix-blend-mode:normal}
+.mark{font-weight:700;font-size:17px;letter-spacing:-.01em}
+.bar ul{display:flex;gap:28px;font-size:15px}
+.bar ul a{opacity:.8}.bar ul a:hover{opacity:1}
+.btn{display:inline-block;padding:10px 20px;background:#e9ebed;color:#0c0e11;font-weight:600;font-size:15px;border-radius:0;transition:background .2s}
+.btn:hover{background:#fff}
+.btn-lg{padding:16px 32px;font-size:18px}
+@media(max-width:900px){.bar ul{display:none}}
+
+/* 고정 사진 */
+.film{position:relative}
+.film-pic{position:sticky;top:0;height:100vh;height:100svh;overflow:hidden;z-index:0}
+.film-pic img{width:100%;height:100%;object-fit:cover;object-position:62% 50%;transform:scale(1.02)}
+.film-pic::after{content:"";position:absolute;inset:0;background:rgba(5,7,10,.38)}
+.beat{position:relative;z-index:1;min-height:100vh;min-height:100svh;padding:0 clamp(20px,4vw,56px);display:flex;flex-direction:column;justify-content:center}
+.film-pic + .beat{margin-top:-100vh;margin-top:-100svh}
+.beat-hero{justify-content:flex-end;padding-bottom:clamp(48px,9vh,110px)}
+.beat-right{align-items:flex-end;text-align:right}
+h1{font-size:clamp(44px,8.4vw,132px);font-weight:800;line-height:1.02;letter-spacing:-.04em;max-width:12em}
+.big{font-size:clamp(34px,6vw,92px);font-weight:700;line-height:1.1;letter-spacing:-.035em;max-width:14em}
+.sub{font-size:clamp(17px,1.6vw,21px);line-height:1.65;max-width:34em;margin-top:28px;color:#dfe2e5}
+.beat-right .big{max-width:11em}
+
+/* 문장이 천천히 밝아짐: 스크립트가 있을 때만 */
+.js .reveal{opacity:.18;transition:opacity .9s ease}
+.js .reveal.on{opacity:1}
+
+/* 밝은 구역: 사진 배경 회색에 맞춤 */
+.lineup{background:var(--paper);color:#101215;padding:clamp(96px,14vw,200px) 0}
+.lineup h2,.more h2,.years h2,.contact h2{font-size:clamp(30px,4.4vw,64px);font-weight:750;line-height:1.12;letter-spacing:-.035em;max-width:16em}
+.lineup-pic{margin:clamp(40px,6vw,80px) 0 0;background:#c3c5c8}
+.lineup-pic img{width:100%;max-height:70vh;object-fit:cover;object-position:50% 60%}
+.lineup-pic figcaption{position:absolute;width:1px;height:1px;overflow:hidden}
+.spec{width:100%;border-collapse:collapse;margin-top:clamp(32px,4vw,56px);font-size:17px}
+.spec th,.spec td{text-align:left;padding:18px 12px 18px 0;border-bottom:1px solid #9fa3a7;font-variant-numeric:tabular-nums}
+.spec thead th{font-weight:600;color:#3b4148}
+.spec tbody th{font-weight:700}
+@media(max-width:640px){.spec{font-size:15px}.spec th,.spec td{padding-right:6px}}
+
+.more{background:#e5e6e7;color:#101215;padding:clamp(96px,12vw,180px) 0}
+.rows{margin-top:clamp(40px,6vw,80px);display:grid;gap:clamp(24px,3vw,40px)}
+.rows a{display:grid;grid-template-columns:minmax(0,5fr) minmax(0,4fr);gap:clamp(20px,4vw,64px);align-items:center}
+.rows img{width:100%;aspect-ratio:2/1;object-fit:cover;background:#c3c5c8}
+.rows h3{font-size:clamp(24px,3vw,40px);letter-spacing:-.03em;line-height:1.2}
+.rows p{margin-top:12px;font-size:18px;max-width:24em;color:#2a2f35}
+.rows a:hover h3{text-decoration:underline;text-underline-offset:6px}
+@media(max-width:760px){.rows a{grid-template-columns:1fr}}
+
+.years{background:var(--ink);padding:clamp(100px,14vw,200px) 0}
+.years p{margin-top:28px;font-size:clamp(18px,2vw,24px);max-width:30em;color:#cfd3d7}
+.contact{background:#14181c;padding:clamp(100px,14vw,200px) 0}
+.contact p{margin:24px 0 40px;font-size:20px;color:#cfd3d7}
+
+.foot{background:var(--ink);padding:56px 0 40px;color:#aeb5bb;font-size:15px}
+.foot .wrap{display:grid;gap:10px}
+.foot-name{font-size:clamp(40px,12vw,180px);font-weight:800;letter-spacing:-.05em;line-height:1;color:#e9ebed;margin-bottom:24px}
+.credit{color:#8c949b;margin-top:16px}

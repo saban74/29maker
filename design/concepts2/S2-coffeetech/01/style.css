@@ -1,0 +1,39 @@
+/* 01: 원본에 가장 가까운 해석. 청흑 + 따뜻한 회색, 가운데 정렬 포스터, 호박색 강조 */
+:root { --d-bg: #0c0d12; --accent: #f0a31c; }
+
+.hero { align-items: center; text-align: center; }
+.hero h1 { font-size: clamp(76px, 20vw, 340px); }
+
+.emerge { background: #06070a; }
+.emerge img { -webkit-mask-image: linear-gradient(#000 0, #000 88%, transparent); mask-image: linear-gradient(#000 0, #000 88%, transparent); }
+
+.intro { padding: clamp(80px, 11vw, 170px) var(--m); }
+.intro-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 32px var(--m); align-items: start; }
+.portrait { position: relative; width: min(100%, 290px); aspect-ratio: 3 / 4; }
+.portrait .ph { height: 100%; }
+.portrait .sig { right: -34px; bottom: 24px; }
+.intro-text { max-width: 560px; }
+.intro-text .big { font-size: clamp(19px, 1.9vw, 26px); line-height: 1.55; margin: 18px 0 20px; letter-spacing: -.01em; }
+.who { font-size: 15px; color: var(--l-mute); margin-bottom: 28px; }
+
+.products { padding: clamp(80px, 11vw, 170px) 0 clamp(80px, 10vw, 150px); overflow: hidden; }
+.mega { font-weight: 500; font-size: clamp(80px, 18vw, 320px); line-height: .95; letter-spacing: -.06em; margin: 0 0 clamp(40px, 6vw, 90px) var(--m); white-space: nowrap; }
+.prod-grid { display: grid; grid-template-columns: 1fr 2fr; gap: 32px var(--m); padding: 0 var(--m); }
+.side { padding-top: 6px; }
+.tiles { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+.all { grid-column: 2; justify-self: start; font-size: clamp(28px, 4vw, 56px); letter-spacing: -.03em; margin-top: 24px; }
+
+.facts { padding: clamp(80px, 10vw, 150px) var(--m); }
+.facts dl { margin: 40px 0 0; display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; }
+.facts dt { font-size: 16px; order: 2; }
+.facts dd { margin: 0 0 8px; font-weight: 300; font-size: clamp(64px, 11vw, 190px); line-height: 1; letter-spacing: -.06em; }
+.facts div { display: flex; flex-direction: column; }
+
+@media (max-width: 900px) {
+  .intro-grid { grid-template-columns: 1fr; }
+  .portrait .sig { right: -4px; }
+  .prod-grid { grid-template-columns: 1fr; }
+  .all { grid-column: 1; }
+  .facts dl { grid-template-columns: 1fr; }
+  .tiles { grid-template-columns: 1fr; }
+}

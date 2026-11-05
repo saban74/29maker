@@ -1,0 +1,562 @@
+[
+ {
+  "g": "A-apple",
+  "c": "A01",
+  "tag": "pc",
+  "H": 5427,
+  "problems": []
+ },
+ {
+  "g": "A-apple",
+  "c": "A01",
+  "tag": "mobile",
+  "H": 3993,
+  "problems": []
+ },
+ {
+  "g": "A-apple",
+  "c": "A02",
+  "tag": "pc",
+  "H": 5853,
+  "problems": []
+ },
+ {
+  "g": "A-apple",
+  "c": "A02",
+  "tag": "mobile",
+  "H": 4578,
+  "problems": []
+ },
+ {
+  "g": "A-apple",
+  "c": "A03",
+  "tag": "pc",
+  "H": 3517,
+  "problems": []
+ },
+ {
+  "g": "A-apple",
+  "c": "A03",
+  "tag": "mobile",
+  "H": 3227,
+  "problems": []
+ },
+ {
+  "g": "A-apple",
+  "c": "A04",
+  "tag": "pc",
+  "H": 4035,
+  "problems": []
+ },
+ {
+  "g": "A-apple",
+  "c": "A04",
+  "tag": "mobile",
+  "H": 3934,
+  "problems": []
+ },
+ {
+  "g": "A-apple",
+  "c": "A05",
+  "tag": "pc",
+  "H": 5378,
+  "problems": []
+ },
+ {
+  "g": "A-apple",
+  "c": "A05",
+  "tag": "mobile",
+  "H": 3800,
+  "problems": []
+ },
+ {
+  "g": "A-apple",
+  "c": "A06",
+  "tag": "pc",
+  "H": 4767,
+  "problems": []
+ },
+ {
+  "g": "A-apple",
+  "c": "A06",
+  "tag": "mobile",
+  "H": 5268,
+  "problems": []
+ },
+ {
+  "g": "A-apple",
+  "c": "A07",
+  "tag": "pc",
+  "H": 7503,
+  "problems": []
+ },
+ {
+  "g": "A-apple",
+  "c": "A07",
+  "tag": "mobile",
+  "H": 6749,
+  "problems": []
+ },
+ {
+  "g": "A-apple",
+  "c": "A08",
+  "tag": "pc",
+  "H": 4317,
+  "problems": []
+ },
+ {
+  "g": "A-apple",
+  "c": "A08",
+  "tag": "mobile",
+  "H": 6055,
+  "problems": []
+ },
+ {
+  "g": "A-apple",
+  "c": "A09",
+  "tag": "pc",
+  "H": 4083,
+  "problems": []
+ },
+ {
+  "g": "A-apple",
+  "c": "A09",
+  "tag": "mobile",
+  "H": 6948,
+  "problems": []
+ },
+ {
+  "g": "A-apple",
+  "c": "A10",
+  "tag": "pc",
+  "H": 6995,
+  "problems": []
+ },
+ {
+  "g": "A-apple",
+  "c": "A10",
+  "tag": "mobile",
+  "H": 4890,
+  "problems": []
+ },
+ {
+  "g": "R-reference",
+  "c": "R01",
+  "tag": "pc",
+  "H": 5792,
+  "problems": []
+ },
+ {
+  "g": "R-reference",
+  "c": "R01",
+  "tag": "mobile",
+  "H": 8430,
+  "problems": []
+ },
+ {
+  "g": "R-reference",
+  "c": "R02",
+  "tag": "pc",
+  "H": 5985,
+  "problems": []
+ },
+ {
+  "g": "R-reference",
+  "c": "R02",
+  "tag": "mobile",
+  "H": 8617,
+  "problems": []
+ },
+ {
+  "g": "R-reference",
+  "c": "R03",
+  "tag": "pc",
+  "H": 5581,
+  "problems": []
+ },
+ {
+  "g": "R-reference",
+  "c": "R03",
+  "tag": "mobile",
+  "H": 7946,
+  "problems": []
+ },
+ {
+  "g": "R-reference",
+  "c": "R04",
+  "tag": "pc",
+  "H": 5932,
+  "problems": []
+ },
+ {
+  "g": "R-reference",
+  "c": "R04",
+  "tag": "mobile",
+  "H": 8267,
+  "problems": []
+ },
+ {
+  "g": "R-reference",
+  "c": "R05",
+  "tag": "pc",
+  "H": 5755,
+  "problems": []
+ },
+ {
+  "g": "R-reference",
+  "c": "R05",
+  "tag": "mobile",
+  "H": 9003,
+  "problems": []
+ },
+ {
+  "g": "R-reference",
+  "c": "R06",
+  "tag": "pc",
+  "H": 6388,
+  "problems": []
+ },
+ {
+  "g": "R-reference",
+  "c": "R06",
+  "tag": "mobile",
+  "H": 9802,
+  "problems": []
+ },
+ {
+  "g": "R-reference",
+  "c": "R07",
+  "tag": "pc",
+  "H": 5578,
+  "problems": []
+ },
+ {
+  "g": "R-reference",
+  "c": "R07",
+  "tag": "mobile",
+  "H": 9896,
+  "problems": []
+ },
+ {
+  "g": "R-reference",
+  "c": "R08",
+  "tag": "pc",
+  "H": 6188,
+  "problems": []
+ },
+ {
+  "g": "R-reference",
+  "c": "R08",
+  "tag": "mobile",
+  "H": 9884,
+  "problems": []
+ },
+ {
+  "g": "R-reference",
+  "c": "R09",
+  "tag": "pc",
+  "H": 6803,
+  "problems": []
+ },
+ {
+  "g": "R-reference",
+  "c": "R09",
+  "tag": "mobile",
+  "H": 10880,
+  "problems": []
+ },
+ {
+  "g": "R-reference",
+  "c": "R10",
+  "tag": "pc",
+  "H": 6151,
+  "problems": []
+ },
+ {
+  "g": "R-reference",
+  "c": "R10",
+  "tag": "mobile",
+  "H": 9886,
+  "problems": []
+ },
+ {
+  "g": "S1-sstr",
+  "c": "01",
+  "tag": "pc",
+  "H": 7259,
+  "problems": []
+ },
+ {
+  "g": "S1-sstr",
+  "c": "01",
+  "tag": "mobile",
+  "H": 8295,
+  "problems": []
+ },
+ {
+  "g": "S1-sstr",
+  "c": "02",
+  "tag": "pc",
+  "H": 4203,
+  "problems": []
+ },
+ {
+  "g": "S1-sstr",
+  "c": "02",
+  "tag": "mobile",
+  "H": 5210,
+  "problems": []
+ },
+ {
+  "g": "S1-sstr",
+  "c": "03",
+  "tag": "pc",
+  "H": 4740,
+  "problems": []
+ },
+ {
+  "g": "S1-sstr",
+  "c": "03",
+  "tag": "mobile",
+  "H": 4711,
+  "problems": []
+ },
+ {
+  "g": "S1-sstr",
+  "c": "04",
+  "tag": "pc",
+  "H": 5512,
+  "problems": []
+ },
+ {
+  "g": "S1-sstr",
+  "c": "04",
+  "tag": "mobile",
+  "H": 5532,
+  "problems": []
+ },
+ {
+  "g": "S2-coffeetech",
+  "c": "01",
+  "tag": "pc",
+  "H": 5189,
+  "problems": []
+ },
+ {
+  "g": "S2-coffeetech",
+  "c": "01",
+  "tag": "mobile",
+  "H": 5353,
+  "problems": []
+ },
+ {
+  "g": "S2-coffeetech",
+  "c": "02",
+  "tag": "pc",
+  "H": 5202,
+  "problems": []
+ },
+ {
+  "g": "S2-coffeetech",
+  "c": "02",
+  "tag": "mobile",
+  "H": 4421,
+  "problems": []
+ },
+ {
+  "g": "S2-coffeetech",
+  "c": "03",
+  "tag": "pc",
+  "H": 5548,
+  "problems": []
+ },
+ {
+  "g": "S2-coffeetech",
+  "c": "03",
+  "tag": "mobile",
+  "H": 4892,
+  "problems": []
+ },
+ {
+  "g": "S2-coffeetech",
+  "c": "04",
+  "tag": "pc",
+  "H": 6248,
+  "problems": []
+ },
+ {
+  "g": "S2-coffeetech",
+  "c": "04",
+  "tag": "mobile",
+  "H": 4294,
+  "problems": []
+ },
+ {
+  "g": "S3-longbow",
+  "c": "01",
+  "tag": "pc",
+  "H": 5385,
+  "problems": []
+ },
+ {
+  "g": "S3-longbow",
+  "c": "01",
+  "tag": "mobile",
+  "H": 5359,
+  "problems": []
+ },
+ {
+  "g": "S3-longbow",
+  "c": "02",
+  "tag": "pc",
+  "H": 5349,
+  "problems": []
+ },
+ {
+  "g": "S3-longbow",
+  "c": "02",
+  "tag": "mobile",
+  "H": 5539,
+  "problems": []
+ },
+ {
+  "g": "S3-longbow",
+  "c": "03",
+  "tag": "pc",
+  "H": 5059,
+  "problems": []
+ },
+ {
+  "g": "S3-longbow",
+  "c": "03",
+  "tag": "mobile",
+  "H": 4762,
+  "problems": []
+ },
+ {
+  "g": "S3-longbow",
+  "c": "04",
+  "tag": "pc",
+  "H": 4821,
+  "problems": []
+ },
+ {
+  "g": "S3-longbow",
+  "c": "04",
+  "tag": "mobile",
+  "H": 4579,
+  "problems": []
+ },
+ {
+  "g": "S4-alethia",
+  "c": "01",
+  "tag": "pc",
+  "H": 5818,
+  "problems": []
+ },
+ {
+  "g": "S4-alethia",
+  "c": "01",
+  "tag": "mobile",
+  "H": 4791,
+  "problems": []
+ },
+ {
+  "g": "S4-alethia",
+  "c": "02",
+  "tag": "pc",
+  "H": 5093,
+  "problems": []
+ },
+ {
+  "g": "S4-alethia",
+  "c": "02",
+  "tag": "mobile",
+  "H": 4438,
+  "problems": []
+ },
+ {
+  "g": "S4-alethia",
+  "c": "03",
+  "tag": "pc",
+  "H": 5402,
+  "problems": []
+ },
+ {
+  "g": "S4-alethia",
+  "c": "03",
+  "tag": "mobile",
+  "H": 4697,
+  "problems": []
+ },
+ {
+  "g": "S4-alethia",
+  "c": "04",
+  "tag": "pc",
+  "H": 4657,
+  "problems": []
+ },
+ {
+  "g": "S4-alethia",
+  "c": "04",
+  "tag": "mobile",
+  "H": 4560,
+  "problems": []
+ },
+ {
+  "g": "S5-sharplink",
+  "c": "01-hall",
+  "tag": "pc",
+  "H": 6003,
+  "problems": []
+ },
+ {
+  "g": "S5-sharplink",
+  "c": "01-hall",
+  "tag": "mobile",
+  "H": 6585,
+  "problems": []
+ },
+ {
+  "g": "S5-sharplink",
+  "c": "02-ice",
+  "tag": "pc",
+  "H": 4649,
+  "problems": []
+ },
+ {
+  "g": "S5-sharplink",
+  "c": "02-ice",
+  "tag": "mobile",
+  "H": 5836,
+  "problems": []
+ },
+ {
+  "g": "S5-sharplink",
+  "c": "03-stage",
+  "tag": "pc",
+  "H": 6158,
+  "problems": []
+ },
+ {
+  "g": "S5-sharplink",
+  "c": "03-stage",
+  "tag": "mobile",
+  "H": 5168,
+  "problems": []
+ },
+ {
+  "g": "S5-sharplink",
+  "c": "04-chapters",
+  "tag": "pc",
+  "H": 5272,
+  "problems": []
+ },
+ {
+  "g": "S5-sharplink",
+  "c": "04-chapters",
+  "tag": "mobile",
+  "H": 4092,
+  "problems": []
+ }
+]

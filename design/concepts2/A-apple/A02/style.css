@@ -1,0 +1,79 @@
+/* A02 - Pro 다크. 사진의 검은 배경(#0b0c11 안팎)에 페이지 색을 맞춰 장비만 떠 보이게 합니다. */
+:root{
+  --bg:#07080c;--ink:#f5f5f7;--ink-2:#a6a8b0;
+  --accent:#e8e9ee;--accent-d:#fff;--on-accent:#07080c;
+  --link:#8fb8ff;--ghost-ink:#f5f5f7;--ghost-on:#07080c;
+  --nav-bg:rgba(7,8,12,.9);--foot-bg:#07080c;--foot-ink:#80838c;--foot-b:#f5f5f7;
+  --paper:#f2f2f4;
+}
+h1,h2,h3{font-weight:600;letter-spacing:-.045em;line-height:1.05}
+.nav{border-bottom:1px solid #15161b}
+
+.hero{position:relative;overflow:hidden}
+.hero .head{padding-top:clamp(40px,7vh,88px);position:relative;z-index:2}
+.hero h1{font-size:clamp(56px,10.5vw,152px);font-weight:600;letter-spacing:-.055em;line-height:.92}
+.hero .sub{font-size:clamp(20px,2.4vw,32px);color:var(--ink-2);margin-top:20px;letter-spacing:-.025em}
+.hero .cta{display:flex;gap:24px;align-items:center;flex-wrap:wrap;margin-top:24px}
+.stage{margin-top:clamp(-120px,-9vw,-30px);position:relative;z-index:1}
+.stage img{width:100%;max-width:2000px;margin:0 auto;
+  -webkit-mask-image:linear-gradient(to bottom,transparent 0,#000 18%,#000 80%,transparent 100%);
+          mask-image:linear-gradient(to bottom,transparent 0,#000 18%,#000 80%,transparent 100%)}
+.bignum{position:absolute;right:var(--pad);bottom:clamp(40px,12vw,200px);text-align:right;z-index:2}
+.bignum span{display:block;font-size:clamp(56px,9vw,140px);font-weight:200;letter-spacing:-.06em;line-height:.9;font-variant-numeric:tabular-nums}
+.bignum small{font-size:.3em;font-weight:300;margin-left:4px;letter-spacing:-.02em}
+.bignum em{display:block;font-style:normal;color:var(--ink-2);font-size:15px;margin-top:10px}
+
+.specs{padding:clamp(88px,12vw,170px) 0 clamp(100px,13vw,180px)}
+.specs h2{font-size:clamp(34px,5vw,68px);max-width:14em}
+.figs{display:grid;grid-template-columns:repeat(4,1fr);gap:clamp(24px,3.4vw,56px);margin-top:clamp(56px,8vw,112px)}
+.figs div{display:flex;flex-direction:column;gap:18px}
+.figs dd{font-size:clamp(46px,6.4vw,100px);font-weight:200;letter-spacing:-.06em;line-height:.95;font-variant-numeric:tabular-nums;white-space:nowrap}
+.figs dd small{font-size:.34em;font-weight:300;margin:0 3px;letter-spacing:-.02em}
+.figs dt{color:var(--ink-2);font-size:16px;max-width:15em}
+
+.walkin{background:var(--paper);color:#1d1d1f;padding:clamp(88px,11vw,160px) 0;--accent:#1d1d1f;--accent-d:#000;--on-accent:#fff;--link:#0a64c8;--ink-2:#4a4a4f}
+.walkin .grid{display:grid;grid-template-columns:.9fr 1.1fr;gap:clamp(32px,6vw,96px);align-items:center}
+.walkin h2{font-size:clamp(32px,4.2vw,58px)}
+.walkin p{margin-top:22px;color:var(--ink-2);max-width:30em}
+.walkin .acts{display:flex;gap:24px;align-items:center;flex-wrap:wrap;margin-top:28px}
+.walkin figure img{width:100%;border-radius:28px}
+
+.ai{padding:clamp(100px,14vw,200px) 0}
+.ai h2{font-size:clamp(40px,7vw,104px);font-weight:600}
+.ai p{color:var(--ink-2);max-width:34em;margin:28px 0 12px;font-size:clamp(17px,1.5vw,20px)}
+
+.products{padding:0 0 clamp(100px,13vw,180px)}
+.products h2{font-size:clamp(30px,4vw,52px)}
+.list{list-style:none;margin-top:clamp(32px,4vw,56px)}
+.list li{border-top:1px solid #1b1c22}
+.list li:last-child{border-bottom:1px solid #1b1c22}
+.list a{display:flex;justify-content:space-between;align-items:baseline;gap:24px;padding:26px 0;transition:padding .35s var(--ease)}
+.list b{font-size:clamp(24px,3.4vw,44px);font-weight:600;letter-spacing:-.04em}
+.list span{color:var(--ink-2);font-size:16px;text-align:right}
+.list a:hover{padding-left:16px}
+
+.about{background:#0e0f14;padding:clamp(100px,13vw,180px) 0}
+.about h2{font-size:clamp(44px,8vw,120px);font-weight:200;letter-spacing:-.06em}
+.about p{color:var(--ink-2);margin-top:30px;max-width:32em}
+
+.final{text-align:center;padding:clamp(100px,13vw,180px) 0}
+.final h2{font-size:clamp(36px,6vw,84px)}
+.final p{color:var(--ink-2);margin:22px auto 0;max-width:30em}
+.final .acts{display:flex;gap:16px;justify-content:center;flex-wrap:wrap;margin-top:34px}
+
+@media (prefers-reduced-motion:no-preference){
+  .stage img{animation:lights 2.4s var(--ease) both .1s}
+  @keyframes lights{from{opacity:0;filter:brightness(.4)}to{opacity:1;filter:none}}
+}
+
+@media (max-width:900px){
+  .figs{grid-template-columns:1fr 1fr;row-gap:48px}
+  .walkin .grid{grid-template-columns:1fr}
+}
+@media (max-width:700px){
+  .stage{margin-top:8px}
+  .stage img{width:170%;max-width:none;margin-left:-20%}
+  .bignum{position:static;text-align:left;padding:8px var(--pad) 0}
+  .list a{flex-direction:column;gap:6px}
+  .list span{text-align:left}
+}

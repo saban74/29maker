@@ -1,0 +1,18 @@
+# ESPEC 카탈로그 PDF: 용량이 크고 ESPEC 저작물이라 저장소에 올리지 않음 (목록은 research/espec/files.md)
+research/espec/files/*.pdf
+
+# taste-skill 작업 파일 (스크린샷, 방향 시트)
+.taste-skill/
+
+# 참고용으로 받은 다른 회사 로고(상표). 저장소에 올리지 않음 (목록과 출처는 research/brand/references.md)
+research/brand/logobook/
+
+# ESPEC 3D 모델과 설계 자료: 공개 허락 확인 전이라 저장소에 올리지 않음
+design/system/assets/3d/
+*.stp
+*.step
+*.glb
+
+# Eleventy 빌드 결과와 설치 폴더 (자동 생성)
+node_modules/
+_site/

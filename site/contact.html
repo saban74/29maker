@@ -1,0 +1,165 @@
+---
+title: 견적·문의 | 제이에스 엔지니어링
+description: 견적 요청, 기술 상담, 자료 요청, A/S, 위탁 시험 문의. 온라인 접수는 준비 중이며, 지금은 전화·이메일로 문의해 주세요.
+css: pages
+nav: contact
+scripts:
+  - js/pages.js
+layout: layouts/base.njk
+---
+{#
+  견적·문의: 제목 > 문의 폼(유형 선택 > 용도 > 장비 > 조건 > 연락처) + 옆 연락처 상자.
+     폼은 아직 전송이 연결되어 있지 않습니다. 연결 방법이 정해지면 pages.js 의 submit 부분과 form 의 action 을 고치세요.
+#}
+<!-- 1. 제목 영역 -->
+<section class="b-r-hero pg-head" aria-labelledby="pg-title">
+  <div class="wrap b-r-hero__top">
+    <div>
+      <p class="b-r-hero__tag">CONTACT</p>
+      <h1 class="b-r-hero__title" id="pg-title">Request<br>a quote</h1>
+    </div>
+    <div>
+      <p class="b-r-hero__sub"><strong>견적·문의</strong>온라인 접수는 준비 중입니다. 아래 항목을 미리 정리해 두시면 전화 상담이 빨라집니다. 응답 시간은 <span class="tbd">[확인 필요: 영업일 기준 ○일 이내]</span>입니다.</p>
+    </div>
+  </div>
+</section>
+
+<!-- 2. 문의 폼 -->
+<section class="blk tone-white" aria-labelledby="form-h">
+  <div class="wrap">
+    <h2 class="sr-only" id="form-h">문의 양식</h2>
+    <div class="contact-grid">
+
+      <!-- data-endpoints : 문의를 받을 주소들. 비워 두면 "온라인 접수 준비 중" 안내만 나옵니다.
+           주소를 쉼표로 여러 개 쓰면 모두에게 보내고(예: 이메일 받는 곳, 그룹웨어 받는 곳), 하나라도 성공하면 "접수되었습니다"가 나옵니다.
+           예) data-endpoints="https://example.com/mail-hook, https://example.com/groupware-hook"
+           자세한 설명은 site/INTEGRATION.md 를 보세요. -->
+      <form class="cform" id="contact-form" data-endpoints="">
+        <!-- 안내·오류 영역 (aria-live): JS 가 없어도 처음부터 보이고, 보내기 버튼을 누르면 JS 가 다시 읽어 줍니다 -->
+        <p class="callout" id="form-notice" aria-live="polite" style="margin-bottom:var(--sp-7)">온라인 문의 접수는 준비 중입니다. 대표전화 <a class="link" href="tel:0255570505">02-557-0505</a>로 문의해 주세요. <span class="tbd">[확인 필요: 문의 접수 방법 연결 전]</span></p>
+
+        <!-- 스팸 방지용 숨김 칸: 사람은 보지 못하고 비워 두며, 자동 입력 프로그램이 채우면 JS 가 보내지 않습니다. 지우지 마세요. -->
+        <div class="hp" aria-hidden="true"><label>이 칸은 비워 두세요 <input type="text" name="website" tabindex="-1" autocomplete="off"></label></div>
+
+        <fieldset>
+          <legend><span>01</span>문의 유형</legend>
+          <div class="type-pick">
+            <label><input type="radio" name="type" value="quote" checked><span>견적 요청</span></label>
+            <label><input type="radio" name="type" value="consult"><span>기술 상담</span></label>
+            <label><input type="radio" name="type" value="material"><span>자료 요청</span></label>
+            <label><input type="radio" name="type" value="as"><span>A/S·유지보수</span></label>
+            <label><input type="radio" name="type" value="lab"><span>위탁 시험</span></label>
+            <label><input type="radio" name="type" value="etc"><span>기타</span></label>
+          </div>
+        </fieldset>
+
+        <!-- 용도: 견적 요청, 기술 상담일 때만 -->
+        <fieldset data-for="quote consult">
+          <legend><span>02</span>용도</legend>
+          <div class="fields">
+            <div class="field">
+              <label for="f-purpose">시험 목적 <span class="req">필수</span></label>
+              <select id="f-purpose" name="purpose" data-req autocomplete="off">
+                <option value="">선택해 주세요</option>
+                <option>온도·습도 환경 시험</option>
+                <option>급속 온도변화·온도 사이클 (열피로)</option>
+                <option>열충격 시험</option>
+                <option>HAST 가속수명 시험</option>
+                <option>배터리 충방전·안전 시험</option>
+                <option>반도체 패키지 전기적 신뢰성 (절연·도체 저항)</option>
+                <option>대형 시험체·서버 시험</option>
+                <option>무풍·저진동 열변형 관찰</option>
+                <option>고온 시험·열처리·건조</option>
+                <option>진동 시험</option>
+                <option>잘 모르겠음</option>
+              </select>
+            </div>
+            <div class="field">
+              <label for="f-industry">산업 분야</label>
+              <select id="f-industry" name="industry" autocomplete="off">
+                <option value="">선택해 주세요</option>
+                <option>반도체</option><option>전기전자</option><option>배터리</option><option>자동차·모빌리티</option><option>항공우주·방산</option><option>소재·기타</option>
+              </select>
+            </div>
+          </div>
+        </fieldset>
+
+        <!-- 장비: 견적 요청, 기술 상담, 자료 요청, A/S 일 때 -->
+        <fieldset data-for="quote consult material as">
+          <legend><span>03</span>장비</legend>
+          <div class="fields">
+            <div class="field">
+              <label for="f-product">관심 제품 또는 모델명</label>
+              <input type="text" id="f-product" name="product" autocomplete="off">
+              <span class="hint">제품 페이지에서 오셨다면 자동으로 입력됩니다. A/S는 장비 번호도 적어 주세요.</span>
+            </div>
+            <div class="field" data-for="quote consult">
+              <label for="f-count">필요 대수</label>
+              <input type="text" id="f-count" name="count" inputmode="numeric" autocomplete="off">
+            </div>
+          </div>
+        </fieldset>
+
+        <!-- 조건: 견적 요청, 기술 상담일 때 -->
+        <fieldset data-for="quote consult">
+          <legend><span>04</span>시험 조건</legend>
+          <div class="fields">
+            <div class="field"><label for="f-temp">온도 범위</label><input type="text" id="f-temp" name="temp" placeholder="예: -40 ~ +125°C" autocomplete="off"></div>
+            <div class="field"><label for="f-humi">습도 범위</label><input type="text" id="f-humi" name="humidity" placeholder="예: 85%rh" autocomplete="off"></div>
+            <div class="field"><label for="f-size">필요한 용량·시험품 크기</label><input type="text" id="f-size" name="size" autocomplete="off"></div>
+            <div class="field"><label for="f-std">적용 규격</label><input type="text" id="f-std" name="standard" placeholder="예: AEC-Q100" autocomplete="off"></div>
+            <div class="field"><label for="f-when">희망 도입 시기</label><input type="text" id="f-when" name="when" autocomplete="off"></div>
+            <div class="field"><label for="f-file">시험 사양서 첨부</label><input type="file" id="f-file" name="spec"></div>
+          </div>
+        </fieldset>
+
+        <!-- 요청 내용: 모든 유형 -->
+        <fieldset>
+          <legend><span>05</span>요청 내용</legend>
+          <div class="fields">
+            <div class="field field--wide" data-for="lab">
+              <label for="f-labtest">시험 내용 <span class="req">필수</span></label>
+              <input type="text" id="f-labtest" name="labtest" data-req autocomplete="off">
+              <span class="hint">위탁 시험소의 시험 가능 항목은 확인 중이어서 상담 후 안내해 드립니다.</span>
+            </div>
+            <div class="field field--wide">
+              <label for="f-msg">기타 요청</label>
+              <textarea id="f-msg" name="message" autocomplete="off"></textarea>
+            </div>
+          </div>
+        </fieldset>
+
+        <fieldset>
+          <legend><span>06</span>연락처</legend>
+          <div class="fields">
+            <div class="field"><label for="f-company">회사·기관명 <span class="req">필수</span></label><input type="text" id="f-company" name="company" autocomplete="organization" required></div>
+            <div class="field"><label for="f-name">담당자 이름 <span class="req">필수</span></label><input type="text" id="f-name" name="name" autocomplete="name" required></div>
+            <div class="field"><label for="f-tel">연락처 <span class="req">필수</span></label><input type="tel" id="f-tel" name="tel" autocomplete="tel" required></div>
+            <div class="field"><label for="f-mail">이메일 <span class="req">필수</span></label><input type="email" id="f-mail" name="email" autocomplete="email" spellcheck="false" required></div>
+          </div>
+          <div class="agree stack-top-s">
+            <input type="checkbox" id="f-agree" name="agree" required>
+            <label for="f-agree"><strong>개인정보 수집·이용에 동의합니다. <span class="req">필수</span></strong><br>
+              수집 항목: 회사명, 이름, 연락처, 이메일 및 문의 내용. 이용 목적: 문의 답변. 보관 기간 <span class="tbd">[확인 필요]</span>. 자세한 내용은 <a class="link" href="privacy.html">개인정보처리방침</a>을 확인해 주세요.</label>
+          </div>
+        </fieldset>
+
+        <!-- 버튼 문구: data-endpoints 가 비어 있으면 "입력 내용 확인", 주소가 있으면 JS 가 "문의 보내기"로 바꿉니다 -->
+        <button class="btn" type="submit" id="form-submit">입력 내용 확인</button>
+      </form>
+
+      <!-- 옆 상자: 폼을 쓰기 싫은 방문자용 연락처 -->
+      <aside class="contact-side" aria-labelledby="side-h">
+        <h2 id="side-h">전화·이메일로 문의하기</h2>
+        <dl>
+          <dt>대표전화</dt><dd><a class="link" href="tel:0255570505">02-557-0505</a></dd>
+          <dt>팩스</dt><dd>02-557-2253</dd>
+          <dt>이메일</dt><dd><span class="tbd">[확인 필요: 이메일]</span></dd>
+          <dt>업무 시간</dt><dd><span class="tbd">[확인 필요]</span></dd>
+        </dl>
+        <p>본사·공장은 충남 아산시 둔포면, 서울사무소는 서울 강남구 삼성로, 지사는 대구와 광주에 있습니다. 주소는 <a class="link" href="about.html#location">오시는 길</a>에서 확인해 주세요.</p>
+        <p>필요한 카탈로그는 <a class="link" href="resources.html">기술자료</a>에서 ESPEC 공식 사이트로 바로 볼 수 있습니다.</p>
+      </aside>
+    </div>
+  </div>
+</section>

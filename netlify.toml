@@ -1,0 +1,13 @@
+# Netlify 배포 설정 (자세한 연결 순서는 DEPLOY.md)
+[build]
+  command = "npm run build"   # Eleventy 로 홈페이지 만들기
+  publish = "_site"           # 만들어진 홈페이지 폴더
+
+[build.environment]
+  NODE_VERSION = "22"
+
+# 관리자 화면은 검색에 나오지 않게
+[[headers]]
+  for = "/admin/*"
+  [headers.values]
+    X-Robots-Tag = "noindex"

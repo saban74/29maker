@@ -1,0 +1,206 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>제이에스 엔지니어링 | 산업별로 고르는 ESPEC 시험 장비</title>
+<meta name="description" content="반도체, 전기전자, 배터리, 자동차, 항공우주·방산, 소재. 시험하는 산업을 고르면 맞는 ESPEC 장비를 보여 드립니다. ESPEC 한국 단독 총대리점 제이에스 엔지니어링.">
+<link rel="stylesheet" href="style.css">
+<script>document.documentElement.className = "js";</script>
+</head>
+<body>
+<a class="skip" href="#lens">본문으로 건너뛰기</a>
+
+<header class="site-head">
+  <div class="wrap">
+    <a class="logo" href="#"><b>J&amp;S ENGINEERING</b><span>제이에스 엔지니어링</span></a>
+    <nav class="gnb" aria-label="주 메뉴">
+      <a href="#">회사소개</a><a href="#">제품소개</a><a href="#">솔루션</a><a href="#">기술자료</a><a href="#">서비스</a><a href="#">고객지원</a>
+    </nav>
+    <a class="btn" href="#ask">견적문의</a>
+  </div>
+</header>
+
+<main>
+<!--
+  산업과 장비의 연결은 research/espec/ 문서에 적힌 용도만 사용했습니다. 지어낸 연결 없음.
+  근거 없는 칸은 [확인 필요]로 표시.
+  반도체  : products/HAST.md(AI 반도체, 데이터센터, 자율주행 부품), TCC시리즈.md(JEDEC 반도체 패키지), 반도체평가시스템.md(AMI/AMR)
+  전기전자: SH벤치탑.md(연구실, 개발 부서), MTP-101.md(광학/고주파 디바이스, 전자 회로 기판), AR시리즈.md(전자부품), PlatinousJ.md
+  배터리  : 배터리장비.md(ADBT, Chamber Next, Safety Tester), PlatinousJ.md(ECO형 배터리 충방전)
+  자동차  : AR시리즈.md(차량 부품), TCC시리즈.md(AEC-Q100, LV 124 L-03, SAE-J1211), 워크인챔버.md(차량), 배터리장비.md(차량용 2차전지)
+  항공우주·방산: TSA열충격.md(MIL-STD-883). 항공우주 전용 자료는 files.md에 aero.pdf 목록만 있고 내용 확인 못 함
+  소재    : 산업용오븐.md(고온 시험, 열처리, 건조), PlatinousJ.md(보관), 반도체평가시스템.md(신소재 절연층)
+-->
+<section class="hero" id="lens" aria-labelledby="h1">
+  <div class="wrap">
+    <div class="hero-top">
+      <h1 id="h1">무엇을 시험하시나요?</h1>
+      <p>산업을 고르면 그 산업에서 쓰는 ESPEC 장비로 첫 화면이 바뀝니다. 제이에스 엔지니어링은 ESPEC의 한국 단독 총대리점입니다.</p>
+    </div>
+
+    <div class="lens">
+      <nav class="picker" id="picker" aria-label="산업 선택">
+        <a href="#p-semicon" class="f-semicon" data-key="semicon">반도체<small>장비 4종</small></a>
+        <a href="#p-elec" class="f-elec" data-key="elec">전기전자<small>장비 4종</small></a>
+        <a href="#p-battery" class="f-battery" data-key="battery">배터리<small>장비 4종</small></a>
+        <a href="#p-auto" class="f-auto" data-key="auto">자동차·모빌리티<small>장비 4종</small></a>
+        <a href="#p-aero" class="f-aero" data-key="aero">항공우주·방산<small>장비 2종</small></a>
+        <a href="#p-material" class="f-material" data-key="material">소재<small>장비 3종</small></a>
+      </nav>
+
+      <div class="stage" id="stage">
+        <!-- 반도체 -->
+        <article class="panel f-semicon" id="p-semicon" data-key="semicon" aria-labelledby="t-semicon">
+          <h2 id="t-semicon">반도체: 패키지와 배선이 열, 습도, 전압을 견디는지 확인합니다</h2>
+          <p class="lead">AI 반도체, 데이터센터, 자율주행 부품의 신뢰성을 짧은 기간에 평가하는 장비입니다.</p>
+          <ul class="tiles">
+            <li class="tile"><div class="shot"><img src="../assets/espec/hast-ehs-mv.png" alt="HAST EHS 시리즈" width="280" height="300"></div>
+              <div class="txt"><h3>HAST (EHS)</h3><p class="spec">+105 ~ +162.2°C · 75~100%rh · 가압</p><p class="why">고온, 고습, 가압을 한꺼번에 걸어 수명과 고장 모드를 평가합니다.</p></div></li>
+            <li class="tile"><div class="shot"><img src="../assets/espec/tcc150-mv.png" alt="TCC 시리즈" width="270" height="300"></div>
+              <div class="txt"><h3>TCC 열 사이클</h3><p class="spec">-70 ~ +180°C · 최대 20K/min</p><p class="why">JEDEC, IPC 규격의 열피로 시험. 반도체 패키지와 실장 기판.</p></div></li>
+            <li class="tile"><div class="shot"><img src="../assets/espec/semicon-ami-mv.png" alt="AMI-SPM 절연 신뢰성 평가 시스템" width="370" height="300"></div>
+              <div class="txt"><h3>AMI-SPM 절연 평가</h3><p class="spec">10V 이하 · 25~300ch/랙</p><p class="why">미세 배선과 신소재 절연층의 절연 열화. HAST 챔버와 연동해 자동 시험.</p></div></li>
+            <li class="tile"><div class="shot"><img src="../assets/espec/semicon-amr-mv.png" alt="AMR-SPM 도체 저항 평가 시스템" width="310" height="300"></div>
+              <div class="txt"><h3>AMR-SPM 저항 평가</h3><p class="spec">1mΩ ~ 10Ω · 40~280ch</p><p class="why">마이크로 비아, 인터포저, 마이크로 범프의 저항 변화를 저전류로 검출.</p></div></li>
+          </ul>
+        </article>
+
+        <!-- 전기전자 -->
+        <article class="panel f-elec" id="p-elec" data-key="elec" aria-labelledby="t-elec">
+          <h2 id="t-elec">전기전자: 책상 위 개발 시험부터 부품 신뢰성 시험까지</h2>
+          <p class="lead">전자부품, 광학과 고주파 디바이스, 회로 기판의 온도와 습도 시험 장비입니다.</p>
+          <ul class="tiles">
+            <li class="tile"><div class="shot"><img src="../assets/espec/sh-benchtop-mv.png" alt="SH 벤치탑 항온항습기" width="410" height="270"></div>
+              <div class="txt"><h3>SH 벤치탑</h3><p class="spec">-60 ~ +150°C · 30~95%rh</p><p class="why">연구실과 개발 부서용 소형 항온항습기. 계측기 연동 단자가 기본입니다.</p></div></li>
+            <li class="tile"><div class="shot crop"><img src="../assets/espec/mtp-101-news.webp" alt="MTP-101 원디바이스 항온 시험기" width="540" height="380"></div>
+              <div class="txt"><h3>MTP-101</h3><p class="spec">-30 ~ +150°C · 100V 탁상형</p><p class="why">무풍, 저진동. 고발열 부품과 고밀도 실장 기판의 열설계를 평가합니다.</p></div></li>
+            <li class="tile"><div class="shot"><img src="../assets/espec/ar-series-mv.png" alt="AR 시리즈" width="420" height="260"></div>
+              <div class="txt"><h3>AR 시리즈</h3><p class="spec">-70 ~ +180°C · 10~98%rh</p><p class="why">전자부품의 급속 온도변화와 습열 시험. 4~18K/min.</p></div></li>
+            <li class="tile"><div class="shot"><img src="../assets/espec/platinous-j-mv.png" alt="Platinous J 시리즈" width="660" height="270"></div>
+              <div class="txt"><h3>Platinous J</h3><p class="spec">-70 ~ +100°C · 20~98%rh</p><p class="why">온도, 습도, 보관, 성능 평가를 폭넓게 맡는 대표 시리즈.</p></div></li>
+          </ul>
+        </article>
+
+        <!-- 배터리 -->
+        <article class="panel f-battery" id="p-battery" data-key="battery" aria-labelledby="t-battery">
+          <h2 id="t-battery">배터리: 충방전하는 동안의 온도까지 함께 평가합니다</h2>
+          <p class="lead">차량용 2차전지부터 노트북 배터리 팩까지, 충방전과 안전 시험 장비입니다.</p>
+          <ul class="tiles">
+            <li class="tile"><div class="shot"><img src="../assets/espec/advanced-battery-tester-mv.png" alt="Advanced Battery Tester ADBT" width="390" height="300"></div>
+              <div class="txt"><h3>ADBT 충방전 평가</h3><p class="spec">-40 ~ +100°C · 균일성 ±1.5°C</p><p class="why">충방전 장치와 챔버를 하나로. 성능, 내구, 온도 특성, 임피던스.</p></div></li>
+            <li class="tile"><div class="shot"><img src="../assets/espec/platinous-j-mv.png" alt="Platinous J 시리즈 ECO형" width="660" height="270"></div>
+              <div class="txt"><h3>Platinous J ECO형</h3><p class="spec">-40 ~ +100°C · 에너지 최대 70% 절감</p><p class="why">0°C 이하 운전 기준(PL-4J-ECO). 장시간 충방전 시험에 맞습니다.</p></div></li>
+            <li class="tile"><div class="shot ph">제품 사진 들어갈 자리<br>(Advanced Battery Chamber Next)</div>
+              <div class="txt"><h3>Chamber Next</h3><p class="spec">-40 ~ +100°C · 균일성 ±0.5°C</p><p class="why">다영역 온도 제어. 고발열과 열화 때 생기는 온도 편차를 줄입니다.</p></div></li>
+            <li class="tile"><div class="shot ph">제품 사진 들어갈 자리<br>(Advanced Safety Tester)</div>
+              <div class="txt"><h3>Safety Tester</h3><p class="spec">-40 ~ +100°C · 변동 ±0.3°C</p><p class="why">못 관통, 압괴, 외부 단락 안전 시험. 소용량 셀부터 팩까지.</p></div></li>
+          </ul>
+        </article>
+
+        <!-- 자동차·모빌리티 -->
+        <article class="panel f-auto" id="p-auto" data-key="auto" aria-labelledby="t-auto">
+          <h2 id="t-auto">자동차·모빌리티: 차량 부품에서 대형 시험실까지</h2>
+          <p class="lead">차량용 규격(AEC-Q100, LV 124, SAE-J1211)에 맞춰 시험하는 장비입니다.</p>
+          <ul class="tiles">
+            <li class="tile"><div class="shot"><img src="../assets/espec/ar-series-mv.png" alt="AR 시리즈" width="420" height="260"></div>
+              <div class="txt"><h3>AR 시리즈</h3><p class="spec">-70 ~ +180°C · 10~98%rh</p><p class="why">차량 부품의 빠른 온도 사이클과 습열 시험.</p></div></li>
+            <li class="tile"><div class="shot"><img src="../assets/espec/tcc150-mv.png" alt="TCC 시리즈" width="270" height="300"></div>
+              <div class="txt"><h3>TCC 열 사이클</h3><p class="spec">-70 ~ +180°C · 최대 20K/min</p><p class="why">AEC-Q100, LV 124 L-03, SAE-J1211 적합.</p></div></li>
+            <li class="tile"><div class="shot"><img src="../assets/espec/walk-in-chamber-tbe-mv.png" alt="워크인 챔버 TBE" width="460" height="280"></div>
+              <div class="txt"><h3>워크인 챔버</h3><p class="spec">-40 ~ +80°C · 10~95%rh</p><p class="why">차량과 대형 장비가 들어가는 방 크기 시험 공간.</p></div></li>
+            <li class="tile"><div class="shot ph">제품 사진 들어갈 자리<br>(Advanced Battery Chamber Next)</div>
+              <div class="txt"><h3>차량용 2차전지 챔버</h3><p class="spec">-40 ~ +100°C · 균일성 ±0.5°C</p><p class="why">차량용 2차전지의 충방전 시험에서 생기는 온도 편차를 줄입니다.</p></div></li>
+          </ul>
+        </article>
+
+        <!-- 항공우주·방산 -->
+        <article class="panel f-aero" id="p-aero" data-key="aero" aria-labelledby="t-aero">
+          <h2 id="t-aero">항공우주·방산: 급격한 온도 변화에서 부품이 버티는지 봅니다</h2>
+          <p class="lead">열충격 시험기는 MIL-STD-883, IEC 60068-2-14 Na 규격에 대응합니다.</p>
+          <ul class="tiles">
+            <li class="tile"><div class="shot"><img src="../assets/espec/tsa-thermal-shock-mv.png" alt="TSA 열충격 시험기" width="460" height="300"></div>
+              <div class="txt"><h3>TSA 열충격</h3><p class="spec">저온 -70~0°C / 고온 +60~+200°C</p><p class="why">시험품이 움직이지 않는 방식이라 대형, 중량 시험품에 맞습니다.</p></div></li>
+            <li class="tile"><div class="shot ph">제품 사진 들어갈 자리<br>(고도 시험기 MZ 시리즈)</div>
+              <div class="txt"><h3>고도(저기압) 시험기</h3><p class="spec">사양 [확인 필요]</p><p class="why">ESPEC 제품 목록에 있는 고도 시험기입니다. 세부 사양은 확인 중입니다.</p></div></li>
+          </ul>
+          <p class="note">항공우주 분야 전용 자료는 확인 중입니다. [확인 필요] 시험 조건을 알려 주시면 맞는 장비를 안내합니다.</p>
+        </article>
+
+        <!-- 소재 -->
+        <article class="panel f-material" id="p-material" data-key="material" aria-labelledby="t-material">
+          <h2 id="t-material">소재: 열과 시간에 소재가 어떻게 변하는지 살핍니다</h2>
+          <p class="lead">열처리, 건조, 고온 시험부터 신소재 절연층의 평가까지 맡는 장비입니다.</p>
+          <ul class="tiles">
+            <li class="tile"><div class="shot"><img src="../assets/espec/industrial-oven-pvph-mv.png" alt="산업용 오븐 PV PH 시리즈" width="550" height="300"></div>
+              <div class="txt"><h3>산업용 오븐 PV/PH</h3><p class="spec">주위온도+20 ~ +200°C (+300°C 모델)</p><p class="why">고온 시험, 열처리, 건조. 수직형은 설치 면적을 20~60% 줄입니다.</p></div></li>
+            <li class="tile"><div class="shot"><img src="../assets/espec/platinous-j-mv.png" alt="Platinous J 시리즈" width="660" height="270"></div>
+              <div class="txt"><h3>Platinous J</h3><p class="spec">-70 ~ +100°C · 20~98%rh</p><p class="why">보관과 성능 평가 시험. 옵션으로 +150/+180°C까지.</p></div></li>
+            <li class="tile"><div class="shot"><img src="../assets/espec/semicon-ami-mv.png" alt="AMI-SPM 절연 신뢰성 평가 시스템" width="370" height="300"></div>
+              <div class="txt"><h3>AMI-SPM 절연 평가</h3><p class="spec">10V 이하 저전압</p><p class="why">신소재 절연층의 절연 열화를 정밀하게 검출합니다.</p></div></li>
+          </ul>
+          <p class="note">소재 분야의 시험 사례는 확인 중입니다. [확인 필요]</p>
+        </article>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="block line-up" aria-labelledby="h-all">
+  <div class="wrap">
+    <div class="intro">
+      <h2 class="big" id="h-all">산업이 달라도 장비는 같은 한 곳에서</h2>
+      <p>ESPEC 장비 가운데 이 페이지에서 소개한 대표 제품입니다. 제품소개에서 전체 라인업과 카탈로그를 볼 수 있습니다.</p>
+    </div>
+    <ul class="strip">
+      <li><div class="shot"><img src="../assets/espec/platinous-j-mv.png" alt="" width="660" height="270"></div><span>Platinous J 항온항습기</span></li>
+      <li><div class="shot"><img src="../assets/espec/ar-series-mv.png" alt="" width="420" height="260"></div><span>AR 급속 온도변화</span></li>
+      <li><div class="shot"><img src="../assets/espec/tsa-thermal-shock-mv.png" alt="" width="460" height="300"></div><span>TSA 열충격</span></li>
+      <li><div class="shot"><img src="../assets/espec/walk-in-chamber-tbe-mv.png" alt="" width="460" height="280"></div><span>워크인 챔버</span></li>
+      <li><div class="shot"><img src="../assets/espec/industrial-oven-pvph-mv.png" alt="" width="550" height="300"></div><span>산업용 오븐</span></li>
+      <li><div class="shot crop"><img src="../assets/espec/mtp-101-news.webp" alt="" width="540" height="380"></div><span>MTP-101 탁상 항온기</span></li>
+    </ul>
+  </div>
+</section>
+
+<section class="block window" aria-labelledby="h-win">
+  <div class="wrap">
+    <div>
+      <h2 class="big" id="h-win">고른 뒤에도 창구는 하나입니다</h2>
+      <p class="says">1981년 설립 이후 45년. ESPEC 장비를 국내에 공급하며 기술 협력과 정기 연수를 이어 왔습니다.</p>
+    </div>
+    <ul class="trio">
+      <li><b>1981년</b>설립, 같은 해 TABAI(현 ESPEC)와 한국 총판 대리점 계약</li>
+      <li><b>매년</b>일본 ESPEC 기술진이 방문해 A/S 기술 협력과 이전</li>
+      <li><b>연 3~4회</b>ESPEC 연구진의 국내 세미나와 기술 강연회</li>
+    </ul>
+  </div>
+</section>
+
+<section class="block ask f-semicon" id="ask" aria-labelledby="h-ask">
+  <div class="wrap">
+    <div>
+      <h2 class="big" id="h-ask">시험 조건을 알려 주세요</h2>
+      <p id="ask-line">산업과 시험 조건을 알려 주시면 맞는 모델과 옵션을 정리해 드립니다.</p>
+    </div>
+    <div class="cta">
+      <a class="btn light" id="ask-btn" href="#">견적문의</a>
+    </div>
+  </div>
+</section>
+</main>
+
+<footer class="site-foot">
+  <div class="wrap">
+    <p class="name">J&amp;S ENGINEERING</p>
+    <div class="meta">
+      <span>(주)제이에스 엔지니어링 · ESPEC 한국 단독 총대리점 · 1981년 설립</span>
+      <span>주소·전화·이메일: [확인 필요]</span>
+      <span>장비 이미지 출처: ESPEC Corp. 공식 웹사이트</span>
+    </div>
+  </div>
+</footer>
+
+<script src="script.js"></script>
+</body>
+</html>

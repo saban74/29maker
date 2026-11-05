@@ -1,0 +1,205 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>제이에스 엔지니어링 | ESPEC 한국 단독 총대리점 (메인 A안)</title>
+<meta name="description" content="1981년부터 ESPEC 환경시험 장비를 한국에 공급해 온 제이에스 엔지니어링.">
+<meta name="theme-color" content="#e8e8e8">
+<link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Michroma&display=swap">
+<link rel="stylesheet" href="../tokens.css">
+<link rel="stylesheet" href="../components.css">
+</head>
+<body>
+<!--
+  메인 A안 = AW 첫 화면(거대한 단어 + 장비) + R 구성(바로가기, 산업, 제품, 파트너, 뉴스) + AW 큰 글자 숫자·분해도.
+  블록 순서와 배경 톤:
+   1 b-aw-wordcut-hero (회색 사진)  2 b-r-shortcuts (graphite)  3 b-r-industries (studio)  4 b-r-products (white)
+   5 b-aw-numbers (silver)  6 b-aw-exploded (graphite)  7 b-r-partners (studio)  8 b-r-news (white)  9 b-cta (graphite)
+-->
+<a class="skip" href="#main">본문 바로가기</a>
+
+<!-- 공통 머리말: 첫 화면이 AW 이므로 투명하게 겹치는 형태(site-header--overlay) -->
+<header class="site-header site-header--overlay">
+  <div class="wrap site-header__in">
+    <a class="brand" href="main-a.html"><strong>J&amp;S ENGINEERING</strong><small>제이에스 엔지니어링</small></a>
+    <input type="checkbox" id="nav-toggle" class="nav-toggle" aria-label="메뉴 열기" aria-expanded="false" aria-controls="site-nav">
+    <label for="nav-toggle" class="nav-burger" aria-hidden="true"><span></span></label>
+    <nav class="nav" id="site-nav" aria-label="주 메뉴">
+      <ul>
+        <li><a href="#">회사소개</a></li>
+        <li><a href="product.html">제품소개</a></li>
+        <li><a href="#solution">솔루션</a></li>
+        <li><a href="#tech">기술자료</a></li>
+        <li><a href="#service">서비스</a></li>
+        <li><a href="#quote">고객지원</a></li>
+        <li class="nav-cta-m"><a href="#quote">견적문의</a></li>
+      </ul>
+    </nav>
+    <div class="site-header__r"><a class="btn btn--sm" href="#quote">견적문의</a></div>
+  </div>
+</header>
+
+<main id="main">
+
+<!-- 1. b-aw-wordcut-hero -->
+<section class="b-aw-wordcut-hero" aria-label="첫 화면">
+  <div class="b-aw-wordcut-hero__stage">
+    <img src="../../concepts2/assets/hires/platinous-j-single-a.jpg" width="1467" height="988" alt="ESPEC Platinous J 항온항습기">
+    <h1 class="b-aw-wordcut-hero__h">
+      <svg class="b-aw-wordcut-hero__word" viewBox="0 0 1000 160" role="img" aria-label="PLATINOUS J. 제이에스 엔지니어링, ESPEC 한국 단독 총대리점">
+        <text x="0" y="120" font-size="132" textLength="1000" lengthAdjust="spacingAndGlyphs">PLATINOUS</text>
+      </svg>
+    </h1>
+    <img class="b-aw-wordcut-hero__cut" src="../../concepts2/assets/hires/platinous-j-single-a.jpg" width="1467" height="988" alt="" aria-hidden="true">
+  </div>
+  <p class="b-aw-wordcut-hero__note"><b>제이에스 엔지니어링, ESPEC 한국 단독 총대리점</b>1981년 설립, 올해로 45년. Platinous J 항온항습기를 비롯한 환경시험 장비를 공급합니다.</p>
+  <div class="b-aw-wordcut-hero__acts">
+    <a class="btn" href="#quote">견적문의</a>
+    <a class="link" href="#products">대표 제품 보기</a>
+  </div>
+</section>
+
+<!-- 2. b-r-shortcuts -->
+<nav class="b-r-shortcuts" aria-label="바로가기">
+  <div class="wrap b-r-shortcuts__in">
+    <a href="product.html"><span class="b-r-shortcuts__no">01</span><strong>환경시험기</strong><small>Environmental Test Chamber</small><span class="b-r-shortcuts__arrow" aria-hidden="true">→</span></a>
+    <a href="#solution"><span class="b-r-shortcuts__no">02</span><strong>신뢰성 솔루션</strong><small>Reliability Test Solution</small><span class="b-r-shortcuts__arrow" aria-hidden="true">→</span></a>
+    <a href="#partner"><span class="b-r-shortcuts__no">03</span><strong>글로벌 파트너십</strong><small>Global Partnership</small><span class="b-r-shortcuts__arrow" aria-hidden="true">→</span></a>
+    <a href="#service"><span class="b-r-shortcuts__no">04</span><strong>기술지원 서비스</strong><small>Technical Support</small><span class="b-r-shortcuts__arrow" aria-hidden="true">→</span></a>
+  </div>
+</nav>
+
+<!-- 3. b-r-industries -->
+<section class="blk tone-studio b-r-industries" id="solution" aria-labelledby="solution-h">
+  <div class="wrap">
+    <div class="sec-head">
+      <div><span class="label">Solution</span><h2 class="h-sec" id="solution-h">산업별 신뢰성 솔루션</h2><p>장비 이름을 몰라도 괜찮습니다. 산업 분야를 고르면 필요한 시험과 맞는 장비를 보여 드립니다.</p></div>
+      <a class="link-arrow" href="#">전체 솔루션 보기</a>
+    </div>
+    <div class="b-r-industries__grid">
+      <a class="ind-card" href="#"><div class="ph ph--dark">반도체 웨이퍼 사진 들어갈 자리</div><div class="ind-card__txt"><div><strong>반도체</strong><small>Semiconductor</small></div><span aria-hidden="true">→</span></div></a>
+      <a class="ind-card" href="#"><div class="ph ph--mid">전자 기판(PCB) 사진 들어갈 자리</div><div class="ind-card__txt"><div><strong>전기전자</strong><small>Electronics</small></div><span aria-hidden="true">→</span></div></a>
+      <a class="ind-card" href="#"><div class="ph ph--dark">배터리 셀·팩 사진 들어갈 자리</div><div class="ind-card__txt"><div><strong>배터리</strong><small>Battery</small></div><span aria-hidden="true">→</span></div></a>
+      <a class="ind-card" href="#"><div class="ph ph--mid">자동차 차체 사진 들어갈 자리</div><div class="ind-card__txt"><div><strong>자동차·모빌리티</strong><small>Automotive</small></div><span aria-hidden="true">→</span></div></a>
+      <a class="ind-card" href="#"><div class="ph ph--dark">항공기 사진 들어갈 자리</div><div class="ind-card__txt"><div><strong>항공우주·방산</strong><small>Aerospace &amp; Defense</small></div><span aria-hidden="true">→</span></div></a>
+      <a class="ind-card" href="#"><div class="ph ph--mid">소재 시편 사진 들어갈 자리</div><div class="ind-card__txt"><div><strong>소재·기타</strong><small>Materials</small></div><span aria-hidden="true">→</span></div></a>
+    </div>
+  </div>
+</section>
+
+<!-- 4. b-r-products -->
+<section class="blk tone-white b-r-products" id="products" aria-labelledby="products-h">
+  <div class="wrap">
+    <div class="sec-head">
+      <div><span class="label">Products</span><h2 class="h-sec" id="products-h">대표 제품</h2></div>
+      <a class="link-arrow" href="product.html">전체 제품 보기</a>
+    </div>
+    <div class="prod-grid">
+      <a class="card-prod" href="product.html"><div class="crop" style="--s:1.2;--ox:50%;--oy:52%"><img src="../../concepts2/assets/hires/platinous-j-lineup.jpg" alt="Platinous J 시리즈" width="1812" height="1359"></div><div class="card-prod__body"><h3>Platinous J 시리즈</h3><div class="card-prod__type">항온항습기</div><div class="card-prod__temp">-70 ~ +100°C</div></div></a>
+      <a class="card-prod" href="#"><div class="crop" style="--s:1.3;--ox:50%;--oy:57%"><img src="../../concepts2/assets/hires/tsa-pair.jpg" alt="TSA 시리즈 열충격 시험기" width="2000" height="1500"></div><div class="card-prod__body"><h3>TSA 시리즈</h3><div class="card-prod__type">열충격 시험기</div><div class="card-prod__temp">-77 ~ +200°C <span class="tbd">[확인 필요]</span></div></div></a>
+      <a class="card-prod" href="#"><div class="pack"><img src="../../concepts2/assets/web/tcc150-mv.png" alt="TCC 시리즈 온도 사이클 시험기" width="270" height="300"></div><div class="card-prod__body"><h3>TCC 시리즈</h3><div class="card-prod__type">온도 사이클 시험기</div><div class="card-prod__temp">-70 ~ +180°C</div></div></a>
+      <a class="card-prod" href="#"><div class="crop" style="--s:1.6;--ox:49%;--oy:52%"><img src="../../concepts2/assets/hires/ar-series-pair.jpg" alt="AR 시리즈 급속 온도변화 시험기" width="1714" height="1143"></div><div class="card-prod__body"><h3>AR 시리즈</h3><div class="card-prod__type">급속 온도변화 시험기</div><div class="card-prod__temp">-70 ~ +180°C</div></div></a>
+      <a class="card-prod" href="#"><div class="crop" style="--s:1.9;--ox:50%;--oy:50%"><img src="../../concepts2/assets/hires/hast-ehs-lineup.jpg" alt="EHS 시리즈 HAST 가속수명 시험기" width="1268" height="905"></div><div class="card-prod__body"><h3>EHS 시리즈</h3><div class="card-prod__type">HAST 가속수명 시험기</div><div class="card-prod__temp">+105 ~ +162.2°C</div></div></a>
+    </div>
+    <p class="src-note" style="margin-top:18px">제품 사양은 ESPEC 공개 자료(수집일 2026-10-29) 기준입니다. 최신 사양은 제이에스 엔지니어링에 문의해 주세요.</p>
+  </div>
+</section>
+
+<!-- 5. b-aw-numbers -->
+<section class="blk tone-silver b-aw-numbers" aria-labelledby="num-h">
+  <div class="wrap b-aw-numbers__in">
+    <div class="lines" aria-hidden="true">
+      <span class="l1">-70<span class="u">°C</span></span>
+      <span class="l2">+200<span class="u">°C</span></span>
+      <span class="l3">98<span class="u">%rh</span></span>
+      <span class="l4">45년</span>
+    </div>
+    <img class="b-aw-numbers__float float-photo" src="../../concepts2/assets/hires/tsa-pair.jpg" width="2000" height="1500" alt="열충격 시험기 TSA 두 대">
+    <div class="micro">
+      <h2 id="num-h">숫자로 보는 시험 범위</h2>
+      <dl>
+        <dt>-70°C</dt><dd>초저온 항온항습기, 열충격 시험기 저온측</dd>
+        <dt>+200°C</dt><dd>TSA 열충격 시험기 고온측</dd>
+        <dt>98%rh</dt><dd>Platinous J 최대 습도</dd>
+        <dt>45년</dt><dd>1981년 설립, ESPEC 한국 총대리점</dd>
+      </dl>
+    </div>
+  </div>
+</section>
+
+<!-- 6. b-aw-exploded -->
+<section class="blk tone-graphite b-aw-exploded" aria-labelledby="ex-h">
+  <div class="wrap">
+    <h2 class="h-big" id="ex-h">장비를 열어 보면</h2>
+    <ul class="specimens" tabindex="0" aria-label="장비 부분 사진 목록, 좌우로 밀어서 보기">
+      <li><img src="../../concepts2/assets/hires/tsa-cutaway-dark.jpg" width="482" height="353" alt="열충격 시험기의 고온조, 시험부, 저온조 단면도"><span>열충격 시험기 단면</span></li>
+      <li><img src="../../concepts2/assets/hires/hast-ehs-dark.jpg" width="209" height="350" alt="HAST 시험기 EHS 시리즈"><span>HAST 시험기 EHS</span></li>
+      <li><img src="../../concepts2/assets/hires/hast-ehs-door-detail.jpg" width="381" height="255" alt="HAST 시험기 문을 열어 본 시험조 내부"><span>HAST 시험조 내부</span></li>
+      <li><img src="../../concepts2/assets/hires/walk-in-tbe-open.jpg" width="702" height="431" alt="문을 연 워크인 챔버"><span>워크인 챔버 내부</span></li>
+    </ul>
+    <div class="micro"><p>시험 조건, 시료 크기, 규격에 맞는 장비를 함께 고릅니다. 한국어 상담부터 설치, A/S까지 한곳에서 맡습니다.</p></div>
+  </div>
+</section>
+
+<!-- 7. b-r-partners -->
+<section class="blk tone-studio b-r-partners" id="partner" aria-labelledby="partner-h">
+  <div class="wrap">
+    <div class="sec-head">
+      <div><span class="label">Partnership</span><h2 class="h-sec" id="partner-h">45년을 함께해 온 파트너</h2></div>
+      <a class="link-arrow" href="#">파트너 네트워크 보기</a>
+    </div>
+    <div class="partner-grid">
+      <div class="partner-card"><small>JAPAN</small><h3>ESPEC</h3><p>환경시험기기. 1981년 한국 총판 대리점 계약, 1994년 항온기 기술 제휴.</p></div>
+      <div class="partner-card"><small>JAPAN <span class="tbd">[확인 필요: 국가]</span></small><h3>SHINKEN</h3><p>진동 시험기. 1981년 한국 대리점 계약.</p></div>
+    </div>
+    <p class="src-note" style="margin-top:18px">국내 거래처 로고 띠는 각 회사의 사용 허락을 확인하기 전까지 표시하지 않습니다. <span class="tbd">[확인 필요]</span></p>
+  </div>
+</section>
+
+<!-- 8. b-r-news -->
+<section class="blk tone-white b-r-news" id="news" aria-labelledby="news-h">
+  <div class="wrap">
+    <div class="sec-head"><div><span class="label">News</span><h2 class="h-sec" id="news-h">최신 소식</h2></div><a class="link-arrow" href="#">뉴스 전체 보기</a></div>
+    <div class="news-grid">
+      <a class="news-card" href="#"><time datetime="2026-10-26">2026.10.26</time> <span class="chip chip--gray">신제품</span><h3>원디바이스 항온 시험기 MTP-101, 2026 굿디자인상 수상</h3><div class="pack"><img src="../../concepts2/assets/web/mtp-101-news.webp" alt="ESPEC MTP-101 원디바이스 항온 시험기" width="540" height="380"></div></a>
+      <a class="news-card" href="#"><time datetime="2026-08-28">2026.08.28</time> <span class="chip chip--gray">신제품</span><h3>AI 반도체 패키지용 평가 시스템 AMR-SPM·AMI-SPM 출시</h3><div class="pack"><img src="../../concepts2/assets/web/semicon-ami-mv.png" alt="AMI-SPM" width="370" height="300" style="max-width:46%"><img src="../../concepts2/assets/web/semicon-amr-mv.png" alt="AMR-SPM" width="310" height="300" style="max-width:46%"></div></a>
+      <a class="news-card" href="#"><time datetime="2026-02-04">2026.02.04</time> <span class="chip chip--gray">신제품</span><h3>AI 서버 시험용 고발열 워크인 항온항습실 출시</h3><div class="crop" style="--s:1.15;--ox:55%;--oy:55%"><img src="../../concepts2/assets/hires/walk-in-tbe-side-door.jpg" alt="워크인 항온항습실" width="1615" height="1076"></div></a>
+    </div>
+  </div>
+</section>
+
+<!-- 9. b-cta -->
+<section class="blk tone-graphite b-cta" id="quote" aria-labelledby="cta-h">
+  <div class="wrap b-cta__in">
+    <div><h2 id="cta-h">시험 조건을 알려 주시면 맞는 장비와 견적을 안내합니다.</h2><p>전화 상담 <span class="tbd">[확인 필요: 번호]</span></p></div>
+    <a class="btn btn--light" href="#">견적문의</a>
+  </div>
+</section>
+</main>
+
+<!-- 공통 꼬리말 -->
+<footer class="site-footer" id="service">
+  <div class="wrap">
+    <div class="footer-grid">
+      <div><div class="footer-brand">J&amp;S ENGINEERING<small>제이에스 엔지니어링</small></div>
+        <p>(주)제이에스 엔지니어링 · 대표이사 정창현<br>1981년부터 ESPEC Corp.의 한국 단독 총대리점입니다.</p>
+        <p>사업자등록번호 <span class="tbd">[확인 필요]</span><br>주소 <span class="tbd">[확인 필요]</span><br>전화 <span class="tbd">[확인 필요]</span> · 이메일 <span class="tbd">[확인 필요]</span></p></div>
+      <div><h4>COMPANY</h4><ul><li><a href="#">회사소개</a></li><li><a href="#partner">파트너 네트워크</a></li><li><a href="product.html">제품소개</a></li><li><a href="#solution">솔루션</a></li></ul></div>
+      <div><h4>SUPPORT</h4><ul><li><a href="#tech">기술자료</a></li><li><a href="#service">서비스</a></li><li><a href="#quote">견적·문의</a></li><li><a href="#news">뉴스·공지</a></li></ul></div>
+      <div><h4>LINK</h4><ul><li><a href="#">개인정보처리방침</a></li><li><a href="https://www.espec.co.jp/english/" target="_blank" rel="noopener">ESPEC 공식 사이트 (영문, 새 창)</a></li></ul></div>
+    </div>
+    <svg class="footer-mark" viewBox="0 0 1000 80" role="img" aria-label="J&amp;S ENGINEERING"><text x="0" y="70" font-size="76" textLength="1000" lengthAdjust="spacingAndGlyphs">J&amp;S ENGINEERING</text></svg>
+    <div class="footer-legal">
+      <p>ESPEC 및 각 제품명은 ESPEC Corp.의 상표입니다. 제품 정보는 ESPEC 공개 자료를 바탕으로 제이에스 엔지니어링이 정리했습니다.</p>
+      <p>장비 이미지 출처: ESPEC Corp. 공식 웹사이트 및 제품 카탈로그</p>
+    </div>
+  </div>
+</footer>
+<script src="../script.js" defer></script>
+</body>
+</html>

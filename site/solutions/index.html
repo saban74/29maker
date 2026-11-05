@@ -1,0 +1,75 @@
+---
+title: 솔루션 | 제이에스 엔지니어링
+description: 산업 분야별, 시험 목적별로 맞는 ESPEC 장비를 찾아보세요. 반도체, 전기전자, 배터리, 자동차·모빌리티, 항공우주·방산, 소재·기타.
+css: pages
+nav: solutions
+layout: layouts/base.njk
+---
+{#
+  솔루션 첫 페이지: 제목 > 산업 카드 6개 > 시험 목적별 표 > 견적 띠
+#}
+<!-- 1. 제목 영역 -->
+<section class="b-r-hero pg-head" aria-labelledby="pg-title">
+  <div class="wrap b-r-hero__top">
+    <div>
+      <p class="b-r-hero__tag">SOLUTION</p>
+      <h1 class="b-r-hero__title" id="pg-title">Reliability<br>solutions</h1>
+    </div>
+    <div>
+      <p class="b-r-hero__sub"><strong>산업별 신뢰성 솔루션</strong>제이에스 엔지니어링은 산업마다 다른 신뢰성 시험 요구에 맞춰 알맞은 장비와 시험 방법을 제안합니다.</p>
+      <div class="b-r-hero__cta"><a class="link-arrow" href="#industry">산업 분야별</a><a class="link-arrow" href="#purpose">시험 목적별</a></div>
+    </div>
+  </div>
+</section>
+
+<!-- 2. 산업 분야별 (산업 카드 6개. 사진을 바꾸려면 .ph 칸 안의 img 를 고치세요) -->
+<section class="blk tone-studio b-r-industries" id="industry" aria-labelledby="industry-h">
+  <div class="wrap">
+    <div class="sec-head">
+      <div><span class="label">By industry</span><h2 class="h-sec" id="industry-h">산업 분야별</h2><p>장비 이름을 몰라도 괜찮습니다. 산업 분야를 고르면 필요한 시험과 맞는 장비를 보여 드립니다.</p></div>
+    </div>
+    <div class="b-r-industries__grid b-r-industries__grid--3">
+      <a class="ind-card" href="semiconductor.html"><div class="ph ph--dark ph--photo"><img src="../assets/img/hires/hast-ehs-lineup.jpg" width="1268" height="906" loading="lazy" alt="반도체 평가용 HAST 시험기 EHS 시리즈, ESPEC 자료"></div><div class="ind-card__txt"><div><strong>반도체</strong><small>Semiconductor</small></div><span aria-hidden="true">→</span></div></a>
+      <a class="ind-card" href="electronics.html"><div class="ph ph--mid ph--photo"><img src="../assets/img/industry/electronics-circuit-board-assembly.jpg" width="530" height="280" loading="lazy" alt="전자 기판 조립 장면, ESPEC 자료"></div><div class="ind-card__txt"><div><strong>전기전자</strong><small>Electronics</small></div><span aria-hidden="true">→</span></div></a>
+      <a class="ind-card" href="battery.html"><div class="ph ph--dark ph--photo"><img src="../assets/img/industry/battery-cells-in-chamber.jpg" width="380" height="266" loading="lazy" alt="배터리 셀 충방전 시험 장면, ESPEC 자료"></div><div class="ind-card__txt"><div><strong>배터리</strong><small>Battery</small></div><span aria-hidden="true">→</span></div></a>
+      <a class="ind-card" href="mobility.html"><div class="ph ph--dark ph--fit"><img src="../assets/img/industry/automotive-vehicle-test-room.jpg" width="330" height="200" loading="lazy" alt="실차 시험실 안의 승용차, ESPEC 자료"></div><div class="ind-card__txt"><div><strong>자동차·모빌리티</strong><small>Automotive</small></div><span aria-hidden="true">→</span></div></a>
+      <a class="ind-card" href="aerospace-defense.html"><div class="ph ph--dark ph--photo"><img src="../assets/img/hires/tsa-pair.jpg" width="2000" height="1501" loading="lazy" alt="열충격 시험기 TSA 시리즈 두 대, ESPEC 자료"></div><div class="ind-card__txt"><div><strong>항공우주·방산</strong><small>Aerospace &amp; Defense</small></div><span aria-hidden="true">→</span></div></a>
+      <a class="ind-card" href="materials.html"><div class="ph ph--pack"><img src="../assets/img/web/industrial-oven-pvph-mv.png" width="553" height="304" loading="lazy" alt="산업용 오븐 PH·PV 시리즈, ESPEC 자료"></div><div class="ind-card__txt"><div><strong>소재·기타</strong><small>Materials</small></div><span aria-hidden="true">→</span></div></a>
+    </div>
+  </div>
+</section>
+
+<!-- 3. 시험 목적별 표 (연결 제품은 제품 상세로 이어집니다) -->
+<section class="blk tone-white" id="purpose" aria-labelledby="purpose-h">
+  <div class="wrap">
+    <span class="label">By purpose</span>
+    <h2 class="h-sec" id="purpose-h">시험 목적별</h2>
+    <p class="lead stack-top-s">하려는 시험에서 출발해 맞는 장비를 찾아보세요. 관련 규격은 ESPEC 공개 자료에 있는 것만 적었습니다.</p>
+    <div class="table-scroll stack-top" tabindex="0" role="region" aria-label="시험 목적별 표, 좌우로 밀어서 보기">
+      <table class="spec spec--s spec--plain tbl-links">
+        <thead><tr><th scope="col">시험 목적</th><th scope="col">관련 규격</th><th scope="col">연결 제품</th></tr></thead>
+        <tbody>
+          <tr><th scope="row">온도·습도 환경 시험</th><td>—</td><td><a href="../products/platinous-j.html">Platinous J</a> · <a href="../products/sh-series.html">SH 시리즈</a> · <a href="../products/walk-in.html">워크인 챔버</a></td></tr>
+          <tr><th scope="row">급속 온도변화·온도 사이클 (열피로)</th><td>JESD22-A104, IPC-9701, AEC-Q100, LV 124 등</td><td><a href="../products/tcc-series.html">TCC 시리즈</a> · <a href="../products/ar-series.html">AR 시리즈</a></td></tr>
+          <tr><th scope="row">열충격 시험</th><td>IEC 60068-2-14 Na, MIL-STD-883</td><td><a href="../products/thermal-shock.html">TSA / TSE / TSD</a></td></tr>
+          <tr><th scope="row">HAST 가속수명 시험</th><td>IEC 60068-2-66</td><td><a href="../products/hast.html">EHS 시리즈</a></td></tr>
+          <tr><th scope="row">배터리 충방전·안전 시험</th><td>EUCAR 위험 등급</td><td><a href="../products/battery.html">2차전지 시험 장비</a> · <a href="../products/platinous-j.html">Platinous J ECO</a></td></tr>
+          <tr><th scope="row">반도체 패키지 전기적 신뢰성 (절연·도체 저항)</th><td>—</td><td><a href="../products/semiconductor-evaluation.html">AMI-SPM · AMR-SPM</a> · <a href="../products/hast.html">EHS 시리즈</a></td></tr>
+          <tr><th scope="row">대형 시험체·서버 시험</th><td>ASHRAE (서버)</td><td><a href="../products/walk-in.html">워크인 챔버</a> (고발열형 포함)</td></tr>
+          <tr><th scope="row">무풍·저진동 열변형 관찰</th><td>—</td><td><a href="../products/mtp-101.html">MTP-101</a></td></tr>
+          <tr><th scope="row">고온 시험·열처리·건조</th><td>—</td><td><a href="../products/industrial-oven.html">산업용 오븐 PH/PV</a></td></tr>
+          <tr><th scope="row">진동 시험</th><td>—</td><td>SHINKEN 진동 시험기, ESPEC 진동 복합 맞춤 제작 (<a href="../contact.html?type=consult&amp;item=진동+시험">문의</a>)</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p class="src-note" style="margin-top:14px">ESPEC 공개 자료(수집일 2026-10-29) 기준입니다. 규격 적합 여부는 모델에 따라 다르므로 상담 때 함께 확인해 드립니다. 규격 이름으로 찾으려면 <a class="link" href="../resources.html#standards">기술자료의 규격별 장비 찾기</a>를 이용하세요.</p>
+  </div>
+</section>
+
+<!-- 4. 견적 띠 -->
+<section class="blk tone-graphite b-cta" aria-labelledby="cta-h">
+  <div class="wrap b-cta__in">
+    <div><h2 id="cta-h">맞는 장비를 못 찾으셨나요? 시험 조건만 알려 주세요.</h2><p>전화 상담 <a href="tel:0255570505" style="color:inherit;text-decoration:underline">02-557-0505</a></p></div>
+    <a class="btn btn--light" href="../contact.html?type=consult">시험 조건으로 상담하기</a>
+  </div>
+</section>

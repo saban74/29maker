@@ -1,0 +1,64 @@
+/* A04 - 비교형. 화면을 반으로 나눠 두 장비가 마주 봅니다. */
+:root{--bg:#f4f4f6;--mist:#e8e8ec;--night:#111113;--accent:#0a64c8;--ink-2:#4a4a4f;--panel:#ececef}
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)}
+h1,h2,h3{font-weight:700;letter-spacing:-.04em;line-height:1.08}
+
+.hero{padding-top:clamp(40px,6vh,72px)}
+.head{text-align:center}
+.hero h1{font-size:clamp(38px,6.4vw,92px);letter-spacing:-.055em;line-height:1.02}
+.hero .sub{font-size:clamp(17px,1.8vw,22px);color:var(--ink-2);margin-top:14px}
+
+.duo{display:grid;grid-template-columns:1fr 1fr;margin-top:clamp(28px,4vw,56px);position:relative}
+.side{background:var(--panel);text-align:center;padding:clamp(32px,4vw,56px) clamp(20px,3vw,48px) 0;display:flex;flex-direction:column;align-items:center;overflow:hidden}
+.side:first-child{background:#e9eaed}
+.side h2{font-size:clamp(28px,3.6vw,52px)}
+.side .one{margin-top:10px;font-size:clamp(16px,1.5vw,20px);max-width:22em}
+.mini{display:flex;gap:clamp(24px,4vw,56px);justify-content:center;margin-top:22px}
+.mini dt{font-size:14px;color:var(--ink-2)}
+.mini dd{font-size:clamp(20px,2.2vw,30px);font-weight:600;letter-spacing:-.035em;font-variant-numeric:tabular-nums;white-space:nowrap}
+.acts{display:flex;gap:22px;align-items:center;justify-content:center;flex-wrap:wrap;margin-top:22px}
+.side img{width:100%;max-width:820px;margin-top:-2%;
+  -webkit-mask-image:radial-gradient(ellipse 68% 76% at 50% 56%,#000 52%,transparent 100%);
+          mask-image:radial-gradient(ellipse 68% 76% at 50% 56%,#000 52%,transparent 100%)}
+.or{position:absolute;left:50%;top:clamp(40px,5vw,64px);transform:translateX(-50%);width:64px;height:64px;border-radius:50%;background:var(--bg);display:grid;place-items:center;font-weight:600;font-size:15px;color:var(--ink-2);z-index:2}
+
+.compare{padding:clamp(88px,11vw,150px) 0}
+.compare h2{font-size:clamp(34px,5vw,68px)}
+.tablewrap{margin-top:clamp(32px,4vw,56px);overflow-x:auto}
+table{width:100%;border-collapse:collapse;min-width:640px;font-size:17px}
+th,td{text-align:left;vertical-align:top;padding:22px 20px 22px 0;border-bottom:1px solid #d6d6db}
+thead th{font-size:clamp(20px,2.2vw,28px);font-weight:700;letter-spacing:-.03em;padding-bottom:20px;border-bottom:2px solid #1d1d1f}
+tbody th{font-weight:600;width:20%;color:var(--ink-2);font-size:16px}
+td{width:40%}
+
+.else{background:#fff;padding:clamp(88px,11vw,150px) 0}
+.else h2{font-size:clamp(34px,5vw,68px)}
+.paths{list-style:none;display:grid;grid-template-columns:repeat(3,1fr);gap:clamp(20px,3vw,48px);margin-top:clamp(32px,4vw,56px)}
+.paths a{display:flex;flex-direction:column;gap:14px;height:100%;padding-top:20px;border-top:2px solid #1d1d1f;transition:border-color .3s}
+.paths a:hover{border-color:var(--accent)}
+.paths b{font-size:clamp(20px,2vw,26px);letter-spacing:-.035em;line-height:1.25}
+.paths span{color:var(--ink-2)}
+
+.about{padding:clamp(100px,13vw,180px) 0}
+.about h2{font-size:clamp(34px,5.6vw,80px)}
+.about p{margin-top:24px;color:var(--ink-2);max-width:32em}
+
+.final{background:var(--night);color:#fff;text-align:center;padding:clamp(100px,13vw,170px) 0;--accent:#fff;--accent-d:#d2d2d7;--on-accent:#111113;--ghost-ink:#fff;--ghost-on:#111113}
+.final h2{font-size:clamp(36px,6vw,84px)}
+.final p{color:#b9b9c0;margin:22px auto 0;max-width:30em}
+.final .acts{margin-top:34px}
+.final .btn.ghost{color:#fff}
+.final .btn.ghost:hover{color:#111113}
+
+@media (prefers-reduced-motion:no-preference){
+  .side img{animation:slide 1.6s var(--ease) both .1s}
+  .side:first-child img{--from:-24px}
+  .side:last-child img{--from:24px}
+  @keyframes slide{from{opacity:0;transform:translateX(var(--from,0))}to{opacity:1;transform:none}}
+}
+
+@media (max-width:860px){
+  .duo{grid-template-columns:1fr}
+  .or{position:relative;left:auto;transform:none;margin:-32px auto -32px}
+  .paths{grid-template-columns:1fr}
+}

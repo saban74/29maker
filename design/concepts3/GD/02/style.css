@@ -1,0 +1,42 @@
+/* GD/02 한 장면에 한 문장: 밝은 회색, 큰 배경 사진 + 큰 글자 + 긴 스크롤 (이 세 가지만) */
+:root{--base:#e4e5e7;--ink:#14171a;--sub:#3a4047;--steel:#44546a}
+body{background:var(--base);color:var(--ink)}
+.bar{position:fixed;inset:0 0 auto 0;z-index:20;display:flex;align-items:center;justify-content:space-between;gap:24px;padding:18px clamp(20px,4vw,56px)}
+.mark{font-weight:700;font-size:17px;letter-spacing:-.01em}
+.bar ul{display:flex;gap:28px;font-size:15px;font-weight:500}
+.bar ul a:hover{text-decoration:underline;text-underline-offset:6px}
+.btn{display:inline-block;padding:10px 22px;background:var(--ink);color:#fff;font-weight:600;font-size:15px;border-radius:999px;transition:background .2s}
+.btn:hover{background:var(--steel)}
+.btn-lg{padding:18px 40px;font-size:20px}
+@media(max-width:900px){.bar ul{display:none}}
+
+.panel{position:relative;min-height:100vh;min-height:100svh;overflow:hidden;background:var(--base)}
+.bg{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:50% 78%}
+.copy{position:relative;z-index:1;padding:clamp(96px,16vh,170px) clamp(20px,4vw,56px) 0;max-width:1100px}
+h1,.panel h2{font-size:clamp(40px,7.2vw,112px);font-weight:800;line-height:1.04;letter-spacing:-.045em;max-width:11em}
+.copy p{margin-top:26px;font-size:clamp(17px,1.5vw,21px);max-width:28em;color:var(--sub)}
+.link{display:inline-block;margin-top:22px;font-weight:600;font-size:17px;border-bottom:2px solid var(--ink);padding-bottom:2px}
+.link:hover{color:var(--steel);border-color:var(--steel)}
+
+/* 사진은 칸에 들어올 때 한 번 천천히 내려앉는다 */
+.js .bg{transform:scale(1.07);transition:transform 2.2s cubic-bezier(.2,.7,.2,1)}
+.js .panel.in .bg{transform:scale(1)}
+
+.about{padding:clamp(110px,14vw,220px) clamp(20px,4vw,56px);background:#d6d8db}
+.about-in{display:grid;grid-template-columns:minmax(0,7fr) minmax(0,5fr);gap:clamp(32px,6vw,96px);align-items:end}
+.about h2{font-size:clamp(34px,5.4vw,84px);font-weight:800;line-height:1.08;letter-spacing:-.04em}
+.about p{font-size:clamp(18px,1.7vw,22px);color:var(--ink)}
+.contact{padding:clamp(110px,15vw,240px) clamp(20px,4vw,56px);display:flex;flex-direction:column;gap:40px;align-items:flex-start;background:var(--ink);color:#fff}
+.contact h2{font-size:clamp(40px,8vw,128px);font-weight:800;line-height:1.04;letter-spacing:-.045em;max-width:9em}
+.contact .btn{background:#fff;color:var(--ink)}
+.contact .btn:hover{background:#c9ced6}
+.foot{padding:48px clamp(20px,4vw,56px) 40px;background:var(--ink);color:#aab0b8;display:grid;gap:10px;font-size:15px}
+.foot-name{font-size:clamp(40px,12vw,180px);font-weight:800;letter-spacing:-.05em;line-height:1;color:#e4e5e7;margin-bottom:20px}
+.credit{color:#8b929b}
+
+@media(max-width:760px){
+  .panel{min-height:0;display:flex;flex-direction:column}
+  .bg{position:static;height:auto;aspect-ratio:4/3;margin-top:auto;object-position:50% 60%}
+  .copy{padding-bottom:36px}
+  .about-in{grid-template-columns:1fr}
+}

@@ -1,0 +1,61 @@
+{#
+  모든 페이지가 함께 쓰는 틀: <head>, 공통 머리말, 공통 꼬리말, 스크립트.
+  페이지 파일 맨 위 앞부분(--- 사이)에서 아래 값을 정합니다.
+    title        브라우저 탭 제목 (전체 글자)
+    description  검색 결과에 보이는 설명
+    robots       (선택) 예: noindex
+    css          이 페이지 묶음 CSS: pages / products / solutions
+    nav          주 메뉴에서 "현재 위치"로 표시할 칸: about, products, solutions, resources, service, contact
+    overlay      true 면 첫 화면 위에 투명하게 겹치는 머리말 (큰 글자 첫 화면 페이지)
+    hero         (제품 상세) body 의 data-hero 값: aw 또는 r
+    scripts      (선택) 더 불러올 스크립트 목록. 예: [js/pages.js]
+    crumb        (선택, 솔루션 산업 페이지) 현재 위치 줄의 마지막 이름
+  주소는 모두 "rel" 필터로 지금 페이지 기준 상대 주소가 됩니다.
+#}
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>{{ title }}</title>
+<meta name="description" content="{{ description }}">
+{% if robots %}
+<meta name="robots" content="{{ robots }}">
+{% endif %}
+<link rel="canonical" href="{{ site.url }}{{ page.url }}">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="{{ site.name }}">
+<meta property="og:title" content="{{ title }}">
+<meta property="og:description" content="{{ description }}">
+<meta property="og:url" content="{{ site.url }}{{ page.url }}">
+<meta name="theme-color" content="#e8e8e8">
+<link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Michroma&display=swap">
+<link rel="stylesheet" href="{{ 'css/tokens.css' | rel }}">
+<link rel="stylesheet" href="{{ 'css/components.css' | rel }}">
+<link rel="stylesheet" href="{{ ('css/' + (css or 'pages') + '.css') | rel }}">
+</head>
+<body{% if hero %} data-hero="{{ hero }}"{% endif %}>
+<a class="skip" href="#main">본문 바로가기</a>
+
+{% include "partials/header.njk" %}
+
+{% if crumb %}
+<!-- 현재 위치 (Home > 솔루션 > 산업명) -->
+<nav class="crumbs" aria-label="현재 위치"><div class="wrap"><ol><li><a href="{{ 'index.html' | rel }}">Home</a></li><li><a href="{{ 'solutions/index.html' | rel }}">솔루션</a></li><li><b aria-current="page">{{ crumb }}</b></li></ol><span>ESPEC 한국 단독 총대리점 <b>제이에스 엔지니어링</b></span></div></nav>
+
+{% endif %}
+<main id="main">
+{{ content | safe }}
+</main>
+
+{% include "partials/footer.njk" %}
+<script src="{{ 'js/script.js' | rel }}" defer></script>
+{% for s in scripts %}
+<script src="{{ s | rel }}" defer></script>
+{% endfor %}
+</body>
+</html>

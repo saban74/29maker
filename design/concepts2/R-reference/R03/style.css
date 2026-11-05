@@ -1,0 +1,41 @@
+/* R03 반반 진열장: 왼쪽 문구, 오른쪽 장비 라인업, 바로 아래 산업 슬라이더 */
+:root { --ground: #FFFFFF; --panel: #F1F2F3; --ink: #14181D; --text: #2A323C; --accent: #1F4FA3; }
+.hero { display: grid; grid-template-columns: 1fr 1fr; min-height: 680px; background: #fff; }
+.hero__l { align-self: center; padding: 72px 64px 72px max(var(--pad), calc((100vw - var(--wrap)) / 2)); }
+.hero h1 { font-size: clamp(34px, 3.8vw, 56px); font-weight: 700; line-height: 1.22; letter-spacing: -.04em; color: var(--ink); }
+.hero__r { position: relative; background: #A6A9AA; overflow: hidden; }
+.hero__r img { width: 100%; height: 100%; object-fit: cover; object-position: 50% 62%; }
+.hero__r figcaption { position: absolute; left: 0; bottom: 0; display: flex; gap: 20px; align-items: baseline; padding: 16px 28px; background: #fff; color: var(--ink); font-size: 15px; }
+.hero__r figcaption span { color: var(--muted); }
+
+.slide { padding: 96px 0 0; background: #fff; }
+.slide .sec-head { margin-bottom: 32px; }
+.ctl { display: flex; gap: 10px; }
+.track { display: flex; gap: 14px; overflow-x: auto; scroll-snap-type: x mandatory; padding: 0 var(--pad) 8px max(var(--pad), calc((100vw - var(--wrap)) / 2)); scrollbar-width: none; }
+.track::-webkit-scrollbar { display: none; }
+.track li { flex: none; width: 300px; scroll-snap-align: start; }
+.track a { position: relative; display: flex; flex-direction: column; justify-content: flex-end; height: 340px; padding: 24px; color: #fff; background: #2A3547; border-radius: 2px; transition: background .35s; }
+.track li:nth-child(even) a { background: #3A4659; }
+.track a:hover { background: var(--accent); }
+.track em { position: absolute; top: 20px; left: 24px; right: 24px; font-style: normal; font-size: 12px; color: rgba(255,255,255,.8); }
+.track strong { font-size: 22px; font-weight: 600; letter-spacing: -.02em; }
+.track small { font-size: 13px; opacity: .85; }
+.quickbar { margin-top: 56px; background: var(--panel); color: var(--ink); }
+.quickbar .quick a:hover { background: #fff; }
+.sec--dark { background: #14181D; }
+.cta { background: var(--accent); }
+@media (max-width: 1000px) {
+  .hero { grid-template-columns: 1fr; min-height: 0; }
+  .hero__l { padding: 56px var(--pad) 40px; }
+  .hero__r { height: 380px; }
+}
+@media (max-width: 760px) {
+  .hero__r { height: 260px; }
+  .hero h1 { font-size: 30px; }
+  .hero__r figcaption { padding: 12px 16px; flex-direction: column; gap: 0; }
+  .slide { padding-top: 64px; }
+  .track li { width: 220px; }
+  .track a { height: 260px; }
+  .track { padding-left: var(--pad); }
+  .quickbar { margin-top: 40px; }
+}

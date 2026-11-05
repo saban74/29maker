@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="64" height="64" role="img" aria-label="J&amp;S 심볼 (어두운 바탕용)">
+  <title>J&amp;S 심볼 - 프레임 (어두운 바탕용)</title>
+  <rect width="64" height="64" rx="3" fill="#FFFFFF"/>
+  <g transform="translate(-5 0)" fill="none" stroke="#0B4F9E" stroke-width="6">
+    <path d="M25 16V40A8 8 0 0 1 17 48"/>
+    <path d="M54 24A8 8 0 1 0 46 32A8 8 0 1 1 38 40"/>
+  </g>
+</svg>

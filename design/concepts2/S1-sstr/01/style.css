@@ -1,0 +1,75 @@
+/* 01 흑연 + 챔버 창 절단 모서리. 어둠 속 워크인 챔버가 주인공 */
+.nav.dark{position:absolute;inset:0 0 auto 0;background:transparent}
+.hero{min-height:max(700px,100svh);padding-top:120px;padding-bottom:72px;display:flex;align-items:center;background:#06080c;overflow:hidden}
+.hero-img{position:absolute;right:0;top:0;width:78%;height:100%;object-fit:cover;object-position:0 50%;
+  -webkit-mask-image:linear-gradient(90deg,transparent 0,#000 20%);mask-image:linear-gradient(90deg,transparent 0,#000 20%)}
+.hero-copy{position:relative;z-index:3;max-width:min(560px,40vw)}
+.hero h1{font-size:clamp(30px,3.7vw,56px);font-weight:300;line-height:1.18;margin-bottom:28px}
+.hero .lead{color:#d6d8db;margin-bottom:34px}
+.acts{display:flex;align-items:center;gap:30px;flex-wrap:wrap}
+
+/* 온도 눈금자: 가장자리에 붙는 계기판 */
+.gauge{position:absolute;z-index:3;right:calc(var(--rail) + var(--pad));top:130px;bottom:72px;width:150px;border-right:1px solid rgba(255,255,255,.35)}
+.gauge li{position:absolute;right:0;top:var(--p);transform:translateY(-50%);padding-right:22px;font-size:13px;color:#e4e5e7;white-space:nowrap;line-height:1}
+.gauge li::after{content:"";position:absolute;right:0;top:50%;width:12px;height:1px;background:rgba(255,255,255,.5)}
+.gauge li b{position:absolute;right:-4px;top:50%;width:9px;height:9px;margin-top:-4.5px;background:var(--or);z-index:1}
+.gauge li:has(b)::after{display:none}
+.gauge li.mid{color:#b9bbbf}
+
+/* 장비 세 갈래 */
+.feat,.stat,.strip,.svc{padding-block:clamp(72px,9vw,150px)}
+.head{display:grid;grid-template-columns:minmax(0,1.1fr) minmax(0,.9fr);gap:var(--pad);align-items:end;margin-bottom:clamp(40px,5vw,72px)}
+.head h2{margin-bottom:28px}
+.cell .wf{fill:none;stroke:var(--g9);stroke-width:1;vector-effect:non-scaling-stroke}
+.cell .wf *{vector-effect:non-scaling-stroke}
+.feat .cell svg{height:200px;width:auto;max-width:100%;margin-bottom:34px}
+.feat .cell h3{margin-bottom:10px;font-size:17px}
+.feat .cell .body{margin-bottom:18px}
+
+/* 수치 */
+.stat .cell{padding:clamp(28px,4vw,64px) var(--pad)}
+.stat-l{display:flex;flex-direction:column;align-items:flex-start;justify-content:center;gap:16px}
+.big{font-size:clamp(120px,15vw,230px);display:flex;align-items:flex-start;margin-block:12px 0}
+.big .pc{font-size:.32em;margin:.1em 0 0 .06em;letter-spacing:0;font-weight:200}
+.stat-label{font-size:clamp(20px,1.9vw,28px);font-weight:300}
+.stat-l .body{margin-bottom:12px}
+.stat-r{display:flex;flex-direction:column;justify-content:center;gap:26px}
+.stat-r .dotplot{max-width:420px}
+.note{font-size:13px;color:var(--sub);line-height:1.5}
+
+/* 제품 띠 */
+.giant{font-size:clamp(46px,10.4vw,168px);font-weight:300;letter-spacing:-.05em;line-height:.95;margin-bottom:clamp(30px,4vw,56px);white-space:nowrap}
+.strip-img{width:100%;aspect-ratio:3.4/1;object-fit:cover;object-position:50% 62%;background:#d8dbdd}
+.strip .cells:nth-of-type(1){border-bottom:0}
+.strip .cells:nth-of-type(2){border-top:0}
+.spec{font-size:15px}
+.spec th,.spec td{text-align:left;padding:10px 0;border-bottom:1px solid var(--hair);font-weight:400}
+.spec thead th{font-size:13px;color:var(--sub)}
+.spec tbody th{font-weight:600}
+.cell-act{display:flex;flex-direction:column;align-items:flex-start;gap:14px;justify-content:center}
+
+/* 서비스 */
+.svc .cells{border-block:1px solid var(--hair)}
+.cell-img{padding:0;display:flex}
+.cell-img img{width:100%;aspect-ratio:3/2;object-fit:cover;background:#b9bcc0}
+.svc-r{display:flex;flex-direction:column;justify-content:center;gap:28px;padding:clamp(28px,4vw,64px) var(--pad)}
+.blt li{display:flex;gap:14px;padding-block:14px;border-top:1px solid var(--hair);font-size:16px;line-height:1.6;color:#d8dadd}
+.blt li::before{content:"";width:8px;height:8px;background:var(--or);flex:none;margin-top:.55em}
+.blt{margin-block:-6px 0}
+
+/* 푸터: 이름이 화면 폭으로 돌아옴 */
+.foot{padding-top:clamp(64px,8vw,120px)}
+.foot-name{font-size:clamp(40px,10.6vw,176px);font-weight:100;letter-spacing:-.05em;line-height:.95;white-space:nowrap;margin-bottom:clamp(36px,5vw,72px)}
+.foot-h{font-size:clamp(22px,2vw,30px);margin-bottom:12px}
+.foot .credit{padding-bottom:28px}
+
+@media (max-width:860px){
+  .nav.dark{position:relative;background:#06080c}
+  .hero{display:block;padding-top:0;padding-bottom:56px;min-height:0}
+  .hero-img{position:relative;width:calc(100% + 2*(var(--rail) + var(--pad)));margin-inline:calc(-1*(var(--rail) + var(--pad)));height:auto;aspect-ratio:4/3;max-width:none;object-position:20% 50%;margin-bottom:28px;
+    -webkit-mask-image:none;mask-image:none}
+  .hero-copy{max-width:none}
+  .gauge{display:none}
+  .head{grid-template-columns:1fr}
+  .stat-r .dotplot{max-width:300px}
+}

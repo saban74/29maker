@@ -1,0 +1,461 @@
+# 홈페이지 관리자 화면(Decap CMS) 설정
+# - 관리자 화면 주소: (홈페이지 주소)/admin/
+# - 저장하면 GitHub 저장소(saban74/29maker)의 main 브랜치에 파일이 저장(커밋)되고,
+#   Netlify 가 몇 분 안에 홈페이지를 다시 만들어 올립니다.
+# - 사용법: 저장소의 ADMIN-GUIDE.md / 연결 방법: DEPLOY.md
+
+backend:
+  name: github
+  repo: saban74/29maker
+  branch: main
+  commit_messages:
+    create: "관리자 화면: {{collection}} 새로 만듦 \"{{slug}}\""
+    update: "관리자 화면: {{collection}} 고침 \"{{slug}}\""
+    delete: "관리자 화면: {{collection}} 지움 \"{{slug}}\""
+    uploadMedia: "관리자 화면: 사진 올림 \"{{path}}\""
+    deleteMedia: "관리자 화면: 사진 지움 \"{{path}}\""
+
+# 내 컴퓨터에서 시험할 때(주소가 localhost)만 쓰는 설정. npx decap-server 를 켜 두면 GitHub 로그인 없이 내 컴퓨터 파일에 바로 저장됩니다.
+local_backend: true
+
+# 관리자 화면 왼쪽 위 "사이트 보기" 주소
+site_url: https://www.espec.co.kr
+display_url: https://www.espec.co.kr
+
+locale: ko
+publish_mode: simple
+
+# 올린 사진이 저장되는 곳 (홈페이지 안 주소는 /assets/img/uploads/...)
+media_folder: site/assets/img/uploads
+public_folder: /assets/img/uploads
+
+# ─────────────────────────────────────────────
+# 여러 곳에서 같이 쓰는 칸 묶음 (YAML 앵커)
+# ─────────────────────────────────────────────
+x-photo-fields: &photo_fields
+  - { label: "사진", name: src, widget: image, choose_url: false, hint: "사진 파일을 올리거나 이미 올린 사진을 고릅니다." }
+  - { label: "가로 크기(px)", name: width, widget: number, value_type: int, required: false, hint: "비워 두면 사진 파일에서 자동으로 읽습니다." }
+  - { label: "세로 크기(px)", name: height, widget: number, value_type: int, required: false, hint: "비워 두면 사진 파일에서 자동으로 읽습니다." }
+  - { label: "사진 설명(대체 글)", name: alt, widget: string, hint: "눈이 불편한 분께 읽어 주는 글입니다. 사진에 무엇이 있는지 짧게 씁니다. 예) ESPEC 열충격 시험기 TSA 두 대" }
+
+x-card-fields: &card_fields
+  - { label: "카드 제목", name: name, widget: string, required: false, hint: "예) Platinous J 시리즈" }
+  - { label: "카드 설명(제품 종류)", name: type, widget: string, required: false, hint: "예) 항온항습기" }
+  - { label: "카드 핵심 수치", name: temp, widget: string, required: false, hint: "예) -70 ~ +100°C" }
+  - { label: "사진 보여 주는 방식", name: frame, widget: select, required: false, options: [{ label: "사진 전체를 칸 안에 맞춤 (배경 없는 작은 사진)", value: pack }, { label: "사진 일부를 확대해서 칸을 채움 (큰 사진)", value: crop }], hint: "모르면 '사진 전체를 칸 안에 맞춤'을 고르세요." }
+  - { label: "확대 배율 (확대 방식일 때)", name: scale, widget: string, required: false, hint: "예) 1.2 (1 = 그대로, 숫자가 클수록 확대)" }
+  - { label: "가로 위치 (확대 방식일 때)", name: pos_x, widget: string, required: false, hint: "예) 50% (0% 왼쪽 ~ 100% 오른쪽)" }
+  - { label: "세로 위치 (확대 방식일 때)", name: pos_y, widget: string, required: false, hint: "예) 52% (0% 위 ~ 100% 아래)" }
+  - { label: "사진 설명만 바꾸기", name: alt, widget: string, required: false, hint: "사진은 그대로 두고 설명(대체 글)만 다르게 할 때" }
+  - { label: "카드 사진", name: images, widget: list, required: false, collapsed: true, summary: "{{fields.alt}}", hint: "사진을 2장 넣으면 나란히 보입니다.", fields: *photo_fields }
+
+x-industry-options: &industry_options
+  - { label: "반도체", value: semiconductor }
+  - { label: "전기전자", value: electronics }
+  - { label: "배터리", value: battery }
+  - { label: "자동차·모빌리티", value: mobility }
+  - { label: "항공우주·방산", value: aerospace-defense }
+  - { label: "소재·기타", value: materials }
+
+x-product-relation: &product_relation
+  label: "제품"
+  name: product
+  widget: relation
+  collection: products
+  value_field: slug
+  search_fields: ["name", "title", "slug"]
+  display_fields: ["name"]
+
+collections:
+  # ─────────────────────────────────────────────
+  # 1. 제품
+  # ─────────────────────────────────────────────
+  - name: products
+    label: "제품"
+    label_singular: "제품"
+    description: "제품 상세 페이지(products/주소용이름.html)를 만듭니다. 제품 목록, 메인 대표 제품, 관련 제품 카드에도 자동으로 쓰입니다."
+    folder: content/products
+    extension: md
+    format: frontmatter
+    create: true
+    delete: true
+    slug: "{{fields.slug}}"
+    identifier_field: name
+    summary: "{{order}}. {{name}} — {{title}}{{published | ternary('', ' (비공개)')}}"
+    sortable_fields: ["order", "name", "title"]
+    view_filters:
+      - { label: "공개된 제품", field: published, pattern: true }
+      - { label: "비공개 제품", field: published, pattern: false }
+      - { label: "메인 대표 제품", field: featured, pattern: true }
+    editor: { preview: false }
+    fields:
+      # 기본 정보
+      - { label: "제품 이름 (현재 위치 줄에 보임)", name: name, widget: string, hint: "예) Platinous J. 페이지 위쪽 'Home > 제품소개 > 항온항습기 > (여기)'에 보입니다." }
+      - { label: "주소용 이름 (영문 소문자)", name: slug, widget: string, pattern: ["^[a-z0-9]+(-[a-z0-9]+)*$", "영문 소문자, 숫자, - 만 쓸 수 있습니다. 예) platinous-j"], hint: "페이지 주소가 됩니다. 예) platinous-j → products/platinous-j.html. 한 번 정하면 바꾸지 마세요(바꾸면 예전 주소가 끊깁니다)." }
+      - { label: "브라우저 탭 제목", name: title, widget: string, hint: "예) Platinous J 항온항습기. 뒤에 ' | 제이에스 엔지니어링'이 자동으로 붙습니다." }
+      - { label: "검색 결과 설명", name: description, widget: text, hint: "검색 사이트에 보이는 한두 문장." }
+      - label: "제품군(분류)"
+        name: category
+        widget: select
+        options:
+          - { label: "항온항습기", value: th }
+          - { label: "급속 온도변화·온도 사이클 시험기", value: rt }
+          - { label: "열충격 시험기", value: ts }
+          - { label: "HAST 가속수명 시험기", value: hast }
+          - { label: "워크인 챔버", value: wi }
+          - { label: "산업용 오븐", value: ov }
+          - { label: "2차전지 시험 장비", value: bt }
+          - { label: "반도체·전자부품 평가 시스템", value: sc }
+          - { label: "진동 시험기", value: vib }
+        hint: "제품 목록의 거르기 버튼과 페이지 위쪽 경로에 쓰입니다."
+      - { label: "정렬 순서 (제품 목록)", name: order, widget: number, value_type: int, default: 99, hint: "작은 숫자가 앞에 나옵니다. 예) 1, 2, 3 ..." }
+      - { label: "홈페이지에 공개", name: published, widget: boolean, default: true, hint: "끄면 홈페이지 어디에도 나오지 않습니다(초안)." }
+      - { label: "메인 대표 제품으로 표시", name: featured, widget: boolean, default: false, required: false, hint: "켜면 메인 화면 '대표 제품'에 카드가 나옵니다." }
+      - { label: "메인 표시 순서", name: featured_order, widget: number, value_type: int, required: false, hint: "메인 '대표 제품' 안에서의 순서. 작은 숫자가 앞." }
+
+      # 첫 화면
+      - label: "첫 화면 방식"
+        name: hero
+        widget: select
+        default: r
+        options:
+          - { label: "r: 사진 + 핵심 수치 + 체크 목록 (작은 사진만 있을 때, 기본)", value: r }
+          - { label: "aw: 거대한 글자 + 장비 사진 (회색 배경 고해상도 사진이 있을 때)", value: aw }
+      - { label: "견적 문의용 제품 이름", name: quote_name, widget: string, hint: "견적문의 버튼을 누르면 문의 양식의 '관심 제품' 칸에 들어갈 이름. 예) Platinous J" }
+      - { label: "자료·사양서 요청용 이름", name: material_name, widget: string, hint: "'사양서 요청', '자료 요청' 버튼에 쓰입니다. 예) Platinous J → 'Platinous J 사양서'" }
+      - { label: "큰 글자 (aw일 때)", name: aw_word, widget: string, required: false, hint: "영문 대문자 짧게. 예) PLATINOUS" }
+      - { label: "큰 글자 읽어 주기 글 (aw일 때)", name: aw_label, widget: string, required: false, hint: "화면 읽기 프로그램용. 예) PLATINOUS J 항온(항습)기" }
+      - { label: "큰 글자 아래 굵은 제목 (aw일 때)", name: aw_title, widget: string, required: false, hint: "예) Platinous J 항온(항습)기" }
+      - { label: "큰 글자 겹침 조정 이름 (aw일 때, 고급)", name: aw_variant, widget: string, required: false, hint: "css/products.css 에 따로 맞춘 값이 있을 때만. 예) hast. 보통 비워 둡니다." }
+      - { label: "제품 큰 제목 (r일 때)", name: heading, widget: string, required: false, hint: "예) SH Series" }
+      - { label: "제품 종류 (r일 때)", name: type_label, widget: string, required: false, hint: "예) 벤치탑 항온항습기" }
+      - { label: "위쪽 작은 표시 (r일 때, 선택)", name: chip, widget: string, required: false, hint: "예) 2014 굿디자인상" }
+      - { label: "한 줄 소개", name: lead, widget: text, hint: "첫 화면에 보이는 소개 문장." }
+      - label: "대표 사진"
+        name: photo
+        widget: object
+        fields: *photo_fields
+      - label: "대표 사진 보여 주는 방식 (r일 때)"
+        name: photo_frame
+        widget: select
+        required: false
+        default: pack
+        options:
+          - { label: "배경 없는 작은 사진을 칸 안에 맞춤", value: pack }
+          - { label: "사진 그대로", value: plain }
+          - { label: "확대해서 보여 줌 (아래 확대 값 필요)", value: zoom }
+      - label: "대표 사진 확대 값 (확대일 때)"
+        name: photo_zoom
+        widget: object
+        required: false
+        collapsed: true
+        fields:
+          - { label: "확대 배율", name: scale, widget: string, required: false, hint: "예) 1.3" }
+          - { label: "가로 위치", name: pos_x, widget: string, required: false, hint: "예) 49%" }
+          - { label: "세로 위치", name: pos_y, widget: string, required: false, hint: "예) 52%" }
+      - label: "사진 갤러리 (r일 때, 선택)"
+        name: gallery
+        widget: list
+        required: false
+        collapsed: true
+        summary: "{{fields.label}}"
+        hint: "2장 이상 넣으면 대표 사진 아래에 작은 사진 버튼이 생깁니다. 첫 사진은 대표 사진과 같은 사진으로 넣으세요."
+        fields:
+          - { label: "사진", name: src, widget: image, choose_url: false }
+          - { label: "가로 크기(px)", name: width, widget: number, value_type: int, required: false, hint: "비워 두면 자동" }
+          - { label: "세로 크기(px)", name: height, widget: number, value_type: int, required: false, hint: "비워 두면 자동" }
+          - { label: "사진 설명(대체 글)", name: alt, widget: string }
+          - { label: "작은 사진 버튼 이름", name: label, widget: string, hint: "예) 정면 사진 보기" }
+      - { label: "사진 아래 출처 문구", name: photo_note, widget: string, required: false, default: "제품 사진은 ESPEC 공식 자료입니다." }
+      - label: "핵심 수치 (보통 3개)"
+        name: kpis
+        widget: list
+        summary: "{{fields.value}}{{fields.unit}} — {{fields.label}}"
+        hint: "r 화면에서는 '값+단위'와 '이름'이, aw 화면에서는 큰 글자와 '이름·자세한 설명'이 보입니다."
+        fields:
+          - { label: "값", name: value, widget: string, hint: "예) -70~+100" }
+          - { label: "단위 (선택)", name: unit, widget: string, required: false, hint: "예) °C, %rh. 큰 글자 화면에서 작게 보입니다." }
+          - { label: "이름", name: label, widget: string, hint: "예) 온도 범위 (모델별)" }
+          - { label: "자세한 설명 (aw일 때)", name: detail, widget: string, required: false }
+      - { label: "핵심 수치 제목 (aw일 때)", name: kpi_title, widget: string, required: false, hint: "비워 두면 '핵심 수치 (모델에 따라 다릅니다)'" }
+      - { label: "특징 체크 목록 (r일 때)", name: checks, widget: list, required: false, field: { label: "한 줄", name: item, widget: string } }
+
+      # 개요
+      - label: "용도 (이런 시험에 씁니다)"
+        name: uses
+        widget: list
+        summary: "{{fields.title}}"
+        fields:
+          - { label: "굵은 제목", name: title, widget: string }
+          - { label: "설명", name: text, widget: text }
+      - { label: "관련 산업", name: industries, widget: select, multiple: true, required: false, options: *industry_options, hint: "개요 아래 산업 단추(솔루션 페이지로 연결)에 고른 순서대로 나옵니다." }
+      - { label: "개요 배경 큰 글자", name: bg_word, widget: string, required: false, hint: "영문 대문자. 예) J SERIES" }
+      - label: "개요 사진"
+        name: overview_photo
+        widget: object
+        required: false
+        fields: *photo_fields
+      - { label: "개요 사진이 배경 없는 작은 사진임", name: overview_pack, widget: boolean, required: false, default: false }
+      - { label: "개요 사진 최대 폭 (선택)", name: overview_photo_max, widget: string, required: false, hint: "작은 사진이 너무 커 보일 때. 예) 470px" }
+
+      # 특징
+      - label: "특징 상세"
+        name: features
+        widget: list
+        summary: "{{fields.big}} — {{fields.title}}"
+        fields:
+          - { label: "강조 글자", name: big, widget: string, hint: "예) 70% 또는 짧은 문장" }
+          - { label: "제목", name: title, widget: string }
+          - { label: "설명", name: text, widget: text }
+
+      # 사양표
+      - { label: "사양 구역 제목", name: specs_title, widget: string, required: false, default: "모델별 사양" }
+      - { label: "사양 탭 이름", name: specs_tab, widget: string, required: false, default: "주요 사양" }
+      - label: "사양표 (여러 개 가능)"
+        name: spec_tables
+        widget: list
+        summary: "{{fields.title}} {{fields.label}}"
+        hint: "표마다 열 이름과 행을 넣습니다. 칸은 | (세로 막대)로 나눕니다."
+        fields:
+          - { label: "표 제목 (선택)", name: title, widget: string, required: false, hint: "표가 여러 개일 때 표 위에 보이는 제목. 예) Advanced Battery Tester (ADBT)" }
+          - { label: "표 제목 옆 작은 글씨 (선택)", name: small, widget: string, required: false, hint: "예) 모델: ADBT-5-1, ADBT-5-10" }
+          - { label: "표 이름 (화면 읽기용)", name: label, widget: string, required: false, hint: "예) 모델별 사양표. 비워 두면 표 제목으로 자동." }
+          - { label: "항목-내용 2칸 표 모양", name: kv, widget: boolean, required: false, default: false, hint: "왼쪽 '항목', 오른쪽 '내용' 두 칸짜리 표면 켭니다." }
+          - { label: "열 이름 (| 로 나눔, 선택)", name: columns, widget: string, required: false, hint: "예) 구분 / 모델 | 온도 범위 | 습도 | 내용적. 첫 열 이름은 행의 '첫 칸' 위에 옵니다. 비워 두면 머리줄 없는 표." }
+          - label: "행"
+            name: rows
+            widget: list
+            summary: "{{fields.head}} {{fields.sub}}"
+            fields:
+              - { label: "첫 칸 (모델 또는 항목)", name: head, widget: string, hint: "예) SH-222 / 온도 범위" }
+              - { label: "첫 칸 아래 작은 글씨 (선택)", name: sub, widget: string, required: false, hint: "예) PR-1J / 2J / 3J / 4J" }
+              - { label: "나머지 칸 (| 로 나눔)", name: cells, widget: string, hint: "예) -20 ~ +150°C, 30 ~ 95%rh | W300×H300×D250 | 100V AC 50/60Hz 등. 칸 안에서 줄을 바꾸려면 <br> 을 씁니다. 모르는 값은 [확인 필요] 라고 쓰면 노란 표시가 됩니다." }
+              - { label: "'이 모델 견적' 링크용 이름 (선택)", name: quote, widget: string, required: false, hint: "채우면 행 끝에 '이 모델 견적' 링크가 생깁니다. 예) SH-222" }
+      - label: "사양표 아래 추가 목록 (선택)"
+        name: spec_more
+        widget: object
+        required: false
+        collapsed: true
+        fields:
+          - { label: "제목", name: title, widget: string, required: false }
+          - { label: "설명", name: text, widget: text, required: false }
+          - { label: "이름 목록", name: items, widget: list, required: false, field: { label: "이름", name: item, widget: string } }
+          - { label: "버튼 글자", name: button, widget: string, required: false }
+          - { label: "버튼 연결 주소", name: button_link, widget: string, required: false, hint: "예) contact.html?type=consult&item=반도체+평가+시스템+라인업" }
+      - { label: "표 아래 주석 (출처 등)", name: spec_note, widget: text, required: false, hint: "출처와 수집일을 꼭 남기세요. 링크는 <a href=\"주소\" target=\"_blank\" rel=\"noopener\">글자</a> 처럼 씁니다." }
+
+      # 규격·인증·수상
+      - { label: "규격·수상 구역 제목", name: awards_title, widget: string, required: false, default: "규격과 수상" }
+      - { label: "규격·수상 탭 이름", name: awards_tab, widget: string, required: false, default: "규격·수상" }
+      - label: "규격·인증·수상 목록"
+        name: awards
+        widget: list
+        required: false
+        summary: "{{fields.title}}"
+        fields:
+          - { label: "제목", name: title, widget: string, hint: "예) 2025 굿디자인상 / JEDEC" }
+          - { label: "설명", name: text, widget: string, required: false }
+
+      # 자료
+      - label: "자료 (카탈로그, 소식 링크)"
+        name: docs
+        widget: list
+        required: false
+        summary: "{{fields.title}} — {{fields.text}}"
+        fields:
+          - { label: "이름", name: title, widget: string, hint: "예) ESPEC 공식 카탈로그 (영문 PDF)" }
+          - { label: "설명 (크기 등)", name: text, widget: string, required: false, hint: "예) Platinous J Series · 약 9.6MB · 새 창" }
+          - { label: "링크 주소", name: url, widget: string, hint: "https:// 로 시작하면 새 창 버튼, 사이트 안 주소(예: contact.html?type=material&item=...)면 일반 버튼" }
+          - { label: "버튼 글자", name: button, widget: string, default: "카탈로그 보기" }
+      - { label: "맨 끝에 '자료 요청' 줄 자동으로 넣기", name: docs_request, widget: boolean, default: true, required: false }
+      - { label: "첫 화면 자료 버튼 글자", name: docs_button, widget: string, required: false, hint: "비워 두면 '카탈로그 보기'" }
+
+      # 관련 제품
+      - label: "관련 제품 (함께 보는 장비)"
+        name: related
+        widget: list
+        required: false
+        summary: "{{fields.product}}"
+        hint: "보통 3개. 다른 제품을 고르면 그 제품 카드가 자동으로 나옵니다."
+        fields:
+          - *product_relation
+          - { label: "카드 제목을 이 페이지에서만 다르게 (선택)", name: name, widget: string, required: false }
+
+      # 견적 띠
+      - { label: "맨 아래 견적 띠 제목", name: cta_title, widget: string, hint: "예) Platinous J 견적을 받아 보세요" }
+      - { label: "맨 아래 견적 띠 설명", name: cta_text, widget: string, required: false, default: "시험 조건만 알려 주시면 맞는 모델을 안내해 드립니다." }
+
+      # 카드
+      - label: "제품 카드 (제품 목록·메인·솔루션 페이지에 쓰는 기본 카드)"
+        name: card
+        widget: object
+        collapsed: true
+        fields: *card_fields
+      - label: "메인 화면에서만 다르게 (선택)"
+        name: card_home
+        widget: object
+        required: false
+        collapsed: true
+        hint: "비워 두면 기본 카드 그대로."
+        fields: *card_fields
+      - label: "다른 제품의 '관련 제품' 칸에서 다르게 (선택)"
+        name: card_related
+        widget: object
+        required: false
+        collapsed: true
+        hint: "비워 두면 기본 카드 그대로."
+        fields: *card_fields
+
+  # ─────────────────────────────────────────────
+  # 2. 뉴스·공지사항
+  # ─────────────────────────────────────────────
+  - name: news
+    label: "뉴스·공지"
+    label_singular: "소식"
+    description: "news.html 목록과 메인 '최신 소식'에 자동으로 나옵니다. 공지사항은 분류에서 '공지사항'을 고르세요."
+    folder: content/news
+    extension: md
+    format: frontmatter
+    create: true
+    delete: true
+    slug: "{{year}}-{{month}}-{{day}}-news"
+    identifier_field: title
+    summary: "{{date}} · {{category}} · {{title}}{{published | ternary('', ' (비공개)')}}"
+    sortable_fields: ["date", "title", "category"]
+    view_groups:
+      - { label: "분류", field: category }
+    view_filters:
+      - { label: "공지사항", field: category, pattern: notice }
+      - { label: "비공개(초안)", field: published, pattern: false }
+    editor: { preview: false }
+    fields:
+      - { label: "제목", name: title, widget: string }
+      - { label: "날짜", name: date, widget: datetime, default: "{{now}}", format: "YYYY-MM-DD", date_format: "YYYY-MM-DD", time_format: false, picker_utc: true }
+      - label: "분류"
+        name: category
+        widget: select
+        options:
+          - { label: "ESPEC 신제품 (ESPEC 소식)", value: new }
+          - { label: "ESPEC 회사 소식 (ESPEC 소식)", value: corp }
+          - { label: "제이에스 엔지니어링 소식", value: js }
+          - { label: "세미나·전시회", value: event }
+          - { label: "공지사항", value: notice }
+      - { label: "홈페이지에 공개", name: published, widget: boolean, default: true, hint: "끄면 초안으로 저장되어 홈페이지에 나오지 않습니다." }
+      - { label: "맨 위에 고정", name: pinned, widget: boolean, default: false, required: false, hint: "켜면 뉴스 목록 맨 위, 메인 '최신 소식' 맨 앞에 나옵니다. 중요한 공지에만 쓰세요." }
+      - { label: "메인 '최신 소식'에 보이기", name: show_on_home, widget: boolean, default: true, required: false, hint: "켠 글 중 최신 3개(고정 글 먼저)가 메인에 나옵니다. 사진이 있는 글이 보기 좋습니다." }
+      - { label: "요약 (첫 문단)", name: summary, widget: text, hint: "목록에 보이는 첫 문단. 모르는 내용은 [확인 필요] 라고 쓰면 노란 표시가 됩니다." }
+      - { label: "본문 (선택, 둘째 문단부터)", name: body, widget: markdown, required: false, buttons: ["bold", "link", "bulleted-list"], editor_components: [], hint: "문단 사이는 한 줄을 비웁니다." }
+      - { label: "관련 제품 (선택)", name: product, widget: relation, collection: products, value_field: slug, search_fields: ["name", "title", "slug"], display_fields: ["name"], required: false, hint: "고르면 '제품 보기' 링크가 생깁니다." }
+      - { label: "다른 안쪽 링크 글자 (선택)", name: link_text, widget: string, required: false, hint: "관련 제품 대신 다른 페이지로 보낼 때. 예) 파트너 네트워크 보기" }
+      - { label: "다른 안쪽 링크 주소 (선택)", name: link_url, widget: string, required: false, hint: "예) network.html" }
+      - { label: "원문 링크 (선택)", name: source_url, widget: string, required: false, hint: "예) https://www.espec.co.jp/english/news/..." }
+      - { label: "원문 링크 글자 (선택)", name: source_label, widget: string, required: false, hint: "비워 두면 'ESPEC 원문 보기 (영문, 새 창)'" }
+      - label: "문의 버튼"
+        name: inquiry_type
+        widget: select
+        required: false
+        default: none
+        options:
+          - { label: "없음", value: none }
+          - { label: "'이 장비 상담하기' (견적 문의로 연결)", value: quote }
+          - { label: "'문의하기' (상담 문의로 연결)", value: consult }
+      - { label: "문의 버튼에 넣을 제품·내용 이름", name: inquiry_name, widget: string, required: false, hint: "문의 양식에 미리 채워질 이름. 예) MTP-101" }
+      - label: "대표 사진 (메인 '최신 소식' 카드에 보임, 선택)"
+        name: images
+        widget: list
+        required: false
+        collapsed: true
+        summary: "{{fields.alt}}"
+        hint: "2장 넣으면 나란히 보입니다."
+        fields: *photo_fields
+      - label: "대표 사진 보여 주는 방식"
+        name: image_frame
+        widget: select
+        required: false
+        default: pack
+        options:
+          - { label: "사진 전체를 칸 안에 맞춤", value: pack }
+          - { label: "사진 일부를 확대해서 칸을 채움", value: crop }
+      - { label: "확대 배율 (확대 방식일 때)", name: image_scale, widget: string, required: false, hint: "예) 1.15" }
+      - { label: "가로 위치 (확대 방식일 때)", name: image_x, widget: string, required: false, hint: "예) 55%" }
+      - { label: "세로 위치 (확대 방식일 때)", name: image_y, widget: string, required: false, hint: "예) 55%" }
+
+  # ─────────────────────────────────────────────
+  # 3. 카탈로그 자료 (기술자료 페이지의 표)
+  # ─────────────────────────────────────────────
+  - name: catalogs
+    label: "카탈로그 자료"
+    label_singular: "카탈로그"
+    description: "기술자료(resources.html) 카탈로그 표에 자동으로 나옵니다."
+    folder: content/catalogs
+    extension: md
+    format: frontmatter
+    create: true
+    delete: true
+    slug: "catalog-{{year}}{{month}}{{day}}-{{hour}}{{minute}}{{second}}"
+    identifier_field: name
+    summary: "{{group}} · {{order}}. {{name}}"
+    sortable_fields: ["group", "order", "name"]
+    view_groups:
+      - { label: "분류", field: group }
+    editor: { preview: false }
+    fields:
+      - { label: "자료 이름", name: name, widget: string, hint: "예) Platinous J 시리즈" }
+      - label: "분류"
+        name: group
+        widget: select
+        options:
+          - { label: "종합", value: g-all }
+          - { label: "항온항습기", value: g-th }
+          - { label: "급속 온도변화", value: g-rt }
+          - { label: "열충격", value: g-ts }
+          - { label: "HAST", value: g-hast }
+          - { label: "워크인", value: g-wi }
+          - { label: "오븐", value: g-ov }
+          - { label: "2차전지", value: g-bt }
+          - { label: "반도체 평가", value: g-sc }
+          - { label: "기타·분야별", value: g-etc }
+      - { label: "분류 안 정렬 순서", name: order, widget: number, value_type: int, default: 99 }
+      - { label: "관련 제품 (선택)", name: product, widget: relation, collection: products, value_field: slug, search_fields: ["name", "title", "slug"], display_fields: ["name"], required: false, hint: "고르면 '관련 제품' 칸이 제품 페이지 링크가 됩니다." }
+      - { label: "관련 제품 칸 글자", name: product_label, widget: string, hint: "예) Platinous J / 소형 항온항습 캐비닛" }
+      - { label: "크기", name: size, widget: string, required: false, hint: "예) 9.6MB. 모르면 비워 두면 '—'로 보입니다." }
+      - { label: "공식 카탈로그 링크", name: url, widget: string, required: false, hint: "ESPEC 공식 PDF 주소. 비워 두면 [확인 필요] 표시가 나옵니다." }
+      - { label: "자료 요청 이름", name: request_item, widget: string, required: false, hint: "'자료 요청' 버튼을 누르면 문의 양식에 들어갈 이름. 비워 두면 자료 이름." }
+      - { label: "홈페이지에 공개", name: published, widget: boolean, default: true }
+
+  # ─────────────────────────────────────────────
+  # 4. 산업 솔루션 페이지의 추천 장비 (파일 하나)
+  # ─────────────────────────────────────────────
+  - name: solutions
+    label: "산업 솔루션 추천 장비"
+    description: "솔루션 > 산업별 페이지의 '추천 장비' 카드 목록입니다. 제품을 고르면 그 제품의 카드가 나오고, 필요하면 이 페이지에서만 글자·사진을 바꿀 수 있습니다."
+    editor: { preview: false }
+    files:
+      - name: picks
+        label: "산업별 추천 장비"
+        file: content/solutions.yml
+        format: yml
+        # 주의: 이 파일 맨 위에 # 주석 줄을 넣으면 관리자 화면이 내용을 읽지 못합니다.
+        fields:
+          - &pick_list
+            label: "반도체"
+            name: semiconductor
+            widget: list
+            required: false
+            summary: "{{fields.product}} {{fields.name}}"
+            fields:
+              - *product_relation
+              - { label: "카드 제목 (이 페이지에서만, 선택)", name: name, widget: string, required: false }
+              - { label: "카드 설명 (선택)", name: type, widget: string, required: false }
+              - { label: "카드 핵심 수치 (선택)", name: temp, widget: string, required: false }
+              - { label: "사진 보여 주는 방식 (선택)", name: frame, widget: select, required: false, options: [{ label: "칸 안에 맞춤", value: pack }, { label: "확대해서 채움", value: crop }] }
+              - { label: "확대 배율 (선택)", name: scale, widget: string, required: false }
+              - { label: "가로 위치 (선택)", name: pos_x, widget: string, required: false }
+              - { label: "세로 위치 (선택)", name: pos_y, widget: string, required: false }
+              - { label: "사진 설명만 바꾸기 (선택)", name: alt, widget: string, required: false }
+              - { label: "카드 사진 바꾸기 (선택)", name: images, widget: list, required: false, collapsed: true, summary: "{{fields.alt}}", fields: *photo_fields }
+          - { <<: *pick_list, label: "전기전자", name: electronics }
+          - { <<: *pick_list, label: "배터리", name: battery }
+          - { <<: *pick_list, label: "자동차·모빌리티", name: mobility }
+          - { <<: *pick_list, label: "항공우주·방산", name: aerospace-defense }
+          - { <<: *pick_list, label: "소재·기타", name: materials }

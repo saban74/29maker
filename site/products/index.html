@@ -1,0 +1,85 @@
+---
+title: 제품소개 | 제이에스 엔지니어링
+description: 제이에스 엔지니어링이 공급하는 ESPEC 환경시험·평가 장비 목록. 항온항습기, 열충격 시험기, HAST, 워크인 챔버, 2차전지 시험 장비 등.
+css: pages
+nav: products
+scripts:
+  - js/pages.js
+layout: layouts/base.njk
+---
+{% from "partials/card.njk" import productCard %}
+{#
+  제품소개 목록: 제목 > 제품군 거르기 + 제품 카드 12장 > 그 밖의 라인업 > 견적 띠.
+     제품 카드는 관리자 화면(제품)에서 제품을 추가하면 자동으로 생깁니다. 제품군 버튼은 site/_data/productCategories.js 에서 만듭니다.
+#}
+<!-- 1. 제목 영역 -->
+<section class="b-r-hero pg-head" aria-labelledby="pg-title">
+  <div class="wrap b-r-hero__top">
+    <div>
+      <p class="b-r-hero__tag">PRODUCTS</p>
+      <h1 class="b-r-hero__title" id="pg-title">ESPEC<br>test chambers</h1>
+    </div>
+    <div>
+      <p class="b-r-hero__sub"><strong>제품소개</strong>다양한 산업의 요구에 맞는 ESPEC 환경시험·평가 장비를 제이에스 엔지니어링이 공급합니다.</p>
+    </div>
+  </div>
+</section>
+
+<!-- 2. 제품 카드 (제품군 버튼으로 거르기) -->
+<section class="blk tone-white" id="list" aria-labelledby="list-h">
+  <div class="wrap">
+    <div class="sec-head">
+      <div><span class="label">Lineup</span><h2 class="h-sec" id="list-h">제품 목록</h2><p>카드를 누르면 사양과 모델 정보를 볼 수 있습니다.</p></div>
+      <a class="link-arrow" href="../solutions/index.html">산업별로 찾기</a>
+    </div>
+    <div class="filters" role="group" aria-label="제품군으로 거르기" data-filter-for="#prod-list">
+      <button type="button" data-filter="all" aria-pressed="true">전체 제품</button>
+{% for c in productCategories %}
+      <button type="button" data-filter="{{ c.code }}" aria-pressed="false">{{ c.label }}</button>
+{% endfor %}
+    </div>
+
+    <div id="prod-list">
+      <div class="prod-grid prod-grid--4">
+{# 제품 카드: content/products 의 공개된 제품이 "정렬 순서"대로 자동으로 나옵니다 #}
+{% for prod in products %}
+        {{ productCard(prod, prod | cardOf, prod.category, page.url) }}
+{% endfor %}
+        <!-- SHINKEN 진동 시험기: 제품 자료가 없어 상담 카드로만 둡니다 -->
+        <a class="card-prod card-prod--consult" data-cat="vib" href="../contact.html?type=consult&amp;item=SHINKEN+진동+시험기"><div class="ph ph--mid" aria-hidden="true"></div><div class="card-prod__body"><h3>SHINKEN 진동 시험기</h3><div class="card-prod__type">진동 시험기</div><div class="card-prod__temp">사양은 문의해 주세요 <span class="tbd">[확인 필요]</span></div></div></a>
+      </div>
+    </div>
+    <p class="src-note" style="margin-top:18px">제품 사양은 ESPEC 공개 자료(수집일 2026-10-29) 기준입니다. 최신 사양과 국내 공급 사양은 제이에스 엔지니어링에 문의해 주세요.</p>
+  </div>
+</section>
+
+<!-- 3. 그 밖의 라인업 (상세 페이지 없이 목록, ESPEC 원문 링크, 문의) -->
+<section class="blk tone-studio" id="others" aria-labelledby="others-h">
+  <div class="wrap">
+    <span class="label">More</span>
+    <h2 class="h-sec" id="others-h">그 밖의 라인업</h2>
+    <p class="lead stack-top-s">아래 장비도 상담할 수 있습니다. 자세한 사양은 ESPEC 공식 페이지를 참고하시거나 제이에스 엔지니어링에 문의해 주세요. 국내 공급 가능 여부는 상담 때 안내합니다. <span class="tbd">[확인 필요]</span></p>
+    <ul class="lineup">
+      <li><strong>Constant Climate Cabinet</strong><span>소형 항온항습 캐비닛</span><div class="lineup__acts"><a class="link" href="https://www.espec.co.jp/english/products/env-test/mc/" target="_blank" rel="noopener">ESPEC 원문 (영문, 새 창)</a><a class="btn btn--sm btn--ghost" href="../contact.html?type=consult&amp;item=Constant+Climate+Cabinet">문의</a></div></li>
+      <li><strong>Compact Ultra Low Temperature Chamber</strong><span>소형 초저온 시험기</span><div class="lineup__acts"><a class="link" href="https://www.espec.co.jp/english/products/env-test/ls/" target="_blank" rel="noopener">ESPEC 원문 (영문, 새 창)</a><a class="btn btn--sm btn--ghost" href="../contact.html?type=consult&amp;item=Compact+Ultra+Low+Temperature+Chamber">문의</a></div></li>
+      <li><strong>Stability Test Chamber CSH/CWH</strong><span>보관 안정성 시험기</span><div class="lineup__acts"><a class="link" href="https://www.espec.co.jp/english/products/env-test/csh/" target="_blank" rel="noopener">ESPEC 원문 (영문, 새 창)</a><a class="btn btn--sm btn--ghost" href="../contact.html?type=consult&amp;item=CSH/CWH">문의</a></div></li>
+      <li><strong>Large HAST Chamber</strong><span>대형 HAST 시험기</span><div class="lineup__acts"><a class="link" href="https://www.espec.co.jp/english/products/env-test/ehs431/" target="_blank" rel="noopener">ESPEC 원문 (영문, 새 창)</a><a class="btn btn--sm btn--ghost" href="../contact.html?type=consult&amp;item=Large+HAST+Chamber">문의</a></div></li>
+      <li><strong>FD Series</strong><span>배터리 모듈, EV 파워트레인, 태양광 모듈 등 대형 시험체용</span><div class="lineup__acts"><a class="link" href="https://www.espec.co.jp/english/products/env-test/fd/" target="_blank" rel="noopener">ESPEC 원문 (영문, 새 창)</a><a class="btn btn--sm btn--ghost" href="../contact.html?type=consult&amp;item=FD+Series">문의</a></div></li>
+      <li><strong>Altitude Temperature (&amp; Humidity) Chamber MZ Series</strong><span>고도(저기압) 시험</span><div class="lineup__acts"><a class="link" href="https://www.espec.co.jp/english/products/env-test/mz/" target="_blank" rel="noopener">ESPEC 원문 (영문, 새 창)</a><a class="btn btn--sm btn--ghost" href="../contact.html?type=consult&amp;item=MZ+Series">문의</a></div></li>
+      <li><strong>High-Rate Thermal Cycle Chamber</strong><span>고속 온도 사이클 시험기</span><div class="lineup__acts"><a class="link" href="https://www.espec.co.jp/english/products/env-test/hr/" target="_blank" rel="noopener">ESPEC 원문 (영문, 새 창)</a><a class="btn btn--sm btn--ghost" href="../contact.html?type=consult&amp;item=High-Rate+Thermal+Cycle+Chamber">문의</a></div></li>
+      <li><strong>Liquid to Liquid 열충격 TSB Series</strong><span>액체식 열충격 시험기</span><div class="lineup__acts"><a class="link" href="https://www.espec.co.jp/english/products/env-test/tsb/" target="_blank" rel="noopener">ESPEC 원문 (영문, 새 창)</a><a class="btn btn--sm btn--ghost" href="../contact.html?type=consult&amp;item=TSB+Series">문의</a></div></li>
+      <li><strong>특수 오븐</strong><span>초고온, 방폭 벤트, 무산소, 클린, 진공 등</span><div class="lineup__acts"><a class="link" href="https://www.espec.co.jp/english/products/env-test/pvc/" target="_blank" rel="noopener">ESPEC 원문 (영문, 새 창)</a><a class="btn btn--sm btn--ghost" href="../contact.html?type=consult&amp;item=특수+오븐">문의</a></div></li>
+      <li><strong>ESPEC ONLINECORE</strong><span>웹 브라우저로 최대 100대의 챔버를 통합 감시</span><div class="lineup__acts"><a class="link" href="https://www.espec.co.jp/english/products/env-test/pcs/" target="_blank" rel="noopener">ESPEC 원문 (영문, 새 창)</a><a class="btn btn--sm btn--ghost" href="../contact.html?type=consult&amp;item=ONLINECORE">문의</a></div></li>
+      <li><strong>맞춤 제작</strong><span>진동 복합 등 복합 환경 시험 시스템</span><div class="lineup__acts"><a class="link" href="https://www.espec.co.jp/english/products/env-test/#special_example" target="_blank" rel="noopener">ESPEC 원문 (영문, 새 창)</a><a class="btn btn--sm btn--ghost" href="../contact.html?type=consult&amp;item=맞춤+제작">문의</a></div></li>
+      <li><strong>HALT/HASS, 식물 재배 챔버</strong><span>자세한 내용은 문의해 주세요 <span class="tbd">[확인 필요]</span></span><div class="lineup__acts"><a class="btn btn--sm btn--ghost" href="../contact.html?type=consult&amp;item=HALT/HASS+또는+식물+재배+챔버">문의</a></div></li>
+    </ul>
+  </div>
+</section>
+
+<!-- 4. 견적 띠 -->
+<section class="blk tone-graphite b-cta" aria-labelledby="cta-h">
+  <div class="wrap b-cta__in">
+    <div><h2 id="cta-h">장비를 못 찾으셨나요? 시험 조건만 알려 주세요.</h2><p>전화 상담 <a href="tel:0255570505" style="color:inherit;text-decoration:underline">02-557-0505</a></p></div>
+    <a class="btn btn--light" href="../contact.html?type=consult">시험 조건으로 상담하기</a>
+  </div>
+</section>

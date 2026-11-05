@@ -1,0 +1,95 @@
+/* S3-longbow 공통 베이스: 4열 헤어라인 그리드 + 교차점 사각 노드 + 거대 마키 + 세리프 제목 + 대문자 본문 */
+@import url("https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css");
+@import url("https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@200;300;400&display=swap");
+
+:root{
+  --sans:"Pretendard Variable",Pretendard,-apple-system,"Malgun Gothic",sans-serif;
+  --serif:"Noto Serif KR","Nanum Myeongjo",serif;
+  --m:16px;                       /* 바깥 여백(좌우 동일) */
+  --u:calc((100vw - 2*var(--m)) / 4);  /* 셀 한 칸 = 정사각 */
+  --ground:#dcdedf; --ink:#1b1b1c; --line:rgba(27,27,28,.30); --node:#1b1b1c; --accent:#1f5c49;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{background:var(--ground);color:var(--ink);font-family:var(--sans);font-size:16px;line-height:1.7;word-break:keep-all;-webkit-font-smoothing:antialiased}
+img{display:block;max-width:100%}
+a{color:inherit}
+:focus-visible{outline:2px solid var(--ink);outline-offset:3px}
+.dark :focus-visible,.on-dark :focus-visible{outline-color:#fff}
+
+/* 그리드 */
+.sec{position:relative;display:grid;grid-template-columns:repeat(4,1fr);grid-auto-rows:minmax(var(--u),auto);margin:0 var(--m);border-right:1px solid var(--line)}
+.sec::after{content:"";position:absolute;right:-4px;top:-4px;width:7px;height:7px;background:var(--node);z-index:4}
+.sec.last{border-bottom:1px solid var(--line)}
+.cell{position:relative;z-index:1;min-width:0;padding:20px;border-top:1px solid var(--line);border-left:1px solid var(--line)}
+.cell::before{content:"";position:absolute;left:-4px;top:-4px;width:7px;height:7px;background:var(--node);z-index:4}
+.cell.photo{padding:0;overflow:hidden}
+.cell.photo img,.bg img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.bg{position:relative;z-index:0;grid-area:1/1/-1/-1;overflow:hidden}
+.over .cell{background:transparent}
+.end{align-self:end}
+
+/* 글자: 아주 큰 마키 / 가벼운 세리프 제목(둘째 줄 이탤릭) / 대문자 작은 본문 */
+.marq{font-family:var(--sans);font-weight:800;font-size:21vw;line-height:.8;letter-spacing:-.06em;text-transform:uppercase;white-space:nowrap;transform:scaleX(.78);transform-origin:left bottom;padding-bottom:.04em}
+.cell.m{padding:0;overflow:hidden;display:flex;align-items:flex-end}
+.h{font-family:var(--serif);font-weight:300;font-size:clamp(26px,2.1vw,32px);line-height:1.38;letter-spacing:-.01em}
+.h i{display:block;font-style:italic}
+.h.xl{font-size:clamp(34px,4vw,60px);line-height:1.2}
+.tag{font-size:13px;font-weight:500;letter-spacing:.08em;text-transform:uppercase}
+.body{font-size:16px;line-height:1.75;letter-spacing:.01em;max-width:34em}
+.small{font-size:14px;line-height:1.6}
+.stack{display:flex;flex-direction:column;gap:20px}
+.stack.sp{justify-content:space-between}
+.sq{display:inline-block;width:7px;height:7px;background:currentColor;margin-right:8px;vertical-align:1px}
+.num{font-family:var(--sans);font-weight:200;font-size:clamp(56px,8.2vw,128px);line-height:.95;letter-spacing:-.05em;font-variant-numeric:tabular-nums}
+
+/* 버튼: 사각 한 가지 */
+.btn{display:inline-block;align-self:flex-start;background:var(--ink);color:var(--ground);padding:13px 22px;font-size:14px;font-weight:600;letter-spacing:.04em;text-decoration:none;border:1px solid var(--ink);transition:background .25s,color .25s}
+.btn:hover{background:transparent;color:var(--ink)}
+.btn.inv{background:#fff;color:#111;border-color:#fff}
+.btn.inv:hover{background:transparent;color:#fff}
+
+/* 내비 */
+.nav{position:absolute;z-index:20;top:calc(var(--m) + 14px);left:50%;transform:translateX(-50%);width:calc((100vw - 2*var(--m))/2 - 24px);min-width:300px;display:grid;grid-template-columns:1fr auto 1fr;align-items:center;gap:12px;padding:10px 16px;background:rgba(220,222,223,.82);border:1px solid var(--line);backdrop-filter:blur(8px)}
+.nav .wm{font-weight:800;letter-spacing:-.04em;font-size:20px;text-decoration:none;text-align:center;transform:scaleX(.85)}
+.nav .req{justify-self:end;font-size:13px;font-weight:600;letter-spacing:.06em;text-decoration:none;border-bottom:1px solid currentColor}
+.nav details{justify-self:start;position:relative}
+.nav summary{list-style:none;cursor:pointer;font-size:13px;font-weight:600;letter-spacing:.06em;display:flex;gap:8px;align-items:center}
+.nav summary::-webkit-details-marker{display:none}
+.nav summary::before{content:"";width:16px;height:7px;border-top:1.5px solid currentColor;border-bottom:1.5px solid currentColor}
+.nav ul{position:absolute;top:calc(100% + 20px);left:-17px;list-style:none;min-width:230px;background:var(--ground);border:1px solid var(--line);padding:8px 0}
+.nav ul a{display:block;padding:9px 18px;text-decoration:none;font-size:15px}
+.nav ul a:hover{background:var(--ink);color:var(--ground)}
+.nav.dk{background:rgba(20,21,22,.62);color:#fff;border-color:rgba(255,255,255,.35)}
+.nav.dk ul{background:#161718;border-color:rgba(255,255,255,.3)}
+.nav.dk ul a:hover{background:#fff;color:#111}
+
+/* 푸터 */
+.foot-name{font-family:var(--sans);font-weight:800;text-transform:uppercase;letter-spacing:-.06em;line-height:.8;font-size:14.2vw;white-space:nowrap;transform:scaleX(.8);transform-origin:left bottom;overflow:hidden}
+.legal{margin:0 var(--m);padding:14px 4px 18px;font-size:12px;letter-spacing:.06em;text-transform:uppercase;display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap}
+
+/* 첫 화면 한 번의 등장: 사진이 위에서 천천히 열림 */
+@keyframes open{from{clip-path:inset(0 0 100% 0)}to{clip-path:inset(0)}}
+@keyframes drift{from{transform:scale(1.06)}to{transform:scale(1)}}
+.reveal img{animation:drift 2.4s cubic-bezier(.2,.7,.2,1) both}
+.reveal{animation:open 1.25s cubic-bezier(.65,0,.35,1) both}
+@keyframes run{to{transform:translateX(-50%)}}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important;scroll-behavior:auto!important}}
+/* 데스크톱: 배경 사진이 구역 전체(모든 행)를 덮게 한다. grid-area 1/1/-1/-1은 암시적 행에서 첫 행만 덮어서 바꿈 (메인 감독자 수정) */
+@media (min-width:821px){.bg{position:absolute;inset:0;grid-area:auto}}
+
+
+/* 휴대폰: 2열, 셀은 한 줄씩 쌓음 */
+@media (max-width:820px){
+  :root{--u:calc((100vw - 2*var(--m)) / 2)}
+  .sec{grid-template-columns:repeat(2,1fr)}
+  .sec>.cell{grid-column:1/-1!important;grid-row:auto!important}
+  .void{display:none!important}
+  .bg{grid-area:auto!important;grid-column:1/-1!important;min-height:92vw}
+  .cell.photo{min-height:78vw}
+  .over .cell{background:var(--ground)}
+  .nav{width:calc(100vw - 2*var(--m) - 24px);min-width:0;grid-template-columns:auto 1fr auto}
+  .marq{font-size:30vw}
+  .foot-name{font-size:22vw}
+  .num{font-size:22vw}
+}

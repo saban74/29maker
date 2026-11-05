@@ -1,0 +1,23 @@
+{
+  "name": "js-engineering-site",
+  "private": true,
+  "description": "제이에스 엔지니어링 홈페이지 (Eleventy + Decap CMS)",
+  "scripts": {
+    "build": "eleventy",
+    "start": "eleventy --serve --port=8080",
+    "cms": "decap-server"
+  },
+  "dependencies": {
+    "@11ty/eleventy": "3.1.7",
+    "gray-matter": "4.0.3",
+    "image-size": "2.0.4",
+    "markdown-it": "14.3.3"
+  },
+  "devDependencies": {
+    "decap-server": "3.11.5"
+  },
+  "engines": {
+    "node": ">=18"
+  },
+  "type": "module"
+}

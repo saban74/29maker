@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 300 190" width="300" height="190" role="img" aria-label="J&amp;S ENGINEERING 제이에스 엔지니어링">
+  <title>J&amp;S ENGINEERING 제이에스 엔지니어링</title>
+  <g transform="translate(114 8) scale(1.125)">
+    <polygon points="12,4 24,4 24,40 44,40 44,46 24,46 24,60 4,60 4,48 12,48" fill="#16233B"/>
+    <polygon points="28,4 60,4 60,16 40,16 40,26 60,26 60,60 28,60 28,48 48,48 48,38 28,38" fill="#D6364A"/>
+  </g>
+  <text x="150" y="122" text-anchor="middle" font-family="Pretendard, 'Noto Sans KR', 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif" font-size="26" font-weight="800" fill="#16233B">J&amp;S ENGINEERING</text>
+  <text x="150" y="152" text-anchor="middle" font-family="Pretendard, 'Noto Sans KR', 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif" font-size="18" font-weight="600" letter-spacing="1" fill="#2B3644">제이에스 엔지니어링</text>
+</svg>

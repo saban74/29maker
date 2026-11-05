@@ -1,0 +1,83 @@
+semiconductor:
+  - product: semiconductor-evaluation
+    name: AMI-SPM · AMR-SPM
+    type: 반도체 측정·평가 시스템
+    temp: 저전압 절연 · 저전류 저항 평가
+    images:
+      - src: /assets/img/web/semicon-ami-mv.png
+        width: 371
+        height: 293
+        alt: AMI-SPM 절연 신뢰성 평가 시스템
+      - src: /assets/img/web/semicon-amr-mv.png
+        width: 306
+        height: 293
+        alt: AMR-SPM 도체 저항 평가 시스템
+  - product: hast
+  - product: tcc-series
+  - product: ar-series
+  - product: mtp-101
+electronics:
+  - product: tcc-series
+  - product: ar-series
+  - product: hast
+  - product: walk-in
+    name: 워크인 챔버 E 시리즈
+    type: 대형 항온항습 시험실
+    scale: "1.15"
+    pos_x: 55%
+    pos_y: 55%
+    images:
+      - src: /assets/img/hires/walk-in-tbe-side-door.jpg
+        width: 1615
+        height: 1213
+        alt: 워크인 챔버 E 시리즈
+  - product: mtp-101
+battery:
+  - product: battery
+    name: 배터리 시험 장비
+    type: 충방전·안전 시험
+    alt: 배터리 시험 장비 Advanced Battery Tester
+  - product: platinous-j
+    name: Platinous J 시리즈 (ECO형)
+    alt: Platinous J 시리즈
+  - product: walk-in
+    name: 워크인 챔버
+    type: 대형 항온항습 시험실 (배터리 팩용 모델은 문의)
+    temp: "-40 ~ +80°C (E 시리즈)"
+    scale: "1.15"
+    pos_x: 55%
+    pos_y: 55%
+    images:
+      - src: /assets/img/hires/walk-in-tbe-side-door.jpg
+        width: 1615
+        height: 1213
+        alt: 워크인 챔버 E 시리즈
+mobility:
+  - product: ar-series
+  - product: tcc-series
+  - product: hast
+  - product: walk-in
+    name: 워크인 챔버 E 시리즈
+    type: 대형 항온항습 시험실
+    scale: "1.15"
+    pos_x: 55%
+    pos_y: 55%
+    images:
+      - src: /assets/img/hires/walk-in-tbe-side-door.jpg
+        width: 1615
+        height: 1213
+        alt: 워크인 챔버 E 시리즈
+aerospace-defense:
+  - product: thermal-shock
+    name: TSA 시리즈
+    type: 열충격 시험기 (TSA · TSE · TSD)
+    temp: 고온 최대 +200°C (TSA) · 저온 최저 -70°C (TSA)
+materials:
+  - product: industrial-oven
+    name: 산업용 오븐 PH · PV 시리즈
+    type: 고온 시험·열처리·건조
+    temp: (주위온도+20) ~ +200°C
+    alt: 산업용 오븐 PH·PV 시리즈
+  - product: sh-series
+  - product: platinous-j
+    alt: Platinous J 시리즈

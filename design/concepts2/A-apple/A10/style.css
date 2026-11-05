@@ -1,0 +1,102 @@
+/* A10 키노트형 - 검은 극장, 장마다 한 문장과 한 장비 */
+:root{
+  --ground:#000;
+  --ink:#f5f5f7;
+  --ink2:#a1a1a6;
+  --warm:#d8d2c4;
+  --pad:clamp(20px,4vw,56px);
+  --max:1280px;
+  --font:"Pretendard Variable",Pretendard,-apple-system,"Apple SD Gothic Neo","Noto Sans KR","Malgun Gothic",sans-serif;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:var(--font);background:var(--ground);color:var(--ink);font-size:17px;line-height:1.6;-webkit-font-smoothing:antialiased;word-break:keep-all}
+img{display:block;max-width:100%;height:auto}
+a{color:inherit;text-decoration:none}
+:focus-visible{outline:3px solid #fff;outline-offset:3px;border-radius:4px}
+.wrap{max-width:var(--max);margin:0 auto;padding:0 var(--pad)}
+h1,h2{letter-spacing:-.05em;line-height:1.06;font-weight:800}
+
+.nav{position:fixed;top:0;left:0;right:0;z-index:30;background:rgba(0,0,0,.92)}
+.nav .wrap{display:flex;align-items:center;justify-content:space-between;height:56px;gap:24px;max-width:1440px}
+.logo{font-weight:800;font-size:16px;letter-spacing:-.02em;white-space:nowrap}
+.menu{display:flex;gap:30px;font-size:14px;color:var(--ink2)}
+.menu a:hover{color:#fff}
+.navr{display:flex;align-items:center;gap:8px}
+.mnav{display:none;position:relative}
+.mnav summary{list-style:none;cursor:pointer;min-height:44px;display:flex;align-items:center;padding:0 10px;font-weight:600}
+.mnav summary::-webkit-details-marker{display:none}
+.mnav div{position:absolute;right:0;top:48px;background:#1c1c1e;border-radius:14px;padding:10px 6px;min-width:180px}
+.mnav a{display:block;padding:12px 16px}
+
+.btn{display:inline-flex;align-items:center;justify-content:center;min-height:48px;padding:0 28px;border-radius:999px;background:var(--ink);color:#000;font-weight:700;font-size:16px;transition:background .2s,transform .2s}
+.btn:hover{background:var(--warm)}
+.btn:active{transform:scale(.97)}
+.btn.sm{min-height:36px;padding:0 18px;font-size:14px}
+.btn.ghost{background:transparent;color:var(--ink);box-shadow:inset 0 0 0 2px rgba(255,255,255,.5)}
+.btn.ghost:hover{background:var(--ink);color:#000}
+.link{font-weight:600;color:var(--warm);text-decoration:underline;text-underline-offset:5px;text-decoration-thickness:2px}
+.link:hover{color:#fff}
+.acts{display:flex;gap:16px;flex-wrap:wrap;margin-top:34px}
+
+/* 도입: 어둠 속 워크인 챔버 */
+.open{position:relative;min-height:100svh;display:flex;align-items:center;overflow:hidden;padding-top:56px}
+.open-pic{position:absolute;top:56px;bottom:0;right:0;width:min(100%,1500px);display:flex;justify-content:flex-end}
+.open-pic img{height:100%;width:100%;object-fit:cover;object-position:62% 50%;
+  -webkit-mask-image:linear-gradient(to right,transparent 0,#000 38%);mask-image:linear-gradient(to right,transparent 0,#000 38%)}
+.open-txt{position:relative;z-index:1;width:100%}
+.open h1{font-size:clamp(46px,7.2vw,112px);letter-spacing:-.06em;line-height:1.02;max-width:9em}
+.lead{font-size:clamp(17px,1.5vw,20px);color:var(--ink2);max-width:26em;margin-top:28px}
+
+/* 장: 극장 비율 화면 + 한 문장 */
+.ch{padding:clamp(88px,11vw,170px) 0 0}
+.stage{margin:0 auto;width:min(100%,1500px);aspect-ratio:21/9;overflow:hidden;background:#0b0b0c}
+.shot{width:100%;height:100%;object-fit:cover;filter:brightness(.62) contrast(1.12)}
+#c1 .shot{object-position:50% 65%}
+.ch:nth-of-type(3) .shot{object-position:50% 44%}
+.ch:nth-of-type(4) .shot{object-position:50% 57%}
+.ch:nth-of-type(5) .shot{object-position:50% 50%}
+.cap{display:grid;grid-template-columns:1.3fr 1fr;gap:clamp(24px,6vw,96px);align-items:end;margin-top:clamp(36px,5vw,64px)}
+.kicker{grid-column:1/-1;color:var(--warm);font-size:16px;font-weight:600}
+.cap h2{font-size:clamp(34px,5vw,72px)}
+.side p{color:var(--ink2)}
+.side .link{display:inline-block;margin-top:18px}
+
+.years{padding:clamp(120px,15vw,240px) 0 clamp(88px,11vw,160px)}
+.years h2{display:flex;flex-direction:column;gap:10px}
+.yr{font-size:clamp(110px,22vw,340px);letter-spacing:-.07em;line-height:.85;color:var(--ink);font-variant-numeric:tabular-nums}
+.yt{font-size:clamp(30px,4.4vw,64px);color:var(--warm)}
+.facts{list-style:none;margin-top:clamp(40px,6vw,80px);display:grid;grid-template-columns:repeat(3,1fr);gap:clamp(20px,4vw,56px)}
+.facts li{color:var(--ink2);font-size:17px;max-width:18em}
+
+.final{background:#111113;text-align:center;padding:clamp(88px,11vw,150px) 0}
+.final h2{font-size:clamp(36px,5.6vw,80px)}
+.final p{color:var(--ink2);margin:22px auto 0;max-width:30em}
+.final .acts{justify-content:center}
+
+footer{padding:48px 0 40px;font-size:14px;color:var(--ink2)}
+footer .cols{display:flex;justify-content:space-between;gap:32px;flex-wrap:wrap}
+footer b{color:var(--ink)}
+footer .src{margin-top:28px;font-size:13px}
+
+/* 움직임: 각 장의 화면이 어둠에서 천천히 밝아짐 (한 번) */
+@media (prefers-reduced-motion:no-preference){
+  .js .shot{filter:brightness(.18) contrast(1.12);transform:scale(1.08);transition:filter 2.6s ease,transform 3.2s cubic-bezier(.2,.7,.2,1)}
+  .js .stage.in .shot{filter:brightness(.62) contrast(1.12);transform:none}
+  .open-pic img{animation:fade 2.4s ease both}
+  @keyframes fade{from{opacity:0}to{opacity:1}}
+}
+
+@media (max-width:980px){
+  .menu{display:none}
+  .mnav{display:block}
+  .cap{grid-template-columns:1fr}
+  .facts{grid-template-columns:1fr}
+  .stage{aspect-ratio:4/3}
+  .open{align-items:flex-end;padding-bottom:56px}
+  .open-pic img{-webkit-mask-image:linear-gradient(to bottom,#000 30%,transparent 100%);mask-image:linear-gradient(to bottom,#000 30%,transparent 100%);object-position:70% 20%}
+  .open-pic{bottom:auto;height:60svh}
+}
+@media (max-width:700px){
+  body{font-size:16px}
+}
