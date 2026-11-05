@@ -1,0 +1,138 @@
+<!-- b03: 좌우 분할 안. 왼쪽에 카피·핵심 수치·버튼, 오른쪽에 장비 사진. 정보를 첫 화면에서 바로 읽게 하고, 아래에 진한 바로가기 띠. -->
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>제이에스 엔지니어링 | ESPEC 한국 공식 총대리점</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Michroma&display=swap">
+<link rel="stylesheet" href="common.css">
+<style>
+.hero3{background:linear-gradient(90deg,#fff 0%,#f6f6f7 45%,#e6e8e9 100%)}
+.hero3 .hd{background:transparent}
+.hero3-grid{display:grid;grid-template-columns:5fr 7fr;gap:24px;align-items:center;padding-bottom:0}
+.hero3-l{padding:24px 0 40px}
+.hero3 .en-h{font-size:clamp(22px,3vw,40px);margin-top:16px}
+.hero3 .intro{margin-top:18px}
+.kpis{display:grid;grid-template-columns:repeat(3,auto);justify-content:start;gap:0;margin-top:26px}
+.kpis div{padding:0 22px}
+.kpis div:first-child{padding-left:0}
+.kpis div+div{border-left:1px solid #c9cdd1}
+.kpis b{display:block;font:400 20px/1.3 var(--f-en);color:var(--ink)}
+.kpis span{font-size:12px;color:var(--muted)}
+.kpis-h{font-size:12px;color:var(--muted);margin-top:22px}
+.hero3 .actions{margin-top:24px}
+.hero3-r{position:relative;align-self:end}
+.hero3-r .shot{aspect-ratio:1.5/1;-webkit-mask-image:linear-gradient(to bottom,transparent 0,#000 12%,#000 100%);mask-image:linear-gradient(to bottom,transparent 0,#000 12%,#000 100%)}
+.hero3-r .shot img{width:125%;max-width:none;margin-left:-11%;margin-top:-20%;-webkit-mask-image:none;mask-image:none}
+.hero3-r .cap{position:absolute;right:0;bottom:18px;text-align:right}
+@media (max-width:980px){
+ .hero3{background:linear-gradient(180deg,#fff 0%,#eceded 100%)}
+ .hero3-grid{grid-template-columns:1fr}
+ .hero3-l{padding-bottom:0}
+ .hero3-r .cap{position:static;padding:0 0 16px}
+}
+@media (max-width:640px){
+ .kpis{grid-template-columns:repeat(3,auto)}
+ .kpis div{padding:0 12px}
+ .kpis b{font-size:15px}
+ .hero3-r .shot{aspect-ratio:1.4/1}
+ .hero3-r .shot img{width:135%;margin-left:-17.5%;margin-top:-22%}
+}
+</style>
+</head>
+<body>
+<a class="skip" href="#trust">본문 바로가기</a>
+<section class="hero3"><div class="wrap">
+ <header class="hd" id="hd">
+  <a class="brand" href="#" aria-label="제이에스 엔지니어링 홈"><b>J&amp;S ENGINEERING</b><span>제이에스 엔지니어링</span></a>
+  <nav class="nav" id="nav" aria-label="주 메뉴"><a href="#">회사소개</a><a href="#products">제품소개</a><a href="#solutions">솔루션</a><a href="#">기술자료</a><a href="#">서비스</a><a href="#">고객지원</a></nav>
+  <a class="btn btn-dark btn-sm" href="#contact">견적문의</a>
+  <button class="menu-btn" type="button" aria-label="메뉴 열기" aria-expanded="false" aria-controls="nav"><i></i></button>
+ </header>
+ <div class="hero3-grid">
+  <div class="hero3-l">
+   <p class="kicker">ESPEC 한국 공식 총대리점<em>|</em>SINCE 1981</p>
+   <h1 class="en-h">RELIABILITY FOR<br>A BETTER TOMORROW</h1>
+   <p class="intro">1981년부터 45년, 신뢰성 시험의 기준을 제이에스 엔지니어링이 함께 합니다.</p>
+   <p class="kpis-h">대표 제품 Platinous J 시리즈</p>
+   <div class="kpis" style="margin-top:8px">
+    <div><b>-70~+100°C</b><span>온도 (모델별)</span></div>
+    <div><b>20~98%rh</b><span>습도</span></div>
+    <div><b>120~800L</b><span>용량</span></div>
+   </div>
+   <div class="actions"><a class="btn btn-dark" href="#contact">견적문의</a><a class="link" href="#trust">회사소개 보기 →</a></div>
+  </div>
+  <div class="hero3-r">
+   <div class="shot"><img src="../../site/assets/img/hires/platinous-j-lineup.jpg" width="1812" height="1359" alt="ESPEC Platinous J 시리즈 항온항습기 네 대"></div>
+   <p class="cap"><b>Platinous J 시리즈</b><span>온도 범위 -70 ~ +100°C (모델별)</span></p>
+  </div>
+ </div>
+</div></section>
+<nav class="quick" aria-label="바로가기"><div class="wrap"><ul>
+ <li><a href="#products"><span class="n">01</span><span><b class="t">환경시험기</b><span class="e">Environmental Test Chamber</span></span><span class="go">→</span></a></li>
+ <li><a href="#solutions"><span class="n">02</span><span><b class="t">신뢰성 솔루션</b><span class="e">Reliability Test Solution</span></span><span class="go">→</span></a></li>
+ <li><a href="#trust"><span class="n">03</span><span><b class="t">글로벌 파트너십</b><span class="e">Global Partnership</span></span><span class="go">→</span></a></li>
+ <li><a href="#contact"><span class="n">04</span><span><b class="t">기술지원 서비스</b><span class="e">Technical Support</span></span><span class="go">→</span></a></li>
+</ul></div></nav>
+
+<main>
+<section class="sec" id="trust" aria-labelledby="h-trust"><div class="wrap">
+ <div class="sec-h"><div><h2 id="h-trust">45년, ESPEC과 함께</h2><p>1981년 ESPEC 한국 총판 대리점 계약으로 시작했습니다.</p></div><a class="link" href="#">회사소개 보기 →</a></div>
+ <div class="stats">
+  <div><strong>45<small>년</small></strong><p>1981년 설립 후 2026년 창립 45주년</p></div>
+  <div><strong>1991</strong><p>충남 아산 공장 준공</p></div>
+  <div><strong>3~4<small>회</small></strong><p>매년 ESPEC 연구진 국내 세미나</p></div>
+  <div><strong>4<small>곳</small></strong><p>본사·서울사무소·대구지사·광주지사</p></div>
+ </div>
+</div></section>
+
+<section class="sec alt" id="products" aria-labelledby="h-prod"><div class="wrap">
+ <div class="sec-h"><div><h2 id="h-prod">대표 제품</h2><p>ESPEC 환경시험기 가운데 가장 많이 찾는 장비입니다.</p></div><a class="link" href="#">제품 전체 보기 →</a></div>
+ <div class="pcards">
+  <a class="pc" href="#"><div class="pc-img"><img src="../../site/assets/img/hires/platinous-j-lineup.jpg" alt="Platinous J 시리즈" loading="lazy" style="--z:1.5;--pos:50% 60%"></div><div class="pc-b"><h3>Platinous J 시리즈</h3><p class="pc-t">항온(항습)기</p><p class="pc-s">온도 -70 ~ +100°C (모델별)</p></div></a>
+  <a class="pc" href="#"><div class="pc-img"><img src="../../site/assets/img/hires/tsa-lineup.jpg" alt="TSA 열충격 시험기" loading="lazy" style="--z:1.25;--pos:50% 70%"></div><div class="pc-b"><h3>TSA / TSE / TSD</h3><p class="pc-t">열충격 시험기</p><p class="pc-s">고온측 최대 +200°C</p></div></a>
+  <a class="pc" href="#"><div class="pc-img"><img src="../../site/assets/img/hires/hast-ehs-lineup.jpg" alt="EHS HAST 시험기" loading="lazy" style="--z:1.45;--pos:50% 55%"></div><div class="pc-b"><h3>EHS</h3><p class="pc-t">HAST 가속수명 시험기</p><p class="pc-s">+105 ~ +162.2°C</p></div></a>
+  <a class="pc" href="#"><div class="pc-img"><img src="../../site/assets/img/hires/walk-in-tbe.jpg" alt="워크인 챔버 E Series" loading="lazy" style="--z:1.05;--pos:50% 55%"></div><div class="pc-b"><h3>Walk-In Chamber E Series</h3><p class="pc-t">워크인 챔버</p><p class="pc-s">-40 ~ +80°C</p></div></a>
+ </div>
+</div></section>
+
+<section class="sec" id="solutions" aria-labelledby="h-ind"><div class="wrap">
+ <div class="sec-h"><div><h2 id="h-ind">산업별 시험 솔루션</h2><p>시험 대상에 맞는 장비와 평가 시스템을 안내합니다.</p></div><a class="link" href="#">솔루션 보기 →</a></div>
+ <div class="ind">
+  <article><figure><img src="../../site/assets/img/web/semicon-ami-mv.png" alt="반도체 평가 시스템" loading="lazy"></figure><h3>반도체</h3><p>HAST 시험기와 절연·저항 평가 시스템으로 패키지 수명을 확인합니다.</p></article>
+  <article><figure><img src="../../site/assets/img/industry/electronics-circuit-board-assembly.jpg" alt="전자부품 기판" loading="lazy"></figure><h3>전자부품</h3><p>항온항습기와 열충격 시험기로 온도·습도 변화에 대한 내구성을 봅니다.</p></article>
+  <article><figure><img src="../../site/assets/img/industry/battery-cells-in-chamber.jpg" alt="챔버 안의 배터리 셀" loading="lazy"></figure><h3>2차전지</h3><p>충방전 평가부터 온도 환경의 안전 시험까지 한 곳에서 상담합니다.</p></article>
+  <article><figure><img src="../../site/assets/img/industry/automotive-vehicle-test-room.jpg" alt="차량 시험실" loading="lazy"></figure><h3>모빌리티</h3><p>사람이 들어가는 워크인 챔버로 차량과 대형 장비를 시험합니다.</p></article>
+ </div>
+</div></section>
+
+<section class="sec alt" id="news" aria-labelledby="h-news"><div class="wrap">
+ <div class="sec-h"><h2 id="h-news">최신 소식</h2><a class="link" href="#">소식 전체 보기 →</a></div>
+ <ul class="news">
+  <li><a href="#"><time datetime="2026-10-26">2026.10.26</time><h3>원디바이스 항온 시험기 MTP-101, 2026 굿디자인상 수상</h3><span class="tag">수상</span></a></li>
+  <li><a href="#"><time datetime="2026-09-24">2026.09.24</time><h3>EU F-gas 규정에 대응한 CO2 냉매 환경시험기 (유럽 시장용)</h3><span class="tag">신제품</span></a></li>
+  <li><a href="#"><time datetime="2026-08-28">2026.08.28</time><h3>AI 반도체 패키지용 평가 시스템 AMR-SPM·AMI-SPM 출시</h3><span class="tag">신제품</span></a></li>
+ </ul>
+</div></section>
+
+<section class="cta" id="contact" aria-labelledby="h-cta"><div class="wrap">
+ <div><h2 id="h-cta">시험 조건만 알려 주세요. 맞는 장비를 안내해 드립니다.</h2><p>대표전화 02-557-0505 · 팩스 02-557-2253</p></div>
+ <div><a class="btn btn-dark" href="#">견적문의</a> <a class="btn btn-line" href="tel:025570505">전화하기</a></div>
+</div></section>
+</main>
+
+<footer class="ft"><div class="wrap">
+ <div class="cols">
+  <div><a class="brand" href="#"><b>J&amp;S ENGINEERING</b><span>제이에스 엔지니어링</span></a><p style="margin-top:12px">ESPEC 한국 공식 총대리점<br>대표이사 정창현</p></div>
+  <div><h4>본사·공장</h4><p>충남 아산시 둔포면 관대안길 31</p></div>
+  <div><h4>서울사무소</h4><p>서울시 강남구 삼성로82길 26<br>제이에스B/D 3층</p></div>
+  <div><h4>연락처</h4><p>대표전화 02-557-0505<br>팩스 02-557-2253</p></div>
+ </div>
+ <p class="copy">© J&amp;S ENGINEERING Corp. 제품 사진은 ESPEC 제공 자료이며, 실제 회사 사진으로 교체될 수 있습니다.</p>
+</div></footer>
+<script>document.querySelectorAll('.menu-btn').forEach(function(b){b.addEventListener('click',function(){var h=b.closest('.hd'),o=h.classList.toggle('open');b.setAttribute('aria-expanded',o)})})</script>
+</body>
+</html>
