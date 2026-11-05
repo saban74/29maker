@@ -52,7 +52,7 @@ h1,h2,h3,h4{color:var(--ink);word-break:keep-all}
 .actions{display:flex;flex-wrap:wrap;gap:14px 22px;align-items:center;margin-top:18px}
 
 /* 사진 자르기: 장비 4대 줄 사진의 중간 띠만 보여 주고 가장자리는 배경으로 녹임 */
-.shot{position:relative;overflow:hidden;aspect-ratio:2.2/1;-webkit-mask-image:linear-gradient(to bottom,transparent 0,#000 24%,#000 86%,transparent 100%);mask-image:linear-gradient(to bottom,transparent 0,#000 24%,#000 86%,transparent 100%)}
+.shot{position:relative;overflow:hidden;aspect-ratio:2.2/1;-webkit-mask-image:linear-gradient(to bottom,transparent 0,#000 16%,#000 90%,transparent 100%);mask-image:linear-gradient(to bottom,transparent 0,#000 16%,#000 90%,transparent 100%)}
 .shot img{width:100%;margin-top:-16.5%;-webkit-mask-image:linear-gradient(to right,transparent 0,#000 7%,#000 93%,transparent 100%);mask-image:linear-gradient(to right,transparent 0,#000 7%,#000 93%,transparent 100%)}
 .cap{font-size:13px;line-height:1.5;color:var(--ink)}
 .cap b{display:block;font-weight:700}
