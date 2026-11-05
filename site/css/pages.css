@@ -6,8 +6,8 @@
 
 /* ---------- 작은 제목 머리 (첫 화면이 큰 사진이 아닌 페이지용) ----------
    components.css 의 b-r-hero 를 사진 없이 쓴 모양입니다. 클래스: "b-r-hero pg-head" */
-.pg-head .b-r-hero__top { padding-top: var(--sp-8); padding-bottom: var(--sp-8); }
-.pg-head .b-r-hero__sub strong { display: block; margin-bottom: var(--sp-2); font-size: 22px; line-height: 1.4; font-weight: 800; letter-spacing: -.02em; }
+.pg-head .b-r-hero__top { padding-top: var(--sp-7); padding-bottom: var(--sp-7); }
+.pg-head .b-r-hero__sub strong { display: block; margin-bottom: var(--sp-2); font-size: 19px; line-height: 1.4; font-weight: 800; letter-spacing: -.02em; }
 .pg-head .b-r-hero__sub { max-width: 520px; font-size: var(--fs-body); font-weight: 400; }
 
 /* ---------- 본문 글 ---------- */
@@ -23,8 +23,8 @@
 .callout p + p { margin-top: var(--sp-2); }
 
 /* 거르기 버튼 (제품군, 뉴스 분류) */
-.filters { display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: var(--sp-6); }
-.filters button { min-height: 44px; padding: 0 18px; border: 1px solid var(--fg); font-size: 15px; font-weight: 500; color: var(--fg); }
+.filters { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: var(--sp-5); }
+.filters button { min-height: 36px; padding: 0 14px; border: 1px solid var(--fg); font-size: 14px; font-weight: 500; color: var(--fg); }
 .filters button:hover { background: var(--stripe); }
 .filters button[aria-pressed="true"] { background: var(--fg); color: var(--bg); }
 .empty-note { padding: var(--sp-6) 0; color: var(--fg-2); border-top: 1px solid var(--line-c); }
@@ -41,27 +41,26 @@
 .greet__body .tbd { margin-bottom: var(--sp-4); }
 
 /* 1981 / 45년 큰 글자 (사진 없이 쓰는 b-aw-numbers) */
-.b-aw-numbers--years .b-aw-numbers__in { min-height: 0; }
-.b-aw-numbers--years .micro { max-width: 340px; width: 340px; }
+.b-aw-numbers--years .micro { max-width: 380px; align-self: end; }
 .b-aw-numbers--years .lines { padding-bottom: var(--sp-2); }
 
 /* 연혁: 10년 단위 묶음 */
 .timeline { margin-top: var(--sp-7); border-bottom: 1px solid var(--line-c); }
-.era { display: grid; grid-template-columns: minmax(0, 3fr) minmax(0, 9fr); gap: var(--sp-6); padding: var(--sp-6) 0; border-top: 1px solid var(--line-c); }
-.era__h { font-family: var(--font-display); font-weight: 400; font-size: clamp(26px, 3.2vw, 46px); line-height: 1.1; color: var(--graphite-600); }
-.era dl { display: grid; grid-template-columns: 72px minmax(0, 1fr); gap: 12px 20px; }
+.era { display: grid; grid-template-columns: minmax(0, 3fr) minmax(0, 9fr); gap: var(--sp-5); padding: var(--sp-5) 0; border-top: 1px solid var(--line-c); }
+.era__h { font-family: var(--font-display); font-weight: 400; font-size: clamp(20px, 2vw, 30px); line-height: 1.1; color: var(--graphite-600); }
+.era dl { display: grid; grid-template-columns: 64px minmax(0, 1fr); gap: 8px 18px; }
 .era dt { font-weight: 800; font-variant-numeric: tabular-nums; }
 .era dd { color: var(--fg); }
 .timeline-note { margin-top: var(--sp-5); }
 
 /* 어두운 사진 띠 (총대리점 구역) */
-.photo-band { margin-top: var(--sp-8); }
-.photo-band img { width: 100%; max-height: 460px; object-fit: cover; filter: var(--photo-bw); }
+.photo-band { margin-top: var(--sp-7); }
+.photo-band img { width: 100%; max-height: 340px; object-fit: cover; filter: var(--photo-bw); }
 .photo-band p { margin-top: var(--sp-4); max-width: 640px; color: var(--fg-2); }
 
 /* 오시는 길 */
 .loc { display: grid; grid-template-columns: minmax(0, 7fr) minmax(0, 5fr); gap: var(--sp-7); margin-top: var(--sp-7); align-items: stretch; }
-.loc .ph { min-height: 340px; }
+.loc .ph { min-height: 260px; }
 .loc--solo { grid-template-columns: minmax(0, 1fr); } /* 지도 칸 없이 주소 목록만 쓸 때 */
 .loc--solo dl { max-width: 760px; }
 .loc dl { display: grid; grid-template-columns: auto 1fr; gap: 14px 20px; align-content: start; }
@@ -92,16 +91,16 @@
 
 /* ---------- 뉴스 ---------- */
 .news-list { border-bottom: 1px solid var(--line-c); }
-.news-item { display: grid; grid-template-columns: minmax(0, 2fr) minmax(0, 8fr); gap: var(--sp-6); padding: var(--sp-6) 0; border-top: 1px solid var(--fg); }
+.news-item { display: grid; grid-template-columns: minmax(0, 2fr) minmax(0, 8fr); gap: var(--sp-5); padding: var(--sp-5) 0; border-top: 1px solid var(--fg); }
 .news-item time { display: block; font-size: var(--fs-caption); color: var(--fg-2); margin-bottom: var(--sp-2); }
-.news-item h2, .news-item h3 { font-size: clamp(19px, 1.9vw, 26px); line-height: 1.4; font-weight: 800; letter-spacing: -.02em; }
+.news-item h2, .news-item h3 { font-size: clamp(17px, 1.4vw, 20px); line-height: 1.4; font-weight: 800; letter-spacing: -.02em; }
 .news-item p { margin-top: var(--sp-3); max-width: 720px; color: var(--fg-2); }
 .news-item .btn-row { margin-top: var(--sp-4); gap: 10px 24px; }
 .news-item[hidden] { display: none; }
 
 /* ---------- 문의 폼 ---------- */
-.contact-grid { display: grid; grid-template-columns: minmax(0, 8fr) minmax(0, 4fr); gap: var(--sp-8); align-items: start; }
-.cform fieldset { margin: 0 0 var(--sp-7); padding: 0; border: 0; min-width: 0; }
+.contact-grid { display: grid; grid-template-columns: minmax(0, 8fr) minmax(0, 4fr); gap: var(--sp-7); align-items: start; }
+.cform fieldset { margin: 0 0 var(--sp-6); padding: 0; border: 0; min-width: 0; }
 .cform legend { padding: 0; margin-bottom: var(--sp-4); font-size: var(--fs-lead); font-weight: 800; }
 /* 번호는 자동으로 매깁니다. 숨겨진 단계는 건너뛰고 01, 02, 03 으로 이어집니다 */
 .cform { counter-reset: fs; }
@@ -112,7 +111,7 @@
 .type-pick { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 10px; }
 .type-pick label { position: relative; display: block; }
 .type-pick input { position: absolute; opacity: 0; inset: 0; width: 100%; height: 100%; margin: 0; cursor: pointer; }
-.type-pick span { display: flex; align-items: center; min-height: 56px; padding: 0 16px; border: 1px solid var(--graphite-600); background: var(--panel); font-weight: 600; }
+.type-pick span { display: flex; align-items: center; min-height: 46px; padding: 0 16px; border: 1px solid var(--graphite-600); background: var(--panel); font-weight: 600; }
 .type-pick input:checked + span { background: var(--ink); color: var(--studio-100); border-color: var(--ink); }
 .type-pick input:focus-visible + span { outline: 3px solid var(--accent); outline-offset: 3px; }
 .fields { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: var(--sp-4) var(--sp-5); }
@@ -121,12 +120,12 @@
 .field label, .field .lab { font-weight: 700; font-size: 15px; }
 .field .req { color: var(--tbd-fg); font-weight: 600; font-size: var(--fs-caption); margin-left: 6px; }
 .field .hint { font-size: var(--fs-caption); color: var(--fg-2); }
-.cform input[type="text"], .cform input[type="email"], .cform input[type="tel"], .cform input[type="file"], .cform select, .cform textarea { width: 100%; min-height: 48px; padding: 10px 14px; border: 1px solid var(--graphite-600); border-radius: 0; background: var(--studio-50); color: var(--ink); font: inherit; }
-.cform textarea { min-height: 140px; resize: vertical; }
+.cform input[type="text"], .cform input[type="email"], .cform input[type="tel"], .cform input[type="file"], .cform select, .cform textarea { width: 100%; min-height: 42px; padding: 8px 12px; border: 1px solid var(--graphite-600); border-radius: 0; background: var(--white); color: var(--ink); font: inherit; }
+.cform textarea { min-height: 120px; resize: vertical; }
 .cform input:focus-visible, .cform select:focus-visible, .cform textarea:focus-visible { outline: 3px solid var(--brass); outline-offset: 2px; }
 .agree { display: flex; align-items: flex-start; gap: 12px; padding: var(--sp-4); background: var(--panel); border: 1px solid var(--line-c); }
 .agree input { width: 22px; height: 22px; margin-top: 3px; flex: none; accent-color: var(--ink); }
-.contact-side { padding: var(--sp-6); background: var(--panel); border: 1px solid var(--line-c); }
+.contact-side { padding: var(--sp-5); background: var(--panel); border: 1px solid var(--line-c); }
 .contact-side h2 { font-size: var(--fs-lead); font-weight: 800; margin-bottom: var(--sp-4); }
 .contact-side dl { display: grid; grid-template-columns: auto 1fr; gap: 10px 16px; }
 .contact-side dt { font-weight: 700; }
@@ -136,18 +135,19 @@
 
 /* ---------- 개인정보처리방침 ---------- */
 .policy-toc { display: flex; flex-wrap: wrap; gap: 8px 24px; margin-bottom: var(--sp-7); font-size: 15px; }
-.policy-sec { padding: var(--sp-6) 0; border-top: 1px solid var(--line-c); scroll-margin-top: calc(var(--head-h) + 24px); }
+.policy-sec { padding: var(--sp-5) 0; border-top: 1px solid var(--line-c); scroll-margin-top: calc(var(--head-h) + 24px); }
 .policy-sec h2 { font-size: var(--fs-h3); font-weight: 800; margin-bottom: var(--sp-3); }
 
 /* ---------- 제품 목록 ---------- */
-.prod-grid--4 { grid-template-columns: repeat(4, 1fr); }
+/* 제품 목록: 한 줄에 5장 (2026-11-05 조밀하게, 이전 4장) */
+.prod-grid--4 { grid-template-columns: repeat(5, 1fr); }
 .prod-grid--4 .card-prod[hidden] { display: none; }
 .card-prod--consult .ph { aspect-ratio: 4 / 3; }
 .card-prod__badge { margin-top: var(--sp-2); }
 .lineup { margin-top: var(--sp-6); border-top: 1px solid var(--fg); }
-.lineup li { display: grid; grid-template-columns: minmax(0, 4fr) minmax(0, 5fr) auto; gap: var(--sp-4) var(--sp-5); align-items: center; padding: 18px 0; border-bottom: 1px solid var(--line-c); }
-.lineup strong { font-size: 18px; }
-.lineup span { color: var(--fg-2); font-size: 15px; }
+.lineup li { display: grid; grid-template-columns: minmax(0, 4fr) minmax(0, 5fr) auto; gap: var(--sp-3) var(--sp-5); align-items: center; padding: 10px 0; border-bottom: 1px solid var(--line-c); }
+.lineup strong { font-size: 16px; }
+.lineup span { color: var(--fg-2); font-size: 14px; }
 .lineup .lineup__acts { display: flex; flex-wrap: wrap; gap: 8px 20px; align-items: center; justify-content: flex-end; }
 
 /* ---------- 문의 폼: 스팸 방지 숨김 칸 (화면 밖으로 치움. display:none 은 쓰지 않음) ---------- */
@@ -162,7 +162,7 @@
 .ind-card .ph--photo img { object-fit: cover; }
 .ind-card .ph--fit img { object-fit: contain; object-position: 50% 0; }
 .ind-card .ph--pack { background: #e9ebec; }
-.ind-card .ph--pack img { object-fit: contain; padding: 14px 14px 64px; mix-blend-mode: multiply; }
+.ind-card .ph--pack img { object-fit: contain; padding: 12px 12px 56px; mix-blend-mode: multiply; }
 /* 화면이 좁아 카드가 커지는 구간에서는 가로로 넓은 카드로 (작은 사진이 너무 커지지 않게) */
 @media (max-width: 1180px) {
   .b-r-industries__grid .ind-card { aspect-ratio: 4 / 3; }
@@ -177,6 +177,9 @@
 
 /* ---------- 화면 크기별 ---------- */
 @media (max-width: 1180px) {
+  .prod-grid--4 { grid-template-columns: repeat(4, 1fr); }
+}
+@media (max-width: 1024px) {
   .prod-grid--4 { grid-template-columns: repeat(3, 1fr); }
 }
 @media (max-width: 1024px) {
@@ -197,5 +200,5 @@
   .partner-grid--4 { grid-template-columns: 1fr; }
   .b-r-industries__grid--3 { grid-template-columns: 1fr 1fr; }
   .contact-side { padding: var(--sp-5); }
-  .filters button { min-height: 44px; }
+  .filters button { min-height: 40px; }
 }

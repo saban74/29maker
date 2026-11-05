@@ -27,10 +27,9 @@
 - `<head>`의 글꼴·CSS·스크립트 연결은 템플릿과 같게(경로만 `css/…`, `js/…`, 하위 폴더는 `../css/…`).
 - 맨 아래 "장비 이미지 출처: ESPEC Corp. 공식 웹사이트 및 제품 카탈로그" 유지.
 
-## 제품 상세 첫 화면 기본값 (`<body data-hero>`)
-- **aw**: platinous-j, ar-series, thermal-shock(TSA), hast(EHS), walk-in — 고해상도 회색 배경 사진이 있는 제품. 큰 단어는 제품 계열명(예: PLATINOUS, AR SERIES, TSA, HAST/EHS, WALK-IN). 
-- **r**: sh-series, mtp-101, tcc-series, industrial-oven, battery, semiconductor-evaluation — 작은 웹 사진만 있는 제품.
-- 실제 사이트에는 "스타일 미리보기" 전환 버튼(`style-switch`)을 넣지 않는다(템플릿 주석 참고).
+## 제품 상세 페이지 (2026-11-05 변경)
+- 모든 제품이 `site/products/product.njk` 한 틀("한 화면" 구성)을 씁니다: 첫 화면(제품명·사진·핵심 수치·특징 요약·버튼) → 구역 바로가기 → 사양표 → 개요 → 특징 → 규격·수상 → 지원 → 자료 → 관련 제품, 오른쪽 고정 사이드바(카탈로그·견적·대표전화·제품 목록).
+- 예전의 `<body data-hero="aw|r">` 첫 화면 구분과 거대한 단어 첫 화면은 제품 페이지에서 쓰지 않습니다(메인·회사소개에만 `b-aw-wordcut-hero`). 스타일은 `css/products.css`.
 
 ## 공통 규칙
 - 사실만. 사양은 `research/espec/products/`, 회사 내용은 `company.md`. 모르는 값은 `[확인 필요]`. 판독 불가 연혁 항목은 쓰지 않는다. 방문자에게 개발자용 문장("수집 자료에 없어" 등)을 보이지 않는다.

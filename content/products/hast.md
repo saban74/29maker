@@ -15,6 +15,8 @@ aw_word: HAST/EHS
 aw_label: HAST EHS 가속수명 시험기
 aw_title: HAST 가속수명 시험기 EHS
 aw_variant: hast
+heading: HAST/EHS
+type_label: HAST 가속수명 시험기
 lead: 고온·고습·가압을 동시에 가해 전자부품의 수명과 고장 모드를 짧은 시간에 평가합니다.
 photo:
   src: /assets/img/hires/hast-ehs-lineup.jpg

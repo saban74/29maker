@@ -14,6 +14,7 @@ material_name: Platinous J
 aw_word: PLATINOUS
 aw_label: PLATINOUS J 항온(항습)기
 aw_title: Platinous J 항온(항습)기
+type_label: 항온(항습)기
 lead: 온도와 습도를 함께 걸어 신뢰성을 확인하는 ESPEC 대표 시리즈. 2025 굿디자인상(ECO형).
 photo:
   src: /assets/img/hires/platinous-j-single-a.jpg
