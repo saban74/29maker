@@ -173,3 +173,4 @@ h1,h2,h3,h4{color:var(--ink);word-break:keep-all}
   .shot img{width:120%;max-width:none;margin-left:-10%;margin-top:-19.8%}
 }
 @media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
+.u{font-family:var(--f-kr);font-style:normal;font-weight:inherit;font-size:.82em;letter-spacing:0}
