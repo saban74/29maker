@@ -4,6 +4,15 @@
 
 사용자 결정: **통합 디자인 시스템(AW05 + R06)**으로 전체 사이트를 만든다. 메인은 **A안**(`design/system/templates/main-a.html`).
 
+## 2026-11-06 2차 디자인 전환 (design/concepts5)
+- 시안: `design/concepts5/`(흰 바탕, 주황 `--accent` 포인트 선, 남색 버튼, ESPEC 사이트 같은 단정한 구성). 공통 CSS는 `site/css/base.css`이고, 기본 틀(`layouts/base.njk`)이 `tokens.css`·`components.css`(옛 페이지용, 유지) 뒤에 `base.css`를 불러와 새 머리말·꼬리말·버튼이 이깁니다.
+- 공통 머리말·꼬리말: `_includes/partials/header.njk`, `footer.njk`(맨 위 작은 줄, 메뉴 6개, 오른쪽 "서비스접수 → contact.html?type=as" / "견적문의 → contact.html?type=quote"). 햄버거 메뉴 동작은 `js/script.js` 1-2번.
+- 메인: `site/index.html` + `css/home.css`. 첫 화면 G1(쇼룸 5종, 50%)·G2·G3·G4(각 약 16.7%)가 무작위로 나오며 주소 뒤 `?hero=g1~g4` 로 고정할 수 있습니다. 장비 5종의 문구·사진은 `_data/homeShowcase.js`, 수치는 제품 md의 핵심 수치, 픽업은 `_data/homePickup.js`, 공지 띠·뉴스는 `content/news/`에서 자동입니다.
+- 제품 상세 `products/product.njk`, 제품 목록 `products/index.html`(`css/products.css`, `js/products.js` 검색), 그 밖의 라인업은 `_data/otherLineup.js`.
+- 장비 소개서(PDF용 A4): `products/sheet.njk`가 제품마다 `products/sheet-<주소>.html`을 만듭니다(noindex, sitemap 제외, `css/sheet.css`). 이를 변환한 PDF를 `site/assets/pdf/<주소>.pdf`에 두면 상세 페이지의 다운로드 버튼이 연결됩니다.
+- 제품 md 새 칸: `catalog_image`(상세 첫 화면·목록·소개서의 큰 사진). 기존 `gallery`는 "모델별 사진" 구역(사진 아래 설명 글 = `label`)으로 바뀌었습니다. 큰 사진은 `site/assets/img/catalog/`에 둡니다(원본은 `design/concepts5/assets/catalog/`).
+- 옛 시안과 이름이 겹치지 않도록 새 CSS의 사진 칸은 `.pt`, 사양표는 `.stbl`, 주석은 `.pn`을 씁니다.
+
 ## 기준 자료
 - 디자인 시스템: `design/system/README.md`(블록 목록, 조립법), `design/system/catalog.html`(블록 HTML 견본), `design/system/templates/main-a.html`(메인), `design/system/templates/product.html`(제품 상세 틀).
 - 기획서: `site/PLAN.md`(사이트맵, 페이지별 내용, 파일 이름은 2장 표).
