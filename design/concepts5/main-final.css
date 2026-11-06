@@ -87,10 +87,12 @@
 .tier--one{background:linear-gradient(#f4f5f7 0%,#f4f5f7 58%,#dfe2e6 58%,#eceef0 100%);padding:8px 0 10px}
 .row5{max-width:1400px;margin:0 auto;padding:0 16px;display:flex;align-items:flex-end;justify-content:center}
 .row5 figure{margin:0;flex:none;position:relative}
-.row5 figure+figure{margin-left:-2.2%}
+.row5 figure+figure{margin-left:-1.9%}
 .row5 img{width:100%;height:auto;filter:drop-shadow(0 14px 10px rgba(0,0,0,.18))}
 .row5 figcaption{font-size:13px;font-weight:600;color:var(--ink);text-align:center;line-height:30px;white-space:nowrap}
-.o-ar{width:19.4%;z-index:1}.o-pj{width:31.2%;z-index:3}.o-hast{width:13.2%;z-index:4}.o-tsa{width:22.4%;z-index:3}.o-wk{width:21.9%;z-index:2}
+/* 실제 크기 비율: 장비 높이(대략) AR 1.85m, Platinous J(800L) 1.95m, HAST EHS 2단 1.8m, TSA 1.9m, 워크인 2.6m를
+   같은 축척(1m≈84px @1440)으로 맞춘 폭. 사진마다 원래 축척이 달라 폭 비율로 환산. 워크인이 가장 크게 보임 */
+.o-ar{width:17.7%;z-index:1}.o-pj{width:33.1%;z-index:3}.o-hast{width:10.5%;z-index:4}.o-tsa{width:19.8%;z-index:3}.o-wk{width:26.5%;z-index:2}
 @media (max-width:760px){
   .row5{flex-wrap:wrap;justify-content:center;gap:4px 10px}
   .row5 figure+figure{margin-left:0}
