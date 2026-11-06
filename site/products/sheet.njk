@@ -1,0 +1,99 @@
+---
+# 장비 소개서 (PDF 변환용 A4 페이지). 제품마다 products/sheet-<주소용 이름>.html 이 만들어집니다.
+# - 내용은 content/products/<제품>.md 에서 자동으로 채워집니다. 제품 정보를 바꾸면 PDF 를 다시 만들어야 합니다 (npm run pdf).
+# - 머리말·꼬리말 없는 단독 틀(layouts/sheet.njk), 검색 제외(noindex), sitemap 제외.
+pagination:
+  data: products
+  size: 1
+  alias: p
+permalink: "products/sheet-{{ p.slug }}.html"
+layout: layouts/sheet.njk
+eleventyExcludeFromCollections: true
+eleventyComputed:
+  title: "{{ p.title }} 장비 소개서 | 제이에스 엔지니어링"
+---
+{% set heroImg = p.catalog_image if (p.catalog_image and p.catalog_image.src) else p.photo %}
+{% set heroPack = (not (p.catalog_image and p.catalog_image.src)) and (p.photo_frame == "pack") %}
+{% set rows = p.spec_tables | specRows %}
+{% set kpiList = (p.kpis or []) | batch(4) | first %}
+
+<!-- 1쪽: 제품명, 장비 사진, 한 줄 소개, 핵심 수치, 주요 특징 -->
+<section class="page">
+  <div class="top"><b>J&amp;S ENGINEERING</b><span>ESPEC 한국 총대리점</span></div>
+  <div class="body">
+    <div class="ttl"><h1>{{ p.title | h | safe }}</h1>{% if p.heading %}<p>{{ p.heading | h | safe }}</p>{% endif %}</div>
+    <div class="photo{% if heroPack %} photo--pack{% endif %}"><img src="{{ heroImg.src | rel }}" alt="{{ heroImg.alt }}"></div>
+    <p class="lead">{{ p.lead | h | safe }}</p>
+{% if kpiList and kpiList.length %}
+    <div class="kpis{% if kpiList.length == 4 %} k4{% endif %}">
+{% for k in kpiList %}
+      <div class="kpi"><b>{{ k | kv }}</b><span>{{ k.label | h | safe }}</span></div>
+{% endfor %}
+    </div>
+{% endif %}
+{% if p.features and p.features.length %}
+    <h2 class="h">주요 특징</h2>
+    <ul class="feat">
+{% for f in p.features | batch(6) | first %}
+      <li><strong>{{ f.title | h | safe }}</strong>{{ f.text | h | safe }}</li>
+{% endfor %}
+    </ul>
+{% elif p.checks and p.checks.length %}
+    <h2 class="h">주요 특징</h2>
+    <ul class="feat">
+{% for c in p.checks %}
+      <li>{{ c | h | safe }}</li>
+{% endfor %}
+    </ul>
+{% endif %}
+    <div class="pad"></div>
+  </div>
+  <div class="foot"><span>장비 이미지 출처: ESPEC Corp.</span><span>1쪽</span></div>
+</section>
+
+<!-- 2쪽: 모델별 사양, 주요 용도, 문의 연락처 -->
+<section class="page{% if rows > 9 %} dense{% endif %}">
+  <div class="top"><b>J&amp;S ENGINEERING</b><span>ESPEC 한국 총대리점</span></div>
+  <div class="body">
+    <div class="ttl"><h1 class="sm">{{ p.title | h | safe }}</h1></div>
+{% if p.spec_tables and p.spec_tables.length %}
+    <h2 class="h">{{ p.specs_title or '모델별 사양' }}</h2>
+{% for t in p.spec_tables %}
+{% if t.title %}
+    <p class="stitle">{{ t.title | h | safe }}{% if t.small %}<small>{{ t.small | h | safe }}</small>{% endif %}</p>
+{% endif %}
+    <table>
+{% if t.columns %}
+      <thead><tr>{% for col in t.columns | lines %}<th>{{ col | h | safe }}</th>{% endfor %}</tr></thead>
+{% endif %}
+      <tbody>
+{% for r in t.rows %}
+        <tr><th>{{ r.head | h | safe }}{% if r.sub %}<small>{{ r.sub | h | safe }}</small>{% endif %}</th>{% for cell in r.cells | lines %}<td>{{ cell | h | safe }}</td>{% endfor %}</tr>
+{% endfor %}
+      </tbody>
+    </table>
+{% endfor %}
+{% if p.spec_note %}
+    <p class="note">{{ p.spec_note | striptags | replace(", 새 창", "") | replace("(영문, 새 창)", "(영문)") | h | safe }}</p>
+{% endif %}
+{% endif %}
+{% if p.uses and p.uses.length %}
+    <h2 class="h">주요 용도</h2>
+    <div class="uses">
+{% for u in p.uses | batch(6) | first %}
+      <div><strong>{{ u.title | h | safe }}</strong>{{ u.text | h | safe }}</div>
+{% endfor %}
+    </div>
+{% if p.industries.length %}
+    <p class="note">적용 분야: {% for code in p.industries %}{% set ind = industries | findBy("code", code) %}{{ ind.label }}{% if not loop.last %}, {% endif %}{% endfor %}</p>
+{% endif %}
+{% endif %}
+    <div class="pad"></div>
+    <div class="contact">
+      <h3>문의 · 견적: (주)제이에스 엔지니어링</h3>
+      <div class="tel"><small>대표전화</small>02-557-0505</div>
+      <p>팩스 02-557-2253<br>본사·공장 충남 아산시 둔포면 관대안길 31<br>서울사무소 서울시 강남구 삼성로82길 26 제이에스B/D 3층</p>
+    </div>
+  </div>
+  <div class="foot"><span>장비 이미지 출처: ESPEC Corp.</span><span>2쪽</span></div>
+</section>
