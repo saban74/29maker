@@ -23,6 +23,19 @@ photo:
   width: 1268
   height: 906
   alt: ESPEC HAST 챔버 EHS 시리즈. 2단 모델과 1단 모델이 나란히 서 있는 모습
+catalog_image:
+  src: /assets/img/catalog/ehs-lineup.jpg
+  alt: ESPEC HAST 챔버 EHS 시리즈 세 대
+gallery:
+  - src: /assets/img/catalog/ehs-twin.jpg
+    alt: ESPEC HAST 챔버 EHS 2단 모델
+    label: EHS 2단 모델
+  - src: /assets/img/catalog/ehs-single-small.jpg
+    alt: ESPEC HAST 챔버 EHS 소형 모델
+    label: EHS 소형 모델
+  - src: /assets/img/catalog/ehs-single-large.jpg
+    alt: ESPEC HAST 챔버 EHS 대형 모델
+    label: EHS 대형 모델
 kpis:
   - value: 105~162.2
     unit: °C

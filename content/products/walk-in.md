@@ -20,27 +20,25 @@ photo:
   height: 1245
   alt: ESPEC 워크인 챔버 E 시리즈 정면. 양문 출입문과 오른쪽 컨트롤러가 보입니다
 photo_frame: plain
+catalog_image:
+  src: /assets/img/catalog/walkin-white.jpg
+  alt: ESPEC 워크인 챔버 E 시리즈 정면
 gallery:
-  - src: /assets/img/hires/walk-in-tbe.jpg
-    width: 1867
-    height: 1245
-    alt: ESPEC 워크인 챔버 E 시리즈 정면. 양문 출입문과 오른쪽 컨트롤러가 보입니다
-    label: 정면 사진 보기
-  - src: /assets/img/hires/walk-in-tbe-side-door.jpg
-    width: 1615
-    height: 1213
-    alt: ESPEC 워크인 챔버. 옆면 출입문이 열려 있고 경사로가 놓여 있는 모습
-    label: 옆문이 열린 사진 보기
-  - src: /assets/img/hires/walk-in-tbe-open.jpg
-    width: 702
-    height: 431
-    alt: ESPEC 워크인 챔버. 양쪽 문을 열어 내부 공간이 보이는 모습
-    label: 문을 연 사진 보기
-  - src: /assets/img/hires/walk-in-tbe-dark.jpg
-    width: 2000
-    height: 1003
-    alt: 어두운 배경에서 문틈으로 빛이 새어 나오는 ESPEC 워크인 챔버
-    label: 어두운 배경 사진 보기
+  - src: /assets/img/catalog/walkin-white-2.jpg
+    alt: ESPEC 워크인 챔버 E 시리즈 다른 각도
+    label: 워크인 챔버 외관
+  - src: /assets/img/catalog/walkin-open.jpg
+    alt: ESPEC 워크인 챔버. 문을 열어 내부 공간이 보이는 모습
+    label: 문을 연 모습
+  - src: /assets/img/catalog/walkin-dark-1.jpg
+    alt: 어두운 배경의 ESPEC 워크인 챔버
+    label: 어두운 배경의 워크인 챔버 1
+  - src: /assets/img/catalog/walkin-dark-2.jpg
+    alt: 어두운 배경의 ESPEC 워크인 챔버, 다른 각도
+    label: 어두운 배경의 워크인 챔버 2
+  - src: /assets/img/catalog/walkin-assembly.jpg
+    alt: ESPEC 워크인 챔버 조립 장면
+    label: 조립 장면
 photo_note: 제품 사진은 ESPEC 공식 카탈로그 자료입니다.
 kpis:
   - value: "-40~+80°C"

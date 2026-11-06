@@ -21,6 +21,24 @@ photo:
   width: 1467
   height: 988
   alt: ESPEC Platinous J 항온항습기
+catalog_image:
+  src: /assets/img/catalog/pj-lineup.jpg
+  width: 1812
+  height: 1359
+  alt: Platinous J 시리즈 장비 네 대
+gallery:
+  - src: /assets/img/catalog/pj-single-1.jpg
+    alt: Platinous J 항온항습기 한 대 (1)
+    label: Platinous J 외관 1
+  - src: /assets/img/catalog/pj-single-2.jpg
+    alt: Platinous J 항온항습기 한 대 (2)
+    label: Platinous J 외관 2
+  - src: /assets/img/catalog/pj-single-3.jpg
+    alt: Platinous J 항온항습기 한 대 (3)
+    label: Platinous J 외관 3
+  - src: /assets/img/catalog/pj-single-4.jpg
+    alt: Platinous J 항온항습기 한 대 (4)
+    label: Platinous J 외관 4
 kpis:
   - value: "-70~+100"
     unit: °C

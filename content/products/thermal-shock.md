@@ -21,22 +21,24 @@ photo:
   height: 1501
   alt: ESPEC 열충격 시험기 TSA-73ES와 TSA-203ES가 나란히 서 있는 모습
 photo_frame: plain
+catalog_image:
+  src: /assets/img/catalog/tsa-pair.jpg
+  width: 2079
+  height: 1560
+  alt: ESPEC 열충격 시험기 TSA 시리즈 두 대가 나란히 서 있는 모습
 gallery:
-  - src: /assets/img/hires/tsa-pair.jpg
-    width: 2000
-    height: 1501
-    alt: ESPEC 열충격 시험기 TSA-73ES와 TSA-203ES가 나란히 서 있는 모습
-    label: 두 대 사진 보기
-  - src: /assets/img/hires/tsa-lineup.jpg
-    width: 1165
-    height: 874
+  - src: /assets/img/catalog/tsa-lineup.jpg
     alt: ESPEC 열충격 시험기 TSA 시리즈 크기별 세 대
-    label: 크기별 세 대 사진 보기
-  - src: /assets/img/hires/tsa-single.jpg
-    width: 828
-    height: 558
-    alt: ESPEC 열충격 시험기 TSA 한 대, 비스듬한 각도
-    label: 단품 사진 보기
+    label: TSA 시리즈 크기별 세 대
+  - src: /assets/img/catalog/tsa-single-1.jpg
+    alt: ESPEC 열충격 시험기 TSA 한 대
+    label: TSA 외관 1
+  - src: /assets/img/catalog/tsa-single-2.jpg
+    alt: ESPEC 열충격 시험기 TSA 한 대, 다른 각도
+    label: TSA 외관 2
+  - src: /assets/img/catalog/tsa-large.jpg
+    alt: ESPEC 대형 열충격 시험기
+    label: 대형 열충격 시험기
 photo_note: 제품 사진은 ESPEC 공식 카탈로그 자료입니다.
 kpis:
   - value: +200°C
