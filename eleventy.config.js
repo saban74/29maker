@@ -92,7 +92,9 @@ export default function (eleventyConfig) {
   eleventyConfig.addFilter("kv", (k) => (k ? String(k.value ?? "") + String(k.unit ?? "") : "").replace(/\s*~\s*/g, " ~ "));
   // 사진 목록에서 특정 사진(주소가 같은 것)을 뺀다. 갤러리에서 대표 사진이 두 번 나오지 않게 한다.
   eleventyConfig.addFilter("withoutSrc", (list, src) => (list || []).filter((x) => x && x.src !== src));
-  eleventyConfig.addFilter("where",(list, key, value) => (list || []).filter((x) => x && x[key] === value));
+  // 자료 목록에서 주소가 https:// 로 시작하는 첫 자료 (제품 상세 오른쪽 "ESPEC 공식 카탈로그" 상자용)
+  eleventyConfig.addFilter("firstExternal", (list) => (list || []).find((d) => d && /^https?:/i.test(String(d.url || ""))));
+  eleventyConfig.addFilter("where", (list, key, value) => (list || []).filter((x) => x && x[key] === value));
   eleventyConfig.addFilter("findBy", (list, key, value) => (list || []).find((x) => x && x[key] === value));
   eleventyConfig.addFilter("bySlug", (list, slug) => (list || []).find((p) => p.slug === slug));
   eleventyConfig.addFilter("lines", (v) => String(v || "").split("|").map((s) => s.trim()));
