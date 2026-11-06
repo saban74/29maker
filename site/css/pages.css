@@ -151,7 +151,7 @@
 .pg .flow span { font-size: 14px; color: var(--text); }
 .pg .svc-actions { margin-top: 24px; }
 .pg .tiles-wrap { padding: 28px 0; background: #fff; border-bottom: 1px solid var(--line); }
-.pg .tiles-wrap .tiles { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+.pg .tiles-wrap .tiles--4 { grid-template-columns: repeat(4, minmax(0, 1fr)); }
 
 /* ---------- 뉴스 ---------- */
 .pg .news-list { border-top: 2px solid var(--navy); background: #fff; }
@@ -223,7 +223,7 @@
   .pg .greet__side { max-width: 240px; }
   .pg .two-col .sec-h { text-align: center; }
   .pg .era { grid-template-columns: minmax(0, 1fr); gap: 8px; }
-  .pg .facts, .pg .sites, .pg .flow, .pg .tiles-wrap .tiles { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .pg .facts, .pg .sites, .pg .flow, .pg .tiles-wrap .tiles, .pg .tiles-wrap .tiles--4 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   .pg .partner-grid--4, .pg .ind-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   .pg .news-item { grid-template-columns: minmax(0, 1fr); gap: 6px; }
 }

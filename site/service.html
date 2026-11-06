@@ -6,39 +6,27 @@ nav: service
 layout: layouts/base.njk
 ---
 {#
-  서비스: 제목 > 바로가기 4개 > A/S > 위탁 시험소 > 세미나 > 기술 연구소 > 견적 띠
+  서비스: 페이지 머리 > 바로가기 4개 > A/S > 위탁 시험소 > 세미나 > 기술 연구소 > 견적 띠
 #}
-<!-- 1. 제목 영역 -->
-<section class="b-r-hero pg-head" aria-labelledby="pg-title">
-  <div class="wrap b-r-hero__top">
-    <div>
-      <p class="b-r-hero__tag">SERVICE</p>
-      <h1 class="b-r-hero__title" id="pg-title">Support after<br>installation</h1>
-    </div>
-    <div>
-      <p class="b-r-hero__sub"><strong>장비를 들여놓은 뒤에도, 제이에스 엔지니어링이 곁에 있습니다.</strong>ESPEC 본사와의 정기 기술 협력으로 쌓은 노하우로 A/S, 위탁 시험, 기술 세미나를 안내합니다.</p>
-    </div>
-  </div>
-</section>
+<div class="pg">
 
-<!-- 2. 서비스 바로가기 4개 -->
-<nav class="b-r-shortcuts" aria-label="서비스 바로가기">
-  <div class="wrap b-r-shortcuts__in">
-    <a href="#as"><span class="b-r-shortcuts__no">01</span><strong>A/S·기술 지원</strong><small>After Service</small><span class="b-r-shortcuts__arrow" aria-hidden="true">→</span></a>
-    <a href="#lab"><span class="b-r-shortcuts__no">02</span><strong>위탁 시험소</strong><small>Testing Laboratory</small><span class="b-r-shortcuts__arrow" aria-hidden="true">→</span></a>
-    <a href="#seminar"><span class="b-r-shortcuts__no">03</span><strong>기술 세미나</strong><small>Seminar</small><span class="b-r-shortcuts__arrow" aria-hidden="true">→</span></a>
-    <a href="#rnd"><span class="b-r-shortcuts__no">04</span><strong>기술 연구소</strong><small>Technical Center</small><span class="b-r-shortcuts__arrow" aria-hidden="true">→</span></a>
-  </div>
-</nav>
+<!-- 페이지 머리: 경로 줄 + 회색 띠 제목 -->
+<nav class="pg-crumb" aria-label="현재 위치"><div class="wrap"><a href="index.html">홈</a><i></i><span aria-current="page">서비스</span></div></nav>
+<header class="pg-title"><div class="wrap"><h1>서비스</h1><p>Support after installation</p><p class="pg-sub"><b>장비를 들여놓은 뒤에도, 제이에스 엔지니어링이 곁에 있습니다.</b><br>ESPEC 본사와의 정기 기술 협력으로 쌓은 노하우로 A/S, 위탁 시험, 기술 세미나를 안내합니다.</p></div></header>
 
-<!-- 3. A/S·기술 지원 -->
-<section class="blk tone-white" id="as" aria-labelledby="as-h">
+<!-- 서비스 바로가기 4개 -->
+<nav class="tiles-wrap" aria-label="서비스 바로가기"><div class="wrap"><div class="tiles tiles--4">
+  <a class="tile" href="#as">A/S·기술 지원</a>
+  <a class="tile" href="#lab">위탁 시험소</a>
+  <a class="tile" href="#seminar">기술 세미나</a>
+  <a class="tile" href="#rnd">기술 연구소</a>
+</div></div></nav>
+
+<!-- 1. A/S·기술 지원 -->
+<section class="sec" id="as" aria-labelledby="as-h">
   <div class="wrap">
     <div class="two-col">
-      <div>
-        <span class="label">After Service</span>
-        <h2 class="h-sec" id="as-h">A/S·기술 지원</h2>
-      </div>
+      <div class="sec-h"><h2 id="as-h">A/S·기술 지원</h2><p>After Service</p></div>
       <div>
         <div class="prose">
           <p>매년 ESPEC 기술진이 방문해 제이에스 엔지니어링 엔지니어와 함께 A/S 기술을 점검하고 전수합니다. 엔지니어는 정기적으로 일본 연수 교육을 받습니다.</p>
@@ -62,12 +50,11 @@ layout: layouts/base.njk
   </div>
 </section>
 
-<!-- 4. 위탁 시험소 (절차 뼈대만, 시험 가능 항목은 확인 후) -->
-<section class="blk tone-graphite b-product-support" id="lab" aria-labelledby="lab-h">
+<!-- 2. 위탁 시험소 (절차 뼈대만, 시험 가능 항목은 확인 후) -->
+<section class="sec" id="lab" aria-labelledby="lab-h">
   <div class="wrap">
-    <span class="label">Testing Laboratory</span>
-    <h2 class="h-big" id="lab-h">위탁 시험소</h2>
-    <p class="lead stack-top-s">장비를 사기 전에, 혹은 장비 없이 시험이 필요할 때. 2015년 아산 본사 공장에 연 제이에스 위탁 시험소에서 시험을 맡기실 수 있습니다.</p>
+    <div class="sec-h"><h2 id="lab-h">위탁 시험소</h2><p>Testing Laboratory</p></div>
+    <p class="lead">장비를 사기 전에, 혹은 장비 없이 시험이 필요할 때. 2015년 아산 본사 공장에 연 제이에스 위탁 시험소에서 시험을 맡기실 수 있습니다.</p>
     <ol class="flow flow--4">
       <li><b>상담</b><span>시험 목적과 시료를 알려 주세요.</span></li>
       <li><b>조건 협의</b><span>시험 조건과 일정을 정합니다.</span></li>
@@ -79,33 +66,27 @@ layout: layouts/base.njk
   </div>
 </section>
 
-<!-- 5. 기술 세미나 -->
-<section class="blk tone-studio" id="seminar" aria-labelledby="seminar-h">
+<!-- 3. 기술 세미나 -->
+<section class="sec" id="seminar" aria-labelledby="seminar-h">
   <div class="wrap">
     <div class="two-col">
-      <div>
-        <span class="label">Seminar</span>
-        <h2 class="h-sec" id="seminar-h">기술 세미나</h2>
-      </div>
+      <div class="sec-h"><h2 id="seminar-h">기술 세미나</h2><p>Seminar</p></div>
       <div>
         <div class="prose">
           <p>매년 3~4회 ESPEC 연구진을 초청해 국내 세미나와 기술 강연회를 엽니다. SEMICON SHOW, KPCA, JPCA 등 국내외 전시회에서도 만나실 수 있습니다.</p>
           <p>고객 대상 장비 사용 교육의 제공 여부는 확인 중입니다. <span class="tbd">[확인 필요]</span></p>
         </div>
-        <div class="btn-row stack-top-s"><a class="btn" href="contact.html?type=etc&amp;item=세미나+안내+받기">세미나 안내 받기</a><a class="btn btn--ghost" href="news.html">뉴스·공지 보기</a></div>
+        <div class="btn-row stack-top-s"><a class="btn" href="contact.html?type=etc&amp;item=세미나+안내+받기">세미나 안내 받기</a><a class="btn btn--line" href="news.html">뉴스·공지 보기</a></div>
       </div>
     </div>
   </div>
 </section>
 
-<!-- 6. 기술 연구소 (설립 사실만) -->
-<section class="blk tone-white" id="rnd" aria-labelledby="rnd-h">
+<!-- 4. 기술 연구소 (설립 사실만) -->
+<section class="sec" id="rnd" aria-labelledby="rnd-h">
   <div class="wrap">
     <div class="two-col">
-      <div>
-        <span class="label">Technical Center</span>
-        <h2 class="h-sec" id="rnd-h">기술 연구소</h2>
-      </div>
+      <div class="sec-h"><h2 id="rnd-h">기술 연구소</h2><p>Technical Center</p></div>
       <div>
         <div class="prose">
           <p>2014년 본사 공장에 제이에스 기술 연구소를, 2016년 서울 사무소에 제이에스 서비스 기술 연구소를 세웠습니다.</p>
@@ -117,10 +98,12 @@ layout: layouts/base.njk
   </div>
 </section>
 
-<!-- 7. 견적 띠 -->
-<section class="blk tone-graphite b-cta" aria-labelledby="cta-h">
+<!-- 5. 견적 띠 -->
+<section class="b-cta" aria-labelledby="cta-h">
   <div class="wrap b-cta__in">
-    <div><h2 id="cta-h">시험 조건을 알려 주시면 맞는 장비와 견적을 안내합니다.</h2><p>전화 상담 <a href="tel:0255570505" style="color:inherit;text-decoration:underline">02-557-0505</a></p></div>
-    <a class="btn btn--light" href="contact.html">견적문의</a>
+    <div><h2 id="cta-h">시험 조건을 알려 주시면 맞는 장비와 견적을 안내합니다.</h2><p>전화 상담 <a href="tel:0255570505">02-557-0505</a></p></div>
+    <a class="btn" href="contact.html">견적문의</a>
   </div>
 </section>
+
+</div>
