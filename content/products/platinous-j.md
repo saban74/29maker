@@ -14,12 +14,31 @@ material_name: Platinous J
 aw_word: PLATINOUS
 aw_label: PLATINOUS J 항온(항습)기
 aw_title: Platinous J 항온(항습)기
+type_label: 항온(항습)기
 lead: 온도와 습도를 함께 걸어 신뢰성을 확인하는 ESPEC 대표 시리즈. 2025 굿디자인상(ECO형).
 photo:
   src: /assets/img/hires/platinous-j-single-a.jpg
   width: 1467
   height: 988
   alt: ESPEC Platinous J 항온항습기
+catalog_image:
+  src: /assets/img/catalog/pj-lineup.jpg
+  width: 1812
+  height: 1359
+  alt: Platinous J 시리즈 장비 네 대
+gallery:
+  - src: /assets/img/catalog/pj-single-1.jpg
+    alt: Platinous J 항온항습기 한 대 (1)
+    label: Platinous J 외관 1
+  - src: /assets/img/catalog/pj-single-2.jpg
+    alt: Platinous J 항온항습기 한 대 (2)
+    label: Platinous J 외관 2
+  - src: /assets/img/catalog/pj-single-3.jpg
+    alt: Platinous J 항온항습기 한 대 (3)
+    label: Platinous J 외관 3
+  - src: /assets/img/catalog/pj-single-4.jpg
+    alt: Platinous J 항온항습기 한 대 (4)
+    label: Platinous J 외관 4
 kpis:
   - value: "-70~+100"
     unit: °C

@@ -113,29 +113,24 @@ collections:
       - { label: "메인 대표 제품으로 표시", name: featured, widget: boolean, default: false, required: false, hint: "켜면 메인 화면 '대표 제품'에 카드가 나옵니다." }
       - { label: "메인 표시 순서", name: featured_order, widget: number, value_type: int, required: false, hint: "메인 '대표 제품' 안에서의 순서. 작은 숫자가 앞." }
 
-      # 첫 화면
-      - label: "첫 화면 방식"
-        name: hero
-        widget: select
-        default: r
-        options:
-          - { label: "r: 사진 + 핵심 수치 + 체크 목록 (작은 사진만 있을 때, 기본)", value: r }
-          - { label: "aw: 거대한 글자 + 장비 사진 (회색 배경 고해상도 사진이 있을 때)", value: aw }
+      # 첫 화면 (2026-11-05부터 모든 제품이 같은 "한 화면" 틀: 사진 + 핵심 수치 + 특징 요약 + 사양표, 오른쪽 사이드바)
+      # 예전 "첫 화면 방식(hero)"과 거대한 글자(aw_...) 칸은 더 이상 화면에 쓰이지 않아 숨겼습니다. 기존 파일의 값은 그대로 남아도 괜찮습니다.
+      - { label: "첫 화면 방식 (더 이상 쓰지 않음)", name: hero, widget: hidden, required: false }
       - { label: "견적 문의용 제품 이름", name: quote_name, widget: string, hint: "견적문의 버튼을 누르면 문의 양식의 '관심 제품' 칸에 들어갈 이름. 예) Platinous J" }
       - { label: "자료·사양서 요청용 이름", name: material_name, widget: string, hint: "'사양서 요청', '자료 요청' 버튼에 쓰입니다. 예) Platinous J → 'Platinous J 사양서'" }
-      - { label: "큰 글자 (aw일 때)", name: aw_word, widget: string, required: false, hint: "영문 대문자 짧게. 예) PLATINOUS" }
-      - { label: "큰 글자 읽어 주기 글 (aw일 때)", name: aw_label, widget: string, required: false, hint: "화면 읽기 프로그램용. 예) PLATINOUS J 항온(항습)기" }
-      - { label: "큰 글자 아래 굵은 제목 (aw일 때)", name: aw_title, widget: string, required: false, hint: "예) Platinous J 항온(항습)기" }
-      - { label: "큰 글자 겹침 조정 이름 (aw일 때, 고급)", name: aw_variant, widget: string, required: false, hint: "css/products.css 에 따로 맞춘 값이 있을 때만. 예) hast. 보통 비워 둡니다." }
-      - { label: "제품 큰 제목 (r일 때)", name: heading, widget: string, required: false, hint: "예) SH Series" }
-      - { label: "제품 종류 (r일 때)", name: type_label, widget: string, required: false, hint: "예) 벤치탑 항온항습기" }
-      - { label: "위쪽 작은 표시 (r일 때, 선택)", name: chip, widget: string, required: false, hint: "예) 2014 굿디자인상" }
+      - { label: "큰 글자 (더 이상 쓰지 않음)", name: aw_word, widget: hidden, required: false }
+      - { label: "큰 글자 읽어 주기 글 (더 이상 쓰지 않음)", name: aw_label, widget: hidden, required: false }
+      - { label: "큰 글자 아래 굵은 제목 (더 이상 쓰지 않음)", name: aw_title, widget: hidden, required: false }
+      - { label: "큰 글자 겹침 조정 이름 (더 이상 쓰지 않음)", name: aw_variant, widget: hidden, required: false }
+      - { label: "제품 제목", name: heading, widget: string, required: false, hint: "첫 화면 맨 위 영문 제목과 오른쪽 제품 목록에 쓰입니다. 비워 두면 '제품 이름'. 예) SH Series" }
+      - { label: "제품 종류", name: type_label, widget: string, required: false, hint: "제목 아래 한 줄. 비워 두면 제품군 이름. 예) 벤치탑 항온항습기" }
+      - { label: "위쪽 작은 표시 (선택)", name: chip, widget: string, required: false, hint: "예) 2014 굿디자인상" }
       - { label: "한 줄 소개", name: lead, widget: text, hint: "첫 화면에 보이는 소개 문장." }
       - label: "대표 사진"
         name: photo
         widget: object
         fields: *photo_fields
-      - label: "대표 사진 보여 주는 방식 (r일 때)"
+      - label: "대표 사진 보여 주는 방식"
         name: photo_frame
         widget: select
         required: false
@@ -153,32 +148,39 @@ collections:
           - { label: "확대 배율", name: scale, widget: string, required: false, hint: "예) 1.3" }
           - { label: "가로 위치", name: pos_x, widget: string, required: false, hint: "예) 49%" }
           - { label: "세로 위치", name: pos_y, widget: string, required: false, hint: "예) 52%" }
-      - label: "사진 갤러리 (r일 때, 선택)"
+      - label: "상세 페이지 첫 화면 큰 사진 (선택)"
+        name: catalog_image
+        widget: object
+        required: false
+        collapsed: true
+        hint: "제품 상세 맨 위 회색 띠와 장비 소개서 PDF, 제품 목록 카드에 쓰는 큰 사진(ESPEC 카탈로그 사진 등). 비워 두면 위의 '대표 사진'을 씁니다."
+        fields: *photo_fields
+      - label: "사진 갤러리 (선택)"
         name: gallery
         widget: list
         required: false
         collapsed: true
         summary: "{{fields.label}}"
-        hint: "2장 이상 넣으면 대표 사진 아래에 작은 사진 버튼이 생깁니다. 첫 사진은 대표 사진과 같은 사진으로 넣으세요."
+        hint: "제품 상세의 '모델별 사진' 구역에 나옵니다. 첫 화면 큰 사진(또는 대표 사진)과 같은 사진은 자동으로 빠집니다."
         fields:
           - { label: "사진", name: src, widget: image, choose_url: false }
           - { label: "가로 크기(px)", name: width, widget: number, value_type: int, required: false, hint: "비워 두면 자동" }
           - { label: "세로 크기(px)", name: height, widget: number, value_type: int, required: false, hint: "비워 두면 자동" }
           - { label: "사진 설명(대체 글)", name: alt, widget: string }
-          - { label: "작은 사진 버튼 이름", name: label, widget: string, hint: "예) 정면 사진 보기" }
+          - { label: "사진 아래 설명 글", name: label, widget: string, hint: "예) Platinous J 외관 1" }
       - { label: "사진 아래 출처 문구", name: photo_note, widget: string, required: false, default: "제품 사진은 ESPEC 공식 자료입니다." }
       - label: "핵심 수치 (보통 3개)"
         name: kpis
         widget: list
         summary: "{{fields.value}}{{fields.unit}} — {{fields.label}}"
-        hint: "r 화면에서는 '값+단위'와 '이름'이, aw 화면에서는 큰 글자와 '이름·자세한 설명'이 보입니다."
+        hint: "첫 화면 핵심 수치 줄에는 '값+단위'와 '이름'이, 개요 구역에는 '이름·자세한 설명'(쓴 경우)이 보입니다."
         fields:
           - { label: "값", name: value, widget: string, hint: "예) -70~+100" }
           - { label: "단위 (선택)", name: unit, widget: string, required: false, hint: "예) °C, %rh. 큰 글자 화면에서 작게 보입니다." }
           - { label: "이름", name: label, widget: string, hint: "예) 온도 범위 (모델별)" }
-          - { label: "자세한 설명 (aw일 때)", name: detail, widget: string, required: false }
-      - { label: "핵심 수치 제목 (aw일 때)", name: kpi_title, widget: string, required: false, hint: "비워 두면 '핵심 수치 (모델에 따라 다릅니다)'" }
-      - { label: "특징 체크 목록 (r일 때)", name: checks, widget: list, required: false, field: { label: "한 줄", name: item, widget: string } }
+          - { label: "자세한 설명 (선택)", name: detail, widget: string, required: false, hint: "개요 구역의 '핵심 수치' 설명 상자에 보입니다." }
+      - { label: "핵심 수치 설명 상자 제목", name: kpi_title, widget: string, required: false, hint: "비워 두면 '핵심 수치 (모델에 따라 다릅니다)'" }
+      - { label: "특징 요약 (체크 목록)", name: checks, widget: list, required: false, hint: "첫 화면에 3~4줄. 비워 두면 '특징 상세'의 제목들이 대신 보입니다.", field: { label: "한 줄", name: item, widget: string } }
 
       # 개요
       - label: "용도 (이런 시험에 씁니다)"
@@ -189,14 +191,14 @@ collections:
           - { label: "굵은 제목", name: title, widget: string }
           - { label: "설명", name: text, widget: text }
       - { label: "관련 산업", name: industries, widget: select, multiple: true, required: false, options: *industry_options, hint: "개요 아래 산업 단추(솔루션 페이지로 연결)에 고른 순서대로 나옵니다." }
-      - { label: "개요 배경 큰 글자", name: bg_word, widget: string, required: false, hint: "영문 대문자. 예) J SERIES" }
+      - { label: "개요 배경 큰 글자 (더 이상 쓰지 않음)", name: bg_word, widget: hidden, required: false }
       - label: "개요 사진"
         name: overview_photo
         widget: object
         required: false
         fields: *photo_fields
       - { label: "개요 사진이 배경 없는 작은 사진임", name: overview_pack, widget: boolean, required: false, default: false }
-      - { label: "개요 사진 최대 폭 (선택)", name: overview_photo_max, widget: string, required: false, hint: "작은 사진이 너무 커 보일 때. 예) 470px" }
+      - { label: "개요 사진 최대 폭 (더 이상 쓰지 않음)", name: overview_photo_max, widget: hidden, required: false }
 
       # 특징
       - label: "특징 상세"

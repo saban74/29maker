@@ -15,12 +15,27 @@ aw_word: HAST/EHS
 aw_label: HAST EHS 가속수명 시험기
 aw_title: HAST 가속수명 시험기 EHS
 aw_variant: hast
+heading: HAST/EHS
+type_label: HAST 가속수명 시험기
 lead: 고온·고습·가압을 동시에 가해 전자부품의 수명과 고장 모드를 짧은 시간에 평가합니다.
 photo:
   src: /assets/img/hires/hast-ehs-lineup.jpg
   width: 1268
   height: 906
   alt: ESPEC HAST 챔버 EHS 시리즈. 2단 모델과 1단 모델이 나란히 서 있는 모습
+catalog_image:
+  src: /assets/img/catalog/ehs-lineup.jpg
+  alt: ESPEC HAST 챔버 EHS 시리즈 세 대
+gallery:
+  - src: /assets/img/catalog/ehs-twin.jpg
+    alt: ESPEC HAST 챔버 EHS 2단 모델
+    label: EHS 2단 모델
+  - src: /assets/img/catalog/ehs-single-small.jpg
+    alt: ESPEC HAST 챔버 EHS 소형 모델
+    label: EHS 소형 모델
+  - src: /assets/img/catalog/ehs-single-large.jpg
+    alt: ESPEC HAST 챔버 EHS 대형 모델
+    label: EHS 대형 모델
 kpis:
   - value: 105~162.2
     unit: °C

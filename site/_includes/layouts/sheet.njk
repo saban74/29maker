@@ -1,0 +1,18 @@
+{#
+  장비 소개서(PDF로 바꿀 A4 인쇄 페이지) 전용 틀.
+  - 공통 머리말·꼬리말이 없고, 검색에 나오지 않도록 noindex 입니다. sitemap.xml 에도 넣지 않습니다.
+  - 이 페이지를 브라우저로 PDF 로 바꾸면 제품 상세의 "장비 소개서 PDF 다운로드" 파일(assets/pdf/<제품주소>.pdf)이 됩니다.
+#}
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex">
+<title>{{ title }}</title>
+<link rel="stylesheet" href="{{ 'css/sheet.css' | rel }}">
+</head>
+<body>
+{{ content | safe }}
+</body>
+</html>

@@ -1,0 +1,206 @@
+<!-- 제품 상세 밝은 시안: Platinous J 기준. 첫 화면에 제품명·사진·핵심 수치·특징 요약·버튼을 넣고, 바로 아래에서 모델별 사양표가 시작되는 조밀한 구성. 사양 수치는 content/products/platinous-j.md 그대로. -->
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Platinous J 항온항습기 | 제이에스 엔지니어링</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Michroma&display=swap">
+<link rel="stylesheet" href="common.css">
+<style>
+body{background:#fff}
+.topbar{border-bottom:1px solid var(--line);background:#fff}
+.crumb{font-size:13px;color:var(--muted);padding:14px 0}
+.crumb a:hover{color:var(--ink);text-decoration:underline}
+.crumb span{margin:0 8px;color:#a0a7ae}
+.phero{display:grid;grid-template-columns:5fr 6fr;gap:8px;background:linear-gradient(180deg,#e3e5e6 0%,#f4f4f5 100%);border-radius:var(--r);overflow:hidden;align-items:center}
+.phero-l{padding:36px 8px 36px 40px}
+.phero .type{font-size:13px;font-weight:600;color:var(--muted)}
+.phero h1{font:400 clamp(22px,2.8vw,34px)/1.25 var(--f-en);margin-top:8px;color:#23272b}
+.phero .lead{margin-top:14px;max-width:420px}
+.badge{display:inline-block;margin-top:14px;font-size:13px;font-weight:600;color:var(--ink);background:#fff;border:1px solid var(--line);border-radius:6px;padding:4px 10px}
+.kp{display:grid;grid-template-columns:repeat(3,auto);justify-content:start;margin-top:22px}
+.kp div{padding:0 22px}.kp div:first-child{padding-left:0}
+.kp div+div{border-left:1px solid #c5cacf}
+.kp b{display:block;font:400 18px/1.3 var(--f-en);color:var(--ink)}
+.kp b small{font:600 12px var(--f-kr);margin-left:2px}
+.kp span{font-size:12px;color:var(--muted)}
+.phero .actions{margin-top:24px}
+.phero-r{position:relative}
+.phero-r .shot{aspect-ratio:1.6/1;-webkit-mask-image:linear-gradient(to bottom,transparent 0,#000 14%,#000 100%);mask-image:linear-gradient(to bottom,transparent 0,#000 14%,#000 100%)}
+.phero-r .shot img{width:112%;max-width:none;margin-left:-6%;margin-top:-18%;-webkit-mask-image:none;mask-image:none}
+.phero-r .cap{position:absolute;right:16px;bottom:12px;text-align:right;font-size:12px}
+.anchors{display:flex;gap:0;margin-top:22px;border-bottom:1px solid var(--line);overflow-x:auto}
+.anchors a{padding:12px 20px;font-size:14px;font-weight:600;color:var(--muted);border-bottom:2px solid transparent;white-space:nowrap}
+.anchors a:hover,.anchors a:first-child{color:var(--ink);border-bottom-color:var(--ink)}
+.cols2{display:grid;grid-template-columns:minmax(0,1fr) 280px;gap:40px;margin-top:28px;align-items:start}
+.ps{padding:30px 0 6px}
+.ps h2{font-size:22px;line-height:1.35;font-weight:700;padding-bottom:10px;border-bottom:2px solid var(--ink);margin-bottom:16px}
+.ps>p.lead2{color:var(--accent);font-weight:600;margin-bottom:6px}
+.tw{overflow-x:auto}
+table{width:100%;border-collapse:collapse;font-size:14px;line-height:1.55;min-width:640px}
+th,td{padding:11px 12px;border:1px solid var(--line);text-align:left;vertical-align:top}
+thead th{background:#eef0f1;color:var(--ink);font-weight:700;white-space:nowrap}
+tbody th{background:#f7f8f9;font-weight:700;color:var(--ink);width:34%}
+tbody th small{display:block;font-weight:400;color:var(--muted);margin-top:2px}
+.note{font-size:13px;color:var(--muted);margin-top:12px;line-height:1.65}
+.note a{color:var(--accent);text-decoration:underline}
+.feat{display:grid;grid-template-columns:repeat(2,1fr);gap:14px}
+.feat article{background:#f6f7f8;border-radius:var(--r);padding:18px 20px}
+.feat strong{display:block;font:400 24px/1.2 var(--f-en);color:var(--ink)}
+.feat h3{font-size:15px;margin:8px 0 4px}
+.feat p{font-size:14px}
+.uses{display:grid;grid-template-columns:repeat(2,1fr);gap:0 28px}
+.uses li{padding:12px 0;border-bottom:1px solid var(--soft)}
+.uses b{display:block;color:var(--ink)}
+.uses span{font-size:14px}
+.aw li{padding:10px 0;border-bottom:1px solid var(--soft)}
+.aw b{color:var(--ink)}
+.aw span{display:block;font-size:14px;color:var(--muted)}
+.side{position:sticky;top:16px;display:grid;gap:14px}
+.box{background:#f1f2f3;border-radius:var(--r);padding:20px}
+.box h2{font-size:15px;margin-bottom:12px}
+.box .btn{width:100%;margin-top:8px}
+.box .tel{font:700 20px/1.3 var(--f-kr);color:var(--ink);margin:6px 0 2px}
+.box p{font-size:13px;color:var(--muted)}
+.rel{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}
+.rel .pc-img{aspect-ratio:16/9;background:#f1f2f3}
+.rel .pc-img img{object-fit:contain;padding:10px}
+@media (max-width:980px){
+ .phero{grid-template-columns:minmax(0,1fr)}
+ .phero-l{padding:26px 20px 0}
+ .phero-r .cap{position:static;text-align:left;padding:0 20px 14px}
+ .cols2{grid-template-columns:minmax(0,1fr)}
+ .side{position:static}
+ .rel{grid-template-columns:1fr}
+}
+@media (max-width:640px){
+ .kp div{padding:0 10px}.kp b{font-size:14px}
+ .feat,.uses{grid-template-columns:1fr}
+ .phero-r .shot{aspect-ratio:1.45/1}
+ .phero-r .shot img{width:125%;margin-left:-12.5%;margin-top:-22%}
+ .anchors a{padding:12px 14px}
+}
+</style>
+</head>
+<body>
+<a class="skip" href="#spec">본문 바로가기</a>
+<div class="topbar"><div class="wrap">
+ <header class="hd" id="hd">
+  <a class="brand" href="main-b01.html" aria-label="제이에스 엔지니어링 홈"><b>J&amp;S ENGINEERING</b><span>제이에스 엔지니어링</span></a>
+  <nav class="nav" id="nav" aria-label="주 메뉴"><a href="#">회사소개</a><a href="#" aria-current="page">제품소개</a><a href="#">솔루션</a><a href="#">기술자료</a><a href="#">서비스</a><a href="#">고객지원</a></nav>
+  <a class="btn btn-dark btn-sm" href="#contact">견적문의</a>
+  <button class="menu-btn" type="button" aria-label="메뉴 열기" aria-expanded="false" aria-controls="nav"><i></i></button>
+ </header>
+</div></div>
+
+<div class="wrap">
+ <nav class="crumb" aria-label="현재 위치"><a href="main-b01.html">홈</a><span>&gt;</span><a href="#">제품소개</a><span>&gt;</span><a href="#">환경시험기</a><span>&gt;</span>Platinous J 항온항습기</nav>
+
+ <section class="phero" aria-label="제품 요약">
+  <div class="phero-l">
+   <p class="type">항온(항습)기 · ESPEC</p>
+   <h1>Platinous J 시리즈</h1>
+   <p class="lead">온도와 습도를 함께 걸어 신뢰성을 확인하는 ESPEC 대표 시리즈입니다.</p>
+   <span class="badge">2025 굿디자인상 (ECO형)</span>
+   <div class="kp">
+    <div><b>-70<i class="u">~</i>+100<small><i class="u">°C</i></small></b><span>온도</span></div>
+    <div><b>20<i class="u">~</i>98<small><i class="u">%rh</i></small></b><span>습도</span></div>
+    <div><b>120<i class="u">~</i>800<small>L</small></b><span>용량</span></div>
+   </div>
+   <div class="actions"><a class="btn btn-dark" href="#contact">견적문의</a><a class="btn btn-line" href="https://www.espec.co.jp/english/products/catalog/pj.pdf" target="_blank" rel="noopener">카탈로그 보기</a><a class="link" href="#spec">사양표 보기 ↓</a></div>
+  </div>
+  <div class="phero-r">
+   <div class="shot"><img src="../../site/assets/img/hires/platinous-j-lineup.jpg" width="1812" height="1359" alt="Platinous J 시리즈 장비 네 대"></div>
+   <p class="cap"><span>제품 사진은 ESPEC 제공 자료</span></p>
+  </div>
+ </section>
+
+ <nav class="anchors" aria-label="페이지 안 이동"><a href="#spec">모델별 사양</a><a href="#feat">특징</a><a href="#uses">쓰임새</a><a href="#awards">규격·수상</a><a href="#docs">자료</a></nav>
+
+ <div class="cols2">
+  <div>
+   <section class="ps" id="spec" aria-labelledby="h-spec">
+    <h2 id="h-spec">모델별 사양</h2>
+    <div class="tw"><table>
+     <thead><tr><th scope="col">구분 / 모델</th><th scope="col">온도 범위</th><th scope="col">습도</th><th scope="col">내용적</th></tr></thead>
+     <tbody>
+      <tr><th scope="row">항온항습기<small>PR-1J / 2J / 3J / 4J</small></th><td>-20 <i class="u">~</i> +100<i class="u">°C</i></td><td>20 <i class="u">~</i> 98<i class="u">%rh</i></td><td>Type1 120L / Type2 225L / Type3 408L / Type4 800L</td></tr>
+      <tr><th scope="row">초에너지절약 저온 항온항습기 (신규)<small>PL-2J-ECO / 3J-ECO / 4J-ECO</small></th><td>-40 <i class="u">~</i> +100<i class="u">°C</i></td><td>20 <i class="u">~</i> 98<i class="u">%rh</i></td><td>Type2 225L 등 [확인 필요: 모델별 표]</td></tr>
+      <tr><th scope="row">저온 항온항습기<small>PL-1J <i class="u">~</i> PL-4J</small></th><td>-40 <i class="u">~</i> +100<i class="u">°C</i></td><td>20 <i class="u">~</i> 98<i class="u">%rh</i></td><td>Type1 <i class="u">~</i> Type4 [확인 필요: 모델별 용량]</td></tr>
+      <tr><th scope="row">초저온 항온항습기<small>PSL-2J / PSL-4J</small></th><td>-70 <i class="u">~</i> +100<i class="u">°C</i></td><td>20 <i class="u">~</i> 98<i class="u">%rh</i></td><td>Type2 306L / Type4 800L</td></tr>
+      <tr><th scope="row">고온 항온항습기<small>PHP-2J / 3J / 4J</small></th><td>주위온도 +10 <i class="u">~</i> +100<i class="u">°C</i></td><td>40 <i class="u">~</i> 98<i class="u">%rh</i></td><td>219L / 398L / 784L</td></tr>
+      <tr><th scope="row">저습형<small>PDR-3J / 4J, PDL-3J / 4J</small></th><td>PDR -20 <i class="u">~</i> +100<i class="u">°C</i><br>PDL -40 <i class="u">~</i> +100<i class="u">°C</i></td><td>5 <i class="u">~</i> 98<i class="u">%rh</i></td><td>408L / 800L</td></tr>
+      <tr><th scope="row">클린 항온항습기<small>PCR-3J (클린도 Class5, HEPA 필터)</small></th><td>-20 <i class="u">~</i> +100<i class="u">°C</i></td><td>30 <i class="u">~</i> 90<i class="u">%rh</i></td><td>312L</td></tr>
+      <tr><th scope="row">항온기 (습도 없음)<small>PU-2J-ECO/3J-ECO/4J-ECO, PU-1J<i class="u">~</i>4J, PG-2J/4J</small></th><td>PU -40 <i class="u">~</i> +100<i class="u">°C</i><br>PG -70 <i class="u">~</i> +100<i class="u">°C</i><br>PU-ECO [확인 필요]</td><td>-</td><td>120 <i class="u">~</i> 800L</td></tr>
+     </tbody>
+    </table></div>
+    <p class="note">옵션으로 +150 / +180<i class="u">°C</i>까지 넓힐 수 있고(모델별로 다름), 요청 시 최대 200<i class="u">°C</i>입니다. 일부 모델은 816L, 1000L를 요청 제작합니다. 외형 치수와 전원 사양은 [확인 필요]. 출처: <a href="https://www.espec.co.jp/english/products/env-test/pj/" target="_blank" rel="noopener">ESPEC 공식 제품 페이지 (영문, 새 창)</a>, 카탈로그 CAT.NO.E15110-Q2504, 수집일 2026-10-29</p>
+   </section>
+
+   <section class="ps" id="feat" aria-labelledby="h-feat">
+    <h2 id="h-feat">특징</h2>
+    <div class="feat">
+     <article><strong>70%</strong><h3>ECO형은 전기를 덜 씁니다</h3><p>0<i class="u">°C</i> 이하 운전에서 표준 J 시리즈보다 최대 70% 에너지 절감(PL-4J-ECO 기준). 배터리 충방전, 보관처럼 오래 도는 시험에 맞습니다.</p></article>
+     <article><strong>64%</strong><h3>낮은 GWP 냉매를 고를 수 있습니다</h3><p>R-449A는 GWP가 R-404A의 3920에서 1397로 64% 줄어듭니다. PR, PL, PSL, PCR, PU, PG에서 요청 시 선택.</p></article>
+     <article><strong>특허</strong><h3>Smart R&amp;D System</h3><p>냉각과 가열 능력을 필요한 만큼만 제어해 온도와 습도를 정밀하게 맞춥니다. 일본 특허 5514787.</p></article>
+     <article><strong>3년</strong><h3>보증 표기</h3><p>카탈로그 표지에 3년 보증이 적혀 있습니다. 국내 적용 조건은 [확인 필요]</p></article>
+    </div>
+   </section>
+
+   <section class="ps" id="uses" aria-labelledby="h-uses">
+    <h2 id="h-uses">이런 시험에 씁니다</h2>
+    <ul class="uses">
+     <li><b>온도·습도 시험</b><span>저온에서 고온, 저습에서 고습까지 조건을 바꿔 가며 제품의 변화를 확인합니다.</span></li>
+     <li><b>보관 시험</b><span>정해진 조건에 제품을 오래 두고 상태가 어떻게 달라지는지 봅니다.</span></li>
+     <li><b>성능 평가</b><span>온도와 습도가 정해진 환경에서 제품이 제대로 동작하는지 확인합니다.</span></li>
+     <li><b>배터리 충방전</b><span>오래 돌리는 시험에는 에너지를 아끼는 ECO 형이 알맞습니다.</span></li>
+    </ul>
+   </section>
+
+   <section class="ps" id="awards" aria-labelledby="h-aw">
+    <h2 id="h-aw">규격과 수상</h2>
+    <ul class="aw">
+     <li><b>2025 굿디자인상</b><span>ECO형. 2025년 10월 17일 ESPEC 소식 기준.</span></li>
+     <li><b>2012 굿디자인상</b><span>Platinous J. ESPEC 과거 수상 표 기준.</span></li>
+     <li><b>에너지 절약 기계 수상</b><span>일본 기계진흥협회(Japan Machinery Federation) 수상 표시, 카탈로그 5쪽.</span></li>
+     <li><b>저 GWP 냉매 R-449A</b><span>선택 사양. 옵션과 맞춤 사양은 문의 시 안내해 드립니다.</span></li>
+    </ul>
+   </section>
+  </div>
+
+  <aside class="side" id="docs" aria-label="문의와 자료">
+   <div class="box"><h2>견적과 상담</h2><p class="tel">02-557-0505</p><p>팩스 02-557-2253</p><a class="btn btn-dark" href="#contact">견적문의</a></div>
+   <div class="box"><h2>자료</h2><p style="color:var(--text);margin-bottom:4px">ESPEC 공식 카탈로그 (영문 PDF)<br>Platinous J Series, CAT.NO.E15110-Q2504 · 약 9.6MB · 새 창</p><a class="btn btn-line" href="https://www.espec.co.jp/english/products/catalog/pj.pdf" target="_blank" rel="noopener">카탈로그 보기</a><a class="btn btn-line" href="#contact">한글 자료 요청</a></div>
+  </aside>
+ </div>
+</div>
+
+<section class="sec" aria-labelledby="h-rel"><div class="wrap">
+ <div class="sec-h"><h2 id="h-rel">함께 보는 제품</h2><a class="link" href="#">제품 전체 보기 →</a></div>
+ <div class="rel">
+  <a class="pc" href="#"><div class="pc-img"><img src="../../site/assets/img/web/sh-benchtop-mv.png" alt="SH Series 벤치탑 항온항습기" loading="lazy"></div><div class="pc-b"><h3>SH Series</h3><p class="pc-t">벤치탑 항온항습기</p><p class="pc-s">-60 <i class="u">~</i> +150<i class="u">°C</i></p></div></a>
+  <a class="pc" href="#"><div class="pc-img"><img src="../../site/assets/img/web/advanced-battery-tester-mv.png" alt="2차전지 시험 장비" loading="lazy"></div><div class="pc-b"><h3>Battery Test Equipment</h3><p class="pc-t">2차전지 시험 장비</p><p class="pc-s">-40 <i class="u">~</i> +100<i class="u">°C</i></p></div></a>
+  <a class="pc" href="#"><div class="pc-img"><img src="../../site/assets/img/web/ar-series-mv.png" alt="AR Series 급속 온도변화 시험기" loading="lazy"></div><div class="pc-b"><h3>AR Series</h3><p class="pc-t">급속 온도변화 시험기</p><p class="pc-s">-70 <i class="u">~</i> +180<i class="u">°C</i></p></div></a>
+ </div>
+</div></section>
+
+<section class="cta" id="contact" aria-labelledby="h-cta"><div class="wrap">
+ <div><h2 id="h-cta">Platinous J 견적을 받아 보세요</h2><p>시험 조건만 알려 주시면 맞는 모델을 안내해 드립니다. 대표전화 02-557-0505</p></div>
+ <div><a class="btn btn-dark" href="#">견적문의</a> <a class="btn btn-line" href="tel:025570505">전화하기</a></div>
+</div></section>
+
+<footer class="ft"><div class="wrap">
+ <div class="cols">
+  <div><a class="brand" href="main-b01.html"><b>J&amp;S ENGINEERING</b><span>제이에스 엔지니어링</span></a><p style="margin-top:12px">ESPEC 한국 공식 총대리점<br>대표이사 정창현</p></div>
+  <div><h4>본사·공장</h4><p>충남 아산시 둔포면 관대안길 31</p></div>
+  <div><h4>서울사무소</h4><p>서울시 강남구 삼성로82길 26<br>제이에스B/D 3층</p></div>
+  <div><h4>연락처</h4><p>대표전화 02-557-0505<br>팩스 02-557-2253</p></div>
+ </div>
+ <p class="copy">© J&amp;S ENGINEERING Corp. 제품 사진과 사양은 ESPEC 공개 자료를 바탕으로 합니다.</p>
+</div></footer>
+<script>document.querySelectorAll('.menu-btn').forEach(function(b){b.addEventListener('click',function(){var h=b.closest('.hd'),o=h.classList.toggle('open');b.setAttribute('aria-expanded',o)})})</script>
+</body>
+</html>

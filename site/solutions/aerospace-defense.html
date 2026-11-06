@@ -2,19 +2,24 @@
 title: 항공우주·방산 시험 솔루션 | 제이에스 엔지니어링
 description: 항공우주·방산 분야의 열충격 시험 장비와 고도·진동 시험 상담. ESPEC 한국 단독 총대리점 제이에스 엔지니어링.
 css: solutions
+extraCss: pages
 nav: solutions
-crumb: 항공우주·방산
 layout: layouts/base.njk
 ---
 {% from "partials/card.njk" import productCard %}
 <!-- 첫 화면: 산업 이름과 소개 문구 (문구는 여기서 고치세요) -->
-<section class="b-r-hero sol-hero" aria-labelledby="sol-title">
+<div class="pg">
+
+<!-- 페이지 머리: 경로 줄 + 회색 띠 제목 -->
+<nav class="pg-crumb" aria-label="현재 위치"><div class="wrap"><a href="../index.html">홈</a><i></i><a href="index.html">솔루션</a><i></i><span aria-current="page">항공우주·방산</span></div></nav>
+<header class="pg-title"><div class="wrap"><h1 id="sol-title">항공우주·방산</h1><p>Aerospace &amp; Defense · 산업별 신뢰성 솔루션</p></div></header>
+
+<!-- 소개 -->
+<section class="sec sol-hero" aria-label="소개">
   <div class="wrap sol-hero__in">
     <div>
-      <p class="b-r-hero__tag">SOLUTION &nbsp;/&nbsp; 산업별 신뢰성 솔루션</p>
-      <h1 class="b-r-hero__title" id="sol-title">Aerospace &amp; Defense<span class="sol-hero__ko">항공우주·방산</span></h1>
-      <p class="b-r-hero__sub">급격한 온도 변화를 재현하는 열충격 시험기를 안내하고, 고도(저기압)와 진동 시험은 시험 조건을 들은 뒤 맞는 장비를 상담해 드립니다.</p>
-      <div class="b-r-hero__cta"><a class="btn" href="../contact.html">항공우주·방산 시험 상담하기</a><a class="link-arrow" href="#equip">추천 장비 보기</a></div>
+      <p class="sol-lead">급격한 온도 변화를 재현하는 열충격 시험기를 안내하고, 고도(저기압)와 진동 시험은 시험 조건을 들은 뒤 맞는 장비를 상담해 드립니다.</p>
+      <div class="sol-cta"><a class="btn" href="../contact.html">항공우주·방산 시험 상담하기</a><a class="link-arrow" href="#equip">추천 장비 보기</a></div>
     </div>
     <figure class="sol-hero__fig">
       <div class="crop crop--color"><img src="../assets/img/hires/tsa-pair.jpg" width="2000" height="1501" fetchpriority="high" alt="TSA 시리즈 열충격 시험기 두 대"></div>
@@ -99,3 +104,5 @@ layout: layouts/base.njk
     <a class="btn btn--light" href="../contact.html">시험 장비 상담하기</a>
   </div>
 </section>
+
+</div>

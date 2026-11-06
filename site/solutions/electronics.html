@@ -2,19 +2,24 @@
 title: 전기전자 신뢰성 시험 솔루션 | 제이에스 엔지니어링
 description: 전기전자 기판과 부품의 온도 사이클, HAST, AI 서버 고발열 시험 장비. ESPEC 한국 단독 총대리점 제이에스 엔지니어링이 안내합니다.
 css: solutions
+extraCss: pages
 nav: solutions
-crumb: 전기전자
 layout: layouts/base.njk
 ---
 {% from "partials/card.njk" import productCard %}
 <!-- 첫 화면: 산업 이름과 소개 문구 (문구는 여기서 고치세요) -->
-<section class="b-r-hero sol-hero" aria-labelledby="sol-title">
+<div class="pg">
+
+<!-- 페이지 머리: 경로 줄 + 회색 띠 제목 -->
+<nav class="pg-crumb" aria-label="현재 위치"><div class="wrap"><a href="../index.html">홈</a><i></i><a href="index.html">솔루션</a><i></i><span aria-current="page">전기전자</span></div></nav>
+<header class="pg-title"><div class="wrap"><h1 id="sol-title">전기전자</h1><p>Electronics · 산업별 신뢰성 솔루션</p></div></header>
+
+<!-- 소개 -->
+<section class="sec sol-hero" aria-label="소개">
   <div class="wrap sol-hero__in">
     <div>
-      <p class="b-r-hero__tag">SOLUTION &nbsp;/&nbsp; 산업별 신뢰성 솔루션</p>
-      <h1 class="b-r-hero__title" id="sol-title">Electronics<span class="sol-hero__ko">전기전자</span></h1>
-      <p class="b-r-hero__sub">기판과 부품의 온도 사이클, 가속수명 시험부터 AI 서버 같은 고발열 장비 시험까지. 시험 대상 크기와 조건에 맞는 장비를 안내합니다.</p>
-      <div class="b-r-hero__cta"><a class="btn" href="../contact.html">전기전자 시험 상담하기</a><a class="link-arrow" href="#equip">추천 장비 보기</a></div>
+      <p class="sol-lead">기판과 부품의 온도 사이클, 가속수명 시험부터 AI 서버 같은 고발열 장비 시험까지. 시험 대상 크기와 조건에 맞는 장비를 안내합니다.</p>
+      <div class="sol-cta"><a class="btn" href="../contact.html">전기전자 시험 상담하기</a><a class="link-arrow" href="#equip">추천 장비 보기</a></div>
     </div>
     <figure class="sol-hero__fig">
       <!-- 장면 사진은 작아서 키우지 않고 상자 안에 원본 크기 이하로 둡니다 (--mw = 최대 가로) -->
@@ -105,3 +110,5 @@ layout: layouts/base.njk
     <a class="btn btn--light" href="../contact.html">전기전자 시험 장비 상담하기</a>
   </div>
 </section>
+
+</div>

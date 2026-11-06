@@ -5,7 +5,8 @@
   "scripts": {
     "build": "eleventy",
     "start": "eleventy --serve --port=8080",
-    "cms": "decap-server"
+    "cms": "decap-server",
+    "pdf": "node scripts/make-pdfs.mjs"
   },
   "dependencies": {
     "@11ty/eleventy": "3.1.7",

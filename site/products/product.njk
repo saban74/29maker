@@ -1,6 +1,9 @@
 ---
 # 제품 상세 페이지 틀 하나로 content/products/*.md 의 제품마다 한 페이지씩 만듭니다.
 # 주소: products/(주소용 이름).html
+# 2026-11-06 2차 디자인: 회색 띠(제품명 + 제조사 장비 사진) > 구역 바로가기 > 개요·수치·사양표·특징·사진·자료·관련 제품,
+# 오른쪽에 "장비 소개서 PDF 다운로드", ESPEC 카탈로그, 견적문의, 대표전화. (design/concepts5/product-platinous.html)
+# 제품 정보 파일에 값이 없는 구역은 화면에서 빠집니다.
 pagination:
   data: products
   size: 1
@@ -13,285 +16,210 @@ nav: products
 eleventyComputed:
   title: "{{ p.title }} | 제이에스 엔지니어링"
   description: "{{ p.description | safe }}"
-  hero: "{{ p.hero }}"
-  overlay: "{{ p.hero == 'aw' }}"
 ---
-{% from "partials/card.njk" import productCard %}
 {% set catInfo = productCategories | findBy("code", p.category) %}
 {% set quoteHref = ("contact.html?type=quote&product=" + (p.quote_name | qp)) | rel %}
-{% set specHref = ("contact.html?type=material&item=" + (p.material_name | qp) + "+사양서") | rel %}
-{% if p.hero == 'aw' %}
-<!-- 첫 화면 (b-aw-product-hero): 장비가 큰 글자({{ p.aw_word }})의 가운데 글자를 가린다 -->
-<section class="b-aw-wordcut-hero b-aw-product-hero{% if p.aw_variant %} b-aw-product-hero--{{ p.aw_variant }}{% endif %}" aria-label="제품 첫 화면">
-  <div class="b-aw-wordcut-hero__crumb">
-    <p><a href="{{ 'index.html' | rel }}">Home</a> &gt; <a href="index.html">제품소개</a> &gt; <a href="index.html">{{ catInfo.crumb }}</a> &gt; {{ p.name }}</p>
-    <p>ESPEC 한국 단독 총대리점 제이에스 엔지니어링</p>
-  </div>
-  <div class="b-aw-wordcut-hero__stage">
-    <img src="{{ p.photo.src | rel }}" width="{{ p.photo.width }}" height="{{ p.photo.height }}" fetchpriority="high" alt="{{ p.photo.alt }}">
-    <h1 class="b-aw-wordcut-hero__h">
-      <svg class="b-aw-wordcut-hero__word" viewBox="0 0 1000 160" role="img" aria-label="{{ p.aw_label }}">
-        <text x="0" y="120" font-size="132" textLength="1000" lengthAdjust="spacingAndGlyphs">{{ p.aw_word }}</text>
-      </svg>
-    </h1>
-    <img class="b-aw-wordcut-hero__cut" src="{{ p.photo.src | rel }}" width="{{ p.photo.width }}" height="{{ p.photo.height }}" alt="" aria-hidden="true">
-  </div>
-  <p class="b-aw-wordcut-hero__note"><b>{{ p.aw_title | h | safe }}</b>{{ p.lead | h | safe }}</p>
-  <div class="b-aw-wordcut-hero__acts">
-    <a class="btn" href="{{ quoteHref }}">견적문의</a>
-    <a class="link" href="#docs">{{ p.docs_button or '카탈로그 보기' }}</a>
-    <a class="link" href="{{ specHref }}">사양서 요청</a>
-  </div>
-</section>
-{% else %}
-<!-- 첫 화면 (b-r-product-hero): 사진{% if p.gallery and p.gallery.length > 1 %} 갤러리{% endif %} + 핵심 수치 + 체크 목록 + 버튼 -->
-<div class="b-r-product-hero">
-  <nav class="crumbs" aria-label="현재 위치">
-    <div class="wrap">
-      <ol><li><a href="{{ 'index.html' | rel }}">Home</a></li><li><a href="index.html">제품소개</a></li><li><a href="index.html">{{ catInfo.crumb }}</a></li><li><b aria-current="page">{{ p.name }}</b></li></ol>
-      <span>ESPEC 한국 단독 총대리점 <b>제이에스 엔지니어링</b></span>
-    </div>
-  </nav>
-  <section class="tone-studio b-r-product-hero__pdp" aria-labelledby="pdp-title">
-    <div class="wrap pdp__grid">
-      <div class="pdp__gallery">
-        <div class="pdp__main{% if p.photo_frame == 'pack' %} pdp__main--pack{% elif p.photo_frame == 'zoom' %} pdp__main--zoom{% endif %}"{% if p.photo_frame == 'zoom' %} style="--s:{{ p.photo_zoom.scale }};--ox:{{ p.photo_zoom.pos_x }};--oy:{{ p.photo_zoom.pos_y }}"{% endif %}><img id="main-photo" src="{{ p.photo.src | rel }}" width="{{ p.photo.width }}" height="{{ p.photo.height }}" fetchpriority="high" alt="{{ p.photo.alt }}"></div>
-{% if p.gallery and p.gallery.length > 1 %}
-        <div class="pdp__thumbs" role="group" aria-label="제품 사진 고르기">
-{% for g in p.gallery %}
-          <button type="button" aria-pressed="{{ 'true' if loop.first else 'false' }}" data-src="{{ g.src | rel }}" data-w="{{ g.width }}" data-h="{{ g.height }}" data-alt="{{ g.alt }}"><img src="{{ g.src | rel }}" alt="{{ g.label }}" width="{{ g.width }}" height="{{ g.height }}"></button>
-{% endfor %}
-        </div>
-{% endif %}
-{% if p.photo_note %}
-        <p class="src-note" style="margin-top:12px">{{ p.photo_note | h | safe }}</p>
+{% set pdfHref = ("assets/pdf/" + p.slug + ".pdf") | rel %}
+{# 회색 띠의 큰 사진: "상세 첫 화면 큰 사진(catalog_image)"이 있으면 그것, 없으면 대표 사진 #}
+{% set heroImg = p.catalog_image if (p.catalog_image and p.catalog_image.src) else p.photo %}
+{% set heroPack = (not (p.catalog_image and p.catalog_image.src)) and (p.photo_frame == "pack") %}
+{% set gal = (p.gallery or []) | withoutSrc(heroImg.src) | withoutSrc(p.photo.src) %}
+{# 오른쪽 상자에 보일 ESPEC 공식 카탈로그: 자료 목록에서 https:// 로 시작하는 첫 자료 #}
+{% set extDoc = p.docs | firstExternal %}
+
+<!-- 현재 위치 줄 -->
+<nav class="crumb" aria-label="현재 위치"><div class="wrap"><a href="{{ 'index.html' | rel }}">홈</a><i></i><a href="{{ 'products/index.html' | rel }}">제품소개</a><i></i><a href="{{ ('products/index.html#cat-' + p.category) | rel }}">{{ catInfo.crumb }}</a><i></i><span>{{ p.name }}</span></div></nav>
+
+<div class="wrap">
+  <!-- 1. 첫 화면 회색 띠: 제품명 + 제조사 장비 사진 -->
+  <section class="p-hero" aria-labelledby="pdp-title">
+    <div class="p-band">
+      <div class="p-band-t">
+        <h1 id="pdp-title">{{ (p.heading or p.name) | h | safe }}</h1>
+        <p class="ko">{{ p.title | h | safe }}</p>
+        <p class="sub">{{ p.lead | h | safe }}</p>
+{% if p.chip %}
+        <div class="badges"><span class="badge">{{ p.chip | h | safe }}</span></div>
 {% endif %}
       </div>
-      <div class="pdp__info">
-{% if p.chip %}
-        <span class="chip">{{ p.chip | h | safe }}</span>
+      <div class="p-band-i{% if heroPack %} p-band-i--pack{% endif %}"><img src="{{ heroImg.src | rel }}"{% if heroImg.width %} width="{{ heroImg.width }}" height="{{ heroImg.height }}"{% endif %} fetchpriority="high" alt="{{ heroImg.alt }}"></div>
+    </div>
+{% if p.photo_note %}
+    <p class="pn pn--photo">{{ p.photo_note | h | safe }}</p>
 {% endif %}
-        <h1 class="pdp__name" id="pdp-title">{{ (p.heading or p.name) | h | safe }}</h1>
-        <p class="pdp__type">{{ p.type_label | h | safe }}</p>
-        <p class="pdp__lead">{{ p.lead | h | safe }}</p>
-{% if p.kpis and p.kpis.length %}
-        <div class="keynums" role="group" aria-label="핵심 수치">
-{% for k in p.kpis %}
-          <div><strong>{{ k.value }}{{ k.unit }}</strong><span>{{ k.label | h | safe }}</span></div>
+  </section>
+
+  <div class="p-main">
+    <div>
+      <!-- 2. 구역 바로가기 -->
+      <nav class="p-nav" aria-label="구역 바로가기">
+        <a href="#overview">장비 개요</a>
+{% if p.kpis and p.kpis.length %}<a href="#range">핵심 수치</a>{% endif %}
+{% if p.spec_tables and p.spec_tables.length %}<a href="#specs">{{ p.specs_title or '모델별 사양' }}</a>{% endif %}
+{% if p.features and p.features.length %}<a href="#features">특징</a>{% endif %}
+{% if gal.length %}<a href="#gallery">사진</a>{% endif %}
+{% if p.awards and p.awards.length %}<a href="#awards">{{ p.awards_tab or '규격·수상' }}</a>{% endif %}
+        <a href="#docs">자료</a>
+{% if p.related.length %}<a href="#related">관련 제품</a>{% endif %}
+      </nav>
+
+      <!-- 3. 장비 개요: 용도(이런 시험에 씁니다) + 특징 요약 + 어울리는 산업 -->
+      <section class="p-sec" id="overview">
+        <h2>장비 개요</h2>
+        <p class="p-lead">{{ p.lead | h | safe }}</p>
+{% if p.uses and p.uses.length %}
+        <ul class="uses">
+{% for u in p.uses %}
+          <li><strong>{{ u.title | h | safe }}</strong>{{ u.text | h | safe }}</li>
 {% endfor %}
-        </div>
+        </ul>
 {% endif %}
 {% if p.checks and p.checks.length %}
-        <ul class="checks">
+        <ul class="chk" aria-label="특징 요약">
 {% for c in p.checks %}
           <li>{{ c | h | safe }}</li>
 {% endfor %}
         </ul>
 {% endif %}
-        <div class="btn-row">
-          <a class="btn" href="{{ quoteHref }}">견적문의</a>
-          <a class="btn btn--ghost" href="#docs">{{ p.docs_button or '카탈로그 보기' }}</a>
-          <a class="btn btn--ghost" href="{{ specHref }}">사양서 요청</a>
-        </div>
-      </div>
-    </div>
-  </section>
-</div>
-{% endif %}
-
-<!-- 탭 줄: 스크롤해도 머리말 밑에 붙어 있고, 지금 보는 구역이 표시된다 -->
-<nav class="b-product-tabs tone-graphite" aria-label="제품 안내 목차">
-  <div class="wrap"><ul>
-    <li><a href="#overview">개요</a></li>
-    <li><a href="#features">특징</a></li>
-    <li><a href="#specs">{{ p.specs_tab or '주요 사양' }}</a></li>
-{% if p.awards and p.awards.length %}
-    <li><a href="#awards">{{ p.awards_tab or '규격·수상' }}</a></li>
-{% endif %}
-    <li><a href="#support">지원</a></li>
-    <li><a href="#docs">자료</a></li>
-{% if p.related.length %}
-    <li><a href="#related">관련 제품</a></li>
-{% endif %}
-  </ul></div>
-</nav>
-{% set aw = p.hero == 'aw' %}
-{% if aw and p.kpis and p.kpis.length %}
-
-<!-- 핵심 수치 섹션 (큰 글자, 큰 글자 첫 화면일 때만) -->
-<section class="blk tone-silver b-product-kpi only-aw" aria-labelledby="kpi-h">
-  <div class="wrap b-product-kpi__in">
-    <h2 id="kpi-h">{{ p.kpi_title or '핵심 수치 (모델에 따라 다릅니다)' }}</h2>
-    <div class="b-product-kpi__box">
-      <div class="lines" aria-hidden="true">
-{% for k in p.kpis %}
-        <span class="l{{ loop.index }}">{{ k.value }}{% if k.unit %}<span class="u">{{ k.unit }}</span>{% endif %}</span>
-{% endfor %}
-      </div>
-    </div>
-    <div class="micro">
-      <dl>
-{% for k in p.kpis %}
-        <dt>{{ k.label | h | safe }}</dt><dd>{{ k.detail | h | safe }}</dd>
-{% endfor %}
-      </dl>
-    </div>
-  </div>
-</section>
-{% endif %}
-
-<!-- 개요 섹션: 이런 시험에 씁니다 -->
-<section class="blk {{ 'tone-studio' if aw else 'tone-white' }} b-product-overview" id="overview" aria-labelledby="ov-h">
-  <div class="wrap">
-    <h2 class="h-big" id="ov-h">이런 시험에 씁니다</h2>
-    <div class="b-product-overview__grid">
-      <div>
-        <ul class="use-list">
-{% for u in p.uses %}
-          <li><strong>{{ u.title | h | safe }}</strong>{{ u.text | h | safe }}</li>
-{% endfor %}
-        </ul>
 {% if p.industries.length %}
         <div class="tags" aria-label="어울리는 산업">{% for code in p.industries %}{% set ind = industries | findBy("code", code) %}<a href="{{ ('solutions/' + code + '.html') | rel }}">{{ ind.label }}</a>{% endfor %}</div>
 {% endif %}
-        <p class="src-note" style="margin-top:14px">산업 분류는 제이에스 엔지니어링 솔루션 구분입니다. 산업별 적합 모델은 문의해 주세요.</p>
-      </div>
-{% if p.overview_photo %}
-{# 배경 큰 글자 폭: 글자 수 × 125 (최소 1000) #}
-{% set tl = (p.bg_word | length) * 125 %}
-      <figure class="line-fig{% if p.overview_pack %} line-fig--pack{% endif %}">
-        <svg class="bg-word" viewBox="0 0 {{ tl if tl > 1000 else 1000 }} 170" aria-hidden="true"><text x="0" y="132" font-size="150" textLength="{{ tl }}" lengthAdjust="spacingAndGlyphs">{{ p.bg_word }}</text></svg>
-        <img class="float-photo" src="{{ p.overview_photo.src | rel }}" width="{{ p.overview_photo.width }}" height="{{ p.overview_photo.height }}" alt="{{ p.overview_photo.alt }}"{% if p.overview_photo_max %} style="width:min(100%,{{ p.overview_photo_max }})"{% endif %} loading="lazy">
-      </figure>
-{% endif %}
-    </div>
-  </div>
-</section>
+        <p class="p-co">제이에스 엔지니어링은 1981년부터 ESPEC 한국 총대리점입니다. 도입 상담, 견적, 설치와 A/S 범위는 문의해 주세요.</p>
+      </section>
 
-<!-- 특징 섹션{% if not aw %} (카드형){% endif %} -->
-<section class="blk {{ 'tone-graphite b-product-features' if aw else 'tone-studio b-product-features b-product-features--cards' }}" id="features" aria-labelledby="ft-h">
-  <div class="wrap">
-    <h2 class="h-big" id="ft-h">특징</h2>
-    <ul class="facts">
-{% for f in p.features %}
-      <li><b>{{ f.big | h | safe }}</b><h3>{{ f.title | h | safe }}</h3><p>{{ f.text | h | safe }}</p></li>
+{% if p.kpis and p.kpis.length %}
+      <!-- 4. 핵심 수치 -->
+      <section class="p-sec" id="range">
+        <h2>{{ p.kpi_title or '핵심 수치' }}</h2>
+        <div class="kpis">
+{% for k in p.kpis %}
+          <div class="kpi"><b>{{ k | kv }}</b><span>{{ k.label | h | safe }}</span>{% if k.detail %}<small>{{ k.detail | h | safe }}</small>{% endif %}</div>
 {% endfor %}
-    </ul>
-  </div>
-</section>
+        </div>
+      </section>
+{% endif %}
 
-<!-- 주요 사양 섹션 (사양표) -->
-<section class="blk {{ 'tone-studio' if aw else 'tone-white' }} b-product-spec" id="specs" aria-labelledby="sp-h">
-  <div class="wrap">
-    <h2 class="h-big" id="sp-h">{{ p.specs_title or '모델별 사양' }}</h2>
+{% if p.spec_tables and p.spec_tables.length %}
+      <!-- 5. 사양표 -->
+      <section class="p-sec" id="specs">
+        <h2>{{ p.specs_title or '모델별 사양' }}</h2>
 {% for t in p.spec_tables %}
 {% set hasQuote = t.rows | selectattr("quote") | list | length %}
 {% if t.title %}
-
-    <h3 class="spec-title">{{ t.title | h | safe }}{% if t.small %}<small>{{ t.small | h | safe }}</small>{% endif %}</h3>
+        <h3 class="stbl-title">{{ t.title | h | safe }}{% if t.small %}<small>{{ t.small | h | safe }}</small>{% endif %}</h3>
 {% endif %}
-    <div class="table-scroll" tabindex="0" role="region" aria-label="{{ t.label or ((t.title or '모델별 사양') + ' 표') }}, 좌우로 밀어서 보기">
-      <table class="spec{% if t.kv %} spec--kv{% endif %}">
+        <div class="tbl-wrap" tabindex="0" role="region" aria-label="{{ t.label or ((t.title or '모델별 사양') + ' 표') }}, 좌우로 밀어서 보기">
+          <table class="stbl">
 {% if t.columns %}
-        <thead><tr>{% for col in t.columns | lines %}<th scope="col">{{ col | h | safe }}</th>{% endfor %}{% if hasQuote %}<th scope="col"><span class="sr-only">견적</span></th>{% endif %}</tr></thead>
+            <thead><tr>{% for col in t.columns | lines %}<th scope="col">{{ col | h | safe }}</th>{% endfor %}{% if hasQuote %}<th scope="col"><span class="sr">견적</span></th>{% endif %}</tr></thead>
 {% endif %}
-        <tbody>
+            <tbody>
 {% for r in t.rows %}
-          <tr><th scope="row">{{ r.head | h | safe }}{% if r.sub %}<span class="sub">{{ r.sub | h | safe }}</span>{% endif %}</th>{% for cell in r.cells | lines %}<td>{{ cell | h | safe }}</td>{% endfor %}{% if hasQuote %}<td>{% if r.quote %}<a class="link" href="{{ ('contact.html?type=quote&product=' + (r.quote | qp)) | rel }}">이 모델 견적</a>{% endif %}</td>{% endif %}</tr>
+              <tr><th scope="row">{{ r.head | h | safe }}{% if r.sub %}<small>{{ r.sub | h | safe }}</small>{% endif %}</th>{% for cell in r.cells | lines %}<td>{{ cell | h | safe }}</td>{% endfor %}{% if hasQuote %}<td>{% if r.quote %}<a class="qlink" href="{{ ('contact.html?type=quote&product=' + (r.quote | qp)) | rel }}">이 모델 견적</a>{% endif %}</td>{% endif %}</tr>
 {% endfor %}
-        </tbody>
-      </table>
-    </div>
+            </tbody>
+          </table>
+        </div>
 {% endfor %}
 {% if p.spec_more and p.spec_more.title %}
-
-    <div class="spec-more">
-      <h3>{{ p.spec_more.title | h | safe }}</h3>
-      <p>{{ p.spec_more.text | h | safe }}</p>
-      <ul class="name-list" aria-label="{{ p.spec_more.title }}">
-        {% for it in p.spec_more.items %}<li>{{ it | h | safe }}</li>{% endfor %}
-
-      </ul>
+        <div class="spec-more">
+          <h3>{{ p.spec_more.title | h | safe }}</h3>
+          <p>{{ p.spec_more.text | h | safe }}</p>
+          <ul class="names">{% for it in p.spec_more.items %}<li>{{ it | h | safe }}</li>{% endfor %}</ul>
 {% if p.spec_more.button %}
-      <a class="btn btn--ghost" href="{{ p.spec_more.button_link | rel }}">{{ p.spec_more.button }}</a>
+          <a class="btn btn--line" href="{{ p.spec_more.button_link | rel }}">{{ p.spec_more.button }}</a>
 {% endif %}
-    </div>
+        </div>
 {% endif %}
 {% if p.spec_note %}
-    <p class="note">{{ p.spec_note | h | safe }}</p>
+        <p class="pn">{{ p.spec_note | h | safe }}</p>
 {% endif %}
-  </div>
-</section>
+      </section>
+{% endif %}
+
+{% if p.features and p.features.length %}
+      <!-- 6. 특징 -->
+      <section class="p-sec" id="features">
+        <h2>특징</h2>
+        <div class="feat">
+{% for f in p.features %}
+          <div class="feat-i"><b{% if (f.big | length) > 6 %} class="long"{% endif %}>{{ f.big | h | safe }}</b><h3>{{ f.title | h | safe }}</h3><p>{{ f.text | h | safe }}</p></div>
+{% endfor %}
+        </div>
+      </section>
+{% endif %}
+
+{% if gal.length %}
+      <!-- 7. 사진 (제품 정보 파일의 "사진 갤러리") -->
+      <section class="p-sec" id="gallery">
+        <h2>모델별 사진</h2>
+        <div class="gal">
+{% for g in gal %}
+          <figure><img src="{{ g.src | rel }}"{% if g.width %} width="{{ g.width }}" height="{{ g.height }}"{% endif %} alt="{{ g.alt }}" loading="lazy">{% if g.label %}<figcaption>{{ g.label | h | safe }}</figcaption>{% endif %}</figure>
+{% endfor %}
+        </div>
+        <p class="pn">사진 출처: ESPEC Corp. 제품 카탈로그 및 공식 웹사이트.</p>
+      </section>
+{% endif %}
 
 {% if p.awards and p.awards.length %}
-<!-- 규격과 수상 섹션 (목록이 비어 있으면 구역과 탭이 숨겨짐) -->
-<section class="blk tone-silver b-product-awards" id="awards" aria-labelledby="aw-h">
-  <div class="wrap">
-    <h2 class="h-big" id="aw-h">{{ p.awards_title or '규격과 수상' }}</h2>
-    <ul class="award-list">
+      <!-- 8. 규격·수상 -->
+      <section class="p-sec" id="awards">
+        <h2>{{ p.awards_title or '규격과 수상' }}</h2>
+        <ul class="awd">
 {% for a in p.awards %}
-      <li><b>{{ a.title | h | safe }}</b><p class="micro">{{ a.text | h | safe }}</p></li>
+          <li><b>{{ a.title | h | safe }}</b>{% if a.text %}<span>{{ a.text | h | safe }}</span>{% endif %}</li>
 {% endfor %}
-    </ul>
-  </div>
-</section>
+        </ul>
+      </section>
 {% endif %}
 
-<!-- 제이에스 엔지니어링 지원 섹션 (도입부터 A/S까지): 모든 제품에 같은 내용 -->
-<section class="blk tone-graphite b-product-support" id="support" aria-labelledby="sup-h">
-  <div class="wrap">
-    <h2 class="h-big" id="sup-h">도입부터 A/S까지</h2>
-    <ol class="flow">
-      <li><b>도입 상담</b><span>시험 조건 확인 <span class="tbd">[확인 필요]</span></span></li>
-      <li><b>사양 확정</b><span>모델·옵션 선택 <span class="tbd">[확인 필요]</span></span></li>
-      <li><b>견적</b><span>견적서 안내 <span class="tbd">[확인 필요]</span></span></li>
-      <li><b>납품·설치</b><span>설치 범위 <span class="tbd">[확인 필요]</span></span></li>
-      <li><b>A/S</b><span>사후 관리 범위 <span class="tbd">[확인 필요]</span></span></li>
-    </ol>
-    <div class="micro">
-      <p>ESPEC 기술진과 정기적으로 기술 협력하는 제이에스 엔지니어링 서비스 조직이 사후 관리를 맡습니다.</p>
-      <p style="margin-top:14px"><a class="link-arrow" href="{{ 'service.html' | rel }}">서비스 보기</a></p>
-    </div>
-  </div>
-</section>
-
-<!-- 자료 섹션 -->
-<section class="blk tone-studio b-product-docs" id="docs" aria-labelledby="doc-h">
-  <div class="wrap">
-    <h2 class="h-big" id="doc-h">자료</h2>
-    <ul class="doc-list">
+      <!-- 9. 자료 -->
+      <section class="p-sec" id="docs">
+        <h2>자료</h2>
+        <div class="docs">
+          <a href="{{ pdfHref }}" download><span>장비 소개서 PDF (제이에스 엔지니어링 제작, 한국어)<small>A4 · {{ p.name }}</small></span></a>
 {% for d in p.docs %}
 {% set external = d.url and (d.url.indexOf('http') == 0) %}
-      <li><div><strong>{{ d.title | h | safe }}</strong><span>{{ d.text | h | safe }}</span></div><a class="{{ 'btn btn--ghost' if external else 'btn' }}" href="{{ d.url | rel }}"{% if external %} target="_blank" rel="noopener"{% endif %}>{{ d.button or '보기' }}</a></li>
+          <a href="{{ d.url | rel }}"{% if external %} target="_blank" rel="noopener"{% endif %}><span>{{ d.title | h | safe }}{% if d.text %}<small>{{ d.text | h | safe }}</small>{% endif %}</span></a>
 {% endfor %}
 {% if p.docs_request != false %}
-      <li><div><strong>자료 요청</strong><span>문의 양식으로 연결됩니다.</span></div><a class="btn" href="{{ ('contact.html?type=material&item=' + (p.material_name | qp) + '+자료') | rel }}">자료 요청</a></li>
+          <a href="{{ ('contact.html?type=material&item=' + (p.material_name | qp) + '+자료') | rel }}"><span>자료 요청<small>문의 양식으로 연결됩니다.</small></span></a>
 {% endif %}
-    </ul>
-  </div>
-</section>
+        </div>
+      </section>
 
 {% if p.related.length %}
-<!-- 관련 제품 섹션 (관리자 화면의 "관련 제품"에서 고른 제품 카드가 자동으로 나옴. 비어 있으면 구역과 탭이 숨겨짐) -->
-<section class="blk tone-white b-product-related" id="related" aria-labelledby="rel-h">
-  <div class="wrap">
-    <div class="sec-head"><h2 class="h-big" id="rel-h">함께 보는 장비</h2><a class="link-arrow" href="index.html">전체 제품 보기</a></div>
-    <div class="prod-grid prod-grid--3">
+      <!-- 10. 관련 제품 (제품 정보 파일의 "관련 제품"에서 고른 제품이 자동으로 나옴) -->
+      <section class="p-sec" id="related">
+        <h2>관련 제품</h2>
+        <div class="rel">
 {% for r in p.related %}
 {% set rp = products | bySlug(r.product) %}
 {% if rp %}
-      {{ productCard(rp, rp | cardOf(rp.card_related, r), '', page.url) }}
+{% set rc = rp | cardOf(rp.card_related, r) %}
+          <a href="{{ ('products/' + rp.slug + '.html') | rel }}"><div class="pt">{% if rc.images and rc.images.length %}<img src="{{ rc.images[0].src | rel }}" alt="" loading="lazy">{% endif %}</div><p>{{ rc.name | h | safe }}</p></a>
 {% endif %}
 {% endfor %}
-    </div>
-  </div>
-</section>
+        </div>
+      </section>
 {% endif %}
+    </div>
 
-<!-- 견적 띠 -->
-<section class="blk tone-graphite b-cta" id="quote" aria-labelledby="cta-h">
-  <div class="wrap b-cta__in">
-    <div><h2 id="cta-h">{{ p.cta_title | h | safe }}</h2><p>{% if p.cta_text %}{{ p.cta_text | h | safe }} {% endif %}전화 상담 <a href="tel:0255570505" style="color:inherit;text-decoration:underline">02-557-0505</a></p></div>
-    <a class="btn btn--light" href="{{ quoteHref }}">견적문의</a>
+    <!-- 오른쪽: 장비 소개서 PDF, ESPEC 카탈로그, 견적문의, 대표전화 -->
+    <aside class="p-side" aria-label="자료와 문의">
+      <a class="dl" href="{{ pdfHref }}" download>
+        <span class="dl-top"><span class="dl-ico" aria-hidden="true">PDF</span><strong>장비 소개서 PDF 다운로드</strong></span>
+        <span class="dl-meta"><span>{{ p.name }} 한국어 소개서</span><em>PDF · A4</em></span>
+      </a>
+      <div class="side-box">
+{% if extDoc %}
+        <a class="l" href="{{ extDoc.url }}" target="_blank" rel="noopener">{{ extDoc.title | h | safe }}</a>
+{% if extDoc.text %}<small>{{ extDoc.text | h | safe }}</small>{% endif %}
+{% endif %}
+        <a class="btn btn--accent" href="{{ quoteHref }}">견적문의</a>
+      </div>
+      <div class="tel"><small>대표전화</small><b><a href="tel:0255570505">02-557-0505</a></b></div>
+    </aside>
   </div>
-</section>
+</div>

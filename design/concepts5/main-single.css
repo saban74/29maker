@@ -1,0 +1,143 @@
+/* 대표 장비 1종 주인공 메인 시안 5개 공통 추가 규칙 (base.css 위에 얹음) */
+
+/* ---- 첫 화면 공통 ---- */
+.hero h1{font-size:clamp(27px,3.6vw,44px);letter-spacing:-.02em;line-height:1.28}
+.hero .since{font-size:14px;color:var(--navy);font-weight:600;margin-bottom:12px}
+.hero .lead{font-size:16px;color:var(--text);line-height:1.7;margin-top:16px;max-width:520px}
+.hero .acts{display:flex;gap:10px;margin-top:24px;flex-wrap:wrap}
+.hero .photo-note{font-size:12px;color:var(--muted)}
+.hero img{mix-blend-mode:multiply}
+
+/* 안1 Platinous J: 회색 띠 + 왼쪽 카피 + 오른쪽 장비 */
+.h-s1{background:linear-gradient(180deg,#d4d7db 0%,#f1f2f4 100%)}
+.h-s1 .wrap{display:grid;grid-template-columns:minmax(0,5fr) minmax(0,7fr);align-items:center;gap:16px;min-height:520px}
+.h-s1 .copy{padding:40px 0}
+.h-s1 .mini{display:flex;gap:0;margin-top:28px;max-width:520px;background:#fff}
+.h-s1 .mini div{flex:1;padding:12px 16px;border-left:1px solid var(--line)}
+.h-s1 .mini div:first-child{border-left:0}
+.h-s1 .mini b{display:block;font-size:20px;color:var(--navy);line-height:1.3}
+.h-s1 .mini span{font-size:13px;color:var(--muted)}
+.h-s1 .pic img{width:100%;max-width:760px;margin-left:auto}
+
+/* 안2 TSA: 가운데 큰 장비 + 아래 수치 3개 */
+.h-s2{background:#fff;text-align:center;padding-top:44px}
+.h-s2 .lead{margin-left:auto;margin-right:auto}
+.h-s2 .acts{justify-content:center}
+.h-s2 .pic{margin:8px auto 0;max-width:880px}
+.h-s2 .pic img{width:100%}
+.h-s2 .kpis{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));background:var(--navy);color:#fff}
+.h-s2 .kpis div{padding:22px 16px;border-left:1px solid rgba(255,255,255,.2)}
+.h-s2 .kpis div:first-child{border-left:0}
+.h-s2 .kpis b{display:block;font-size:30px;line-height:1.3}
+.h-s2 .kpis span{font-size:14px;color:#dbe4f2}
+
+/* 안3 HAST: 왼쪽 사진, 오른쪽 남색 사양 패널 */
+.h-s3{display:grid;grid-template-columns:minmax(0,7fr) minmax(0,5fr);background:#e9ebee}
+.h-s3 .pic{display:flex;align-items:center;justify-content:center;padding:24px}
+.h-s3 .pic img{width:100%;max-width:720px}
+.h-s3 .panel{background:var(--navy);color:#fff;padding:48px max(var(--gut),calc((100vw - var(--wrap))/2)) 48px 48px}
+.h-s3 .panel h1,.h-s3 .panel .since{color:#fff}
+.h-s3 .panel .lead{color:#dbe4f2}
+.h-s3 dl{margin:24px 0 0;max-width:460px}
+.h-s3 dl div{display:flex;justify-content:space-between;gap:16px;padding:10px 0;border-bottom:1px solid rgba(255,255,255,.25)}
+.h-s3 dt{color:#c3d0e6;font-size:14px}
+.h-s3 dd{margin:0;font-weight:700;font-size:16px;text-align:right}
+.h-s3 .btn{background:#fff;color:var(--navy);border-color:#fff}
+.h-s3 .btn--line{background:transparent;color:#fff;border-color:#fff}
+.h-s3 .btn--line:hover{background:rgba(255,255,255,.12);color:#fff}
+
+/* 안4 AR: 장비 사진 + 실사용 장면 분할 */
+.h-s4{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);min-height:560px}
+.h-s4 .left{background:linear-gradient(180deg,#e3e5e8,#f6f7f8);padding:40px max(var(--gut),calc((100vw - var(--wrap))/2)) 0 max(var(--gut),calc((100vw - var(--wrap))/2));display:flex;flex-direction:column}
+.h-s4 .left .pic{margin-top:auto}
+.h-s4 .left .pic img{width:100%;max-width:640px}
+.h-s4 .right{position:relative;min-height:320px;background:#2a2f35}
+.h-s4 .right img{width:100%;height:100%;object-fit:cover;mix-blend-mode:normal;position:absolute;inset:0}
+.h-s4 .right figcaption{position:absolute;left:0;right:0;bottom:0;padding:28px 24px 16px;background:rgba(20,26,34,.72);color:#fff;font-size:14px}
+.h-s4 .right{margin:0}
+.h-s4 .acts{margin-bottom:28px}
+
+/* 안5 워크인: 어두운 배경 극적 */
+.h-s5{background:#02030a;color:#e6eaf0}
+.h-s5 .top{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:32px;align-items:end;padding-top:44px}
+.h-s5 h1{color:#fff}
+.h-s5 .since{color:#9fb7dd}
+.h-s5 .lead{color:#c9d1dc}
+.h-s5 .kpis{display:flex;gap:28px}
+.h-s5 .kpis div{border-left:3px solid var(--accent);padding-left:14px}
+.h-s5 .kpis b{display:block;color:#fff;font-size:24px;line-height:1.3}
+.h-s5 .kpis span{font-size:13px;color:#a9b3c1}
+.h-s5 .pic{max-width:1500px;margin:0 auto}
+.h-s5 .pic img{width:100%;mix-blend-mode:normal}
+.h-s5 .btn--line{background:transparent;color:#fff;border-color:#8b97a8}
+.h-s5 .btn--line:hover{background:rgba(255,255,255,.1);color:#fff}
+.h-s5 .acts{margin-top:20px}
+
+/* ---- 공지 박스 ---- */
+.notices{padding:40px 0 8px}
+.notice{display:block;border:2px solid #555c63;padding:16px 22px;margin-bottom:14px;background:#fff}
+.notice b{display:block;color:var(--ink);font-size:16px}
+.notice span{font-size:14px;color:var(--text)}
+
+/* ---- 제품 정보 ---- */
+.prod-wrap{display:grid;grid-template-columns:minmax(0,1.1fr) minmax(0,1fr);gap:36px;align-items:center;margin-top:24px}
+.prod-wrap h3{font-size:18px;margin-bottom:8px}
+.prod-pic{background:linear-gradient(180deg,#e3e5e8,#f6f7f8);padding:8px}
+.prod-pic img{width:100%;mix-blend-mode:multiply}
+.center{text-align:center;margin-top:28px}
+.sec--tight{padding:56px 0}
+
+/* ---- 서비스 타일 ---- */
+.tiles--6{grid-template-columns:repeat(3,minmax(0,1fr))}
+
+/* ---- 회사 소개 ---- */
+.about{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px}
+.card{display:block;position:relative;background:#fff}
+.card .ph{aspect-ratio:4/3;display:block;width:100%;object-fit:contain;background:linear-gradient(180deg,#e3e5e8,#f6f7f8)}
+.card .lab{display:flex;justify-content:space-between;align-items:center;padding:12px 16px;background:var(--navy);color:#fff;font-weight:600}
+.card .lab::after{content:"";width:7px;height:7px;border-top:2px solid #fff;border-right:2px solid #fff;transform:rotate(45deg)}
+.card:hover .lab{background:var(--navy-2)}
+.card:hover{color:#fff}
+
+/* ---- 뉴스 ---- */
+.tabs{display:flex;border:1px solid var(--line);background:#fff;margin-bottom:8px}
+.tabs button{flex:1;height:44px;border:0;border-left:1px solid var(--line);background:#fff;font:600 14px var(--f);color:var(--ink);cursor:pointer}
+.tabs button:first-child{border-left:0}
+.tabs button[aria-selected="true"]{background:var(--navy);color:#fff}
+.news-list li{display:grid;grid-template-columns:104px 112px minmax(0,1fr);gap:12px;align-items:center;padding:14px 4px;border-bottom:1px solid var(--line)}
+.news-list time{font-size:14px;color:var(--muted)}
+.news-list .badge{display:inline-block;text-align:center;font-size:12px;padding:3px 8px;background:#e8eef8;color:var(--navy)}
+.news-list .badge.corp{background:#efe8f5;color:#5a3a7c}
+.news-list li[hidden]{display:none}
+.news-list a{color:var(--ink)}
+.news-list a:hover{color:var(--link);text-decoration:underline}
+
+/* 휴대폰 메뉴 */
+@media (max-width:1023px){
+  .gnb.open{display:flex;flex-direction:column;gap:0;position:absolute;left:0;right:0;top:100%;background:#fff;border-bottom:4px solid var(--accent);padding:8px var(--gut)}
+  .gnb.open a{padding:12px 0;border-bottom:1px solid var(--line-2)}
+  .hd-main{position:relative}
+  .h-s1 .wrap{grid-template-columns:minmax(0,1fr);min-height:0}
+  .h-s1 .pic img{margin:0 auto}
+  .h-s3,.h-s4{grid-template-columns:minmax(0,1fr)}
+  .h-s3 .panel{padding:32px var(--gut)}
+  .h-s4 .left{padding:32px var(--gut) 0}
+  .h-s5 .top{grid-template-columns:minmax(0,1fr)}
+  .prod-wrap{grid-template-columns:minmax(0,1fr)}
+  .about{grid-template-columns:minmax(0,1fr)}
+  .tiles--6{grid-template-columns:repeat(2,minmax(0,1fr))}
+}
+@media (max-width:640px){
+  .h-s2 .kpis{grid-template-columns:minmax(0,1fr)}
+  .h-s2 .kpis div{border-left:0;border-top:1px solid rgba(255,255,255,.2)}
+  .h-s2 .kpis b{font-size:24px}
+  .h-s1 .mini{flex-direction:column}
+  .h-s1 .mini div{border-left:0;border-top:1px solid var(--line)}
+  .h-s5 .kpis{flex-direction:column;gap:12px}
+  .tiles--6{grid-template-columns:minmax(0,1fr)}
+  .tabs{flex-wrap:wrap}
+  .tabs button{flex:1 1 50%;border-top:1px solid var(--line)}
+  .news-list li{grid-template-columns:minmax(0,1fr) auto;gap:4px 12px}
+  .news-list a{grid-column:1/-1;grid-row:2}
+  .hero .acts .btn{flex:1}
+}

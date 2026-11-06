@@ -7,7 +7,8 @@
     css          이 페이지 묶음 CSS: pages / products / solutions
     nav          주 메뉴에서 "현재 위치"로 표시할 칸: about, products, solutions, resources, service, contact
     overlay      true 면 첫 화면 위에 투명하게 겹치는 머리말 (큰 글자 첫 화면 페이지)
-    hero         (제품 상세) body 의 data-hero 값: aw 또는 r
+    extraCss     (선택) 추가로 불러올 CSS 이름. 예: home (메인 전용 site/css/home.css)
+    bodyClass    (선택) body 에 붙일 클래스. 예: home
     scripts      (선택) 더 불러올 스크립트 목록. 예: [js/pages.js]
     crumb        (선택, 솔루션 산업 페이지) 현재 위치 줄의 마지막 이름
   주소는 모두 "rel" 필터로 지금 페이지 기준 상대 주소가 됩니다.
@@ -28,17 +29,22 @@
 <meta property="og:title" content="{{ title }}">
 <meta property="og:description" content="{{ description }}">
 <meta property="og:url" content="{{ site.url }}{{ page.url }}">
-<meta name="theme-color" content="#e8e8e8">
+<meta name="theme-color" content="#ffffff">
 <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Michroma&display=swap">
+{# 2026-11-06 2차 디자인: 옛 tokens/components 는 아직 옛 틀을 쓰는 페이지를 위해 유지하고, 새 base.css 를 그 뒤에 두어 새 머리말·꼬리말·버튼이 이기게 합니다. #}
 <link rel="stylesheet" href="{{ 'css/tokens.css' | rel }}">
 <link rel="stylesheet" href="{{ 'css/components.css' | rel }}">
+<link rel="stylesheet" href="{{ 'css/base.css' | rel }}">
 <link rel="stylesheet" href="{{ ('css/' + (css or 'pages') + '.css') | rel }}">
+{% if extraCss %}
+<link rel="stylesheet" href="{{ ('css/' + extraCss + '.css') | rel }}">
+{% endif %}
 </head>
-<body{% if hero %} data-hero="{{ hero }}"{% endif %}>
+<body{% if bodyClass %} class="{{ bodyClass }}"{% endif %}>
 <a class="skip" href="#main">본문 바로가기</a>
 
 {% include "partials/header.njk" %}

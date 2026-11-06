@@ -2,29 +2,23 @@
 title: 파트너 네트워크 | 제이에스 엔지니어링
 description: 제이에스 엔지니어링의 거점과 파트너. 일본 ESPEC, SHINKEN과 45년 동안 함께해 왔습니다.
 css: pages
+nav: about
 layout: layouts/base.njk
 ---
 {#
-  파트너 네트워크: 제목 > 거점·파트너 카드 > ESPEC 소개 > 견적 띠
+  파트너 네트워크: 페이지 머리 > 거점·파트너 카드 > ESPEC 소개 > 견적 띠
 #}
-<!-- 1. 제목 영역 -->
-<section class="b-r-hero pg-head" aria-labelledby="pg-title">
-  <div class="wrap b-r-hero__top">
-    <div>
-      <p class="b-r-hero__tag">GLOBAL NETWORK &nbsp;/&nbsp; SINCE 1981</p>
-      <h1 class="b-r-hero__title" id="pg-title">Partnership<br>since 1981</h1>
-    </div>
-    <div>
-      <p class="b-r-hero__sub"><strong>일본 ESPEC, SHINKEN과 함께해 왔습니다.</strong>제이에스 엔지니어링은 1981년 두 회사와 한국 대리점 계약을 맺은 이래 ESPEC 환경시험 장비와 SHINKEN 진동 시험기를 국내 고객에게 공급하고 있습니다.</p>
-    </div>
-  </div>
-</section>
+<div class="pg">
 
-<!-- 2. 거점과 파트너 카드 -->
-<section class="blk tone-studio b-r-partners" aria-labelledby="sites-h">
+<!-- 페이지 머리: 경로 줄 + 회색 띠 제목 -->
+<nav class="pg-crumb" aria-label="현재 위치"><div class="wrap"><a href="index.html">홈</a><i></i><a href="about.html">회사소개</a><i></i><span aria-current="page">파트너 네트워크</span></div></nav>
+<header class="pg-title"><div class="wrap"><h1>파트너 네트워크</h1><p>Partnership since 1981</p><p class="pg-sub">제이에스 엔지니어링은 1981년 일본 ESPEC, SHINKEN과 한국 대리점 계약을 맺은 이래 ESPEC 환경시험 장비와 SHINKEN 진동 시험기를 국내 고객에게 공급하고 있습니다.</p></div></header>
+
+<!-- 1. 거점과 파트너 카드 -->
+<section class="sec" aria-labelledby="sites-h">
   <div class="wrap">
     <div class="sec-head">
-      <div><span class="label">Network</span><h2 class="h-sec" id="sites-h">거점과 파트너</h2></div>
+      <div><h2 class="h-sec" id="sites-h">거점과 파트너</h2><span class="label">Network</span></div>
       <a class="link-arrow" href="about.html#location">오시는 길 보기</a>
     </div>
     <div class="partner-grid partner-grid--4">
@@ -39,14 +33,11 @@ layout: layouts/base.njk
   </div>
 </section>
 
-<!-- 3. ESPEC 소개 (수집 자료에 있는 사실만, 출처 링크 표기) -->
-<section class="blk tone-white" aria-labelledby="espec-h">
+<!-- 2. ESPEC 소개 (수집 자료에 있는 사실만, 출처 링크 표기) -->
+<section class="sec" aria-labelledby="espec-h">
   <div class="wrap">
     <div class="two-col">
-      <div>
-        <span class="label">About ESPEC</span>
-        <h2 class="h-sec" id="espec-h">ESPEC은 어떤 회사인가</h2>
-      </div>
+      <div class="sec-h"><h2 id="espec-h">ESPEC은 어떤 회사인가</h2><p>About ESPEC</p></div>
       <div>
         <div class="prose">
           <p>ESPEC은 환경시험 장비를 만드는 일본 기업입니다. 항온항습기, 열충격 시험기부터 배터리와 반도체 평가 장비까지 신뢰성 시험 장비를 폭넓게 공급합니다.</p>
@@ -64,10 +55,12 @@ layout: layouts/base.njk
   </div>
 </section>
 
-<!-- 4. 견적 띠 -->
-<section class="blk tone-graphite b-cta" aria-labelledby="cta-h">
+<!-- 3. 견적 띠 -->
+<section class="b-cta" aria-labelledby="cta-h">
   <div class="wrap b-cta__in">
-    <div><h2 id="cta-h">시험 조건을 알려 주시면 맞는 장비와 견적을 안내합니다.</h2><p>전화 상담 <a href="tel:0255570505" style="color:inherit;text-decoration:underline">02-557-0505</a></p></div>
-    <a class="btn btn--light" href="contact.html">견적문의</a>
+    <div><h2 id="cta-h">시험 조건을 알려 주시면 맞는 장비와 견적을 안내합니다.</h2><p>전화 상담 <a href="tel:0255570505">02-557-0505</a></p></div>
+    <a class="btn" href="contact.html">견적문의</a>
   </div>
 </section>
+
+</div>
