@@ -8,12 +8,17 @@ layout: layouts/base.njk
 ---
 {% from "partials/card.njk" import productCard %}
 <!-- 첫 화면: 산업 이름과 소개 문구 (사진을 바꾸려면 아래 img 를 고치세요) -->
-<section class="b-r-hero sol-hero" aria-labelledby="sol-title">
+<div class="pg">
+
+<!-- 페이지 머리: 경로 줄 + 회색 띠 제목 -->
+<nav class="pg-crumb" aria-label="현재 위치"><div class="wrap"><a href="../index.html">홈</a><i></i><a href="index.html">솔루션</a><i></i><span aria-current="page">소재·기타</span></div></nav>
+<header class="pg-title"><div class="wrap"><h1 id="sol-title">소재·기타</h1><p>Materials · 산업별 신뢰성 솔루션</p></div></header>
+
+<!-- 소개 -->
+<section class="sec sol-hero" aria-label="소개">
   <div class="wrap sol-hero__in">
     <div>
-      <p class="b-r-hero__tag">SOLUTION &nbsp;/&nbsp; 산업별 신뢰성 솔루션</p>
-      <h1 class="b-r-hero__title" id="sol-title">Materials<span class="sol-hero__ko">소재·기타</span></h1>
-      <p class="b-r-hero__sub">소재 열처리와 고온 시험, 연구실과 개발 부서의 소형 항온항습 시험까지. 시료 크기와 시험 목적에 맞는 장비를 안내합니다.</p>
+      <p class="sol-lead">소재 열처리와 고온 시험, 연구실과 개발 부서의 소형 항온항습 시험까지. 시료 크기와 시험 목적에 맞는 장비를 안내합니다.</p>
       <div class="b-r-hero__cta"><a class="btn" href="../contact.html">소재·연구 시험 상담하기</a><a class="link-arrow" href="#equip">추천 장비 보기</a></div>
     </div>
     <figure class="sol-hero__fig">
