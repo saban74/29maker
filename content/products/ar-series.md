@@ -25,6 +25,11 @@ photo_zoom:
   scale: "1.3"
   pos_x: 49%
   pos_y: 52%
+catalog_image:
+  src: /assets/img/catalog/ar-pair.jpg
+  width: 1714
+  height: 1143
+  alt: ESPEC AR 시리즈 급속 온도변화 시험기 두 대가 나란히 서 있는 모습
 photo_note: 제품 사진은 ESPEC 공식 자료입니다.
 kpis:
   - value: "-70~+180°C"
