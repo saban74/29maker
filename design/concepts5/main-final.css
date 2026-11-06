@@ -1,0 +1,84 @@
+/* 최종 메인(main-final.html) 추가 규칙. base.css + main-group.css 위에 덮어씀 */
+.hero[hidden]{display:none!important}
+
+/* ---------- 공지: 얇은 한 줄 띠 ---------- */
+.notice{grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;padding:10px var(--gut)}
+.notice a{display:flex;align-items:center;gap:12px;border:1px solid var(--line);background:var(--bg-gray);padding:7px 14px;font-size:13px;line-height:1.5;min-width:0}
+.notice b{display:block;flex:1;min-width:0;font-size:13.5px;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.notice span{flex:none;font-size:13px;color:var(--muted)}
+.notice a::after{flex:none}
+
+/* ---------- G1 쇼룸 2단 ---------- */
+.hero--g1{background:#f4f5f7;overflow:hidden}
+.hero--g1 .top{padding-top:40px;padding-bottom:12px}
+.hero--g1 h1{font-size:44px;line-height:1.25;letter-spacing:-.02em;max-width:640px}
+.hero--g1 .sub{margin-top:10px;font-size:16px;color:var(--ink);max-width:560px}
+.hero--g1 .btns{display:flex;flex-wrap:wrap;gap:10px;margin-top:20px}
+/* 뒷줄: 벽 + 발 밑에서 바닥 시작 */
+.tier{display:block}
+.tier .row{display:flex;justify-content:space-between;align-items:flex-end}
+.tier figure{margin:0;display:block}
+.tier a{display:block}
+.tier img{width:100%;height:auto;filter:drop-shadow(0 10px 8px rgba(0,0,0,.16))}
+.tier figcaption{font-size:13px;line-height:30px;height:30px;text-align:center;font-weight:600;color:var(--ink);white-space:nowrap}
+.tier--back{background:linear-gradient(#f4f5f7 calc(100% - 30px),#d6dade calc(100% - 30px))}
+.tier--back .row{padding:0 3% }
+.tier--back img{filter:drop-shadow(0 8px 6px rgba(0,0,0,.14))}
+.tier--front{background:linear-gradient(#d6dade,#e9ebee);padding-top:14px;padding-bottom:6px}
+.tier--front img{filter:drop-shadow(0 14px 10px rgba(0,0,0,.2))}
+/* 폭(가로 1200 기준 %): 원본의 약 0.66~0.70배, 1.2배 제한 안쪽 */
+.f-pj{width:39%;max-width:792px}.f-tsa{width:27%;max-width:552px}.f-wk{width:27%;max-width:558px}
+.b-ar{width:23%;max-width:504px}.b-hast{width:15.5%;max-width:332px}.b-tcc{width:15.5%;max-width:328px}.b-ami{width:20.5%;max-width:445px}
+
+/* ---------- G2 카탈로그 (8칸: 장비 7 + 안내 1) ---------- */
+.hero--g2 .g2-grid{grid-template-columns:repeat(4,minmax(0,1fr))}
+.hero--g2 .g2-cell{border-right:1px solid var(--line-2)}
+.hero--g2 .g2-cell:nth-child(4n){border-right:0}
+.hero--g2 .g2-cell:nth-child(n+5){border-top:1px solid var(--line-2)}
+.hero--g2 .g2-cell--cta{background:var(--bg-gray);justify-content:center;gap:10px}
+.hero--g2 .g2-cell--cta h2{margin:0}
+.hero--g2 .g2-cell--cta .btn{margin-top:6px}
+.hero--g2 .g2-top{padding-bottom:28px}
+
+/* ---------- G3 탭 7개 ---------- */
+.hero--g3 .g3-list label{padding:14px 20px}
+.hero--g3 .g3-body{min-height:500px}
+.hero--g3 .g3-panel .pic--mv img{width:100%;height:auto;max-width:var(--mw,320px)}
+#g3t1:checked ~ .g3-body .p1,#g3t2:checked ~ .g3-body .p2,#g3t3:checked ~ .g3-body .p3,#g3t4:checked ~ .g3-body .p4,#g3t5:checked ~ .g3-body .p5,#g3t6:checked ~ .g3-body .p6,#g3t7:checked ~ .g3-body .p7{display:grid}
+#g3t1:checked ~ .g3-body label[for=g3t1],#g3t2:checked ~ .g3-body label[for=g3t2],#g3t3:checked ~ .g3-body label[for=g3t3],#g3t4:checked ~ .g3-body label[for=g3t4],#g3t5:checked ~ .g3-body label[for=g3t5],#g3t6:checked ~ .g3-body label[for=g3t6],#g3t7:checked ~ .g3-body label[for=g3t7]{border-left-color:var(--accent);background:var(--bg-gray);color:var(--navy)}
+#g3t1:focus-visible ~ .g3-body label[for=g3t1],#g3t2:focus-visible ~ .g3-body label[for=g3t2],#g3t3:focus-visible ~ .g3-body label[for=g3t3],#g3t4:focus-visible ~ .g3-body label[for=g3t4],#g3t5:focus-visible ~ .g3-body label[for=g3t5],#g3t6:focus-visible ~ .g3-body label[for=g3t6],#g3t7:focus-visible ~ .g3-body label[for=g3t7]{outline:2px solid var(--navy-2);outline-offset:-2px}
+
+/* ---------- G4 카드 6개 ---------- */
+.hero--g4 .g4-big{min-height:0}
+.hero--g4 .g4-card .ph{aspect-ratio:16/10}
+.hero--g4 .g4-card .ph img{padding:6px 0 0}
+
+@media (max-width:1023px){
+  .hero--g2 .g2-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .hero--g2 .g2-cell:nth-child(n){border-right:1px solid var(--line-2);border-top:0;border-bottom:1px solid var(--line-2)}
+  .hero--g2 .g2-cell:nth-child(2n){border-right:0}
+  #g3t1:checked ~ .g3-body label[for=g3t1],#g3t2:checked ~ .g3-body label[for=g3t2],#g3t3:checked ~ .g3-body label[for=g3t3],#g3t4:checked ~ .g3-body label[for=g3t4],#g3t5:checked ~ .g3-body label[for=g3t5],#g3t6:checked ~ .g3-body label[for=g3t6],#g3t7:checked ~ .g3-body label[for=g3t7]{border-left-color:transparent;border-bottom-color:var(--accent)}
+  .hero--g4 .g4-big{min-height:460px}
+}
+@media (max-width:760px){
+  .notice{grid-template-columns:minmax(0,1fr)}
+  .hero--g1 h1{font-size:30px}
+  .hero--g1 .top{padding-top:28px}
+  /* 휴대폰: 2열로 접고 바닥은 한 톤 */
+  .tier--back,.tier--front{background:#e4e7ea;padding-top:10px}
+  .tier--back{padding-bottom:0}
+  .tier .row{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:6px 12px;align-items:end;padding:0}
+  .tier figure{width:auto!important;max-width:none!important}
+  .tier .f-pj{grid-column:1/-1}
+  .tier .f-pj img{width:80%;margin:0 auto}
+  .tier figcaption{height:26px;line-height:26px}
+}
+@media (max-width:640px){
+  .hero--g2 .g2-grid{grid-template-columns:minmax(0,1fr)}
+  .hero--g2 .g2-cell:nth-child(n){border-right:0}
+  .hero--g2 .g2-top h1,.hero--g2 h1{font-size:28px}
+  .hero--g4 .g4-four{grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+  .hero--g4 .g4-card p{display:none}
+  .hero--g4 .g4-card div.t{padding:10px}
+  .hero--g3 .g3-panel .txt{padding:20px 16px}
+}
