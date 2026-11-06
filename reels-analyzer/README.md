@@ -14,7 +14,13 @@
    ```bash
    node reels-analyzer/fetch-reels.mjs 인스타아이디 10 --transcript
    ```
-4. **분석** (프롬프트 2): `ANALYSIS-PROMPT.md` 내용을 Claude Code에 붙여 넣고 위 파일을 알려 줍니다.
+4. **대본 뽑기** (위스퍼): 조회수 상위 10개 영상을 OpenAI 위스퍼(whisper-1, 단어별 시각)로 받아 적고, 0~3초를 '훅'으로 따로 저장합니다. `.env` 에 `OPENAI_API_KEY` 필요.
+   ```bash
+   node reels-analyzer/transcribe.mjs reels-analyzer/output/아이디-날짜.json 10
+   ```
+   → `아이디-날짜-transcripts.json` 에 저장 (위스퍼 요금: 1분에 약 $0.006)
+   인스타 영상 서버에 접속이 안 되는 곳(클라우드 등)에서는 3단계에서 `--video` 를 붙여 Apify에 영상 사본을 남겨 두면 그걸 대신 씁니다. (1개당 $0.02)
+5. **분석** (프롬프트 2): `ANALYSIS-PROMPT.md` 내용을 Claude Code에 붙여 넣고 위 파일을 알려 줍니다.
 
 ## 참고
 - 필요한 것: Node.js 18 이상 (설치할 패키지 없음)
