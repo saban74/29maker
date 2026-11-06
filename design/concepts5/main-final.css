@@ -31,10 +31,10 @@
 .b-ar{width:23%;max-width:504px}.b-hast{width:15.5%;max-width:332px}.b-tcc{width:15.5%;max-width:328px}.b-ami{width:20.5%;max-width:445px}
 
 /* ---------- G2 카탈로그 (8칸: 장비 7 + 안내 1) ---------- */
-.hero--g2 .g2-grid{grid-template-columns:repeat(4,minmax(0,1fr))}
+.hero--g2 .g2-grid{grid-template-columns:repeat(5,minmax(0,1fr))}
 .hero--g2 .g2-cell{border-right:1px solid var(--line-2)}
-.hero--g2 .g2-cell:nth-child(4n){border-right:0}
-.hero--g2 .g2-cell:nth-child(n+5){border-top:1px solid var(--line-2)}
+.hero--g2 .g2-cell:nth-child(5n){border-right:0}
+
 .hero--g2 .g2-cell--cta{background:var(--bg-gray);justify-content:center;gap:10px}
 .hero--g2 .g2-cell--cta h2{margin:0}
 .hero--g2 .g2-cell--cta .btn{margin-top:6px}
@@ -81,4 +81,18 @@
   .hero--g4 .g4-card p{display:none}
   .hero--g4 .g4-card div.t{padding:10px}
   .hero--g3 .g3-panel .txt{padding:20px 16px}
+}
+
+/* G1 쇼룸 5종 한 줄 (사용자 요청: 2단 대신 5개 한 줄) — 폭은 원본 가로 비율, 살짝 겹쳐서 크게 */
+.tier--one{background:linear-gradient(#f4f5f7 0%,#f4f5f7 58%,#dfe2e6 58%,#eceef0 100%);padding:8px 0 10px}
+.row5{max-width:1400px;margin:0 auto;padding:0 16px;display:flex;align-items:flex-end;justify-content:center}
+.row5 figure{margin:0;flex:none;position:relative}
+.row5 figure+figure{margin-left:-2.2%}
+.row5 img{width:100%;height:auto;filter:drop-shadow(0 14px 10px rgba(0,0,0,.18))}
+.row5 figcaption{font-size:13px;font-weight:600;color:var(--ink);text-align:center;line-height:30px;white-space:nowrap}
+.o-ar{width:19.4%;z-index:1}.o-pj{width:31.2%;z-index:3}.o-hast{width:13.2%;z-index:4}.o-tsa{width:22.4%;z-index:3}.o-wk{width:21.9%;z-index:2}
+@media (max-width:760px){
+  .row5{flex-wrap:wrap;justify-content:center;gap:4px 10px}
+  .row5 figure+figure{margin-left:0}
+  .row5 .o-pj{width:92%!important;order:-1}.row5 .o-ar,.row5 .o-tsa,.row5 .o-wk{width:44%!important}.row5 .o-hast{width:30%!important}
 }
