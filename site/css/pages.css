@@ -232,7 +232,7 @@
   .pg-title h1 { font-size: 24px; }
   .pg > section.sec, .pg > section.blk { padding: 40px 0; }
   .pg .sec-head .h-sec, .pg .h-sec { font-size: 22px; }
-  .pg .facts, .pg .sites, .pg .flow, .pg .kpis, .pg .partner-grid, .pg .partner-grid--4, .pg .ind-grid, .pg .type-pick, .pg .fields, .pg .tiles-wrap .tiles { grid-template-columns: minmax(0, 1fr); }
+  .pg .facts, .pg .sites, .pg .flow, .pg .kpis, .pg .partner-grid, .pg .partner-grid--4, .pg .ind-grid, .pg .type-pick, .pg .fields, .pg .tiles-wrap .tiles, .pg .tiles-wrap .tiles--4 { grid-template-columns: minmax(0, 1fr); }
   .pg .era dl { grid-template-columns: 52px minmax(0, 1fr); gap: 8px 12px; }
   .pg .era { padding: 16px; }
   .pg .loc dl { grid-template-columns: minmax(0, 1fr); }
