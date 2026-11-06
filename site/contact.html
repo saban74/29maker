@@ -1,6 +1,6 @@
 ---
 title: 견적·문의 | 제이에스 엔지니어링
-description: 견적 요청, 기술 상담, 자료 요청, A/S, 위탁 시험 문의. 온라인 접수는 준비 중이며, 지금은 전화·이메일로 문의해 주세요.
+description: 견적 요청, 기술 상담, 자료 요청, 서비스 접수, A/S, 위탁 시험 문의. 온라인 접수는 준비 중이며, 지금은 전화·이메일로 문의해 주세요.
 css: pages
 nav: contact
 scripts:
@@ -8,26 +8,20 @@ scripts:
 layout: layouts/base.njk
 ---
 {#
-  견적·문의: 제목 > 문의 폼(유형 선택 > 용도 > 장비 > 조건 > 연락처) + 옆 연락처 상자.
+  견적·문의: 페이지 머리 > 문의 폼(유형 선택 > 용도 > 장비 > 조건 > 연락처) + 옆 연락처 상자.
      폼은 아직 전송이 연결되어 있지 않습니다. 연결 방법이 정해지면 pages.js 의 submit 부분과 form 의 action 을 고치세요.
+     주소로 유형 미리 선택: contact.html?type=quote / consult / material / as / service / lab / etc
 #}
-<!-- 1. 제목 영역 -->
-<section class="b-r-hero pg-head" aria-labelledby="pg-title">
-  <div class="wrap b-r-hero__top">
-    <div>
-      <p class="b-r-hero__tag">CONTACT</p>
-      <h1 class="b-r-hero__title" id="pg-title">Request<br>a quote</h1>
-    </div>
-    <div>
-      <p class="b-r-hero__sub"><strong>견적·문의</strong>온라인 접수는 준비 중입니다. 아래 항목을 미리 정리해 두시면 전화 상담이 빨라집니다. 응답 시간은 <span class="tbd">[확인 필요: 영업일 기준 ○일 이내]</span>입니다.</p>
-    </div>
-  </div>
-</section>
+<div class="pg">
 
-<!-- 2. 문의 폼 -->
-<section class="blk tone-white" aria-labelledby="form-h">
+<!-- 페이지 머리: 경로 줄 + 회색 띠 제목 -->
+<nav class="pg-crumb" aria-label="현재 위치"><div class="wrap"><a href="index.html">홈</a><i></i><span aria-current="page">견적·문의</span></div></nav>
+<header class="pg-title"><div class="wrap"><h1>견적·문의</h1><p>Contact</p><p class="pg-sub">온라인 접수는 준비 중입니다. 아래 항목을 미리 정리해 두시면 전화 상담이 빨라집니다. 응답 시간은 <span class="tbd">[확인 필요: 영업일 기준 ○일 이내]</span>입니다.</p></div></header>
+
+<!-- 1. 문의 폼 -->
+<section class="sec sec--white" aria-labelledby="form-h">
   <div class="wrap">
-    <h2 class="sr-only" id="form-h">문의 양식</h2>
+    <h2 class="sr" id="form-h">문의 양식</h2>
     <div class="contact-grid">
 
       <!-- data-endpoints : 문의를 받을 주소들. 비워 두면 "온라인 접수 준비 중" 안내만 나옵니다.
@@ -36,7 +30,7 @@ layout: layouts/base.njk
            자세한 설명은 site/INTEGRATION.md 를 보세요. -->
       <form class="cform" id="contact-form" data-endpoints="">
         <!-- 안내·오류 영역 (aria-live): JS 가 없어도 처음부터 보이고, 보내기 버튼을 누르면 JS 가 다시 읽어 줍니다 -->
-        <p class="callout" id="form-notice" aria-live="polite" style="margin-bottom:var(--sp-7)">온라인 문의 접수는 준비 중입니다. 대표전화 <a class="link" href="tel:0255570505">02-557-0505</a>로 문의해 주세요. <span class="tbd">[확인 필요: 문의 접수 방법 연결 전]</span></p>
+        <p class="callout" id="form-notice" aria-live="polite" style="margin-bottom:28px">온라인 문의 접수는 준비 중입니다. 대표전화 <a class="link" href="tel:0255570505">02-557-0505</a>로 문의해 주세요. <span class="tbd">[확인 필요: 문의 접수 방법 연결 전]</span></p>
 
         <!-- 스팸 방지용 숨김 칸: 사람은 보지 못하고 비워 두며, 자동 입력 프로그램이 채우면 JS 가 보내지 않습니다. 지우지 마세요. -->
         <div class="hp" aria-hidden="true"><label>이 칸은 비워 두세요 <input type="text" name="website" tabindex="-1" autocomplete="off"></label></div>
@@ -47,6 +41,7 @@ layout: layouts/base.njk
             <label><input type="radio" name="type" value="quote" checked><span>견적 요청</span></label>
             <label><input type="radio" name="type" value="consult"><span>기술 상담</span></label>
             <label><input type="radio" name="type" value="material"><span>자료 요청</span></label>
+            <label><input type="radio" name="type" value="service"><span>서비스 접수(점검·수리)</span></label>
             <label><input type="radio" name="type" value="as"><span>A/S·유지보수</span></label>
             <label><input type="radio" name="type" value="lab"><span>위탁 시험</span></label>
             <label><input type="radio" name="type" value="etc"><span>기타</span></label>
@@ -84,14 +79,14 @@ layout: layouts/base.njk
           </div>
         </fieldset>
 
-        <!-- 장비: 견적 요청, 기술 상담, 자료 요청, A/S 일 때 -->
-        <fieldset data-for="quote consult material as">
+        <!-- 장비: 견적 요청, 기술 상담, 자료 요청, 서비스 접수, A/S 일 때 -->
+        <fieldset data-for="quote consult material service as">
           <legend><span>03</span>장비</legend>
           <div class="fields">
             <div class="field">
               <label for="f-product">관심 제품 또는 모델명</label>
               <input type="text" id="f-product" name="product" autocomplete="off">
-              <span class="hint">제품 페이지에서 오셨다면 자동으로 입력됩니다. A/S는 장비 번호도 적어 주세요.</span>
+              <span class="hint">제품 페이지에서 오셨다면 자동으로 입력됩니다. 서비스 접수·A/S는 장비 번호도 적어 주세요.</span>
             </div>
             <div class="field" data-for="quote consult">
               <label for="f-count">필요 대수</label>
@@ -163,3 +158,5 @@ layout: layouts/base.njk
     </div>
   </div>
 </section>
+
+</div>
