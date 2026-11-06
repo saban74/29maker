@@ -10,6 +10,10 @@
    node reels-analyzer/fetch-reels.mjs 인스타아이디 20
    ```
    → `reels-analyzer/output/아이디-날짜.json` 에 저장됩니다.
+   대본(말한 내용)까지 가져오려면 끝에 `--transcript` 를 붙입니다. (릴스 1개당 약 $0.048 추가)
+   ```bash
+   node reels-analyzer/fetch-reels.mjs 인스타아이디 10 --transcript
+   ```
 4. **분석** (프롬프트 2): `ANALYSIS-PROMPT.md` 내용을 Claude Code에 붙여 넣고 위 파일을 알려 줍니다.
 
 ## 참고
@@ -17,3 +21,7 @@
 - 개수를 크게 하면 Apify 크레딧이 더 듭니다. 처음엔 10~20개로 시험하세요.
 - 공개 계정만 가져올 수 있습니다.
 - 가져온 자료에는 조회수·좋아요·댓글 수·캡션·날짜·영상 길이 등이 들어 있습니다. 말한 내용(대본)이 들어 있지 않다면 "영상을 봐야 아는 항목"은 분석 결과에 [눈으로 확인]으로 따로 표시됩니다.
+- **클라우드(claude.ai/code)에서 실행할 때**: 토큰은 작업 공간 설정에 저장되어 자동으로 붙습니다. `.env` 없이 아래처럼 실행합니다.
+  ```bash
+  APIFY_TOKEN=proxy-injected node reels-analyzer/fetch-reels.mjs 인스타아이디 10
+  ```

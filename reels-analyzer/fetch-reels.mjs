@@ -28,9 +28,11 @@ if (fs.existsSync(envFile)) {
 }
 
 // 2) 입력값 확인
-const [rawUser, rawCount] = process.argv.slice(2);
+const args = process.argv.slice(2);
+const withTranscript = args.includes("--transcript"); // 대본(말한 내용) 함께 가져오기 — 유료 추가 기능
+const [rawUser, rawCount] = args.filter((a) => !a.startsWith("--"));
 if (!rawUser) {
-  console.error("사용법: node reels-analyzer/fetch-reels.mjs <인스타 아이디> [개수]");
+  console.error("사용법: node reels-analyzer/fetch-reels.mjs <인스타 아이디> [개수] [--transcript]");
   process.exit(1);
 }
 // @nike, https://www.instagram.com/nike/ 같은 형태도 아이디만 뽑아 씀
@@ -58,9 +60,16 @@ if (!token) {
 const input = {
   username: [username],
   resultsLimit: count,
+  skipPinnedPosts: true, // 고정(핀) 릴스는 오래된 것이어도 맨 앞에 와서 '최근 순'이 틀어지므로 뺌
+  includeTranscript: withTranscript,
 };
 
-console.log(`@${username} 릴스 ${count}개 가져오는 중... (보통 1~3분 걸립니다)`);
+// 예상 비용 (2026-11 기준 Apify 무료 요금: 시작 $0.001, 릴스 1개 $0.0026, 대본 1개 $0.048)
+const estimate = 0.001 + count * (0.0026 + (withTranscript ? 0.048 : 0));
+console.log(
+  `@${username} 릴스 ${count}개 가져오는 중${withTranscript ? " (대본 포함)" : ""}... ` +
+    `예상 비용 약 $${estimate.toFixed(3)} · 보통 1~3분 걸립니다`
+);
 
 const url = `https://api.apify.com/v2/acts/${ACTOR}/run-sync-get-dataset-items?format=json`;
 let res;
@@ -115,5 +124,6 @@ for (const r of result) {
   const views = r.videoPlayCount ?? r.videoViewCount ?? "?";
   const date = (r.timestamp || "").slice(0, 10);
   const caption = (r.caption || "").replace(/\s+/g, " ").slice(0, 40);
-  console.log(`${date}  조회 ${views}  좋아요 ${r.likesCount ?? "?"}  댓글 ${r.commentsCount ?? "?"}  ${caption}`);
+  const script = withTranscript ? (r.transcript ? "  [대본 있음]" : "  [대본 없음]") : "";
+  console.log(`${date}  조회 ${views}  좋아요 ${r.likesCount ?? "?"}  댓글 ${r.commentsCount ?? "?"}  ${caption}${script}`);
 }
