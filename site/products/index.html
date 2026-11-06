@@ -45,9 +45,9 @@ layout: layouts/base.njk
       <section class="l-sec" id="cat-others">
         <h2 class="l-h">그 밖의 라인업 (상담 가능)<span>{{ otherLineup.length }}종</span></h2>
         <p class="pn" style="margin:-8px 0 8px">아래 장비도 상담할 수 있습니다. 자세한 사양은 ESPEC 공식 페이지를 참고하시거나 제이에스 엔지니어링에 문의해 주세요. 국내 공급 가능 여부는 상담 때 안내합니다. <span class="tbd">[확인 필요]</span></p>
-        <ul class="docs">
+        <ul class="oth-list">
 {% for o in otherLineup %}
-          <li class="oth"><span class="oth-t"><b>{{ o.name }}</b><small>{{ o.desc | h | safe }}</small></span><span class="oth-a">{% if o.espec %}<a class="qlink" href="{{ o.espec }}" target="_blank" rel="noopener">ESPEC 원문 (영문, 새 창)</a>{% endif %}<a class="qlink" href="{{ ('contact.html?type=consult&item=' + (o.item | qp)) | rel }}">문의</a></span></li>
+          <li><span class="oth-t"><b>{{ o.name }}</b><small>{{ o.desc | h | safe }}</small></span><span class="oth-a">{% if o.espec %}<a class="qlink" href="{{ o.espec }}" target="_blank" rel="noopener">ESPEC 원문 (영문, 새 창)</a>{% endif %}<a class="qlink" href="{{ ('contact.html?type=consult&item=' + (o.item | qp)) | rel }}">문의</a></span></li>
 {% endfor %}
         </ul>
       </section>

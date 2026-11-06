@@ -147,6 +147,12 @@
 .pcard p{font-size:13px;color:var(--muted);line-height:1.6}
 .pcard:hover h3{color:var(--link)}
 .l-sec+.l-sec{margin-top:48px}
+.pcard p.temp{color:var(--navy);font-weight:600;margin-top:4px}
+.oth-list li{display:flex;justify-content:space-between;align-items:center;gap:6px 16px;flex-wrap:wrap;padding:12px 4px;border-bottom:1px solid var(--line);font-size:14px}
+.oth-t{min-width:0}
+.oth-t b{color:var(--ink)}
+.oth-t small{display:block;color:var(--muted);font-size:12px}
+.oth-a{display:flex;gap:14px;flex:none}
 
 @media (max-width:1023px){
   .p-band{grid-template-columns:minmax(0,1fr)}
