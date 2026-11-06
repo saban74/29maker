@@ -96,7 +96,7 @@
         if (el.type === 'file') { data[el.name + 'FileName'] = el.files && el.files[0] ? el.files[0].name : ''; return; }
         data[el.name] = el.value;
       });
-      var labels = { quote: '견적 요청', consult: '기술 상담', material: '자료 요청', as: 'A/S·유지보수', lab: '위탁 시험', etc: '기타' };
+      var labels = { quote: '견적 요청', consult: '기술 상담', material: '자료 요청', as: 'A/S·유지보수', service: '서비스 접수(점검·수리)', lab: '위탁 시험', etc: '기타' };
       data.typeLabel = labels[data.type] || '';
       data.pageUrl = window.location.href;
       data.submittedAt = new Date().toISOString();

@@ -81,7 +81,18 @@ export default function (eleventyConfig) {
     (list || []).filter((p) => p.featured === true).sort((a, b) => (Number(a.featured_order) || 999) - (Number(b.featured_order) || 999)));
   // 메인 "최신 소식" 3개: ① 고정 글 ② "메인에 보이기"를 켠 글, 각각 날짜 최신순 (news 는 이미 고정 → 최신순으로 정렬됨)
   eleventyConfig.addFilter("homeNews", (list, n = 3) => (list || []).filter((x) => x.pinned === true || x.show_on_home === true).slice(0, n));
-  eleventyConfig.addFilter("where", (list, key, value) => (list || []).filter((x) => x && x[key] === value));
+  // 메인 "공지 띠" n개: 공지(공지사항 분류·고정 글)를 먼저, 모자라면 최신 소식으로 채운다 (news 는 이미 고정 → 최신순)
+  eleventyConfig.addFilter("noticeStrip", (list, n = 2) => {
+    const all = list || [];
+    const first = all.filter((x) => x.pinned === true || x.category === "notice");
+    const rest = all.filter((x) => !first.includes(x));
+    return [...first, ...rest].slice(0, n);
+  });
+  // 핵심 수치 하나를 글자로: 값 + 단위, "~" 앞뒤는 띄어 쓴다. 예) "-70~+100" + "°C" → "-70 ~ +100°C"
+  eleventyConfig.addFilter("kv", (k) => (k ? String(k.value ?? "") + String(k.unit ?? "") : "").replace(/\s*~\s*/g, " ~ "));
+  // 사진 목록에서 특정 사진(주소가 같은 것)을 뺀다. 갤러리에서 대표 사진이 두 번 나오지 않게 한다.
+  eleventyConfig.addFilter("withoutSrc", (list, src) => (list || []).filter((x) => x && x.src !== src));
+  eleventyConfig.addFilter("where",(list, key, value) => (list || []).filter((x) => x && x[key] === value));
   eleventyConfig.addFilter("findBy", (list, key, value) => (list || []).find((x) => x && x[key] === value));
   eleventyConfig.addFilter("bySlug", (list, slug) => (list || []).find((p) => p.slug === slug));
   eleventyConfig.addFilter("lines", (v) => String(v || "").split("|").map((s) => s.trim()));

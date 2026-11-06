@@ -34,6 +34,21 @@
   }
   syncHeader();
 
+  /* 1-2) 2차 디자인 머리말(.hd): 휴대폰 햄버거 버튼을 누르면 메뉴가 펼쳐지고, 다시 누르거나 Esc 를 누르면 닫힌다 */
+  var hd = d.getElementById('site-header');
+  var menuBtn = hd ? hd.querySelector('.menu-btn') : null;
+  if (menuBtn) {
+    var setMenu = function (open) {
+      hd.classList.toggle('is-open', open);
+      menuBtn.setAttribute('aria-expanded', open ? 'true' : 'false');
+      menuBtn.setAttribute('aria-label', open ? '메뉴 닫기' : '메뉴 열기');
+    };
+    menuBtn.addEventListener('click', function () { setMenu(!hd.classList.contains('is-open')); });
+    d.addEventListener('keydown', function (e) {
+      if ((e.key === 'Escape' || e.key === 'Esc') && hd.classList.contains('is-open')) { setMenu(false); menuBtn.focus(); }
+    });
+  }
+
   /* 2) b-aw-bigword-list: 단어에 올리거나 포커스를 주면 오른쪽 사진이 바뀐다 */
   [].forEach.call(d.querySelectorAll('.b-aw-bigword-list'), function (block) {
     var links = [].slice.call(block.querySelectorAll('.bw-list a'));

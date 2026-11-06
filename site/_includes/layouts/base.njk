@@ -35,8 +35,10 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Michroma&display=swap">
+{# 2026-11-06 2차 디자인: 옛 tokens/components 는 아직 옛 틀을 쓰는 페이지를 위해 유지하고, 새 base.css 를 그 뒤에 두어 새 머리말·꼬리말·버튼이 이기게 합니다. #}
 <link rel="stylesheet" href="{{ 'css/tokens.css' | rel }}">
 <link rel="stylesheet" href="{{ 'css/components.css' | rel }}">
+<link rel="stylesheet" href="{{ 'css/base.css' | rel }}">
 <link rel="stylesheet" href="{{ ('css/' + (css or 'pages') + '.css') | rel }}">
 {% if extraCss %}
 <link rel="stylesheet" href="{{ ('css/' + extraCss + '.css') | rel }}">
