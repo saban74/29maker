@@ -17,9 +17,16 @@
 | 글쓰기, 요약, 번역, 다듬기 | `writer` |
 | 코드 설명 | `code-explainer` |
 | 코드 검토 | `code-reviewer` |
+| 릴스 카드영상 만들기 | `reels-producer` (스킬: `reels-maker`) |
+| 글·대본·영상 검수 | `content-reviewer` |
 
 - 간단한 질문은 에이전트 없이 바로 답합니다.
 - 큰 일은 순서대로 이어서 맡깁니다. 예: `planner`로 계획 → 직접 개발 → `code-reviewer`로 검토
+
+## 29 Crew 대시보드
+- `crew29/` 폴더는 이 팀을 관리하는 대시보드(파이썬 기본 기능만 사용)입니다. 테스트: `python -m unittest discover -s tests`
+- 이름이 `reviewer`로 끝나는 에이전트는 검수 담당입니다. 미션을 혼자 맡지 않습니다.
+- 미션 결과물은 `data/missions/<번호>/output/`, 영상은 `data/videos/`에 저장됩니다. `data/`는 git에 올리지 않습니다.
 
 ## 지킬 것
 - 파일을 지우거나 덮어쓰기 전에는 사용자에게 먼저 확인합니다.
