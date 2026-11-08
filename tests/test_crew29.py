@@ -227,10 +227,45 @@ class VideoTest(Sandbox):
         self.assertNotIn("<script>x", html)
         self.assertIn("a<br>b", html)
 
-    def test_srt_times(self):
-        srt = video._srt([{"start": 0, "end": 2.5, "narration": "하나"}, {"start": 2.5, "end": 61.2, "narration": ""}])
-        self.assertIn("00:00:00,000 --> 00:00:02,500\n하나", srt)
-        self.assertNotIn("61", srt)
+    def test_chunks_split_and_time_proportionally(self):
+        groups = video.chunks("자동 편집이 잘 되는지 확인하는 문장입니다", 10.0, 2.0, max_chars=12)
+        self.assertEqual([g["text"] for g in groups], ["자동 편집이 잘 되는지", "확인하는 문장입니다"])
+        self.assertAlmostEqual(groups[0]["start"], 10.0)
+        self.assertAlmostEqual(groups[-1]["end"], 12.0)
+        self.assertEqual(len(groups[0]["words"]), 4)
+
+    def test_chunks_use_exact_timings(self):
+        text = "안녕 하세요"
+        timings = [(ch, k * 0.5, k * 0.5 + 0.4) for k, ch in enumerate(text)]
+        g = video.chunks(text, 1.0, 9.0, timings)[0]
+        self.assertAlmostEqual(g["words"][1]["start"], 1.0 + 1.5)
+        self.assertAlmostEqual(g["end"], 1.0 + 2.9)
+
+    def test_subtitles_do_not_overlap(self):
+        p = video.normalize({"cards": [{"title": "a"}], "accent": "#112233"})
+        groups = video.chunks("하나 둘 셋 넷 다섯 여섯 일곱 여덟", 0, 4, max_chars=6)
+        srt = video.build_srt(groups)
+        ass = video.build_ass(groups, p)
+        self.assertIn("&H00332211", ass)
+        self.assertIn("{\\k", ass)
+        ends = [g["end"] for g in groups]
+        for k in range(len(groups) - 1):
+            self.assertLessEqual(video._show_until(groups, k), groups[k + 1]["start"])
+        self.assertIn("-->", srt)
+        self.assertTrue(ends)
+
+    def test_ass_escapes_braces(self):
+        p = video.normalize({"cards": [{"title": "a"}]})
+        ass = video.build_ass(video.chunks("{위험} \\글자", 0, 1), p)
+        self.assertIn("(위험)", ass)
+
+    def test_formats_and_carousel_limit(self):
+        p = video.normalize({"format": "youtube", "cards": [{"title": "a"}]})
+        self.assertEqual(video.size_of(p), (1920, 1080))
+        self.assertIn("width:1920px", video.card_html(p, 0))
+        with self.assertRaises(video.VideoError):
+            video.normalize({"format": "carousel", "cards": [{"title": str(i)} for i in range(11)]})
+        self.assertIn("rgba(0,0,0,.38)", video.card_html(p, 0, transparent=True))
 
     @unittest.skipUnless(all(video.check()[k] for k in ("ffmpeg", "browser")), "ffmpeg 또는 브라우저 없음")
     def test_render_with_command_voice(self):
@@ -245,6 +280,35 @@ class VideoTest(Sandbox):
         self.assertAlmostEqual(m["timeline"][1]["end"] - m["timeline"][1]["start"], 1.5)
         self.assertTrue((out / "cards" / "card02.png").is_file())
         self.assertFalse((out / "work").exists())
+        self.assertTrue(m["captions"])
+
+    @unittest.skipUnless(all(video.check()[k] for k in ("ffmpeg", "browser")), "ffmpeg 또는 브라우저 없음")
+    def test_render_with_every_edit_option(self):
+        ff, _ = video.find_ffmpeg()
+        run = lambda *a: __import__("subprocess").run([ff, "-y", "-v", "error", *a], check=True)  # noqa: E731
+        run("-f", "lavfi", "-i", "testsrc2=size=640x360:rate=30", "-f", "lavfi", "-i", "sine=f=200",
+            "-t", "1.5", "-pix_fmt", "yuv420p", str(self.tmp / "clip.mp4"))
+        run("-f", "lavfi", "-i", "sine=f=100:duration=10", str(self.tmp / "bgm.mp3"))
+        run("-f", "lavfi", "-i", "color=c=red:s=200x80", "-frames:v", "1", str(self.tmp / "logo.png"))
+        project = {"title": "편집", "format": "square", "bgm": str(self.tmp / "bgm.mp3"),
+                   "voice": {"engine": "command", "command": f"{ff} -y -f lavfi -i sine=duration=1 {{out}}"},
+                   "edit": {"subtitles": True, "motion": True, "logo": str(self.tmp / "logo.png"),
+                            "intro": str(self.tmp / "logo.png"), "intro_duration": 1, "outro": str(self.tmp / "clip.mp4")},
+                   "cards": [{"title": "하나", "narration": "첫 번째 문장"},
+                             {"title": "둘", "narration": "배경 영상", "background": {"type": "video", "path": str(self.tmp / "clip.mp4")}}]}
+        out = self.tmp / "out"
+        m = video.render(project, out)
+        self.assertEqual(m["size"], [1080, 1080])
+        self.assertAlmostEqual(m["timeline"][0]["start"], 1.0)
+        self.assertGreater(m["duration"], 1 + 2.5 + 2.5 + 1.4)
+        self.assertTrue((out / "subtitles.ass").is_file())
+        self.assertEqual(m["timeline"][1]["clip"], str(self.tmp / "clip.mp4"))  # 내 영상은 원래 경로 그대로
+
+    @unittest.skipUnless(all(video.check()[k] for k in ("ffmpeg", "browser")), "ffmpeg 또는 브라우저 없음")
+    def test_carousel_makes_jpegs(self):
+        m = video.render({"format": "carousel", "cards": [{"title": "하나"}, {"title": "둘"}]}, self.tmp / "c")
+        self.assertEqual(m["images"], ["cards/card01.jpg", "cards/card02.jpg"])
+        self.assertTrue((self.tmp / "c" / "cards" / "card01.jpg").read_bytes().startswith(b"\xff\xd8"))
 
 
 class WebTest(Sandbox):

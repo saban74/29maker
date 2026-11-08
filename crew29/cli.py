@@ -3,15 +3,17 @@
     python -m crew29 dashboard [--port 8129] [--lan]   대시보드 켜기
     python -m crew29 video render 프로젝트.json [--out 폴더]   릴스 영상 만들기
     python -m crew29 mission "할 일" [--agent 이름] [--no-review]   미션 바로 실행
+    python -m crew29 publish draft 영상번호 --to youtube --to instagram --title "제목" --caption "설명"
+        게시 초안 만들기 (올리기 전에 대시보드에서 사람이 승인해야 한다)
     python -m crew29 check   필요한 도구가 설치됐는지 점검
 """
 import argparse
 import json
 import sys
-from datetime import datetime
+import time
 from pathlib import Path
 
-from . import missions, paths, video
+from . import missions, paths, publish, video
 
 
 def main(argv=None) -> int:
@@ -36,6 +38,16 @@ def main(argv=None) -> int:
     m.add_argument("--agent", default="", help="이 에이전트 한 명에게만 맡기기")
     m.add_argument("--no-review", action="store_true")
 
+    pb = sub.add_parser("publish", help="게시 초안")
+    pbs = pb.add_subparsers(dest="pcmd", required=True)
+    dr = pbs.add_parser("draft", help="게시 초안 만들기 (승인은 대시보드에서)")
+    dr.add_argument("video_id", help="data/videos 아래 폴더 이름")
+    dr.add_argument("--to", action="append", choices=publish.PLATFORMS, required=True)
+    dr.add_argument("--title", default="")
+    dr.add_argument("--caption", default="")
+    dr.add_argument("--hashtags", default="")
+    dr.add_argument("--privacy", default="private", choices=publish.PRIVACY)
+
     sub.add_parser("check", help="필요한 도구 점검")
 
     a = ap.parse_args(argv)
@@ -45,9 +57,26 @@ def main(argv=None) -> int:
             serve(a.port, a.lan)
         elif a.cmd == "video":
             project = json.loads(Path(a.project).read_text(encoding="utf-8"))
-            out = Path(a.out) if a.out else paths.videos_dir() / datetime.now().strftime("%Y%m%d-%H%M%S")
-            manifest = video.render(project, out, lambda msg: print("·", msg))
-            print(f"완성: {out / manifest['video']} ({manifest['duration']}초)")
+            if a.out:
+                manifest = video.render(project, Path(a.out), lambda msg: print("·", msg))
+                out = Path(a.out)
+            else:  # 대시보드 '만든 영상'에도 보이게 작업으로 만든다
+                job = video.start_job(project)
+                out = paths.videos_dir() / job["id"]
+                last = ""
+                while video.job(job["id"])["status"] == "running":
+                    msg = video.job(job["id"])["message"]
+                    if msg != last:
+                        print("·", msg)
+                        last = msg
+                    time.sleep(0.5)
+                job = video.job(job["id"])
+                if job["status"] != "done":
+                    raise video.VideoError(job["error"])
+                manifest = video.manifest(job["id"])
+                print(f"영상 번호: {job['id']}")
+            what = manifest.get("video") or ", ".join(manifest.get("images", []))
+            print(f"완성: {out} ({what})")
         elif a.cmd == "mission":
             mode = "one" if a.agent else "team"
             mi = missions.create(a.goal, mode, a.agent, not a.no_review)
@@ -56,13 +85,16 @@ def main(argv=None) -> int:
             mi = missions.detail(mi["id"])
             print(mi["result"] or mi["log"][-2000:])
             return 0 if mi["status"] == "done" else 1
+        elif a.cmd == "publish":
+            d = publish.create(a.video_id, a.to, a.title, a.caption, a.hashtags, a.privacy)
+            print(f"게시 초안 {d['id']}를 만들었어요. 대시보드 '게시' 화면에서 사람이 승인하면 올라가요.")
         elif a.cmd == "check":
             c = {"claude": bool(missions.claude_cmd()), **video.check()}
             labels = {"claude": "Claude Code (미션 실행)", "ffmpeg": "ffmpeg (영상 만들기)",
                       "browser": "Edge/Chrome (카드 그리기)", "edge_tts": "edge-tts (무료 목소리, 선택)"}
             for k, ok in c.items():
                 print(("✅ " if ok else "❌ ") + labels[k])
-    except (video.VideoError, missions.MissionError, OSError, ValueError) as e:
+    except (video.VideoError, missions.MissionError, publish.PublishError, OSError, ValueError) as e:
         print(f"❌ {e}", file=sys.stderr)
         return 1
     return 0

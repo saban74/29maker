@@ -89,7 +89,10 @@ h3 { margin: 0; font-size: 14.5px; }
 .st-running .dot, .st-stopping .dot { background: var(--warn); box-shadow: 0 0 0 3px rgba(242, 177, 76, .18); }
 .st-done .dot { background: var(--ok); }
 .st-failed .dot, .st-interrupted .dot { background: var(--bad); }
-.st-queued .dot { background: var(--accent); }
+.st-queued .dot, .st-pending .dot, .st-scheduled .dot, .st-approved .dot { background: var(--accent); }
+.st-publishing .dot { background: var(--warn); box-shadow: 0 0 0 3px rgba(242, 177, 76, .18); }
+.thumbs { display: grid; grid-template-columns: repeat(auto-fill, minmax(64px, 1fr)); gap: 6px; }
+.thumbs img { width: 100%; aspect-ratio: 4 / 5; object-fit: cover; border-radius: 6px; border: 1px solid var(--line); display: block; }
 .ava {
   width: 30px; height: 30px; border-radius: 8px; display: grid; place-items: center; font-weight: 700; font-size: 13px;
   flex: none; color: #fff;
@@ -106,7 +109,7 @@ h3 { margin: 0; font-size: 14.5px; }
 /* 입력 */
 label.f { display: block; margin-top: 12px; }
 label.f > span { display: block; font-size: 12.5px; color: var(--muted); margin-bottom: 5px; }
-input[type=text], input[type=number], input[type=url], select, textarea {
+input[type=text], input[type=number], input[type=url], input[type=password], input[type=datetime-local], select, textarea {
   width: 100%; background: var(--bg); border: 1px solid var(--line-2); border-radius: 8px; padding: 8px 10px; outline: none;
 }
 input:focus, select:focus, textarea:focus { border-color: var(--accent); }
@@ -145,10 +148,10 @@ pre.log {
 /* 스튜디오 */
 .studio { display: grid; grid-template-columns: minmax(0, 1fr) 300px; gap: 16px; align-items: start; }
 .phone {
-  width: 270px; height: 480px; border-radius: 22px; overflow: hidden; border: 6px solid #22232a; background: #000;
+  border-radius: 22px; overflow: hidden; border: 6px solid #22232a; background: #000;
   position: sticky; top: 76px;
 }
-.phone iframe { width: 1080px; height: 1920px; border: 0; transform: scale(.25); transform-origin: 0 0; }
+.phone iframe { border: 0; transform-origin: 0 0; }
 .scene { border: 1px solid var(--line); border-radius: var(--radius); padding: 12px; background: var(--panel); margin-top: 10px; }
 .scene.on { border-color: rgba(124, 131, 255, .6); }
 .scene .n { width: 24px; height: 24px; border-radius: 6px; background: var(--panel-2); display: grid; place-items: center; font-size: 12px; color: var(--muted); }

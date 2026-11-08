@@ -7,16 +7,18 @@ import json
 import mimetypes
 import secrets
 import shutil
+import urllib.parse
 from http import cookies
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 from pathlib import Path
 from urllib.parse import parse_qs, urlparse
 
-from . import agents, missions, paths, skills, tts, video
+from . import agents, connections, higgsfield, missions, net, paths, publish, share, skills, tts, video
 
 STATIC = Path(__file__).parent / "static"
 MAX_BODY = 1_000_000
-ERRORS = (agents.AgentError, skills.SkillError, missions.MissionError, video.VideoError, tts.TTSError)
+ERRORS = (agents.AgentError, skills.SkillError, missions.MissionError, video.VideoError, tts.TTSError,
+          publish.PublishError, higgsfield.HiggsfieldError, net.NetError)
 
 
 def token_file() -> Path:
@@ -37,16 +39,28 @@ def state() -> dict:
         "director": paths.director_file().read_text(encoding="utf-8") if paths.director_file().is_file() else "",
         "missions": missions.list_missions()[:50],
         "videos": video.list_jobs()[:30],
+        "publish": publish.list_drafts()[:50],
         "options": {"models": agents.MODELS, "colors": agents.COLORS, "tools": agents.TOOLS,
-                    "max_skills": agents.MAX_SKILLS, "voices": tts.VOICES, "themes": list(video.THEMES)},
+                    "max_skills": agents.MAX_SKILLS, "voices": tts.VOICES, "themes": list(video.THEMES),
+                    "formats": {k: v["label"] for k, v in video.FORMATS.items()},
+                    "image_formats": [k for k, v in video.FORMATS.items() if v.get("images")],
+                    "engines": list(tts.ENGINES)},
         "checks": {"claude": bool(missions.claude_cmd()), **video.check()},
         "settings": missions.settings(),
+        "connections": connections.view(),
+        "linked": {
+            "elevenlabs": connections.has("elevenlabs_key"), "typecast": connections.has("typecast_key"),
+            "higgsfield": higgsfield.configured(), "youtube": connections.has("youtube_refresh_token"),
+            "instagram": connections.has("instagram_token") and connections.has("instagram_user_id"),
+            "public": bool(share.base_url()),
+        },
     }
 
 
 class Handler(BaseHTTPRequestHandler):
     server_version = "crew29"
     token: str | None = None  # --lan 일 때만 설정
+    port: int = 8129
 
     def log_message(self, fmt, *args):  # 조용히
         pass
@@ -127,6 +141,8 @@ class Handler(BaseHTTPRequestHandler):
                     return self._error("파일이 없어요.", 404)
                 sub = base / parts[2] / ("output" if parts[1] == "missions" else "")
                 return self._file(sub, "/".join(parts[3:]))
+            if method == "GET" and parts[0] == "oauth" and parts[1:] in (["youtube", "start"], ["youtube", "callback"]):
+                return self._youtube_oauth(parts[2], query)
             if parts[0] == "api":
                 return self._api(method, parts[1:])
             self._error("없는 주소예요.", 404)
@@ -136,6 +152,25 @@ class Handler(BaseHTTPRequestHandler):
             self._error(str(e))
         except (ValueError, KeyError, TypeError) as e:
             self._error(f"잘못된 요청이에요: {e}")
+
+    def _redirect(self, location: str):
+        self.send_response(302)
+        self.send_header("Location", location)
+        self.send_header("Content-Length", "0")
+        self.end_headers()
+
+    def _youtube_oauth(self, step: str, query: dict):
+        # 구글은 이 PC 주소(127.0.0.1)로만 돌려보내 준다. 그래서 연결은 PC 브라우저에서 해야 한다.
+        redirect_uri = f"http://127.0.0.1:{self.port}/oauth/youtube/callback"
+        if step == "start":
+            return self._redirect(publish.youtube_auth_url(redirect_uri))
+        if query.get("error"):
+            return self._redirect("/#/settings?yt=" + query["error"][0])
+        try:
+            name = publish.youtube_callback(query.get("code", [""])[0], query.get("state", [""])[0], redirect_uri)
+        except publish.PublishError as e:
+            return self._redirect("/#/settings?yt=error&msg=" + urllib.parse.quote(str(e)))
+        self._redirect("/#/settings?yt=ok&channel=" + urllib.parse.quote(name))
 
     def _api(self, method: str, p: list[str]):
         if method == "GET" and p == ["state"]:
@@ -200,6 +235,26 @@ class Handler(BaseHTTPRequestHandler):
                 return self._error("만드는 중인 영상은 지울 수 없어요.")
             shutil.rmtree(paths.videos_dir() / p[1])
             return self._json({"ok": True})
+        # 연결 (API 키, 계정)
+        if method == "POST" and p == ["connections"]:
+            return self._json(connections.update(self._body()))
+        if method == "POST" and p == ["connections", "test", "instagram"]:
+            return self._json({"ok": True, "message": "연결됨: @" + publish.test_instagram()})
+        if method == "GET" and len(p) == 2 and p[0] == "voices":
+            return self._json(tts.list_voices(p[1]))
+        # 게시
+        if method == "POST" and p == ["publish"]:
+            b = self._body()
+            return self._json(publish.create(b.get("video_id", ""), b.get("platforms") or [], b.get("title", ""),
+                                             b.get("caption", ""), b.get("hashtags", ""), b.get("privacy", "private"),
+                                             b.get("schedule_at")))
+        if method == "POST" and len(p) == 3 and p[0] == "publish" and p[2] in ("approve", "reject", "retry"):
+            return self._json(getattr(publish, p[2])(p[1]))
+        if method == "DELETE" and len(p) == 2 and p[0] == "publish":
+            publish.delete(p[1])
+            return self._json({"ok": True})
+        if method == "GET" and len(p) == 3 and p[0] == "videos" and p[2] == "manifest":
+            return self._json(video.manifest(p[1]))
         # 설정
         if method == "POST" and p == ["settings"]:
             return self._json(missions.save_settings(self._body()))
@@ -209,9 +264,14 @@ class Handler(BaseHTTPRequestHandler):
 def serve(port: int = 8129, lan: bool = False) -> None:
     host = "0.0.0.0" if lan else "127.0.0.1"
     Handler.token = ensure_token() if lan else None
+    Handler.port = port
     missions.RUNNER.start()
+    publish.PUBLISHER.start()
     httpd = ThreadingHTTPServer((host, port), Handler)
     print(f"29 Crew 대시보드가 켜졌어요: http://127.0.0.1:{port}/")
+    public_port = share.start_server()
+    if public_port:
+        print(f"공개 파일 서버: {public_port}번 포트 → {share.base_url()} (인스타그램·힉스필드용)")
     if lan:
         print(f"다른 기기에서는: http://(이 PC의 IP):{port}/?token={Handler.token}")
         print("이 열쇠(token)는 다른 사람에게 알려 주지 마세요.")
