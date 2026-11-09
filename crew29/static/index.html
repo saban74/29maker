@@ -8,14 +8,23 @@
 </head>
 <body>
   <div class="app">
-    <aside class="side">
-      <div class="brand"><div class="logo">29</div>29 Crew</div>
-      <nav class="nav" id="nav"></nav>
-      <div class="foot">Claude Code 에이전트 팀</div>
+    <aside class="side" id="side">
+      <div class="brand">
+        <a class="brand-link" href="#/home"><span class="logo">29</span><span class="lbl">29 Crew</span></a>
+        <button class="rail-btn" id="rail-btn" aria-label="메뉴 접기" aria-pressed="false"></button>
+      </div>
+      <nav class="nav" id="nav" aria-label="메뉴"></nav>
+      <div class="foot lbl">29 Crew · Claude Code 에이전트 팀</div>
     </aside>
     <main class="main">
-      <header class="top"><h1 id="title"></h1><span class="sub" id="subtitle"></span><div class="actions" id="actions"></div></header>
-      <div class="page" id="page"></div>
+      <header class="top"><div class="cmd-wrap" id="cmd"></div></header>
+      <div class="page">
+        <div class="phead">
+          <div class="phead-text"><h1 id="title"></h1><p id="subtitle"></p></div>
+          <div class="actions" id="actions"></div>
+        </div>
+        <div id="page"></div>
+      </div>
     </main>
   </div>
   <div id="layer"></div>

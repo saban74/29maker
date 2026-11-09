@@ -10,9 +10,16 @@ const STATUS = { queued: "대기 중", running: "진행 중", stopping: "멈추�
   stopped: "멈춤", interrupted: "중단됨" };
 /* 메뉴: [주소, 아이콘, 이름, 휴대폰 아래 메뉴에 보일지]. 휴대폰 아래 메뉴는 5개까지만 둔다. */
 const NAV = [
-  ["home", "home", "홈", true], ["missions", "target", "미션", true], ["team", "users", "팀", false],
+  ["home", "home", "홈", true], ["missions", "target", "미션", true], ["team", "cpu", "에이전트", false],
   ["skills", "book", "스킬", false], ["studio", "film", "영상", true], ["publish", "upload", "게시", true],
   ["settings", "sliders", "설정", false],
+];
+/* 왼쪽 메뉴 묶음. 이름(label)이 없으면 묶지 않고 바로 보여 준다. */
+const NAV_GROUPS = [
+  { items: ["home"] },
+  { id: "work", label: "작업", icon: "briefcase", items: ["missions", "studio", "publish"] },
+  { id: "crew", label: "팀", icon: "users", items: ["team", "skills"] },
+  { items: ["settings"] },
 ];
 const MORE = ["team", "skills", "settings"];
 /* 선 아이콘 (Lucide 모양). 글자 옆에 붙는 장식이라 화면 읽기 프로그램에는 숨긴다. */
@@ -25,6 +32,19 @@ const ICONS = {
   upload: "M12 15V3 M7 8l5-5 5 5 M4 15v4a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-4",
   sliders: "M4 21v-7 M4 10V3 M12 21v-9 M12 8V3 M20 21v-5 M20 12V3 M1 14h6 M9 8h6 M17 16h6",
   more: "M5 12h.01 M12 12h.01 M19 12h.01",
+  briefcase: "M3 7h18v13H3z M8 7V5a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2 M3 12h18",
+  cpu: "M7 7h10v10H7z M4 10h3 M4 14h3 M17 10h3 M17 14h3 M10 4v3 M14 4v3 M10 17v3 M14 17v3",
+  plus: "M12 5v14 M5 12h14",
+  minus: "M5 12h14",
+  panel: "M3 4h18v16H3z M9 4v16",
+  search: "M11 19a8 8 0 1 0 0-16 8 8 0 0 0 0 16Z M21 21l-4.3-4.3",
+  grid: "M4 4h7v7H4z M13 4h7v7h-7z M4 13h7v7H4z M13 13h7v7h-7z",
+  list: "M8 6h13 M8 12h13 M8 18h13 M3 6h.01 M3 12h.01 M3 18h.01",
+  pulse: "M22 12h-4l-3 9L9 3l-3 9H2",
+  clock: "M12 21a9 9 0 1 0 0-18 9 9 0 0 0 0 18Z M12 7v5l3 2",
+  chart: "M3 3v18h18 M7 15l4-4 3 3 5-6",
+  shield: "M12 3l8 3v6c0 5-3.5 8-8 9-4.5-1-8-4-8-9V6z",
+  send: "M22 2 11 13 M22 2l-7 20-4-9-9-4z",
 };
 /* 켜고 끄는 칩: 키보드로도 누를 수 있고, 켜졌는지 화면 읽기 프로그램에 알려 준다. */
 function toggleChip(c, isOn, onToggle) {
@@ -40,7 +60,7 @@ function icon(name) {
   const NS = "http://www.w3.org/2000/svg";
   const svg = document.createElementNS(NS, "svg");
   for (const [k, v] of Object.entries({ viewBox: "0 0 24 24", width: 18, height: 18, fill: "none", stroke: "currentColor",
-    "stroke-width": name === "more" ? 3 : 1.8, "stroke-linecap": "round", "stroke-linejoin": "round", "aria-hidden": "true", class: "ico" })) svg.setAttribute(k, v);
+    "stroke-width": name === "more" ? 3 : 1.7, "stroke-linecap": "round", "stroke-linejoin": "round", "aria-hidden": "true", class: "ico" })) svg.setAttribute(k, v);
   const path = document.createElementNS(NS, "path");
   path.setAttribute("d", ICONS[name]);
   svg.append(path);
@@ -102,6 +122,28 @@ const ago = (t) => {
   return Math.floor(s / 86400) + "일 전";
 };
 const isReviewer = (name) => name.endsWith("reviewer");
+/* 화면 설정(메뉴 접기 등)을 이 브라우저에 기억. 저장이 막혀 있어도 그냥 동작한다. */
+const pref = {
+  get(key, fallback) { try { const v = JSON.parse(localStorage.getItem("crew29." + key)); return v ?? fallback; } catch { return fallback; } },
+  set(key, value) { try { localStorage.setItem("crew29." + key, JSON.stringify(value)); } catch { /* 무시 */ } },
+};
+/* 테두리 있는 패널: 위에 아이콘 + 영어 라벨 + 한글 이름 */
+const panel = (ico, en, ko, ...body) => h("section", { class: "card panel" },
+  h("div", { class: "panel-label" }, icon(ico), h("span", {}, en), ko ? h("span", { class: "ko" }, ko) : null), ...body);
+/* 탭: [[값, 이름, 개수]] */
+function tabs(items, current, onChange) {
+  const bar = h("div", { class: "tabs", role: "tablist" });
+  items.forEach(([value, label, count]) => {
+    const btn = h("button", { role: "tab", class: value === current ? "on" : "", "aria-selected": String(value === current) },
+      label, count != null ? h("span", { class: "tab-count" }, count) : null);
+    btn.addEventListener("click", () => {
+      [...bar.children].forEach(b => { b.classList.toggle("on", b === btn); b.setAttribute("aria-selected", String(b === btn)); });
+      onChange(value);
+    });
+    bar.append(btn);
+  });
+  return bar;
+}
 const status = (st) => h("span", { class: "row st-" + st, style: "gap:6px" }, h("span", { class: "dot" }), STATUS[st] || st);
 const ava = (a) => h("div", { class: "ava", style: `background:${COLOR[a.color] || "#555a66"}` }, a.name.slice(0, 1).toUpperCase());
 
@@ -129,18 +171,111 @@ function route() {
   const [page, arg] = path.split("/");
   const query = new URLSearchParams(qs || "");
   clearInterval(S.timer);
-  const on = (id) => page === id || (page === "mission" && id === "missions");
-  fill($("#nav"), ...NAV.map(([id, ico, label, mobile]) => h("a", { href: "#/" + id, class: (on(id) ? "on" : "") + (mobile ? "" : " desk-only"),
-    "aria-current": on(id) ? "page" : null },
-    icon(ico), label,
-    id === "missions" && S.data ? h("span", { class: "count", id: "count-missions" }, S.data.missions.filter(m => ["running", "queued"].includes(m.status)).length || "") : null,
-    id === "publish" && S.data ? h("span", { class: "count", id: "count-publish" }, S.data.publish.filter(p => p.status === "pending").length || "") : null)),
-    h("a", { href: "#/more", class: "mobile-only" + (page === "more" || MORE.includes(page) ? " on" : ""), "aria-current": page === "more" ? "page" : null },
-      icon("more"), "더보기"));
+  renderNav(page);
   fill($("#actions"));
   $("#subtitle").textContent = "";
   const pages = { home, missions: missionsPage, mission: missionPage, team, skills: skillsPage, studio, publish: publishPage, settings, more: morePage };
   (pages[page] || home)(arg, query);
+}
+
+function renderNav(page) {
+  const on = (id) => page === id || (page === "mission" && id === "missions");
+  const open = pref.get("nav", {});
+  const link = (id, sub) => {
+    const [, ico, label, mobile] = NAV.find(n => n[0] === id);
+    return h("a", { href: "#/" + id, title: label, class: "nav-item" + (sub ? " sub" : "") + (on(id) ? " on" : "") + (mobile ? "" : " desk-only"),
+      "aria-current": on(id) ? "page" : null },
+      icon(ico), h("span", { class: "lbl" }, label),
+      id === "missions" && S.data ? h("span", { class: "count", id: "count-missions" }, S.data.missions.filter(m => ["running", "queued"].includes(m.status)).length || "") : null,
+      id === "publish" && S.data ? h("span", { class: "count", id: "count-publish" }, S.data.publish.filter(p => p.status === "pending").length || "") : null);
+  };
+  const out = [];
+  for (const g of NAV_GROUPS) {
+    if (!g.label) { out.push(...g.items.map(id => link(id, false))); continue; }
+    const isOpen = open[g.id] !== false || g.items.some(on);
+    const items = h("div", { class: "group-items", id: "grp-" + g.id, hidden: !isOpen }, g.items.map(id => link(id, true)));
+    const btn = h("button", { class: "group-head desk-only", "aria-expanded": String(isOpen), "aria-controls": "grp-" + g.id,
+      onclick: () => {
+        const now = items.hidden;
+        items.hidden = !now;
+        btn.setAttribute("aria-expanded", String(now));
+        fill(btn.querySelector(".tog"), icon(now ? "minus" : "plus"));
+        pref.set("nav", { ...pref.get("nav", {}), [g.id]: now });
+      } },
+      icon(g.icon), h("span", { class: "lbl" }, g.label), h("span", { class: "tog lbl" }, icon(isOpen ? "minus" : "plus")));
+    out.push(h("div", { class: "group" }, btn, items));
+  }
+  out.push(h("a", { href: "#/more", class: "nav-item mobile-only" + (page === "more" || MORE.includes(page) ? " on" : ""), "aria-current": page === "more" ? "page" : null },
+    icon("more"), h("span", { class: "lbl" }, "더보기")));
+  fill($("#nav"), ...out);
+}
+
+/* 메뉴 전체 접기 (아이콘만 보이게) */
+function setupRail() {
+  const btn = $("#rail-btn");
+  fill(btn, icon("panel"));
+  const apply = (on) => {
+    document.body.classList.toggle("rail", on);
+    btn.setAttribute("aria-pressed", String(on));
+    btn.setAttribute("aria-label", on ? "메뉴 펼치기" : "메뉴 접기");
+    btn.title = on ? "메뉴 펼치기" : "메뉴 접기";
+    // 메뉴가 접히는 움직임(0.2초)이 끝난 뒤에 구조도 선을 다시 그린다
+    setTimeout(() => document.querySelectorAll(".teammap").forEach(drawTeamLinks), 260);
+  };
+  apply(pref.get("rail", false));
+  btn.onclick = () => { const on = !document.body.classList.contains("rail"); pref.set("rail", on); apply(on); };
+}
+
+/* 가운데 위 검색창 (Ctrl+K): 화면·에이전트·스킬·미션을 찾고, 없으면 그 내용으로 미션을 맡긴다. */
+const SCOPES = [["all", "전체"], ["missions", "미션"], ["agents", "에이전트"], ["skills", "스킬"]];
+function setupCommand() {
+  let scope = 0, results = [], sel = 0;
+  const scopeBtn = h("button", { class: "cmd-scope", type: "button", title: "찾을 범위 바꾸기" }, SCOPES[0][1]);
+  const input = h("input", { type: "search", class: "cmd-input", placeholder: "화면·에이전트·스킬·미션 찾기, 또는 맡길 일 입력",
+    "aria-label": "검색", role: "combobox", "aria-expanded": "false", "aria-controls": "cmd-list", autocomplete: "off" });
+  const list = h("div", { class: "cmd-pop", id: "cmd-list", role: "listbox", hidden: true });
+  const close = () => { list.hidden = true; input.setAttribute("aria-expanded", "false"); };
+  const go = (r) => { close(); input.value = ""; input.blur(); r.go(); };
+  function compute() {
+    const q = input.value.trim().toLowerCase();
+    const d = S.data || { agents: [], skills: [], missions: [] };
+    const sc = SCOPES[scope][0];
+    const hit = (t) => !q || t.toLowerCase().includes(q);
+    const rows = [];
+    if (sc === "all") NAV.forEach(([id, ico, label]) => hit(label + id) && rows.push({ ico, label, hint: "화면", go: () => { location.hash = "#/" + id; } }));
+    if (sc === "all" || sc === "agents") d.agents.forEach(a => hit(a.name + a.description) && rows.push({ ico: "cpu", label: a.name, hint: "에이전트",
+      go: () => { S.openAgent = a.name; location.hash === "#/team" ? team() : (location.hash = "#/team"); } }));
+    if (sc === "all" || sc === "skills") d.skills.forEach(k => hit(k.name + k.description) && rows.push({ ico: "book", label: k.name, hint: "스킬",
+      go: () => { S.openSkill = k.name; location.hash === "#/skills" ? skillsPage() : (location.hash = "#/skills"); } }));
+    if (sc === "all" || sc === "missions") d.missions.forEach(m => hit(m.goal) && rows.push({ ico: "target", label: m.goal, hint: STATUS[m.status] || m.status,
+      go: () => { location.hash = "#/mission/" + m.id; } }));
+    results = rows.slice(0, 8);
+    if (q) results.push({ ico: "send", label: `"${input.value.trim()}" 미션으로 맡기기`, hint: "새 미션", action: true,
+      go: () => { S.prefillGoal = input.value.trim(); location.hash === "#/missions" ? missionsPage() : (location.hash = "#/missions"); } });
+    sel = Math.min(sel, Math.max(results.length - 1, 0));
+    fill(list, results.length ? results.map((r, i) => h("div", { class: "cmd-row" + (i === sel ? " sel" : "") + (r.action ? " action" : ""), role: "option",
+      "aria-selected": String(i === sel), "aria-hidden": "false", onmousedown: (e) => { e.preventDefault(); go(r); } },
+      icon(r.ico), h("span", { class: "grow ellipsis" }, r.label), h("span", { class: "cmd-hint" }, r.hint)))
+      : h("div", { class: "cmd-empty" }, "찾는 게 없어요."));
+    list.hidden = false;
+    input.setAttribute("aria-expanded", "true");
+  }
+  scopeBtn.onclick = () => { scope = (scope + 1) % SCOPES.length; scopeBtn.textContent = SCOPES[scope][1]; input.focus(); compute(); };
+  input.addEventListener("input", () => { sel = 0; compute(); });
+  input.addEventListener("focus", compute);
+  input.addEventListener("blur", () => setTimeout(close, 120));
+  input.addEventListener("keydown", (e) => {
+    if (e.key === "ArrowDown") { e.preventDefault(); sel = Math.min(sel + 1, results.length - 1); compute(); }
+    else if (e.key === "ArrowUp") { e.preventDefault(); sel = Math.max(sel - 1, 0); compute(); }
+    else if (e.key === "Enter" && results[sel]) { e.preventDefault(); go(results[sel]); }
+    else if (e.key === "Escape") { close(); input.blur(); }
+  });
+  document.addEventListener("keydown", (e) => {
+    const typing = ["INPUT", "TEXTAREA", "SELECT"].includes(document.activeElement.tagName);
+    if ((e.key === "k" && (e.ctrlKey || e.metaKey)) || (e.key === "/" && !typing)) { e.preventDefault(); input.focus(); input.select(); }
+  });
+  fill($("#cmd"), h("div", { class: "cmd" }, scopeBtn, h("span", { class: "cmd-sep", "aria-hidden": "true" }), icon("search"), input,
+    h("kbd", { class: "cmd-kbd" }, "Ctrl K")), list);
 }
 
 function head(title, sub, ...actions) {
@@ -162,25 +297,49 @@ function morePage() {
 /* ---------- 홈 ---------- */
 function home() {
   const d = S.data;
-  head("홈", "오늘의 팀 현황", h("a", { class: "btn primary", href: "#/missions" }, "+ 새 미션"));
-  const running = d.missions.filter(m => ["running", "queued", "stopping"].includes(m.status));
+  head("홈", "팀에게 일을 맡기고, 진행 상황과 결과를 한눈에 봐요");
   const missing = Object.entries(d.checks).filter(([k, ok]) => !ok && k !== "edge_tts");
+  const workers = d.agents.filter(a => !isReviewer(a.name));
+  const f = { mode: "team" };
+  const goal = h("input", { type: "text", class: "ask-input", placeholder: "무엇을 맡길까요? 예) 가을 캠핑 준비물 쇼츠 만들어 줘", "aria-label": "맡길 일" });
+  const agentSel = h("select", { class: "ask-agent", hidden: true, "aria-label": "맡길 에이전트" }, workers.map(a => h("option", { value: a.name }, a.name)));
+  const typeBtn = h("button", { class: "cmd-scope", type: "button", title: "맡기는 방식 바꾸기" }, "팀으로");
+  typeBtn.onclick = () => { f.mode = f.mode === "team" ? "one" : "team"; typeBtn.textContent = f.mode === "team" ? "팀으로" : "한 명에게"; agentSel.hidden = f.mode === "team"; };
+  const review = h("input", { type: "checkbox", checked: true });
+  const submit = async () => {
+    const m = await run(() => api("missions", { body: { goal: goal.value, mode: f.mode, agent: agentSel.value, review: review.checked } }), "미션을 맡겼어요.");
+    if (m) { await load(); location.hash = "#/mission/" + m.id; }
+  };
+  goal.addEventListener("keydown", (e) => { if (e.key === "Enter") submit(); });
+  const mapBox = h("div", {}), statsBox = h("div", {}), runBox = h("div", {}), recentBox = h("div", {});
   page(
-    missing.length ? h("div", { class: "card", style: "border-color:rgba(242,177,76,.5)" },
-      h("b", {}, "⚠️ 설치가 필요한 도구가 있어요"), " ",
-      h("span", { class: "muted" }, missing.map(([k]) => k).join(", ")), " ",
+    missing.length ? h("div", { class: "card notice" }, "⚠️ 설치가 필요한 도구가 있어요: ", h("b", {}, missing.map(([k]) => k).join(", ")), " ",
       h("a", { href: "#/settings", class: "tag accent" }, "설정에서 확인")) : null,
-    teamMap(d),
-    h("div", { class: "grid g4 stats mt" },
-      stat("에이전트", d.agents.length, "#/team"), stat("스킬", d.skills.length, "#/skills"),
-      stat("미션", d.missions.length, "#/missions"), stat("영상", d.videos.length, "#/studio")),
-    h("h2", {}, "진행 중"),
-    running.length ? missionList(running) : h("div", { class: "list" }, h("div", { class: "empty" }, "지금 돌고 있는 미션이 없어요.")),
-    h("h2", {}, "최근 결과"),
-    missionList(d.missions.filter(m => !running.includes(m)).slice(0, 6)),
-  );
-  requestAnimationFrame(() => document.querySelectorAll(".teammap").forEach(drawTeamLinks));
-  S.timer = setInterval(async () => { await load(); if (location.hash.startsWith("#/home") || !location.hash) home(); }, 4000);
+    h("section", { class: "card ask" },
+      h("div", { class: "ask-row" }, typeBtn, h("span", { class: "cmd-sep", "aria-hidden": "true" }), goal, agentSel,
+        h("button", { class: "btn primary ask-go", onclick: submit }, icon("send"), "맡기기")),
+      h("div", { class: "ask-foot" }, h("label", { class: "row" }, review, "끝나면 검수 받기"),
+        h("span", { class: "muted small" }, d.checks.claude ? "Claude Code로 실행돼요 · Max 사용량이 쓰여요" : "⚠️ claude 명령을 찾지 못했어요"))),
+    h("section", { class: "card panel map-panel" }, mapBox),
+    h("div", { class: "grid g3 mt" },
+      panel("chart", "STATS", "현황", statsBox),
+      panel("pulse", "RUNNING", "진행 중", runBox),
+      panel("clock", "RECENT", "최근 결과", recentBox)));
+  const refresh = () => {
+    const dd = S.data;
+    const running = dd.missions.filter(m => ["running", "queued", "stopping"].includes(m.status));
+    fill(mapBox, teamMap(dd));
+    const row = (label, value, href) => h("a", { class: "stat-row", href }, h("span", { class: "muted" }, label), h("b", {}, value));
+    fill(statsBox, row("에이전트", dd.agents.length + "명", "#/team"), row("스킬", dd.skills.length + "개", "#/skills"),
+      row("미션", `${dd.missions.length}개 · 진행 ${running.length}`, "#/missions"), row("만든 결과물", dd.videos.length + "개", "#/studio"),
+      row("게시 승인 대기", dd.publish.filter(p => p.status === "pending").length + "개", "#/publish"));
+    fill(runBox, running.length ? missionList(running, true) : h("div", { class: "empty-s" }, icon("pulse"), "지금 돌고 있는 미션이 없어요."));
+    const done = dd.missions.filter(m => !running.includes(m)).slice(0, 5);
+    fill(recentBox, done.length ? missionList(done, true) : h("div", { class: "empty-s" }, icon("clock"), "아직 끝난 미션이 없어요."));
+    requestAnimationFrame(() => document.querySelectorAll(".teammap").forEach(drawTeamLinks));
+  };
+  refresh();
+  S.timer = setInterval(async () => { await load(); if (location.hash.startsWith("#/home") || !location.hash) refresh(); }, 4000);
 }
 /* ---------- AI 팀 구조도 (029 Maker 홈과 같은 모양) ---------- */
 const MODEL_LABEL = { opus: "opus", sonnet: "sonnet", haiku: "haiku", inherit: "기본 모델" };
@@ -280,22 +439,23 @@ window.addEventListener("resize", () => document.querySelectorAll(".teammap").fo
 
 const stat = (label, n, href) => h("a", { class: "card stat", href }, h("span", { class: "muted small" }, label), h("b", {}, n));
 
-function missionList(list) {
+function missionList(list, compact) {
   if (!list.length) return h("div", { class: "list" }, h("div", { class: "empty" }, "아직 없어요."));
-  return h("div", { class: "list" }, list.map(m => h("a", { class: "item", href: "#/mission/" + m.id },
+  return h("div", { class: "list" + (compact ? " compact" : "") }, list.map(m => h("a", { class: "item", href: "#/mission/" + m.id },
     status(m.status),
     h("div", { class: "grow ellipsis" }, m.goal),
-    m.mode === "one" ? h("span", { class: "tag" }, "🙋 " + m.agent) : h("span", { class: "tag" }, "👥 팀"),
+    compact ? null : m.mode === "one" ? h("span", { class: "tag" }, "🙋 " + m.agent) : h("span", { class: "tag" }, "👥 팀"),
     h("span", { class: "muted small" }, ago(m.created_at)))));
 }
 
 /* ---------- 미션 ---------- */
 function missionsPage() {
   const d = S.data;
-  head("미션", "팀에게 일 맡기기");
+  head("미션", "팀이나 에이전트 한 명에게 일을 맡기고, 진행 기록을 봐요");
   const workers = d.agents.filter(a => !isReviewer(a.name));
   const f = { mode: "team", agent: workers[0]?.name || "", review: true };
-  const goal = h("textarea", { placeholder: "예) 초보자를 위한 가을 캠핑 준비물 블로그 글 써 줘", rows: 3 });
+  const goal = h("textarea", { placeholder: "예) 초보자를 위한 가을 캠핑 준비물 블로그 글 써 줘", rows: 3, value: S.prefillGoal || "" });
+  S.prefillGoal = "";
   const agentSel = h("select", {}, workers.map(a => h("option", { value: a.name }, `${a.name} — ${a.description.slice(0, 40)}`)));
   const agentRow = h("label", { class: "f", style: "display:none" }, h("span", {}, "맡길 에이전트"), agentSel);
   const seg = h("div", { class: "seg" },
@@ -307,9 +467,16 @@ function missionsPage() {
     agentRow.style.display = mode === "one" ? "" : "none";
   }
   const review = h("input", { type: "checkbox", checked: true });
+  const FILTERS = { all: () => true, live: (m) => ["running", "queued", "stopping"].includes(m.status), done: (m) => m.status === "done",
+    other: (m) => ["failed", "stopped", "interrupted"].includes(m.status) };
+  let cur = S.missionTab || "all";
+  const count = (k) => d.missions.filter(FILTERS[k]).length;
+  const tabBar = tabs([["all", "전체", count("all")], ["live", "진행 중", count("live")], ["done", "완료", count("done")], ["other", "실패·멈춤", count("other")]],
+    cur, (v) => { cur = S.missionTab = v; drawList(); });
+  const drawList = () => { const el = $("#mlist"); if (el) fill(el, missionList(S.data.missions.filter(FILTERS[cur]))); };
   page(
-    h("div", { class: "card" },
-      h("h3", {}, "새 미션"),
+    h("div", { class: "card panel" },
+      h("div", { class: "panel-label" }, icon("send"), h("span", {}, "NEW MISSION"), h("span", { class: "ko" }, "새 미션")),
       h("label", { class: "f" }, h("span", {}, "맡길 일"), goal),
       h("div", { class: "row mt-s" }, seg,
         h("label", { class: "row muted", style: "margin-left:8px" }, review, "끝나면 검수 받기")),
@@ -320,10 +487,11 @@ function missionsPage() {
           const m = await run(() => api("missions", { body: { goal: goal.value, mode: f.mode, agent: agentSel.value, review: review.checked } }), "미션을 맡겼어요.");
           if (m) { await load(); location.hash = "#/mission/" + m.id; }
         } }, "맡기기"))),
-    h("h2", {}, "전체 미션"),
-    h("div", { id: "mlist" }, missionList(d.missions)),
+    h("div", { class: "mt" }, tabBar),
+    h("div", { id: "mlist", class: "mt" }),
   );
-  S.timer = setInterval(async () => { await load(); const el = $("#mlist"); if (el) fill(el, missionList(S.data.missions)); }, 4000);
+  drawList();
+  S.timer = setInterval(async () => { await load(); if (location.hash.startsWith("#/missions")) drawList(); }, 4000);
 }
 
 async function missionPage(id) {
@@ -364,31 +532,64 @@ async function missionPage(id) {
 }
 
 /* ---------- 팀 ---------- */
+const ROLE_INFO = { research: ["RESEARCH", "조사", "search"], maker: ["MAKER", "제작", "cpu"], review: ["REVIEW", "검수", "shield"] };
+
 function team() {
   const d = S.data;
-  head("팀", `에이전트 ${d.agents.length}명`, h("button", { class: "btn primary", onclick: () => agentEditor() }, "+ 에이전트"));
-  const workers = d.agents.filter(a => !isReviewer(a.name));
-  const reviewers = d.agents.filter(a => isReviewer(a.name));
+  head("에이전트", "역할·모델·스킬로 팀을 꾸려요", h("button", { class: "btn primary", onclick: () => agentEditor() }, icon("plus"), "에이전트"));
+  const st = { q: "", sort: pref.get("agentSort", "role"), view: pref.get("agentView", "grid") };
+  const search = h("input", { type: "search", placeholder: "에이전트 이름·설명 찾기", "aria-label": "에이전트 찾기" });
+  search.addEventListener("input", () => { st.q = search.value.trim().toLowerCase(); draw(); });
+  const sort = h("select", { "aria-label": "정렬" }, [["role", "역할 순"], ["name", "이름 순"], ["model", "모델 순"]].map(([v, l]) => h("option", { value: v, selected: v === st.sort }, l)));
+  sort.addEventListener("change", () => { st.sort = sort.value; pref.set("agentSort", st.sort); draw(); });
+  const viewBtn = (v, ico, label) => h("button", { class: "vt" + (st.view === v ? " on" : ""), "aria-label": label, "aria-pressed": String(st.view === v), title: label,
+    onclick: (e) => { st.view = v; pref.set("agentView", v); [...e.currentTarget.parentNode.children].forEach(b => { b.classList.toggle("on", b === e.currentTarget); b.setAttribute("aria-pressed", String(b === e.currentTarget)); }); draw(); } }, icon(ico));
+  const countEl = h("div", { class: "muted small" });
+  const box = h("div", {});
   page(
-    h("div", { class: "card" },
-      h("div", { class: "spread" },
-        h("div", { class: "row" }, h("div", { class: "ava", style: "background:linear-gradient(135deg,#7c83ff,#c66bff)" }, "👑"),
-          h("div", {}, h("h3", {}, "총감독"), h("div", { class: "muted small" }, "팀 미션에서 계획을 세우고 일을 나눠 주는 리더예요."))),
-        h("button", { class: "btn sm", onclick: directorEditor }, "지시문 고치기"))),
-    h("h2", {}, `🛠 일꾼 (${workers.length})`), agentGrid(workers),
-    h("h2", {}, `✅ 검수 담당 (${reviewers.length})`),
-    h("div", { class: "muted small", style: "margin:-4px 0 10px" }, "이름이 reviewer로 끝나면 검수 담당이 돼요. 혼자 미션을 맡지 않고 결과물을 점검해요."),
-    agentGrid(reviewers),
-  );
+    h("div", { class: "card director" },
+      h("div", { class: "row" }, h("div", { class: "ava", style: "background:linear-gradient(135deg,#5e6ad2,#8b8aed)" }, "👑"),
+        h("div", {}, h("h3", {}, "총감독 · TEAM LEAD"), h("div", { class: "muted small" }, "팀 미션에서 계획을 세우고 일을 나눠 주는 리더예요."))),
+      h("button", { class: "btn sm", onclick: directorEditor }, "지시문 고치기")),
+    h("div", { class: "toolbar mt" },
+      h("label", { class: "searchbox" }, icon("search"), search, h("kbd", {}, "/")),
+      sort, h("div", { class: "viewtoggle", role: "group", "aria-label": "보기 방식" }, viewBtn("grid", "grid", "카드로 보기"), viewBtn("list", "list", "목록으로 보기"))),
+    countEl, box);
+  const order = { research: 0, maker: 1, review: 2 };
+  function draw() {
+    let list = d.agents.filter(a => !st.q || (a.name + " " + a.description).toLowerCase().includes(st.q));
+    list = list.sort((a, b) => st.sort === "name" ? a.name.localeCompare(b.name)
+      : st.sort === "model" ? (a.model || "").localeCompare(b.model || "") || a.name.localeCompare(b.name)
+      : order[roleOf(a)] - order[roleOf(b)] || a.name.localeCompare(b.name));
+    fill(countEl, h("b", { style: "color:var(--fg);font-size:15px" }, list.length), " 에이전트");
+    fill(box, !list.length ? h("div", { class: "list" }, h("div", { class: "empty" }, "찾는 에이전트가 없어요."))
+      : st.view === "grid" ? h("div", { class: "grid g3 agent-grid" }, list.map(agentCard)) : agentTable(list));
+  }
+  draw();
+  if (S.openAgent) { const a = d.agents.find(x => x.name === S.openAgent); S.openAgent = ""; if (a) agentEditor(a); }
 }
 
-function agentGrid(list) {
-  if (!list.length) return h("div", { class: "list" }, h("div", { class: "empty" }, "아직 없어요."));
-  return h("div", { class: "grid g3" }, list.map(a => h("div", { class: "card", style: "cursor:pointer", onclick: () => agentEditor(a) },
-    h("div", { class: "row" }, ava(a), h("div", { class: "grow", style: "min-width:0" }, h("h3", { class: "ellipsis" }, a.name),
-      h("div", { class: "muted small" }, a.model))),
-    h("div", { class: "muted small mt-s", style: "display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden" }, a.description),
-    h("div", { class: "chips mt-s" }, a.skills.length ? a.skills.map(s => h("span", { class: "tag accent" }, "🧰 " + s)) : h("span", { class: "muted small" }, "스킬 없음")))));
+function agentCard(a) {
+  const [en, ko, ico] = ROLE_INFO[roleOf(a)];
+  const row = (label, ...v) => h("div", { class: "acard-row" }, h("span", { class: "acard-k" }, label), h("div", { class: "acard-v" }, ...v));
+  return h("div", { class: "card acard", onclick: () => agentEditor(a), "aria-label": `${a.name} 편집` },
+    h("div", { class: "acard-head" }, h("span", { class: "acard-ico", style: `color:${COLOR[a.color] || "var(--muted)"}` }, icon(ico)), h("h3", {}, a.name)),
+    h("div", { class: "acard-desc" }, h("p", {}, a.description)),
+    row("역할", h("span", { class: "rtag" }, en), h("span", { class: "muted small" }, ko)),
+    row("모델", h("span", { class: "btag" }, a.model || "inherit")),
+    row("스킬", a.skills.length ? a.skills.map(k => h("span", { class: "btag" }, k)) : h("span", { class: "muted" }, "-")),
+    row("도구", h("span", { class: "acard-tools" }, a.tools.length ? a.tools.join(" · ") : "-")));
+}
+
+function agentTable(list) {
+  return h("div", { class: "list" }, list.map(a => {
+    const [en] = ROLE_INFO[roleOf(a)];
+    return h("div", { class: "item", onclick: () => agentEditor(a), "aria-label": `${a.name} 편집` },
+      h("span", { class: "acard-ico", style: `color:${COLOR[a.color] || "var(--muted)"}` }, icon(ROLE_INFO[roleOf(a)][2])),
+      h("b", { style: "min-width:150px" }, a.name), h("span", { class: "rtag" }, en), h("span", { class: "btag" }, a.model || "inherit"),
+      h("span", { class: "grow ellipsis muted small" }, a.description),
+      h("span", { class: "muted small" }, `스킬 ${a.skills.length}`));
+  }));
 }
 
 function drawer(title, body, actions) {
@@ -461,7 +662,8 @@ function directorEditor() {
 /* ---------- 스킬 ---------- */
 function skillsPage() {
   const d = S.data;
-  head("스킬", `${d.skills.length}개`,
+  if (S.openSkill) { const k = S.openSkill; S.openSkill = ""; setTimeout(() => skillEditor(k), 0); }
+  head("스킬", `에이전트가 일할 때 펼쳐 보는 업무 설명서 · ${d.skills.length}개`,
     h("button", { class: "btn", onclick: importDialog }, "⬇ GitHub에서 가져오기"),
     h("button", { class: "btn primary", onclick: () => skillEditor() }, "+ 직접 만들기"));
   const usedBy = (s) => d.agents.filter(a => a.skills.includes(s)).map(a => a.name);
@@ -821,19 +1023,24 @@ function publishDialog(j) {
 }
 
 function publishPage() {
-  head("게시", "승인하면 올라가요");
-  const box = h("div", {});
-  page(box);
+  head("게시", "승인한 것만 유튜브·인스타그램에 올라가요");
+  const GROUPS = {
+    pending: [(x) => x.status === "pending", "승인할 게시가 없어요. 영상 화면에서 '📤 게시 준비'를 눌러 보세요."],
+    active: [(x) => ["approved", "scheduled", "publishing"].includes(x.status), "예약했거나 올리는 중인 게시가 없어요."],
+    ended: [(x) => ["done", "failed", "rejected"].includes(x.status), "끝난 게시가 없어요."],
+  };
+  let cur = S.pubTab || "pending";
+  const n = (k) => S.data.publish.filter(GROUPS[k][0]).length;
+  const box = h("div", { class: "mt" });
+  page(
+    !S.data.linked.youtube && !S.data.linked.instagram ? h("div", { class: "card notice" },
+      "⚠️ 아직 연결된 계정이 없어요. ", h("a", { href: "#/settings", class: "tag accent" }, "설정 → 연결")) : null,
+    tabs([["pending", "승인 대기", n("pending")], ["active", "예약 · 올리는 중", n("active")], ["ended", "끝난 것", n("ended")]], cur, (v) => { cur = S.pubTab = v; draw(); }),
+    box);
   const draw = () => {
-    const all = S.data.publish;
-    const group = (title, list, empty) => [h("h2", {}, `${title} (${list.length})`),
-      list.length ? h("div", { class: "grid g2" }, list.map(pubCard)) : h("div", { class: "list" }, h("div", { class: "empty" }, empty))];
-    fill(box,
-      !S.data.linked.youtube && !S.data.linked.instagram ? h("div", { class: "card", style: "border-color:rgba(242,177,76,.5)" },
-        "⚠️ 아직 연결된 계정이 없어요. ", h("a", { href: "#/settings", class: "tag accent" }, "설정 → 연결")) : null,
-      group("✋ 승인 대기", all.filter(x => x.status === "pending"), "승인할 게시가 없어요. 영상 화면에서 '📤 게시 준비'를 눌러 보세요."),
-      group("⏰ 예약 · 올리는 중", all.filter(x => ["approved", "scheduled", "publishing"].includes(x.status)), "없어요."),
-      group("📁 끝난 것", all.filter(x => ["done", "failed", "rejected"].includes(x.status)), "없어요."));
+    const [test, empty] = GROUPS[cur];
+    const list = S.data.publish.filter(test);
+    fill(box, list.length ? h("div", { class: "grid g2" }, list.map(pubCard)) : h("div", { class: "list" }, h("div", { class: "empty" }, empty)));
   };
   draw();
   S.timer = setInterval(async () => { await load(); if (location.hash.startsWith("#/publish")) draw(); }, 4000);
@@ -944,4 +1151,6 @@ function settings(arg, query) {
 
 /* ---------- 시작 ---------- */
 window.addEventListener("hashchange", () => { fill($("#layer")); route(); });
+setupRail();
+setupCommand();
 load().then(route).catch(e => page(h("div", { class: "card" }, "대시보드를 불러오지 못했어요: " + e.message)));
