@@ -162,7 +162,9 @@
   .mv-txt h1{font-size:34px}
   .pick{grid-template-columns:repeat(3,minmax(0,1fr))}
   .sl-side{grid-template-columns:1fr 1fr;grid-template-rows:none;height:180px}
-  .sl-cap{position:static;max-width:none}
+  .sl-cap{position:static;max-width:none;width:100%}
+  .sl-main{flex-direction:column;padding:16px 0 0}
+  .sl-main img{max-width:100%;height:auto}
   .q4{grid-template-columns:repeat(2,minmax(0,1fr))}
   .cat,.cols3,.tri{grid-template-columns:repeat(2,minmax(0,1fr))}
   .tb-nav{grid-template-columns:repeat(3,minmax(0,1fr))}
