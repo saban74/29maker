@@ -1,4 +1,4 @@
-# 29maker
+# 29 Crew
 
 Claude Code로 움직이는 개인용 AI 에이전트 팀과, 그 팀을 관리하는 대시보드 **29 Crew**가 들어 있어요.
 모두 Claude Max 요금제 안에서 돌아가요. 다른 AI 회사의 API 키는 필요 없어요.
@@ -17,8 +17,13 @@ Claude Code로 움직이는 개인용 AI 에이전트 팀과, 그 팀을 관리�
 
 ### 설치 (윈도우, 한 번만)
 
-1. 이 저장소를 PC에 내려받아요. (Git이 있으면 `git clone`, 없으면 GitHub의 Code → Download ZIP 후 압축 풀기)
-2. 폴더 안의 **`install.bat`를 더블클릭**해요.
+1. 이 저장소를 PC에 내려받아요. Git이 있으면 아래 명령, 없으면 GitHub의 Code → Download ZIP 후 압축 풀기.
+
+```powershell
+git clone https://github.com/saban74/29crew.git
+```
+
+2. `29crew` 폴더 안의 **`install.bat`를 더블클릭**해요.
 
 설치 도우미가 차례로 해 줘요.
 
@@ -123,7 +128,7 @@ tailscale funnel 8130
 - 미션은 Claude Code를 자동 실행(`claude -p`)해서 돌아가요. Max 요금제 사용량이 쓰여요.
 - 미션 중에는 설정 화면의 "허락 없이 쓸 수 있는 도구"만 써요. 아무 명령이나 실행하는 도구는 기본으로 막혀 있어요.
 - `data/` 폴더(미션 기록, 영상, 열쇠)는 git에 올라가지 않아요. 가끔 다른 곳에 복사해서 백업하세요.
-- 새 버전 받기: 대시보드를 끄고 29maker 폴더에서 `git pull`
+- 새 버전 받기: 대시보드를 끄고 29crew 폴더에서 `git pull`
 
 ## AI 에이전트
 
