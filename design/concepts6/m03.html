@@ -1,0 +1,103 @@
+<!-- m03 회색 띠 + 제품군 탭형: 메인 비주얼 아래 회색 띠에서 제품군을 탭으로 고르면 사진·한 줄 설명·링크가 바뀜(CSS만) -->
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>m03 제품군 탭형 | 제이에스 엔지니어링</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
+<link rel="stylesheet" href="base.css">
+<link rel="stylesheet" href="m-a.css">
+</head>
+<body>
+<header class="hd">
+  <div class="wrap">
+    <div class="hd-util"><a href="#">ESPEC 공식 사이트(영문)</a><a href="#">카탈로그</a><a href="#">고객지원</a><a href="#">오시는 길</a></div>
+    <div class="hd-main">
+      <a class="logo" href="#"><b>J&amp;S ENGINEERING</b><small>제이에스 엔지니어링 · ESPEC 한국 총대리점</small></a>
+      <nav class="gnb" aria-label="주 메뉴"><a href="#">회사소개</a><a href="#">제품소개</a><a href="#">솔루션</a><a href="#">기술자료</a><a href="#">서비스</a><a href="#">고객지원</a></nav>
+      <div class="hd-cta"><a class="btn btn--svc" href="#">서비스접수</a><a class="btn" href="#">견적문의</a><button class="menu-btn" type="button" aria-label="메뉴 열기" onclick="this.closest('.hd').classList.toggle('is-open')"><span></span><span></span><span></span></button></div>
+    </div>
+  </div>
+</header>
+
+<main>
+<section class="mv" aria-label="메인 비주얼">
+  <div class="wrap"><div class="mv-in" style="min-height:340px">
+    <div class="mv-txt">
+      <small>ESPEC 한국 총대리점</small>
+      <h1>환경시험기, 필요한 장비를<br>제품군별로 찾아보세요</h1>
+      <a class="mv-box" href="#">제품 도입·견적 상담<br>02-557-0505</a>
+    </div>
+    <div class="mv-pic"><img src="../../site/assets/img/catalog/tsa-lineup.jpg" alt="열충격 시험기 라인업" style="max-height:290px"></div>
+  </div></div>
+</section>
+
+<!-- 회색 띠: 제품군 탭 -->
+<section class="band" aria-labelledby="fam">
+  <div class="wrap">
+    <div class="tb">
+      <input type="radio" name="tb" id="t1" checked aria-label="항온항습기">
+      <input type="radio" name="tb" id="t2" aria-label="열충격">
+      <input type="radio" name="tb" id="t3" aria-label="HAST">
+      <input type="radio" name="tb" id="t4" aria-label="급속온도변화">
+      <input type="radio" name="tb" id="t5" aria-label="워크인">
+      <h2 id="fam" class="sr">제품군</h2>
+      <div class="tb-nav" role="presentation"><label for="t1">항온항습기</label><label for="t2">열충격</label><label for="t3">HAST</label><label for="t4">급속온도변화</label><label for="t5">워크인</label></div>
+      <div class="tb-pane p1"><div class="ph"><img src="../../site/assets/img/catalog/pj-single-1.jpg" alt="Platinous J"></div><div><h2>항온항습기 Platinous J</h2><p>온도 -20 ~ +100°C, 습도 20 ~ 98%rh를 다루는 기본 환경시험기입니다. 120L부터 800L까지 있습니다.</p><a class="btn" href="#">제품 보기</a></div></div>
+      <div class="tb-pane p2"><div class="ph"><img src="../../site/assets/img/catalog/tsa-single-1.jpg" alt="열충격 시험기 TSA"></div><div><h2>열충격 시험기 TSA · TSE · TSD</h2><p>고온과 저온을 오가며 부품이 급격한 온도 변화를 견디는지 확인합니다.</p><a class="btn" href="#">제품 보기</a></div></div>
+      <div class="tb-pane p3"><div class="ph"><img src="../../site/assets/img/catalog/ehs-single-large.jpg" alt="HAST 시험기 EHS"></div><div><h2>HAST 가속수명 시험기 EHS</h2><p>+105 ~ +142.9°C, 75 ~ 100%rh의 고온·고습·가압 조건으로 수명 시험을 줄입니다.</p><a class="btn" href="#">제품 보기</a></div></div>
+      <div class="tb-pane p4"><div class="ph"><img src="../../site/assets/img/catalog/ar-pair.jpg" alt="AR 시리즈"></div><div><h2>급속 온도변화 시험기 AR 시리즈</h2><p>최대 -70 ~ +180°C 범위에서 습도 10 ~ 98%rh까지 함께 걸어 시험합니다.</p><a class="btn" href="#">제품 보기</a></div></div>
+      <div class="tb-pane p5"><div class="ph"><img src="../../site/assets/img/catalog/walkin-open.jpg" alt="워크인 챔버"></div><div><h2>워크인 챔버 E 시리즈</h2><p>-40 ~ +80°C, 10 ~ 95%rh. 제품이나 장치를 통째로 넣어 시험하는 큰 시험실입니다.</p><a class="btn" href="#">제품 보기</a></div></div>
+    </div>
+    <div class="tb-band-bottom"></div>
+  </div>
+</section>
+
+<section class="sec" aria-labelledby="pu">
+  <div class="wrap">
+    <div class="sec-h"><h2 id="pu">새 소식 · 신제품</h2><p>Pick up</p></div>
+    <div class="cols3">
+      <a href="#"><div class="ph"><img src="../../site/assets/img/web/mtp-101-news.webp" alt="MTP-101"></div><div class="b"><h3>MTP-101, 2026 굿디자인상 수상</h3><p class="cap">2026.10.26</p></div></a>
+      <a href="#"><div class="ph"><img src="../../site/assets/img/catalog/walkin-dark-1.jpg" alt="워크인"></div><div class="b"><h3>AI 서버 시험용 고발열 워크인 항온항습실 출시</h3><p class="cap">2026.02.04</p></div></a>
+      <a href="#"><div class="ph"><img src="../../site/assets/img/web/semicon-amr-mv.png" alt="AMR-SPM"></div><div class="b"><h3>AMR-SPM·AMI-SPM 출시</h3><p class="cap">2026.08.28</p></div></a>
+    </div>
+  </div>
+</section>
+
+<section class="sec sec--gray" aria-labelledby="svc">
+  <div class="wrap">
+    <div class="sec-h"><h2 id="svc">서비스와 회사</h2><p>Service &amp; Company</p></div>
+    <div class="tiles"><a class="tile" href="#">서비스 접수</a><a class="tile" href="#">위탁 시험소</a><a class="tile" href="#">기술 협력</a><a class="tile" href="#">회사 개요</a><a class="tile" href="#">연혁</a><a class="tile" href="#">오시는 길</a></div>
+  </div>
+</section>
+
+<section class="sec" aria-labelledby="nw">
+  <div class="wrap">
+    <div class="sec-h"><h2 id="nw">뉴스</h2><p>News</p></div>
+    <div class="ntab"><span>전체</span><span>제품·서비스</span><span>기업</span><span>공지</span></div>
+    <ul class="nw">
+      <li><a href="#"><time>2026.10.26</time><span class="lbl lbl--p">제품·서비스</span><span>원디바이스 항온 시험기 MTP-101, 2026 굿디자인상 수상</span></a></li>
+      <li><a href="#"><time>2026.09.24</time><span class="lbl lbl--p">제품·서비스</span><span>EU F-gas 규정에 대응한 CO2 냉매 환경시험기 (유럽 시장용)</span></a></li>
+      <li><a href="#"><time>2026.05.21</time><span class="lbl lbl--c">기업</span><span>ESPEC, CDP 공급망 참여 평가 최상위 4년 연속 선정</span></a></li>
+      <li><a href="#"><time>2025.12.01</time><span class="lbl lbl--c">기업</span><span>ESPEC, Nikkei 지속가능 경영 조사 평가</span></a></li>
+    </ul>
+    <div class="more-c"><a class="more" href="#">뉴스 전체 보기</a></div>
+  </div>
+</section>
+</main>
+
+<footer class="ft ft--dense">
+  <div class="wrap">
+    <div class="ft-cols">
+      <div><h4>제품소개</h4><ul><li><a href="#">항온항습기</a></li><li><a href="#">열충격 시험기</a></li><li><a href="#">HAST 시험기</a></li><li><a href="#">급속 온도변화</a></li><li><a href="#">워크인 챔버</a></li></ul></div>
+      <div><h4>솔루션</h4><ul><li><a href="#">반도체</a></li><li><a href="#">전기·전자</a></li><li><a href="#">배터리</a></li><li><a href="#">자동차·모빌리티</a></li></ul></div>
+      <div><h4>고객지원</h4><ul><li><a href="#">견적·문의</a></li><li><a href="#">서비스접수</a></li><li><a href="#">기술자료</a></li></ul></div>
+      <div><h4>회사소개</h4><ul><li><a href="#">회사 개요</a></li><li><a href="#">연혁</a></li><li><a href="#">네트워크</a></li><li><a href="#">오시는 길</a></li></ul></div>
+      <div class="ft-info"><h4>(주)제이에스 엔지니어링</h4><p>대표전화 02-557-0505 · 팩스 02-557-2253</p><p>본사·공장 충남 아산시 둔포면 관대안길 31</p><p>서울사무소 서울시 강남구 삼성로82길 26 제이에스B/D 3층</p></div>
+    </div>
+  </div>
+  <div class="wrap"><div class="ft-bottom"><span>© 제이에스 엔지니어링 J&amp;S ENGINEERING</span><span>장비 이미지 출처: ESPEC Corp. 공식 웹사이트 및 제품 카탈로그</span></div></div>
+</footer>
+</body>
+</html>
