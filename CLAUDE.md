@@ -18,6 +18,7 @@
 | 코드 설명 | `code-explainer` |
 | 코드 검토 | `code-reviewer` |
 | 릴스 카드영상 만들기 | `reels-producer` (스킬: `reels-maker`) |
+| 게시용 제목·캡션·해시태그 | `caption-writer` |
 | 글·대본·영상 검수 | `content-reviewer` |
 
 - 간단한 질문은 에이전트 없이 바로 답합니다.

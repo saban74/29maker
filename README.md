@@ -117,6 +117,7 @@ tailscale funnel 8130
 | `planner` | 막연한 아이디어를 단계별 계획으로 정리 | 안 함 |
 | `writer` | 글쓰기, 요약, 번역, 다듬기 | 요청할 때만 |
 | `reels-producer` | 릴스 카드영상 기획부터 MP4까지 (스킬: `reels-maker`) | 함 |
+| `caption-writer` | 게시용 제목·캡션·해시태그 여러 버전 (빠른 haiku 모델) | 안 함 |
 | `code-explainer` | 코드를 입문자 눈높이로 쉽게 설명 | 안 함 |
 | `code-reviewer` | 코드의 버그, 보안 문제, 개선점 점검 (검수 담당) | 안 함 |
 | `content-reviewer` | 글·대본·영상 결과물 점검 (검수 담당) | 안 함 |
