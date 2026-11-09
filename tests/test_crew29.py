@@ -184,6 +184,7 @@ class MissionsTest(Sandbox):
         self.assertEqual(d["status"], "done")
         self.assertEqual(d["result"], "다 했어요")
         self.assertIn("▶ 시작 (모델: test-model)", d["log"])
+        self.assertEqual((d["model"], missions.last_model()), ("test-model", "test-model"))
         self.assertIn("🔧 Agent writer", d["log"])
 
     def test_activity_names_latest_agent(self):

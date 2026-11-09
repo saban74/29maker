@@ -213,7 +213,7 @@ input:focus-visible, select:focus-visible, textarea:focus-visible { outline: non
 .tm-head h3 { font-size: 17px; font-weight: 700; }
 .tm-link { margin-left: auto; color: var(--muted); font-size: 13px; }
 .tm-link:hover { color: var(--fg); }
-.teammap { position: relative; min-height: 560px; color: #4a4d53; }
+.teammap { position: relative; min-height: 600px; color: #4a4d53; }
 .tm-lines { position: absolute; inset: 0; pointer-events: none; overflow: visible; }
 .tm-line { fill: none; stroke: currentColor; stroke-width: 1.2; }
 .tm-line.dashed { stroke-dasharray: 4 4; }
@@ -229,7 +229,7 @@ input:focus-visible, select:focus-visible, textarea:focus-visible { outline: non
 }
 .tm-role b { font: 600 12px/1 var(--mono); letter-spacing: .06em; color: var(--fg); }
 .tm-ico { color: var(--dim); font-size: 13px; }
-.tm-nodes { position: absolute; top: 240px; left: 340px; right: 0; display: flex; justify-content: space-around; gap: 16px; }
+.tm-nodes { position: absolute; top: 290px; left: 340px; right: 0; display: flex; justify-content: space-around; gap: 16px; }
 .tm-node { display: flex; flex-direction: column; align-items: center; text-align: center; width: 170px; color: var(--muted); }
 .tm-frame { padding: 10px; border: 1px dashed #303134; border-radius: 12px; }
 .tm-tile { width: 72px; height: 72px; border-radius: 8px; background: var(--panel-2); border: 1px solid var(--line); position: relative; }

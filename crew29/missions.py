@@ -110,6 +110,14 @@ def detail(mid: str) -> dict:
     return m
 
 
+def last_model() -> str:
+    """가장 최근 미션에서 Claude Code 기본 모델로 쓰인 모델 이름 (모르면 빈칸)."""
+    for m in list_missions():
+        if m.get("model"):
+            return m["model"]
+    return ""
+
+
 def activity() -> dict:
     """지금 돌고 있는 미션과, 그 미션에서 마지막으로 일을 맡은 에이전트."""
     for m in list_missions():
@@ -288,6 +296,10 @@ class Runner:
                     continue
                 if ev.get("type") == "result":
                     result = ev.get("result") or ""
+                if ev.get("type") == "system" and ev.get("subtype") == "init" and ev.get("model"):
+                    cur = load(m["id"])  # 실제로 쓰인 모델 이름을 남겨 둔다 (홈 구조도에 표시)
+                    cur["model"] = ev["model"]
+                    _write(cur)
                 line = log_line(ev)
                 if line:
                     log.write(line + "\n")

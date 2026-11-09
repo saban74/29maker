@@ -184,7 +184,11 @@ function home() {
 }
 /* ---------- AI 팀 구조도 (029 Maker 홈과 같은 모양) ---------- */
 const MODEL_LABEL = { opus: "opus", sonnet: "sonnet", haiku: "haiku", inherit: "기본 모델" };
-const ROLES = [["lead", "TEAM LEAD", "팀장"], ["worker", "WORKER", "일꾼"], ["review", "REVIEW", "검수"]];
+const ROLES = [["lead", "TEAM LEAD", "팀장"], ["research", "RESEARCH", "조사"], ["maker", "MAKER", "제작"], ["review", "REVIEW", "검수"]];
+/* 역할 나누기: 이름이 reviewer로 끝나면 검수, research가 들어가면 조사, 나머지는 제작 */
+const roleOf = (a) => isReviewer(a.name) ? "review" : a.name.includes("research") ? "research" : "maker";
+/* 'claude-opus-5-5' → 'opus-5-5' 처럼 짧게 */
+const shortModel = (m) => (m || "").replace(/^claude-/, "");
 
 function teamGroups(d) {
   // 모델마다 상자 하나. 팀장(총감독)은 Claude Code 기본 모델로 돈다.
@@ -195,7 +199,7 @@ function teamGroups(d) {
     if (name) n.agents.push(name);
   };
   add("inherit", "lead", "");
-  for (const a of d.agents) add(a.model || "inherit", isReviewer(a.name) ? "review" : "worker", a.name);
+  for (const a of d.agents) add(a.model || "inherit", roleOf(a), a.name);
   const order = ["inherit", "opus", "sonnet", "haiku"];
   return Object.values(nodes).sort((x, y) => order.indexOf(x.model) - order.indexOf(y.model));
 }
@@ -206,7 +210,8 @@ function teamMap(d) {
   const busyAgent = d.agents.find(a => a.name === act.agent);
   const busyModel = act.mission ? (busyAgent ? (busyAgent.model || "inherit") : "inherit") : null;
   const glyph = () => h("div", { class: "tm-glyph", "aria-hidden": "true" }, Array.from({ length: 12 }, () => h("i", {})));
-  const busyRole = !act.mission ? "" : busyAgent ? (isReviewer(busyAgent.name) ? "review" : "worker") : "lead";
+  const busyRole = !act.mission ? "" : busyAgent ? roleOf(busyAgent) : "lead";
+  const modelName = (m) => m === "inherit" && d.default_model ? shortModel(d.default_model) : (MODEL_LABEL[m] || m);
   const box = h("div", { class: "teammap", "data-busy-role": busyRole },
     h("div", { class: "tm-roles" }, ROLES.map(([key, en, ko]) =>
       h("div", { class: "tm-role", "data-role": key }, h("span", { class: "tm-ico", "aria-hidden": "true" }, "⌘"), h("b", {}, en), h("span", {}, ko)))),
@@ -216,9 +221,9 @@ function teamMap(d) {
       const names = n.agents.slice(0, 3).join(", ") + (n.agents.length > 3 ? ` 외 ${n.agents.length - 3}` : "");
       return h("a", { class: "tm-node" + (busy ? " busy" : ""), href: "#/team", "data-model": n.model, "data-roles": [...n.roles].join(" ") },
         h("div", { class: "tm-frame" }, h("div", { class: "tm-tile" }, glyph())),
-        h("b", { class: "tm-name" }, MODEL_LABEL[n.model] || n.model),
+        h("b", { class: "tm-name" }, n.model === "inherit" ? "기본 모델" : modelName(n.model)),
         h("span", { class: "tm-state" }, busy ? (busyAgent ? `${busyAgent.name} 일하는 중` : "지휘하는 중") : "쉬는 중"),
-        h("span", { class: "tm-meta" }, roles + " · " + (MODEL_LABEL[n.model] || n.model)),
+        h("span", { class: "tm-meta" }, roles + " · " + modelName(n.model)),
         names ? h("span", { class: "tm-agents" }, "+ " + names) : null);
     })),
     h("div", { class: "tm-report" }, h("span", {}, "REPORT"), " 결과 보고 · 검수"));
@@ -252,7 +257,7 @@ function drawTeamLinks(box) {
     if (targets.length) dot(sx, sy);
     targets.forEach(n => {
       const f = rel(n.querySelector(".tm-frame"));
-      const tx = f.x + f.w / 2 + (i - 1) * 6, ty = f.y - 4, rad = 12;
+      const tx = f.x + f.w / 2 + (i - 1.5) * 5, ty = f.y - 4, rad = 12;
       path(`M${sx} ${sy} H${tx - rad} Q${tx} ${sy} ${tx} ${sy + rad} V${ty}`, "tm-line" + (n.classList.contains("busy") && box.dataset.busyRole === roleEl.dataset.role ? " busy" : "")).setAttribute("marker-end", "url(#tm-arrow)");
     });
   });
