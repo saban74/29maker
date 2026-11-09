@@ -8,10 +8,44 @@ const COLOR = { blue: "#4f7cff", green: "#33b07a", purple: "#9b6bff", orange: "#
   yellow: "#d9a520", pink: "#e8649b", cyan: "#22aecc" };
 const STATUS = { queued: "대기 중", running: "진행 중", stopping: "멈추는 중", done: "완료", failed: "실패",
   stopped: "멈춤", interrupted: "중단됨" };
+/* 메뉴: [주소, 아이콘, 이름, 휴대폰 아래 메뉴에 보일지]. 휴대폰 아래 메뉴는 5개까지만 둔다. */
 const NAV = [
-  ["home", "⌂", "홈"], ["missions", "◎", "미션"], ["team", "👥", "팀"],
-  ["skills", "🧰", "스킬"], ["studio", "🎬", "영상"], ["publish", "📤", "게시"], ["settings", "⚙", "설정"],
+  ["home", "home", "홈", true], ["missions", "target", "미션", true], ["team", "users", "팀", false],
+  ["skills", "book", "스킬", false], ["studio", "film", "영상", true], ["publish", "upload", "게시", true],
+  ["settings", "sliders", "설정", false],
 ];
+const MORE = ["team", "skills", "settings"];
+/* 선 아이콘 (Lucide 모양). 글자 옆에 붙는 장식이라 화면 읽기 프로그램에는 숨긴다. */
+const ICONS = {
+  home: "M3 10.5 12 3l9 7.5V20a1 1 0 0 1-1 1h-5v-6H9v6H4a1 1 0 0 1-1-1z",
+  target: "M12 21a9 9 0 1 0 0-18 9 9 0 0 0 0 18Z M12 16a4 4 0 1 0 0-8 4 4 0 0 0 0 8Z M12 12h.01",
+  users: "M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2 M9 11a4 4 0 1 0 0-8 4 4 0 0 0 0 8Z M22 21v-2a4 4 0 0 0-3-3.87 M16 3.13a4 4 0 0 1 0 7.75",
+  book: "M4 19.5A2.5 2.5 0 0 1 6.5 17H20V3H6.5A2.5 2.5 0 0 0 4 5.5z M4 19.5A2.5 2.5 0 0 0 6.5 22H20v-5",
+  film: "M3 5h18v14H3z M7 5v14 M17 5v14 M3 9.5h4 M17 9.5h4 M3 14.5h4 M17 14.5h4",
+  upload: "M12 15V3 M7 8l5-5 5 5 M4 15v4a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-4",
+  sliders: "M4 21v-7 M4 10V3 M12 21v-9 M12 8V3 M20 21v-5 M20 12V3 M1 14h6 M9 8h6 M17 16h6",
+  more: "M5 12h.01 M12 12h.01 M19 12h.01",
+};
+/* 켜고 끄는 칩: 키보드로도 누를 수 있고, 켜졌는지 화면 읽기 프로그램에 알려 준다. */
+function toggleChip(c, isOn, onToggle) {
+  c.tabIndex = 0;
+  c.setAttribute("role", "button");
+  c.setAttribute("aria-pressed", String(isOn()));
+  c.onclick = () => { onToggle(); c.setAttribute("aria-pressed", String(isOn())); };
+  c.onkeydown = (e) => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); c.click(); } };
+  return c;
+}
+
+function icon(name) {
+  const NS = "http://www.w3.org/2000/svg";
+  const svg = document.createElementNS(NS, "svg");
+  for (const [k, v] of Object.entries({ viewBox: "0 0 24 24", width: 18, height: 18, fill: "none", stroke: "currentColor",
+    "stroke-width": name === "more" ? 3 : 1.8, "stroke-linecap": "round", "stroke-linejoin": "round", "aria-hidden": "true", class: "ico" })) svg.setAttribute(k, v);
+  const path = document.createElementNS(NS, "path");
+  path.setAttribute("d", ICONS[name]);
+  svg.append(path);
+  return svg;
+}
 
 function h(tag, attrs, ...kids) {
   const el = document.createElement(tag);
@@ -22,6 +56,16 @@ function h(tag, attrs, ...kids) {
     else if (k === "value") el.value = v;
     else el.setAttribute(k, v === true ? "" : v);
   }
+  // 버튼이 아닌 요소를 누를 수 있게 만들었으면 키보드(Tab, Enter, Space)로도 쓸 수 있게 한다.
+  if (attrs && attrs.onclick && !["BUTTON", "A", "INPUT", "SELECT", "TEXTAREA", "LABEL"].includes(el.tagName) && !attrs["aria-hidden"]) {
+    el.tabIndex = 0;
+    if (!el.getAttribute("role")) el.setAttribute("role", "button");
+    el.addEventListener("keydown", (e) => {
+      if (e.target === el && (e.key === "Enter" || e.key === " ")) { e.preventDefault(); el.click(); }
+    });
+  }
+  // 칸 이름이 따로 없는 입력칸은 안내 글을 이름으로 쓴다 (화면 읽기 프로그램용).
+  if (["INPUT", "TEXTAREA"].includes(el.tagName) && attrs && attrs.placeholder && !attrs["aria-label"]) el.setAttribute("aria-label", attrs.placeholder);
   for (const kid of kids.flat()) if (kid != null && kid !== false) el.append(kid.nodeType ? kid : String(kid));
   return el;
 }
@@ -39,7 +83,7 @@ async function api(path, opts = {}) {
 }
 
 function toast(msg, bad) {
-  const t = h("div", { class: "toast" + (bad ? " bad" : "") }, msg);
+  const t = h("div", { class: "toast" + (bad ? " bad" : ""), role: bad ? "alert" : "status", "aria-live": bad ? "assertive" : "polite" }, msg);
   document.body.append(t);
   setTimeout(() => t.remove(), bad ? 5000 : 2500);
 }
@@ -85,13 +129,17 @@ function route() {
   const [page, arg] = path.split("/");
   const query = new URLSearchParams(qs || "");
   clearInterval(S.timer);
-  fill($("#nav"), ...NAV.map(([id, ico, label]) => h("a", { href: "#/" + id, class: page === id || (page === "mission" && id === "missions") ? "on" : "" },
-    h("span", { class: "ico" }, ico), label,
+  const on = (id) => page === id || (page === "mission" && id === "missions");
+  fill($("#nav"), ...NAV.map(([id, ico, label, mobile]) => h("a", { href: "#/" + id, class: (on(id) ? "on" : "") + (mobile ? "" : " desk-only"),
+    "aria-current": on(id) ? "page" : null },
+    icon(ico), label,
     id === "missions" && S.data ? h("span", { class: "count", id: "count-missions" }, S.data.missions.filter(m => ["running", "queued"].includes(m.status)).length || "") : null,
-    id === "publish" && S.data ? h("span", { class: "count", id: "count-publish" }, S.data.publish.filter(p => p.status === "pending").length || "") : null)));
+    id === "publish" && S.data ? h("span", { class: "count", id: "count-publish" }, S.data.publish.filter(p => p.status === "pending").length || "") : null)),
+    h("a", { href: "#/more", class: "mobile-only" + (page === "more" || MORE.includes(page) ? " on" : ""), "aria-current": page === "more" ? "page" : null },
+      icon("more"), "더보기"));
   fill($("#actions"));
   $("#subtitle").textContent = "";
-  const pages = { home, missions: missionsPage, mission: missionPage, team, skills: skillsPage, studio, publish: publishPage, settings };
+  const pages = { home, missions: missionsPage, mission: missionPage, team, skills: skillsPage, studio, publish: publishPage, settings, more: morePage };
   (pages[page] || home)(arg, query);
 }
 
@@ -101,6 +149,15 @@ function head(title, sub, ...actions) {
   fill($("#actions"), ...actions);
 }
 const page = (...kids) => fill($("#page"), ...kids);
+
+/* 휴대폰 '더보기': 아래 메뉴에 못 들어간 화면들 */
+function morePage() {
+  head("더보기", "");
+  const d = S.data;
+  const desc = { team: `에이전트 ${d.agents.length}명`, skills: `스킬 ${d.skills.length}개`, settings: "도구 점검 · 계정 연결" };
+  page(h("div", { class: "list" }, NAV.filter(([id]) => MORE.includes(id)).map(([id, ico, label]) =>
+    h("a", { class: "item", href: "#/" + id }, icon(ico), h("div", { class: "grow" }, h("b", {}, label), h("div", { class: "muted small" }, desc[id])), "›"))));
+}
 
 /* ---------- 홈 ---------- */
 function home() {
@@ -237,11 +294,21 @@ function agentGrid(list) {
 }
 
 function drawer(title, body, actions) {
-  const close = () => fill($("#layer"));
-  fill($("#layer"), 
-    h("div", { class: "drawer-bg", onclick: close }),
-    h("div", { class: "drawer" }, h("div", { class: "head" }, h("h3", {}, title), h("button", { class: "btn ghost sm", style: "margin-left:auto", onclick: close }, "✕")),
-      h("div", { class: "body" }, body), h("div", { class: "foot" }, actions(close))));
+  const before = document.activeElement;
+  const onKey = (e) => { if (e.key === "Escape") close(); };
+  const close = () => {
+    document.removeEventListener("keydown", onKey);
+    fill($("#layer"));
+    if (before && before.isConnected) before.focus();
+  };
+  const panel = h("div", { class: "drawer", role: "dialog", "aria-modal": "true", "aria-labelledby": "drawer-title" },
+    h("div", { class: "head" }, h("h3", { id: "drawer-title" }, title),
+      h("button", { class: "btn ghost sm", style: "margin-left:auto", onclick: close, "aria-label": "닫기" }, "✕")),
+    h("div", { class: "body" }, body), h("div", { class: "foot" }, actions(close)));
+  fill($("#layer"), h("div", { class: "drawer-bg", onclick: close, "aria-hidden": "true" }), panel);
+  document.addEventListener("keydown", onKey);
+  const first = panel.querySelector(".body input:not([disabled]), .body textarea, .body select, .body button") || panel.querySelector("button");
+  if (first) first.focus();
 }
 
 function agentEditor(a) {
@@ -256,13 +323,12 @@ function agentEditor(a) {
   const role = h("textarea", { rows: 12, class: "code", value: a.role, placeholder: "당신은 ...입니다.\n\n## 역할\n- ...\n\n## 하지 말 것\n- ..." });
   const chipSet = (all, set, max) => h("div", { class: "chips" }, all.map(x => {
     const c = h("span", { class: "chip" + (set.has(x) ? " on" : "") }, x);
-    c.onclick = () => {
+    return toggleChip(c, () => set.has(x), () => {
       if (set.has(x)) set.delete(x);
       else if (max && set.size >= max) return toast(`스킬은 ${max}개까지 달 수 있어요.`, true);
       else set.add(x);
       c.classList.toggle("on", set.has(x));
-    };
-    return c;
+    });
   }));
   drawer(isNew ? "새 에이전트" : a.name, h("div", {},
     h("label", { class: "f" }, h("span", {}, "이름 (영어 소문자·숫자·하이픈)"), name),
@@ -434,9 +500,9 @@ function studio() {
         h("div", { class: "spread" }, h("div", { class: "row" }, h("span", { class: "n" }, i + 1), h("b", {}, c.title || "(제목 없음)"),
           c.background.type !== "none" ? h("span", { class: "tag accent" }, c.background.type === "higgsfield" ? "🎥 AI 클립" : "🎞 내 영상") : null),
           h("div", { class: "row" },
-            h("button", { class: "btn ghost sm", title: "위로", onclick: (e) => { e.stopPropagation(); move(i, -1); } }, "↑"),
-            h("button", { class: "btn ghost sm", title: "아래로", onclick: (e) => { e.stopPropagation(); move(i, 1); } }, "↓"),
-            h("button", { class: "btn ghost sm danger", title: "지우기", onclick: (e) => {
+            h("button", { class: "btn ghost sm", title: "위로", "aria-label": `${i + 1}번 카드 위로`, onclick: (e) => { e.stopPropagation(); move(i, -1); } }, "↑"),
+            h("button", { class: "btn ghost sm", title: "아래로", "aria-label": `${i + 1}번 카드 아래로`, onclick: (e) => { e.stopPropagation(); move(i, 1); } }, "↓"),
+            h("button", { class: "btn ghost sm danger", title: "지우기", "aria-label": `${i + 1}번 카드 지우기`, onclick: (e) => {
               e.stopPropagation();
               if (proj.cards.length === 1) return toast("카드는 한 장 이상 있어야 해요.", true);
               proj.cards.splice(i, 1); cur = Math.min(cur, proj.cards.length - 1); save(); drawScenes(); preview();
@@ -635,8 +701,8 @@ function publishDialog(j) {
   const chip = (k) => {
     const disabled = k === "youtube" && images;
     const c = h("span", { class: "chip" + (pick[k] ? " on" : ""), style: disabled ? "opacity:.4" : "" }, PLATFORM[k], d.linked[k] ? "" : " (연결 안 됨)");
-    c.onclick = () => { if (disabled) return toast("카드형 이미지는 인스타그램에만 올릴 수 있어요.", true); pick[k] = !pick[k]; c.classList.toggle("on", pick[k]); };
-    return c;
+    if (disabled) c.setAttribute("aria-disabled", "true");
+    return toggleChip(c, () => pick[k], () => { if (disabled) return toast("카드형 이미지는 인스타그램에만 올릴 수 있어요.", true); pick[k] = !pick[k]; c.classList.toggle("on", pick[k]); });
   };
   drawer("📤 게시 준비", h("div", {},
     h("div", { style: "max-width:220px" }, jobPreview(j)),

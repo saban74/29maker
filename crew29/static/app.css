@@ -6,9 +6,11 @@
   --line-2: #32333a;
   --fg: #e8e9ec;
   --muted: #8b8d96;
-  --dim: #5f616a;
+  --dim: #82858f;
   --accent: #7c83ff;
   --accent-soft: rgba(124, 131, 255, .14);
+  --accent-strong: #5a60e8;
+  --ring: #ffffff;
   --ok: #4cc38a;
   --warn: #f2b14c;
   --bad: #ef6464;
@@ -41,7 +43,8 @@ button, input, select, textarea { font: inherit; color: inherit; }
 }
 .nav a:hover { background: var(--panel-2); color: var(--fg); }
 .nav a.on { background: var(--accent-soft); color: var(--fg); }
-.nav .ico { width: 18px; text-align: center; }
+.nav .ico, .item .ico { flex: none; }
+.mobile-only { display: none !important; }
 .nav .count { margin-left: auto; font-size: 12px; color: var(--dim); }
 .side .foot { margin-top: auto; padding: 10px; font-size: 12px; color: var(--dim); }
 .main { min-width: 0; }
@@ -60,7 +63,7 @@ button, input, select, textarea { font: inherit; color: inherit; }
   display: inline-flex; align-items: center; gap: 6px; white-space: nowrap;
 }
 .btn:hover { border-color: #44464f; }
-.btn.primary { background: var(--accent); border-color: var(--accent); color: #fff; font-weight: 600; }
+.btn.primary { background: var(--accent-strong); border-color: var(--accent-strong); color: #fff; font-weight: 600; }
 .btn.primary:hover { filter: brightness(1.08); }
 .btn.danger { color: var(--bad); }
 .btn.ghost { background: transparent; }
@@ -181,4 +184,21 @@ video { width: 100%; max-width: 300px; border-radius: 12px; background: #000; di
   .g4.stats { grid-template-columns: repeat(2, 1fr); }
   .studio { grid-template-columns: 1fr; }
   .phone { position: static; margin: 0 auto; }
+}
+
+/* 접근성 · 움직임 */
+a, button, .chip, [role=button] { cursor: pointer; }
+.btn, .nav a, .chip, .item, .scene, .card[role=button] { transition: background-color .15s ease, border-color .15s ease, color .15s ease; }
+:focus-visible { outline: 2px solid var(--ring); outline-offset: 2px; border-radius: 6px; }
+input:focus-visible, select:focus-visible, textarea:focus-visible { outline: none; }
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { transition: none !important; animation: none !important; scroll-behavior: auto !important; }
+}
+@media (max-width: 860px) {
+  .desk-only { display: none !important; }
+  .mobile-only { display: flex !important; }
+  .nav a { min-height: 48px; min-width: 56px; justify-content: center; }
+  .btn, .chip { min-height: 44px; }
+  .btn.sm { min-height: 40px; }
+  input[type=text], input[type=number], input[type=url], input[type=password], input[type=datetime-local], select, textarea { font-size: 16px; }
 }
