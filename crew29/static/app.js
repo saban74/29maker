@@ -170,6 +170,7 @@ function home() {
       h("b", {}, "⚠️ 설치가 필요한 도구가 있어요"), " ",
       h("span", { class: "muted" }, missing.map(([k]) => k).join(", ")), " ",
       h("a", { href: "#/settings", class: "tag accent" }, "설정에서 확인")) : null,
+    teamMap(d),
     h("div", { class: "grid g4 stats mt" },
       stat("에이전트", d.agents.length, "#/team"), stat("스킬", d.skills.length, "#/skills"),
       stat("미션", d.missions.length, "#/missions"), stat("영상", d.videos.length, "#/studio")),
@@ -178,8 +179,100 @@ function home() {
     h("h2", {}, "최근 결과"),
     missionList(d.missions.filter(m => !running.includes(m)).slice(0, 6)),
   );
+  requestAnimationFrame(() => document.querySelectorAll(".teammap").forEach(drawTeamLinks));
   S.timer = setInterval(async () => { await load(); if (location.hash.startsWith("#/home") || !location.hash) home(); }, 4000);
 }
+/* ---------- AI 팀 구조도 (029 Maker 홈과 같은 모양) ---------- */
+const MODEL_LABEL = { opus: "opus", sonnet: "sonnet", haiku: "haiku", inherit: "기본 모델" };
+const ROLES = [["lead", "TEAM LEAD", "팀장"], ["worker", "WORKER", "일꾼"], ["review", "REVIEW", "검수"]];
+
+function teamGroups(d) {
+  // 모델마다 상자 하나. 팀장(총감독)은 Claude Code 기본 모델로 돈다.
+  const nodes = {};
+  const add = (model, role, name) => {
+    const n = nodes[model] = nodes[model] || { model, roles: new Set(), agents: [] };
+    n.roles.add(role);
+    if (name) n.agents.push(name);
+  };
+  add("inherit", "lead", "");
+  for (const a of d.agents) add(a.model || "inherit", isReviewer(a.name) ? "review" : "worker", a.name);
+  const order = ["inherit", "opus", "sonnet", "haiku"];
+  return Object.values(nodes).sort((x, y) => order.indexOf(x.model) - order.indexOf(y.model));
+}
+
+function teamMap(d) {
+  const nodes = teamGroups(d);
+  const act = d.activity || {};
+  const busyAgent = d.agents.find(a => a.name === act.agent);
+  const busyModel = act.mission ? (busyAgent ? (busyAgent.model || "inherit") : "inherit") : null;
+  const glyph = () => h("div", { class: "tm-glyph", "aria-hidden": "true" }, Array.from({ length: 12 }, () => h("i", {})));
+  const busyRole = !act.mission ? "" : busyAgent ? (isReviewer(busyAgent.name) ? "review" : "worker") : "lead";
+  const box = h("div", { class: "teammap", "data-busy-role": busyRole },
+    h("div", { class: "tm-roles" }, ROLES.map(([key, en, ko]) =>
+      h("div", { class: "tm-role", "data-role": key }, h("span", { class: "tm-ico", "aria-hidden": "true" }, "⌘"), h("b", {}, en), h("span", {}, ko)))),
+    h("div", { class: "tm-nodes" }, nodes.map(n => {
+      const busy = busyModel === n.model;
+      const roles = ROLES.filter(([k]) => n.roles.has(k)).map(([, en]) => en).join(" · ");
+      const names = n.agents.slice(0, 3).join(", ") + (n.agents.length > 3 ? ` 외 ${n.agents.length - 3}` : "");
+      return h("a", { class: "tm-node" + (busy ? " busy" : ""), href: "#/team", "data-model": n.model, "data-roles": [...n.roles].join(" ") },
+        h("div", { class: "tm-frame" }, h("div", { class: "tm-tile" }, glyph())),
+        h("b", { class: "tm-name" }, MODEL_LABEL[n.model] || n.model),
+        h("span", { class: "tm-state" }, busy ? (busyAgent ? `${busyAgent.name} 일하는 중` : "지휘하는 중") : "쉬는 중"),
+        h("span", { class: "tm-meta" }, roles + " · " + (MODEL_LABEL[n.model] || n.model)),
+        names ? h("span", { class: "tm-agents" }, "+ " + names) : null);
+    })),
+    h("div", { class: "tm-report" }, h("span", {}, "REPORT"), " 결과 보고 · 검수"));
+  return h("section", { class: "tm-wrap", "aria-label": "AI 팀 구조" },
+    h("div", { class: "tm-head" }, h("h3", {}, "AI 팀"), h("span", { class: "muted" }, "팀장이 일을 나누고, 결과를 모아 검수합니다."),
+      h("a", { class: "tm-link", href: "#/team" }, "팀 구성 바꾸기 →")),
+    box);
+}
+
+/* 상자 사이 연결선: 화면 크기에 맞춰 다시 그린다. */
+function drawTeamLinks(box) {
+  box.querySelector("svg.tm-lines")?.remove();
+  if (getComputedStyle(box).display === "none" || window.innerWidth <= 860) return;
+  const NS = "http://www.w3.org/2000/svg";
+  const r0 = box.getBoundingClientRect();
+  const svg = document.createElementNS(NS, "svg");
+  svg.setAttribute("class", "tm-lines");
+  svg.setAttribute("aria-hidden", "true");
+  svg.setAttribute("width", r0.width);
+  svg.setAttribute("height", r0.height);
+  svg.innerHTML = `<defs><marker id="tm-arrow" viewBox="0 0 10 10" refX="5" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0 10 5 0 10z" fill="currentColor"/></marker></defs>`;
+  const rel = (el) => { const r = el.getBoundingClientRect(); return { x: r.left - r0.left, y: r.top - r0.top, w: r.width, h: r.height }; };
+  const path = (d, cls) => { const p = document.createElementNS(NS, "path"); p.setAttribute("d", d); p.setAttribute("class", cls); svg.append(p); return p; };
+  const dot = (x, y) => { const c = document.createElementNS(NS, "circle"); c.setAttribute("cx", x); c.setAttribute("cy", y); c.setAttribute("r", 2.5); c.setAttribute("class", "tm-dot"); svg.append(c); };
+  const rolesBox = rel(box.querySelector(".tm-roles"));
+  const nodes = [...box.querySelectorAll(".tm-node")];
+  box.querySelectorAll(".tm-role").forEach((roleEl, i) => {
+    const r = rel(roleEl);
+    const sx = rolesBox.x + rolesBox.w + 10, sy = r.y + r.h / 2;
+    const targets = nodes.filter(n => n.dataset.roles.split(" ").includes(roleEl.dataset.role));
+    if (targets.length) dot(sx, sy);
+    targets.forEach(n => {
+      const f = rel(n.querySelector(".tm-frame"));
+      const tx = f.x + f.w / 2 + (i - 1) * 6, ty = f.y - 4, rad = 12;
+      path(`M${sx} ${sy} H${tx - rad} Q${tx} ${sy} ${tx} ${sy + rad} V${ty}`, "tm-line" + (n.classList.contains("busy") && box.dataset.busyRole === roleEl.dataset.role ? " busy" : "")).setAttribute("marker-end", "url(#tm-arrow)");
+    });
+  });
+  // 결과 보고: 각 모델에서 아래로 모여 팀장에게 돌아간다.
+  const rep = rel(box.querySelector(".tm-report"));
+  const ry = rep.y + rep.h / 2;
+  const back = rolesBox.x + 140;
+  nodes.forEach(n => {
+    const nb = rel(n);
+    const x = nb.x + nb.w / 2;
+    dot(x, nb.y + nb.h + 8);
+    path(`M${x} ${nb.y + nb.h + 8} V${ry}`, "tm-line dashed");
+  });
+  const last = nodes.length ? rel(nodes[nodes.length - 1]) : { x: back, w: 0 };
+  path(`M${last.x + last.w / 2} ${ry} H${rep.x + rep.w + 8}`, "tm-line dashed");
+  path(`M${rep.x - 8} ${ry} H${back + 12} Q${back} ${ry} ${back} ${ry - 12} V${rolesBox.y + rolesBox.h + 26}`, "tm-line dashed").setAttribute("marker-end", "url(#tm-arrow)");
+  box.prepend(svg);
+}
+window.addEventListener("resize", () => document.querySelectorAll(".teammap").forEach(drawTeamLinks));
+
 const stat = (label, n, href) => h("a", { class: "card stat", href }, h("span", { class: "muted small" }, label), h("b", {}, n));
 
 function missionList(list) {

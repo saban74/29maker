@@ -110,6 +110,22 @@ def detail(mid: str) -> dict:
     return m
 
 
+def activity() -> dict:
+    """지금 돌고 있는 미션과, 그 미션에서 마지막으로 일을 맡은 에이전트."""
+    for m in list_missions():
+        if m["status"] in ("running", "stopping"):
+            log = _dir(m["id"]) / "log.txt"
+            agent = ""
+            if log.is_file():
+                for line in reversed(log.read_text(encoding="utf-8", errors="replace").splitlines()[-200:]):
+                    line = line.strip()
+                    if line.startswith("🔧 Agent "):
+                        agent = line[len("🔧 Agent "):].split()[0] if line[len("🔧 Agent "):].strip() else ""
+                        break
+            return {"mission": m["id"], "goal": m["goal"], "agent": agent}
+    return {"mission": "", "goal": "", "agent": ""}
+
+
 def create(goal: str, mode: str = "team", agent: str = "", review: bool = True) -> dict:
     goal = goal.strip()
     if not goal:

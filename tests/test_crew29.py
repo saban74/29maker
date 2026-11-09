@@ -186,6 +186,17 @@ class MissionsTest(Sandbox):
         self.assertIn("▶ 시작 (모델: test-model)", d["log"])
         self.assertIn("🔧 Agent writer", d["log"])
 
+    def test_activity_names_latest_agent(self):
+        self.agent()
+        m = missions.create("x")
+        self.assertEqual(missions.activity()["agent"], "")
+        d = missions.load(m["id"])
+        d["status"] = "running"
+        missions._write(d)
+        (self.tmp / "data" / "missions" / m["id"] / "log.txt").write_text(
+            "🔧 Agent researcher\n  ↳ 🔧 WebSearch x\n🔧 Agent writer\n🔧 Write a.md\n", encoding="utf-8")
+        self.assertEqual(missions.activity(), {"mission": m["id"], "goal": "x", "agent": "writer"})
+
     def test_failed_exit_code(self):
         self.agent()
         self.fake_claude([{"type": "result", "result": ""}], code=2)

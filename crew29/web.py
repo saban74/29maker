@@ -38,6 +38,7 @@ def state() -> dict:
         "skills": skills.list_skills(),
         "director": paths.director_file().read_text(encoding="utf-8") if paths.director_file().is_file() else "",
         "missions": missions.list_missions()[:50],
+        "activity": missions.activity(),
         "videos": video.list_jobs()[:30],
         "publish": publish.list_drafts()[:50],
         "options": {"models": agents.MODELS, "colors": agents.COLORS, "tools": agents.TOOLS,
