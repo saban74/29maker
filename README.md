@@ -15,16 +15,33 @@ Claude Code로 움직이는 개인용 AI 에이전트 팀과, 그 팀을 관리�
 | 게시 | 게시 초안 → **사람이 승인** → (예약 시간에) 유튜브·인스타그램에 업로드 |
 | 설정 | 도구 점검, 유료 서비스·계정 연결, 미션에서 허락 없이 쓸 수 있는 도구 정하기 |
 
-### 처음 준비 (윈도우, 한 번만)
+### 설치 (윈도우, 한 번만)
 
-1. Python과 Claude Code가 설치되어 있어야 해요.
-2. 영상을 만들려면 ffmpeg를 설치해요.
+1. 이 저장소를 PC에 내려받아요. (Git이 있으면 `git clone`, 없으면 GitHub의 Code → Download ZIP 후 압축 풀기)
+2. 폴더 안의 **`install.bat`를 더블클릭**해요.
+
+설치 도우미가 차례로 해 줘요.
+
+| 순서 | 하는 일 |
+|------|---------|
+| 1 | Python 확인 (없으면 설치할지 물어봄) |
+| 2 | ffmpeg 확인 (영상 만들기) |
+| 3 | edge-tts 확인 (무료 목소리, 선택) |
+| 4 | Git·Claude Code 확인 |
+| 5 | 바탕화면 바로가기, (선택) 윈도우 시작 시 자동 실행 |
+| 6 | 최종 점검 후 바로 켜기 |
+
+질문에는 Enter(예) 또는 n(아니요)으로 답하면 돼요. 설정을 바꾸고 싶으면 언제든 다시 실행하세요.
+
+직접 설치하고 싶다면:
 
 ```powershell
-winget install ffmpeg
+winget install Python.Python.3.12
 ```
 
-3. 무료 목소리를 쓰려면 edge-tts를 설치해요. (선택)
+```powershell
+winget install Gyan.FFmpeg
+```
 
 ```powershell
 pip install edge-tts
@@ -32,7 +49,7 @@ pip install edge-tts
 
 ### 켜기
 
-`start-crew.bat`를 더블클릭하면 대시보드가 켜지고 브라우저가 열려요. 또는:
+바탕화면의 **29 Crew** 바로가기(또는 폴더 안 `start-crew.bat`)를 더블클릭하면 대시보드가 켜지고 브라우저가 열려요. 또는:
 
 ```powershell
 py -m crew29 dashboard
@@ -105,7 +122,8 @@ tailscale funnel 8130
 
 - 미션은 Claude Code를 자동 실행(`claude -p`)해서 돌아가요. Max 요금제 사용량이 쓰여요.
 - 미션 중에는 설정 화면의 "허락 없이 쓸 수 있는 도구"만 써요. 아무 명령이나 실행하는 도구는 기본으로 막혀 있어요.
-- `data/` 폴더(미션 기록, 영상, 열쇠)는 git에 올라가지 않아요.
+- `data/` 폴더(미션 기록, 영상, 열쇠)는 git에 올라가지 않아요. 가끔 다른 곳에 복사해서 백업하세요.
+- 새 버전 받기: 대시보드를 끄고 29maker 폴더에서 `git pull`
 
 ## AI 에이전트
 
