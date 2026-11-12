@@ -1,5 +1,5 @@
 // 오프라인용 저장(골프장은 전파가 약한 곳이 많아서 화면 파일을 폰에 보관)
-const CACHE = "golf-v4";
+const CACHE = "golf-v5";
 const FILES = ["./", "index.html", "style.css", "app.js", "betting.js", "geo.js", "clubs.js", "voicepack.js", "sync.js", "config.js", "icon.svg", "manifest.webmanifest"];
 self.addEventListener("install", (e) => e.waitUntil(caches.open(CACHE).then((c) => c.addAll(FILES))));
 self.addEventListener("activate", (e) =>

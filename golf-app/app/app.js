@@ -204,6 +204,8 @@ function showSetup() {
       <h2>내기 규칙</h2>
       <label>타당 금액 (1타 차이당)</label>
       <input id="unit" type="number" inputmode="numeric" step="500" value="${r.unit}">
+      <div class="presets">${[[1000, "일장"], [2000, "이장"], [3000, "삼장"], [5000, "오장"], [10000, "만원"]]
+        .map(([v, n]) => `<button type="button" data-unit="${v}">${n}<small>${v.toLocaleString("ko-KR")}</small></button>`).join("")}</div>
       <label class="check"><input type="checkbox" id="cap" ${r.capDoublePar ? "checked" : ""}> 양파(더블파) 이상은 더블파로 계산</label>
       <label>버디 보너스 (1명당, 이글은 2배, 0이면 없음)</label>
       <input id="birdie" type="number" inputmode="numeric" step="500" value="${r.birdieBonus}">
@@ -228,6 +230,9 @@ function showSetup() {
     if (club && club.courses.length > 1) $("#back9").value = "1";
   };
   $("#club").onchange = fillCourses; fillCourses();
+  const markUnit = () => view.querySelectorAll("[data-unit]").forEach((b) => b.classList.toggle("on", +b.dataset.unit === +$("#unit").value));
+  view.querySelectorAll("[data-unit]").forEach((b) => (b.onclick = () => { $("#unit").value = b.dataset.unit; markUnit(); }));
+  $("#unit").oninput = markUnit; markUnit();
 
   $("#create").onclick = async () => {
     const club = state.courses[$("#club").value];
