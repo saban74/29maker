@@ -1,0 +1,29 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>골프 내기 정산</title>
+  <meta name="theme-color" content="#1f6b3a">
+  <link rel="manifest" href="manifest.webmanifest">
+  <link rel="icon" href="icon.svg" type="image/svg+xml">
+  <link rel="apple-touch-icon" href="icon.svg">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header class="top">
+    <button id="back" class="icon-btn" aria-label="처음으로" hidden>‹</button>
+    <h1 id="title">골프 내기 정산</h1>
+    <span id="mode" class="mode"></span>
+  </header>
+  <main id="view"></main>
+  <nav id="tabs" class="tabs" hidden>
+    <button data-tab="score">스코어</button>
+    <button data-tab="distance">거리</button>
+    <button data-tab="money">정산</button>
+  </nav>
+  <div id="toast" class="toast" hidden></div>
+  <script type="module" src="app.js"></script>
+</body>
+</html>

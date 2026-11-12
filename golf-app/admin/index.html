@@ -1,0 +1,63 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>골프장 관리</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css">
+  <link rel="stylesheet" href="admin.css">
+</head>
+<body>
+  <aside class="panel">
+    <h1>골프장 관리 프로그램 <small>(PC용)</small></h1>
+
+    <section>
+      <h2>1. 지도에서 골프장 찾기</h2>
+      <div class="row"><input id="q" placeholder="예) ○○컨트리클럽"><button id="search">검색</button></div>
+      <div id="results"></div>
+      <div class="row">
+        <select id="layer">
+          <option value="osm">일반 지도 (OpenStreetMap)</option>
+          <option value="vworld">위성 사진 (브이월드, 키 필요)</option>
+        </select>
+      </div>
+      <div class="row" id="vw-row" hidden><input id="vwkey" placeholder="브이월드 API 키"><button id="vwsave">적용</button></div>
+    </section>
+
+    <section>
+      <h2>2. 골프장 기본 정보</h2>
+      <label>이름</label><input id="name">
+      <label>주소</label><input id="addr">
+      <label>정보 출처 메모 (어디서 확인했는지)</label><input id="src" placeholder="예) 직접 현장 확인, OpenStreetMap, 골프장 홈페이지 파 정보">
+    </section>
+
+    <section>
+      <h2>3. 코스와 홀</h2>
+      <div class="row" id="course-tabs"></div>
+      <div class="row">
+        <button id="add-course">+ 코스 추가 (9홀)</button>
+        <button id="rename-course">이름 바꾸기</button>
+        <button id="del-course" class="danger">코스 삭제</button>
+      </div>
+      <button id="osm" class="wide">OpenStreetMap에서 홀·그린 자동 불러오기 (지금 보이는 지도 범위)</button>
+      <p class="hint">버튼을 누른 뒤 지도를 클릭하면 그 자리가 그린 앞/중앙/뒤로 저장돼요. 마커는 끌어서 옮길 수 있어요.</p>
+      <table id="holes"></table>
+    </section>
+
+    <section>
+      <h2>4. 저장</h2>
+      <div class="row">
+        <button id="export" class="primary">JSON 파일로 저장</button>
+        <label class="file">불러오기<input type="file" id="import" accept=".json"></label>
+        <button id="reset" class="danger">새로 시작</button>
+      </div>
+      <p class="hint">저장한 파일을 <code>golf-app/app/courses/</code> 폴더에 넣고 <code>index.json</code> 목록에 파일 이름을 추가하면 앱에 나타나요.</p>
+    </section>
+  </aside>
+  <div id="map"></div>
+  <div id="status" class="status" hidden></div>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js"></script>
+  <script type="module" src="admin.js"></script>
+</body>
+</html>
