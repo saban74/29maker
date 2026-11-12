@@ -2,7 +2,8 @@
 import { DEFAULT_RULES, roundResult, settle, won } from "./betting.js";
 import { distanceM, watchMyPosition } from "./geo.js";
 import * as sync from "./sync.js";
-import { DEFAULT_CLUBS, recommendClub, speak, canSpeak } from "./clubs.js";
+import { DEFAULT_CLUBS, recommendClub, canSpeak } from "./clubs.js";
+import { announce, koreanVoices, listPacks } from "./voicepack.js";
 
 const $ = (s) => document.querySelector(s);
 const esc = (s) => String(s ?? "").replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
@@ -64,6 +65,11 @@ function showHome() {
       <button class="btn ghost" id="clubs">클럽 거리 입력</button>
     </div>
     <div class="card">
+      <h2>음성 안내</h2>
+      <p class="muted">목소리와 빠르기를 고르거나, 음성팩(내가 만든 목소리 파일)을 쓸 수 있어요.</p>
+      <button class="btn ghost" id="voice">음성 설정</button>
+    </div>
+    <div class="card">
       <h2>골프장 파일</h2>
       <p class="muted">PC 관리 프로그램에서 만든 골프장 파일(.json)을 이 폰에 넣거나, 현장에서 찍은 그린 위치를 파일로 내보내 PC에서 다듬을 수 있어요.</p>
       <label class="btn ghost file-btn">골프장 파일 불러오기<input type="file" id="course-file" accept=".json,application/json" hidden></label>
@@ -76,6 +82,7 @@ function showHome() {
   view.querySelectorAll(".recent a").forEach((a) => (a.onclick = (e) => { e.preventDefault(); openRound(a.dataset.code); }));
   $("#course-file").onchange = importCourse;
   $("#clubs").onclick = showClubs;
+  $("#voice").onclick = showVoice;
   $("#course-export").onclick = exportMyGreens;
 }
 
@@ -93,6 +100,47 @@ function showClubs() {
     toast("저장했어요");
     showHome();
   };
+}
+
+// ---------- 음성 설정 ----------
+const voiceSettings = () => store.get("golf.voice", { type: "system", voiceName: "", rate: 1, pack: "" });
+const SAMPLE = { holeNo: 3, par: 4, target: "center", dist: 152, front: 140, back: 165, club: "7번 아이언" };
+async function showVoice() {
+  setHeader("음성 설정", true);
+  const v = voiceSettings();
+  const packs = await listPacks();
+  const render = () => {
+    const voices = koreanVoices();
+    view.innerHTML = `
+      <div class="card">
+        <label class="check"><input type="radio" name="vt" value="system" ${v.type !== "pack" ? "checked" : ""}> 휴대폰 기본 음성</label>
+        <label>목소리</label>
+        <select id="v-name">${voices.length ? voices.map((x) => `<option ${x.name === v.voiceName ? "selected" : ""}>${esc(x.name)}</option>`).join("")
+          : `<option value="">기본 한국어 목소리</option>`}</select>
+        <label>빠르기 <span id="v-rate-txt">${v.rate.toFixed(1)}배</span></label>
+        <input id="v-rate" type="range" min="0.7" max="1.5" step="0.1" value="${v.rate}">
+        <p class="muted">목소리 종류는 휴대폰마다 달라요. 휴대폰 설정 → 텍스트 음성 변환(TTS)에서 더 받을 수 있어요.</p>
+      </div>
+      <div class="card">
+        <label class="check"><input type="radio" name="vt" value="pack" ${v.type === "pack" ? "checked" : ""} ${packs.length ? "" : "disabled"}> 음성팩</label>
+        ${packs.length ? `<select id="v-pack">${packs.map((p) => `<option value="${esc(p.id)}" ${p.id === v.pack ? "selected" : ""}>${esc(p.name)}</option>`).join("")}</select>`
+          : `<p class="muted">아직 음성팩이 없어요. 만드는 법은 README의 "음성팩 만들기"를 보세요.</p>`}
+      </div>
+      <button class="btn ghost" id="v-test">🔊 미리 듣기</button>
+      <button class="btn" id="v-save">저장</button>`;
+    const read = () => ({
+      type: view.querySelector('[name="vt"]:checked').value,
+      voiceName: $("#v-name").value,
+      rate: +$("#v-rate").value,
+      pack: $("#v-pack") ? $("#v-pack").value : "",
+    });
+    $("#v-rate").oninput = () => ($("#v-rate-txt").textContent = (+$("#v-rate").value).toFixed(1) + "배");
+    $("#v-test").onclick = () => announce(SAMPLE, read());
+    $("#v-save").onclick = () => { store.set("golf.voice", read()); toast("저장했어요"); showHome(); };
+  };
+  render();
+  // 목소리 목록은 늦게 도착하는 경우가 있어 한 번 더 그림
+  if ("speechSynthesis" in window && !koreanVoices().length) speechSynthesis.onvoiceschanged = () => { if ($("#v-name")) render(); };
 }
 
 // ---------- 골프장 파일 ----------
@@ -406,10 +454,13 @@ function renderDistance() {
   const say = $("#say");
   if (say) say.onclick = () => {
     const hole = state.round.setup.holes[h];
-    const parts = [`${h + 1}번 홀, 파${hole.par}.`, `그린 ${g.center ? "중앙" : g.front ? "앞" : "뒤"}까지 ${main}미터.`];
-    if (g.center && g.front && g.back) parts.push(`앞 ${d(g.front)}, 뒤 ${d(g.back)}.`);
-    if (club) parts.push(`추천 클럽, ${club.name}.`);
-    speak(parts.join(" "));
+    const full = g.center && g.front && g.back;
+    announce({
+      holeNo: h + 1, par: hole.par,
+      target: g.center ? "center" : g.front ? "front" : "back", dist: main,
+      front: full ? d(g.front) : null, back: full ? d(g.back) : null,
+      club: club ? club.name : null,
+    }, voiceSettings());
   };
   const ss = $("#shot-start"); if (ss) ss.onclick = () => { state.shotStart = me.latlng; renderDistance(); };
   const sr = $("#shot-reset"); if (sr) sr.onclick = () => { state.shotStart = null; renderDistance(); };
