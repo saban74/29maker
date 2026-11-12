@@ -57,11 +57,58 @@ function showHome() {
       ${recent.map((r) => `<li><a href="?r=${esc(r.code)}" data-code="${esc(r.code)}">${esc(r.name)}<br><span class="muted">${esc(r.players)}</span></a>
       <span class="muted">${esc((r.date || "").slice(5, 10).replace("-", "/"))}</span></li>`).join("")}
     </ul></div>` : ""}
+    <div class="card">
+      <h2>골프장 파일</h2>
+      <p class="muted">PC 관리 프로그램에서 만든 골프장 파일(.json)을 이 폰에 넣거나, 현장에서 찍은 그린 위치를 파일로 내보내 PC에서 다듬을 수 있어요.</p>
+      <label class="btn ghost file-btn">골프장 파일 불러오기<input type="file" id="course-file" accept=".json,application/json" hidden></label>
+      <button class="btn ghost" id="course-export">현장에서 찍은 그린 위치 내보내기</button>
+    </div>
     ${sync.isShared ? "" : `<p class="muted">지금은 <b>혼자 모드</b>예요. 기록이 이 폰에만 저장돼요. 4명이 함께 보려면 README의 "4명 공유 켜기"를 해주세요.</p>`}
   `;
   $("#new").onclick = showSetup;
   $("#join").onclick = () => openRound($("#code").value);
   view.querySelectorAll(".recent a").forEach((a) => (a.onclick = (e) => { e.preventDefault(); openRound(a.dataset.code); }));
+  $("#course-file").onchange = importCourse;
+  $("#course-export").onclick = exportMyGreens;
+}
+
+// ---------- 골프장 파일 ----------
+function mergeLocalCourses() {
+  store.get("golf.courses.local", []).forEach((c) => {
+    const i = state.courses.findIndex((x) => x.id === c.id);
+    if (i >= 0) state.courses[i] = c; else state.courses.push(c);
+  });
+}
+async function importCourse(e) {
+  const f = e.target.files[0]; if (!f) return;
+  try {
+    const club = JSON.parse(await f.text());
+    if (!club.id || !club.name || !Array.isArray(club.courses)) throw 0;
+    const list = store.get("golf.courses.local", []).filter((c) => c.id !== club.id);
+    list.push(club);
+    store.set("golf.courses.local", list);
+    mergeLocalCourses();
+    toast(`${club.name} 추가했어요`);
+  } catch { toast("골프장 파일이 아니에요"); }
+  e.target.value = "";
+}
+function exportMyGreens() {
+  // 골프장 파일 + 이 폰에서 찍은 그린 위치를 합쳐서 내보냄 (PC 관리 프로그램에서 불러오기 가능)
+  const done = state.courses.filter((club) => Object.keys(store.get(greenKey(club.id), {})).length);
+  if (!done.length) return toast("아직 현장에서 찍은 그린 위치가 없어요");
+  done.forEach((club) => {
+    const mine = store.get(greenKey(club.id), {});
+    const out = structuredClone(club);
+    out.courses.forEach((c) => c.holes.forEach((h) => {
+      const m = mine[`${c.name}|${h.no}`];
+      if (m) h.green = { ...(h.green || {}), ...m };
+    }));
+    out.source = [out.source, "현장 GPS 측정"].filter(Boolean).join(", ");
+    const blob = new Blob([JSON.stringify(out, null, 2)], { type: "application/json" });
+    const a = document.createElement("a");
+    a.href = URL.createObjectURL(blob); a.download = club.id + ".json"; a.click();
+    setTimeout(() => URL.revokeObjectURL(a.href), 1000);
+  });
 }
 
 // ---------- 라운드 만들기 ----------
@@ -118,7 +165,9 @@ function showSetup() {
     if (players.length < 2) return toast("2명 이상 이름을 넣어주세요");
     if (new Set(players).size !== players.length) return toast("이름이 겹치지 않게 해주세요");
     const f = club.courses[$("#front").value], b = club.courses[$("#back9").value];
-    const holes = [...f.holes.map((h) => ({ ...h, label: f.name })), ...b.holes.map((h) => ({ ...h, label: b.name }))];
+    const mine = store.get(greenKey(club.id), {}); // 이 폰에서 현장에서 찍은 그린 위치도 같이 넣어 동반자와 공유
+    const withMine = (h, label) => ({ ...h, label, green: { ...(h.green || {}), ...(mine[`${label}|${h.no}`] || {}) } });
+    const holes = [...f.holes.map((h) => withMine(h, f.name)), ...b.holes.map((h) => withMine(h, b.name))];
     const num = (id) => Math.max(0, parseInt($(id).value, 10) || 0);
     const setup = {
       courseId: club.id, courseName: club.name, holes, players,
@@ -146,6 +195,7 @@ async function openRound(code) {
   if (!round) return toast("그 코드의 라운드를 찾지 못했어요");
   stopRoundListeners();
   state.round = round;
+  state.tab = "score"; state.shotStart = null;
   history.replaceState(null, "", "?r=" + code);
   remember(code, round.setup);
   state.hole = firstEmptyHole();
@@ -274,26 +324,68 @@ function renderScore() {
   $("#share").onclick = () => shareText(`골프 라운드 참여 코드: ${code}\n${location.origin + location.pathname}?r=${code}`);
 }
 
+// ---------- 그린 위치 (골프장 파일 + 이 폰에서 현장에서 찍은 값) ----------
+const greenKey = (courseId) => "golf.greens." + courseId;
+const holeKey = (hole) => `${hole.label || ""}|${hole.no}`;
+function greenFor(h) {
+  const { setup } = state.round;
+  const hole = setup.holes[h];
+  const mine = store.get(greenKey(setup.courseId), {})[holeKey(hole)];
+  return { ...(hole.green || {}), ...(mine || {}) };
+}
+function saveGreenPoint(h, point, latlng) {
+  const { setup } = state.round;
+  const all = store.get(greenKey(setup.courseId), {});
+  const k = holeKey(setup.holes[h]);
+  all[k] = { ...(all[k] || {}), [point]: latlng.map((v) => Math.round(v * 1e6) / 1e6) };
+  store.set(greenKey(setup.courseId), all);
+}
+const POINT_KO = { front: "앞", center: "중앙", back: "뒤" };
+
 function renderDistance() {
   const res = calc();
-  const hole = state.round.setup.holes[state.hole];
-  const g = hole.green || {};
+  const h = state.hole;
+  const g = greenFor(h);
   const hasGreen = g.center || g.front || g.back;
   const me = state.pos;
+  const acc = me ? Math.round(me.accuracy) : null;
   const d = (pt) => (me && pt ? Math.round(distanceM(me.latlng, pt)) : null);
+  const shot = state.shotStart;
   view.innerHTML = holeBar(res) + (hasGreen ? `
     <div class="card dist">
-      <span class="muted">그린 중앙까지</span>
-      <div class="big">${d(g.center) ?? "…"}<small>m</small></div>
+      <span class="muted">그린 ${g.center ? "중앙" : g.front ? "앞" : "뒤"}까지</span>
+      <div class="big">${d(g.center || g.front || g.back) ?? "…"}<small>m</small></div>
       <div class="three">
         <div><span class="muted">앞</span><b>${d(g.front) ?? "–"}</b></div>
         <div><span class="muted">뒤</span><b>${d(g.back) ?? "–"}</b></div>
       </div>
-      <p class="muted">${me ? `GPS 오차 약 ±${Math.round(me.accuracy)}m` : "위치를 찾는 중…"}<br>핀 위치는 매일 바뀌므로 그린 중앙 기준 대략 거리예요. 높낮이는 반영 안 돼요.</p>
+      <p class="muted">${me ? `GPS 오차 약 ±${acc}m` : "위치를 찾는 중…"}<br>핀 위치는 매일 바뀌므로 그린 기준 대략 거리예요. 높낮이는 반영 안 돼요.</p>
     </div>` : `
-    <div class="card"><h2>거리 정보 없음</h2><p class="muted">이 골프장의 그린 위치가 아직 등록되지 않았어요. PC용 관리 프로그램(admin)에서 그린 위치를 찍어 등록하면 거리가 나와요.</p></div>`);
+    <div class="card"><h2>그린 위치 없음</h2><p class="muted">그린 위에 올라가서 아래 <b>그린 위치 저장</b>을 누르면 다음부터 이 홀 거리가 나와요. PC 관리 프로그램에서 미리 등록해도 돼요.</p></div>`) + `
+    <div class="card">
+      <h2>샷 거리 재기</h2>
+      ${shot ? `<div class="dist"><div class="big">${me ? Math.round(distanceM(shot, me.latlng)) : "…"}<small>m</small></div>
+          <p class="muted">친 자리에서 지금 위치까지</p></div>
+        <button class="btn ghost" id="shot-reset">다시 재기</button>`
+      : `<p class="muted">공을 친 자리에서 누르고, 공이 있는 곳까지 걸어가면 거리가 나와요.</p>
+        <button class="btn ghost" id="shot-start" ${me ? "" : "disabled"}>여기서 쳤어요</button>`}
+    </div>
+    <div class="card">
+      <h2>그린 위치 저장 (현장)</h2>
+      <p class="muted">그린 위 해당 자리에 서서 누르세요. ${acc != null ? `지금 GPS 오차 약 ±${acc}m${acc > 15 ? " — 오차가 커요. 잠시 기다렸다 누르세요." : ""}` : "위치를 찾는 중…"}</p>
+      <div class="row3">${Object.entries(POINT_KO).map(([p, ko]) => `<button data-gp="${p}" ${me ? "" : "disabled"} class="${g[p] ? "set" : ""}">${g[p] ? "✓ " : ""}${ko}</button>`).join("")}</div>
+    </div>`;
   bindHoleBar();
-  if (hasGreen && !state.stopGps) {
+  const ss = $("#shot-start"); if (ss) ss.onclick = () => { state.shotStart = me.latlng; renderDistance(); };
+  const sr = $("#shot-reset"); if (sr) sr.onclick = () => { state.shotStart = null; renderDistance(); };
+  view.querySelectorAll("[data-gp]").forEach((b) => (b.onclick = () => {
+    const p = b.dataset.gp;
+    if (!confirm(`지금 서 있는 곳을 ${h + 1}번 홀 그린 ${POINT_KO[p]}으로 저장할까요?`)) return;
+    saveGreenPoint(h, p, state.pos.latlng);
+    toast(`${h + 1}번 홀 그린 ${POINT_KO[p]} 저장했어요`);
+    renderDistance();
+  }));
+  if (!state.stopGps) {
     state.stopGps = watchMyPosition(
       (p) => { state.pos = p; if (state.tab === "distance") renderDistance(); },
       (msg) => toast(msg)
@@ -328,11 +420,10 @@ function renderMoney() {
       </table>
     </div>
     <div class="card">
-      <h2>타수</h2>
-      <table>
-        <tr><th>이름</th><th>전반</th><th>후반</th><th>합계</th></tr>
-        ${names.map((n, p) => `<tr><td>${esc(n)}</td><td>${sf[p] || "–"}</td><td>${sb[p] || "–"}</td><td><b>${sf[p] + sb[p] || "–"}</b></td></tr>`).join("")}
-      </table>
+      <h2>스코어카드 <span class="muted">총타수 ${names.map((n, p) => `${esc(n)} ${sf[p] + sb[p] || "–"}`).join(" · ")}</span></h2>
+      ${scorecard(0, half)}
+      ${setup.holes.length > half ? scorecard(half, setup.holes.length) : ""}
+      <p class="muted">○ 버디 이하 · □ 보기 · ■ 더블 이상 · 칸을 누르면 그 홀로 이동</p>
     </div>
     <div class="card">
       <h2>누가 누구에게 (최종)</h2>
@@ -341,6 +432,9 @@ function renderMoney() {
     </div>
     ${frontT.length ? `<div class="card"><h2>전반만 정산한다면</h2>${frontT.map((t) => `<div class="transfer"><span>${esc(t.from)} → ${esc(t.to)}</span><b>${t.amount.toLocaleString("ko-KR")}원</b></div>`).join("")}</div>` : ""}
   `;
+  view.querySelectorAll("[data-goto]").forEach((c) => (c.onclick = () => {
+    state.hole = +c.dataset.goto; state.tab = "score"; renderTab(); window.scrollTo(0, 0);
+  }));
   $("#share-money").onclick = () => {
     const lines = [
       `⛳ ${setup.courseName} (${doneCount}/${setup.holes.length}홀)`,
@@ -351,6 +445,30 @@ function renderMoney() {
     ];
     shareText(lines.join("\n"));
   };
+}
+
+// 9홀씩 스코어카드 표
+function scorecard(from, to) {
+  const { setup, scores } = state.round;
+  const holes = setup.holes.slice(from, to);
+  const mark = (s, par) => {
+    if (s == null) return "";
+    const d = s - par;
+    return d <= -1 ? "under" : d === 1 ? "bogey" : d >= 2 ? "double" : "";
+  };
+  return `<table class="sc">
+    <tr><th>홀</th>${holes.map((_, i) => `<th data-goto="${from + i}">${from + i + 1}</th>`).join("")}<th>계</th></tr>
+    <tr class="par"><td>파</td>${holes.map((h) => `<td>${h.par}</td>`).join("")}<td>${holes.reduce((a, h) => a + h.par, 0)}</td></tr>
+    ${setup.players.map((n, p) => {
+      let t = 0;
+      const cells = holes.map((h, i) => {
+        const s = scores[from + i + "-" + p];
+        if (s) t += s;
+        return `<td data-goto="${from + i}"><span class="${mark(s, h.par)}">${s ?? ""}</span></td>`;
+      }).join("");
+      return `<tr><td>${esc(n.slice(0, 3))}</td>${cells}<td><b>${t || ""}</b></td></tr>`;
+    }).join("")}
+  </table>`;
 }
 
 async function shareText(text) {
@@ -366,6 +484,7 @@ if ("serviceWorker" in navigator && location.protocol === "https:") navigator.se
 
 (async function start() {
   state.courses = await sync.loadCourses();
+  mergeLocalCourses();
   const code = new URLSearchParams(location.search).get("r");
   showHome();
   if (code) openRound(code);

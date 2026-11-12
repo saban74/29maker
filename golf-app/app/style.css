@@ -111,3 +111,22 @@ th { color: var(--muted); font-weight: 600; font-size: 13px; }
 .toast { position: fixed; left: 16px; right: 16px; bottom: 90px; z-index: 9; background: #222; color: #fff; padding: 12px 14px; border-radius: 10px; text-align: center; }
 
 [hidden] { display: none !important; }
+
+/* 그린 저장 버튼 3개 */
+.row3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; }
+.row3 button { font: inherit; font-weight: 700; padding: 14px 0; border-radius: 12px; border: 1px solid var(--line); background: var(--bg); color: var(--text); }
+.row3 button.set { background: #dff0e4; color: #1f6b3a; border-color: #9fd1ae; }
+.row3 button:disabled, .btn:disabled { opacity: .45; }
+.file-btn { text-align: center; cursor: pointer; }
+
+/* 스코어카드 */
+table.sc { font-size: 13px; table-layout: fixed; margin-bottom: 12px; }
+table.sc th, table.sc td { padding: 6px 0; text-align: center; }
+table.sc th:first-child, table.sc td:first-child { width: 3.4em; text-align: left; white-space: nowrap; overflow: hidden; }
+table.sc th:last-child, table.sc td:last-child { width: 2.4em; }
+table.sc tr.par td { color: var(--muted); }
+table.sc td span { display: inline-block; min-width: 20px; line-height: 18px; }
+table.sc .under { border: 1.5px solid var(--plus); border-radius: 50%; }
+table.sc .bogey { border: 1.5px solid var(--minus); }
+table.sc .double { background: var(--minus); color: #fff; }
+table.sc [data-goto] { cursor: pointer; }

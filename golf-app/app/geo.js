@@ -20,8 +20,9 @@ export function watchMyPosition(onPos, onError) {
   }
   const id = navigator.geolocation.watchPosition(
     (p) => onPos({ latlng: [p.coords.latitude, p.coords.longitude], accuracy: p.coords.accuracy }),
-    (e) => onError(e.code === 1 ? "위치 권한을 허용해 주세요." : "위치를 찾는 중 문제가 생겼어요."),
-    { enableHighAccuracy: true, maximumAge: 2000, timeout: 15000 }
+    // 권한 거부만 알림. 일시적인 신호 끊김·시간 초과는 계속 기다리면 다시 잡히므로 조용히 넘어감
+    (e) => { if (e.code === 1) onError("위치 권한을 허용해 주세요. (휴대폰 설정 → 브라우저 → 위치)"); },
+    { enableHighAccuracy: true, maximumAge: 2000 }
   );
   return () => navigator.geolocation.clearWatch(id);
 }
