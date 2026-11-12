@@ -2,6 +2,7 @@
 import { DEFAULT_RULES, roundResult, settle, won } from "./betting.js";
 import { distanceM, watchMyPosition } from "./geo.js";
 import * as sync from "./sync.js";
+import { DEFAULT_CLUBS, recommendClub, speak, canSpeak } from "./clubs.js";
 
 const $ = (s) => document.querySelector(s);
 const esc = (s) => String(s ?? "").replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
@@ -58,6 +59,11 @@ function showHome() {
       <span class="muted">${esc((r.date || "").slice(5, 10).replace("-", "/"))}</span></li>`).join("")}
     </ul></div>` : ""}
     <div class="card">
+      <h2>내 클럽 거리</h2>
+      <p class="muted">클럽별로 평소 보내는 거리를 넣어두면 거리 화면에서 추천 클럽을 알려줘요.</p>
+      <button class="btn ghost" id="clubs">클럽 거리 입력</button>
+    </div>
+    <div class="card">
       <h2>골프장 파일</h2>
       <p class="muted">PC 관리 프로그램에서 만든 골프장 파일(.json)을 이 폰에 넣거나, 현장에서 찍은 그린 위치를 파일로 내보내 PC에서 다듬을 수 있어요.</p>
       <label class="btn ghost file-btn">골프장 파일 불러오기<input type="file" id="course-file" accept=".json,application/json" hidden></label>
@@ -69,7 +75,24 @@ function showHome() {
   $("#join").onclick = () => openRound($("#code").value);
   view.querySelectorAll(".recent a").forEach((a) => (a.onclick = (e) => { e.preventDefault(); openRound(a.dataset.code); }));
   $("#course-file").onchange = importCourse;
+  $("#clubs").onclick = showClubs;
   $("#course-export").onclick = exportMyGreens;
+}
+
+// ---------- 내 클럽 거리 ----------
+const myClubs = () => store.get("golf.clubs", DEFAULT_CLUBS);
+function showClubs() {
+  setHeader("내 클럽 거리", true);
+  view.innerHTML = `<div class="card"><p class="muted">평소 캐리 거리(미터)를 넣으세요. 안 쓰는 클럽은 비워두면 돼요.</p>
+    ${myClubs().map((c, i) => `<div class="club-row"><span>${esc(c.name)}</span>
+      <input type="number" inputmode="numeric" data-ci="${i}" value="${c.dist || ""}" placeholder="–"><span class="muted">m</span></div>`).join("")}
+    </div><button class="btn" id="clubs-save">저장</button>`;
+  $("#clubs-save").onclick = () => {
+    const list = myClubs().map((c, i) => ({ ...c, dist: Math.max(0, parseInt(view.querySelector(`[data-ci="${i}"]`).value, 10) || 0) }));
+    store.set("golf.clubs", list);
+    toast("저장했어요");
+    showHome();
+  };
 }
 
 // ---------- 골프장 파일 ----------
@@ -351,14 +374,18 @@ function renderDistance() {
   const acc = me ? Math.round(me.accuracy) : null;
   const d = (pt) => (me && pt ? Math.round(distanceM(me.latlng, pt)) : null);
   const shot = state.shotStart;
+  const main = d(g.center || g.front || g.back);
+  const club = recommendClub(main, myClubs());
   view.innerHTML = holeBar(res) + (hasGreen ? `
     <div class="card dist">
       <span class="muted">그린 ${g.center ? "중앙" : g.front ? "앞" : "뒤"}까지</span>
-      <div class="big">${d(g.center || g.front || g.back) ?? "…"}<small>m</small></div>
+      <div class="big">${main ?? "…"}<small>m</small></div>
+      ${club ? `<div class="club">추천 <b>${esc(club.name)}</b></div>` : ""}
       <div class="three">
         <div><span class="muted">앞</span><b>${d(g.front) ?? "–"}</b></div>
         <div><span class="muted">뒤</span><b>${d(g.back) ?? "–"}</b></div>
       </div>
+      ${canSpeak() ? `<button class="btn" id="say" ${main == null ? "disabled" : ""}>🔊 음성으로 듣기</button>` : ""}
       <p class="muted">${me ? `GPS 오차 약 ±${acc}m` : "위치를 찾는 중…"}<br>핀 위치는 매일 바뀌므로 그린 기준 대략 거리예요. 높낮이는 반영 안 돼요.</p>
     </div>` : `
     <div class="card"><h2>그린 위치 없음</h2><p class="muted">그린 위에 올라가서 아래 <b>그린 위치 저장</b>을 누르면 다음부터 이 홀 거리가 나와요. PC 관리 프로그램에서 미리 등록해도 돼요.</p></div>`) + `
@@ -376,6 +403,14 @@ function renderDistance() {
       <div class="row3">${Object.entries(POINT_KO).map(([p, ko]) => `<button data-gp="${p}" ${me ? "" : "disabled"} class="${g[p] ? "set" : ""}">${g[p] ? "✓ " : ""}${ko}</button>`).join("")}</div>
     </div>`;
   bindHoleBar();
+  const say = $("#say");
+  if (say) say.onclick = () => {
+    const hole = state.round.setup.holes[h];
+    const parts = [`${h + 1}번 홀, 파${hole.par}.`, `그린 ${g.center ? "중앙" : g.front ? "앞" : "뒤"}까지 ${main}미터.`];
+    if (g.center && g.front && g.back) parts.push(`앞 ${d(g.front)}, 뒤 ${d(g.back)}.`);
+    if (club) parts.push(`추천 클럽, ${club.name}.`);
+    speak(parts.join(" "));
+  };
   const ss = $("#shot-start"); if (ss) ss.onclick = () => { state.shotStart = me.latlng; renderDistance(); };
   const sr = $("#shot-reset"); if (sr) sr.onclick = () => { state.shotStart = null; renderDistance(); };
   view.querySelectorAll("[data-gp]").forEach((b) => (b.onclick = () => {
