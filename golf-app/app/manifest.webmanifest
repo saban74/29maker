@@ -3,8 +3,8 @@
   "short_name": "골프정산",
   "start_url": "./index.html",
   "display": "standalone",
-  "background_color": "#f4f7f4",
-  "theme_color": "#1f6b3a",
+  "background_color": "#f4f2ea",
+  "theme_color": "#0f3b28",
   "lang": "ko",
   "icons": [
     { "src": "icon.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "any maskable" }

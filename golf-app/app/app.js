@@ -44,42 +44,43 @@ function showHome() {
   setHeader("골프 내기 정산", false);
   $("#tabs").hidden = true;
   const recent = store.get("golf.recent", []);
+  const icon = (d) => `<span class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${d}</svg></span>`;
   view.innerHTML = `
-    <div class="card">
-      <h2>새 라운드</h2>
-      <p class="muted">골프장·사람·내기 규칙을 정하면 참여 코드가 나와요. 코드를 동반자에게 보내면 같이 입력하고 볼 수 있어요.</p>
-      <button class="btn" id="new">라운드 만들기</button>
+    <section class="hero">
+      <svg class="flag" viewBox="0 0 54 70" aria-hidden="true"><path d="M14 4v62" stroke="#f4f2ea" stroke-width="3" stroke-linecap="round"/><path d="M15 5l30 11-30 11z" fill="#d9a521"/><ellipse cx="18" cy="66" rx="14" ry="3" fill="rgba(255,255,255,.15)"/></svg>
+      <div class="kicker">오늘의 라운드</div>
+      <h2>내기는 정확하게,<br>정산은 바로.</h2>
+      <p>골프장·동반자·내기 규칙만 정하면 매 홀 누가 얼마인지 바로 계산해요.</p>
+      <button class="btn" id="new">새 라운드 만들기</button>
+      <div class="join">
+        <input id="code" placeholder="참여 코드 6자리" maxlength="6" autocapitalize="characters" autocomplete="off" aria-label="참여 코드">
+        <button class="btn" id="join">참여</button>
+      </div>
+    </section>
+    ${recent.length ? `<div class="section-title">최근 라운드</div><div class="list">
+      ${recent.map((r) => `<a class="list-item recent-item" href="?r=${esc(r.code)}" data-code="${esc(r.code)}">
+        ${icon('<path d="M6 21V4"/><path d="M6 4l11 4-11 4"/>')}
+        <span class="txt"><b>${esc(r.name)}</b><span>${esc(r.players)}</span></span>
+        <span class="date">${esc((r.date || "").slice(5, 10).replace("-", "/"))}</span></a>`).join("")}
+    </div>` : ""}
+    <div class="section-title">설정</div>
+    <div class="list">
+      <button class="list-item" id="clubs">${icon('<path d="M8 3l8 15"/><path d="M16 18l3-1 1 3-5 1z"/>')}
+        <span class="txt"><b>내 클럽 거리</b><span>남은 거리에 맞는 클럽을 추천해요</span></span><span class="chev">›</span></button>
+      <button class="list-item" id="voice">${icon('<path d="M4 9v6h4l5 4V5L8 9z"/><path d="M17 8a5 5 0 0 1 0 8"/>')}
+        <span class="txt"><b>음성 안내</b><span>목소리·빠르기·음성팩</span></span><span class="chev">›</span></button>
+      <label class="list-item" style="margin:0;cursor:pointer">${icon('<path d="M12 4v11"/><path d="M7 10l5 5 5-5"/><path d="M5 20h14"/>')}
+        <span class="txt"><b>골프장 파일 불러오기</b><span>PC 관리 프로그램에서 만든 .json</span></span><span class="chev">›</span>
+        <input type="file" id="course-file" accept=".json,application/json" hidden></label>
+      <button class="list-item" id="course-export">${icon('<path d="M12 20V9"/><path d="M7 14l5-5 5 5"/><path d="M5 4h14"/>')}
+        <span class="txt"><b>현장 그린 위치 내보내기</b><span>현장에서 찍은 위치를 파일로</span></span><span class="chev">›</span></button>
     </div>
-    <div class="card">
-      <h2>코드로 참여하기</h2>
-      <div class="row"><input id="code" placeholder="예) K7PQ2M" maxlength="6" autocapitalize="characters" style="text-transform:uppercase"></div>
-      <button class="btn ghost" id="join">참여</button>
-    </div>
-    ${recent.length ? `<div class="card"><h2>최근 라운드</h2><ul class="recent">
-      ${recent.map((r) => `<li><a href="?r=${esc(r.code)}" data-code="${esc(r.code)}">${esc(r.name)}<br><span class="muted">${esc(r.players)}</span></a>
-      <span class="muted">${esc((r.date || "").slice(5, 10).replace("-", "/"))}</span></li>`).join("")}
-    </ul></div>` : ""}
-    <div class="card">
-      <h2>내 클럽 거리</h2>
-      <p class="muted">클럽별로 평소 보내는 거리를 넣어두면 거리 화면에서 추천 클럽을 알려줘요.</p>
-      <button class="btn ghost" id="clubs">클럽 거리 입력</button>
-    </div>
-    <div class="card">
-      <h2>음성 안내</h2>
-      <p class="muted">목소리와 빠르기를 고르거나, 음성팩(내가 만든 목소리 파일)을 쓸 수 있어요.</p>
-      <button class="btn ghost" id="voice">음성 설정</button>
-    </div>
-    <div class="card">
-      <h2>골프장 파일</h2>
-      <p class="muted">PC 관리 프로그램에서 만든 골프장 파일(.json)을 이 폰에 넣거나, 현장에서 찍은 그린 위치를 파일로 내보내 PC에서 다듬을 수 있어요.</p>
-      <label class="btn ghost file-btn">골프장 파일 불러오기<input type="file" id="course-file" accept=".json,application/json" hidden></label>
-      <button class="btn ghost" id="course-export">현장에서 찍은 그린 위치 내보내기</button>
-    </div>
-    ${sync.isShared ? "" : `<p class="muted">지금은 <b>혼자 모드</b>예요. 기록이 이 폰에만 저장돼요. 4명이 함께 보려면 README의 "4명 공유 켜기"를 해주세요.</p>`}
+    ${sync.isShared ? "" : `<p class="note">지금은 <b>혼자 모드</b>예요. 기록이 이 폰에만 저장돼요. 4명이 함께 보려면 README의 "4명 공유 켜기"를 해주세요.</p>`}
   `;
   $("#new").onclick = showSetup;
   $("#join").onclick = () => openRound($("#code").value);
-  view.querySelectorAll(".recent a").forEach((a) => (a.onclick = (e) => { e.preventDefault(); openRound(a.dataset.code); }));
+  $("#code").onkeydown = (e) => e.key === "Enter" && openRound($("#code").value);
+  view.querySelectorAll(".recent-item").forEach((a) => (a.onclick = (e) => { e.preventDefault(); openRound(a.dataset.code); }));
   $("#course-file").onchange = importCourse;
   $("#clubs").onclick = showClubs;
   $("#voice").onclick = showVoice;
@@ -414,7 +415,7 @@ function holeBar(result) {
   return `
     <div class="holebar">
       <button id="prev" ${h === 0 ? "disabled" : ""} aria-label="이전 홀">‹</button>
-      <div class="now"><b>${h + 1}번 홀</b><span class="muted">${esc(holeName(h))} · 파${hole.par}</span>${mult > 1 ? `<span class="badge">배판 ×${mult}</span>` : ""}</div>
+      <div class="now"><span class="no">${h + 1}</span><span class="meta"><span class="lbl">${esc(holeName(h))}</span><span class="par">PAR ${hole.par}</span>${mult > 1 ? `<span class="badge">배판 ×${mult}</span>` : ""}</span></div>
       <button id="next" ${h === holes.length - 1 ? "disabled" : ""} aria-label="다음 홀">›</button>
     </div>
     <div class="chips">${holes.map((_, i) => `<button data-h="${i}" class="${grid[i].every((s) => s != null) ? "done" : ""} ${i === h ? "cur" : ""}">${i + 1}</button>`).join("")}</div>`;
@@ -434,6 +435,8 @@ function renderTab() {
   else if (state.tab === "distance") renderDistance();
   else renderMoney();
 }
+
+const PLAYER_COLORS = ["#2c8a57", "#3b6fb6", "#c0742b", "#8a4fb0"];
 
 function scoreName(s, par) {
   const d = s - par;
@@ -461,10 +464,11 @@ function renderScore() {
       ${setup.players.map((name, p) => {
         const s = scores[h + "-" + p];
         const m = hr.money[p];
-        return `<div class="player ${p === state.me ? "me" : ""}">
+        return `<div class="player ${p === state.me ? "me" : ""}" style="--c:${PLAYER_COLORS[p % 4]}">
+          <span class="avatar" aria-hidden="true">${esc([...name][0] || "?")}</span>
           <div class="who"><b>${esc(name)}</b>
-            <span class="${m > 0 ? "plus" : m < 0 ? "minus" : "muted"}">${hr.complete ? "이번 홀 " + won(m) : "입력 대기"}</span>
-            <span class="muted"> · 누적 ${won(upto[p])}</span></div>
+            <span class="${hr.complete ? (m > 0 ? "plus" : m < 0 ? "minus" : "muted") : "muted"}">${hr.complete ? "이번 홀 " + won(m) : "입력 대기"}</span>
+            <span class="muted sum">누적 ${won(upto[p])}</span></div>
           <div class="stepper">
             <button data-p="${p}" data-d="-1" aria-label="${esc(name)} 한 타 빼기">−</button>
             <div class="val">${s ?? "–"}<small>${s ? scoreName(s, par) : ""}</small></div>
@@ -479,7 +483,7 @@ function renderScore() {
       ${hr.complete && hr.carryOut ? `<p class="muted">스킨 이월: 1명당 ${won(hr.carryOut).replace("+", "")}</p>` : ""}
     </div>
     ${hr.complete && h < setup.holes.length - 1 ? `<button class="btn" id="go-next">다음 홀로 →</button>` : ""}
-    <div class="card"><span class="muted">참여 코드</span> <span class="code">${code}</span>
+    <div class="card code-card"><span class="muted">참여 코드 · 동반자에게 보내세요</span> <span class="code">${code}</span>
       <div class="row" style="margin-top:10px"><button class="btn small ghost" id="share">코드 보내기</button><button class="btn small ghost" id="edit">이름·규칙 수정</button></div></div>`;
   bindHoleBar();
   view.querySelectorAll(".stepper button").forEach((b) => (b.onclick = async () => {
@@ -637,10 +641,10 @@ function renderMoney() {
     </div>
     <div class="card">
       <h2>누가 누구에게 (최종)</h2>
-      ${transfers.length ? transfers.map((t) => `<div class="transfer"><span>${esc(t.from)} → ${esc(t.to)}</span><b>${t.amount.toLocaleString("ko-KR")}원</b></div>`).join("") : `<p class="muted">아직 주고받을 돈이 없어요.</p>`}
+      ${transfers.length ? transfers.map((t) => `<div class="transfer"><span>${esc(t.from)}<span class="arrow">→</span>${esc(t.to)}</span><b>${t.amount.toLocaleString("ko-KR")}원</b></div>`).join("") : `<p class="muted">아직 주고받을 돈이 없어요.</p>`}
       <button class="btn" id="share-money">카톡 등으로 결과 보내기</button>
     </div>
-    ${frontT.length ? `<div class="card"><h2>전반만 정산한다면</h2>${frontT.map((t) => `<div class="transfer"><span>${esc(t.from)} → ${esc(t.to)}</span><b>${t.amount.toLocaleString("ko-KR")}원</b></div>`).join("")}</div>` : ""}
+    ${frontT.length ? `<div class="card"><h2>전반만 정산한다면</h2>${frontT.map((t) => `<div class="transfer"><span>${esc(t.from)}<span class="arrow">→</span>${esc(t.to)}</span><b>${t.amount.toLocaleString("ko-KR")}원</b></div>`).join("")}</div>` : ""}
   `;
   view.querySelectorAll("[data-goto]").forEach((c) => (c.onclick = () => {
     state.hole = +c.dataset.goto; state.tab = "score"; renderTab(); window.scrollTo(0, 0);
