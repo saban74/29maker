@@ -54,7 +54,7 @@ map.on("click", (e) => {
   const nextPoint = order.find((p) => !hole.green[p]);
   picking = nextPoint ? { hole: picking.hole, point: nextPoint } : null;
   save(); render();
-  status(picking ? `${hole.no}번 홀 그린 ${label(picking.point)}을 클릭하세요` : `${hole.no}번 홀 완료`);
+  status(picking ? `${hole.no}번 홀 그린 ${label(picking.point)}을 클릭하세요` : `${hole.no}번 홀 완료`, picking ? 0 : 2500);
 });
 const round6 = (v) => Math.round(v * 1e6) / 1e6;
 const label = (p) => POINTS.find((x) => x[0] === p)[1];
@@ -80,15 +80,23 @@ function drawMarkers() {
 // ---------- 화면 ----------
 function render() {
   $("#name").value = club.name; $("#addr").value = club.address; $("#src").value = club.source;
-  $("#course-tabs").innerHTML = club.courses.map((c, i) => `<button data-c="${i}" class="${i === cur ? "on" : ""}">${esc(c.name)}</button>`).join("");
+  const isDone = (h) => Boolean(h.green.center || h.green.front || h.green.back);
+  $("#course-tabs").innerHTML = club.courses.map((c, i) => `<button data-c="${i}" class="${i === cur ? "on" : ""}">${esc(c.name)}<small>${c.holes.filter(isDone).length}/${c.holes.length}</small></button>`).join("");
+  // 위쪽 진행 막대
+  const all = club.courses.flatMap((c) => c.holes);
+  const done = all.filter(isDone).length;
+  $("#club-title").textContent = club.name || "새 골프장";
+  $("#prog-txt").textContent = `그린 등록 ${done}/${all.length}홀`;
+  $("#meter").style.width = all.length ? (done / all.length) * 100 + "%" : "0";
+  document.querySelector("#map").classList.toggle("picking", Boolean(picking));
   document.querySelectorAll("[data-c]").forEach((b) => (b.onclick = () => { cur = +b.dataset.c; picking = null; render(); fitCourse(); }));
   const course = club.courses[cur];
   $("#holes").innerHTML = `<tr><th>홀</th><th>파</th><th>그린 앞</th><th>중앙</th><th>뒤</th><th>그린 깊이</th></tr>` +
-    (course ? course.holes.map((h, hi) => `<tr class="${picking && picking.hole === hi ? "cur" : ""}">
+    (course ? course.holes.map((h, hi) => `<tr class="${picking && picking.hole === hi ? "cur" : ""} ${isDone(h) ? "done" : ""}">
       <td><b>${h.no}</b></td>
       <td><select data-par="${hi}">${[3, 4, 5, 6].map((p) => `<option ${p === h.par ? "selected" : ""}>${p}</option>`).join("")}</select></td>
-      ${POINTS.map(([p, ko]) => `<td><button data-pick="${hi}:${p}" class="${h.green[p] ? "set" : ""}">${h.green[p] ? "✓ " : ""}${ko}</button></td>`).join("")}
-      <td>${h.green.front && h.green.back ? Math.round(dist(h.green.front, h.green.back)) + "m" : "–"}</td>
+      ${POINTS.map(([p, ko]) => `<td><button data-pick="${hi}:${p}" class="${h.green[p] ? "set " + p : ""} ${picking && picking.hole === hi && picking.point === p ? "picking" : ""}" title="${h.no}번 홀 그린 ${ko} ${h.green[p] ? "다시 찍기" : "찍기"}">${ko}</button></td>`).join("")}
+      <td><span class="depth">${h.green.front && h.green.back ? Math.round(dist(h.green.front, h.green.back)) + "m" : "–"}</span></td>
     </tr>`).join("") : "");
   document.querySelectorAll("[data-par]").forEach((s) => (s.onchange = () => { course.holes[+s.dataset.par].par = +s.value; save(); }));
   document.querySelectorAll("[data-pick]").forEach((b) => (b.onclick = () => {
@@ -111,6 +119,7 @@ function fitCourse() {
 
 ["name", "addr", "src"].forEach((id) => ($("#" + id).oninput = () => {
   club.name = $("#name").value; club.address = $("#addr").value; club.source = $("#src").value; save();
+  $("#club-title").textContent = club.name || "새 골프장";
 }));
 $("#add-course").onclick = () => {
   const name = prompt("코스 이름 (예: 레이크, 마운틴, OUT, IN)", `${String.fromCharCode(65 + club.courses.length)} 코스`);
@@ -219,3 +228,8 @@ $("#import").onchange = async (e) => {
 $("#reset").onclick = () => { if (confirm("지금 작업을 지우고 새로 시작할까요? (저장 안 한 내용은 사라져요)")) { club = blankClub(); cur = 0; save(); render(); } };
 
 render(); fitCourse();
+
+// Esc 키: 지도 클릭 대기 취소
+document.addEventListener("keydown", (e) => {
+  if (e.key === "Escape" && picking) { picking = null; render(); status("취소했어요"); }
+});
