@@ -44,39 +44,50 @@ function showHome() {
   setHeader("골프 내기 정산", false);
   $("#tabs").hidden = true;
   const recent = store.get("golf.recent", []);
-  const icon = (d) => `<span class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${d}</svg></span>`;
+  const svg = (d) => `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${d}</svg>`;
   view.innerHTML = `
-    <section class="hero">
-      <svg class="flag" viewBox="0 0 54 70" aria-hidden="true"><path d="M14 4v62" stroke="#f4f2ea" stroke-width="3" stroke-linecap="round"/><path d="M15 5l30 11-30 11z" fill="#d9a521"/><ellipse cx="18" cy="66" rx="14" ry="3" fill="rgba(255,255,255,.15)"/></svg>
-      <div class="kicker">오늘의 라운드</div>
-      <h2>내기는 정확하게,<br>정산은 바로.</h2>
-      <p>골프장·동반자·내기 규칙만 정하면 매 홀 누가 얼마인지 바로 계산해요.</p>
-      <button class="btn" id="new">새 라운드 만들기</button>
-      <div class="join">
-        <input id="code" placeholder="참여 코드 6자리" maxlength="6" autocapitalize="characters" autocomplete="off" aria-label="참여 코드">
-        <button class="btn" id="join">참여</button>
+    <section class="hero photo">
+      <div class="hero-in">
+        <div class="kicker">오늘의 라운드</div>
+        <h2>내기는 정확하게,<br>정산은 바로.</h2>
+        <p>동반자와 내기 규칙만 정하면<br>매 홀 누가 얼마인지 바로 계산해요.</p>
+        <button class="btn" id="new">새 라운드 만들기</button>
+        <div class="join">
+          <input id="code" placeholder="참여 코드 6자리" maxlength="6" autocapitalize="characters" autocomplete="off" aria-label="참여 코드">
+          <button class="btn" id="join">참여</button>
+        </div>
       </div>
     </section>
+
+    <nav class="quick" aria-label="바로가기">
+      <button id="clubs">${svg('<path d="M8 3l8 15"/><path d="M16 18l3-1 1 3-5 1z"/>')}<span>클럽 거리</span></button>
+      <button id="voice">${svg('<path d="M4 9v6h4l5 4V5L8 9z"/><path d="M17 8a5 5 0 0 1 0 8"/>')}<span>음성 안내</span></button>
+      <label>${svg('<path d="M12 4v11"/><path d="M7 10l5 5 5-5"/><path d="M5 20h14"/>')}<span>골프장 파일</span>
+        <input type="file" id="course-file" accept=".json,application/json" hidden></label>
+      <button id="course-export">${svg('<path d="M12 20V9"/><path d="M7 14l5-5 5 5"/><path d="M5 4h14"/>')}<span>그린 내보내기</span></button>
+    </nav>
+
+    <div class="stats">
+      <div class="stat">
+        <div class="stat-h">${svg('<path d="M6 21V4"/><path d="M6 4l11 4-11 4"/>')} 내 라운드</div>
+        <div class="stat-row"><span>이번 달</span><b id="st-month">–</b></div>
+        <div class="stat-row"><span>평균 타수</span><b id="st-avg">–</b></div>
+      </div>
+      <div class="stat">
+        <div class="stat-h">${svg('<circle cx="12" cy="12" r="8"/><path d="M12 8v8M9.5 10.5h4a1.5 1.5 0 0 1 0 3h-3"/>')} 내기 누적</div>
+        <div class="stat-big" id="st-money">–</div>
+        <div class="stat-row"><span>이긴 라운드</span><b id="st-win">–</b></div>
+      </div>
+    </div>
+
     ${recent.length ? `<div class="section-title">최근 라운드</div><div class="list">
       ${recent.map((r) => `<a class="list-item recent-item" href="?r=${esc(r.code)}" data-code="${esc(r.code)}">
-        ${icon('<path d="M6 21V4"/><path d="M6 4l11 4-11 4"/>')}
-        <span class="txt"><b>${esc(r.name)}</b><span>${esc(r.players)}</span></span>
-        <span class="date">${esc((r.date || "").slice(5, 10).replace("-", "/"))}</span></a>`).join("")}
-    </div>` : ""}
-    <div class="section-title">설정</div>
-    <div class="list">
-      <button class="list-item" id="clubs">${icon('<path d="M8 3l8 15"/><path d="M16 18l3-1 1 3-5 1z"/>')}
-        <span class="txt"><b>내 클럽 거리</b><span>남은 거리에 맞는 클럽을 추천해요</span></span><span class="chev">›</span></button>
-      <button class="list-item" id="voice">${icon('<path d="M4 9v6h4l5 4V5L8 9z"/><path d="M17 8a5 5 0 0 1 0 8"/>')}
-        <span class="txt"><b>음성 안내</b><span>목소리·빠르기·음성팩</span></span><span class="chev">›</span></button>
-      <label class="list-item" style="margin:0;cursor:pointer">${icon('<path d="M12 4v11"/><path d="M7 10l5 5 5-5"/><path d="M5 20h14"/>')}
-        <span class="txt"><b>골프장 파일 불러오기</b><span>PC 관리 프로그램에서 만든 .json</span></span><span class="chev">›</span>
-        <input type="file" id="course-file" accept=".json,application/json" hidden></label>
-      <button class="list-item" id="course-export">${icon('<path d="M12 20V9"/><path d="M7 14l5-5 5 5"/><path d="M5 4h14"/>')}
-        <span class="txt"><b>현장 그린 위치 내보내기</b><span>현장에서 찍은 위치를 파일로</span></span><span class="chev">›</span></button>
-    </div>
+        <span class="txt"><b>${esc(r.name)}</b><span>${esc((r.date || "").slice(5, 10).replace("-", "/"))} · ${esc(r.players)}</span></span>
+        <span class="rmoney" data-money="${esc(r.code)}"></span><span class="chev">›</span></a>`).join("")}
+    </div>` : `<p class="note">아직 라운드 기록이 없어요. 첫 라운드를 만들어 보세요.</p>`}
     ${sync.isShared ? "" : `<p class="note">지금은 <b>혼자 모드</b>예요. 기록이 이 폰에만 저장돼요. 4명이 함께 보려면 README의 "4명 공유 켜기"를 해주세요.</p>`}
   `;
+  fillStats(recent);
   $("#new").onclick = showSetup;
   $("#join").onclick = () => openRound($("#code").value);
   $("#code").onkeydown = (e) => e.key === "Enter" && openRound($("#code").value);
@@ -85,6 +96,35 @@ function showHome() {
   $("#clubs").onclick = showClubs;
   $("#voice").onclick = showVoice;
   $("#course-export").onclick = exportMyGreens;
+}
+
+// ---------- 처음 화면 요약 (최근 라운드 기록에서 계산) ----------
+async function fillStats(recent) {
+  const month = new Date().toISOString().slice(0, 7);
+  let rounds = 0, strokeSum = 0, fullRounds = 0, money = 0, wins = 0, played = 0;
+  for (const r of recent) {
+    let round;
+    try { round = await sync.loadRound(r.code); } catch { continue; }
+    if (!round) continue;
+    const me = store.get("golf.me." + r.code, 0);
+    const { setup, scores } = round;
+    const n = setup.players.length;
+    const grid = setup.holes.map((_, h) => setup.players.map((_, p) => scores[h + "-" + p]));
+    const res = roundResult(setup.holes, n, grid, { ...DEFAULT_RULES, ...setup.rules }, { events: round.events, handicaps: setup.handicaps });
+    const mine = res.total[me] || 0;
+    const done = res.perHole.filter((x) => x.complete).length;
+    if ((setup.createdAt || "").startsWith(month)) rounds++;
+    if (done) { played++; money += mine; if (mine > 0) wins++; }
+    const myStrokes = grid.map((row) => row[me]);
+    if (myStrokes.every((v) => v)) { fullRounds++; strokeSum += myStrokes.reduce((a, b) => a + b, 0); }
+    const cell = view.querySelector(`[data-money="${r.code}"]`);
+    if (cell && done) { cell.textContent = won(mine); cell.className = "rmoney " + (mine > 0 ? "plus" : mine < 0 ? "minus" : ""); }
+  }
+  const set = (id, v, cls = "") => { const el = $(id); if (el) { el.textContent = v; el.className = cls; } };
+  set("#st-month", rounds + "회");
+  set("#st-avg", fullRounds ? (strokeSum / fullRounds).toFixed(1) : "–");
+  set("#st-money", played ? won(money) : "–", "stat-big " + (money > 0 ? "plus" : money < 0 ? "minus" : ""));
+  set("#st-win", played ? `${wins} / ${played}` : "–");
 }
 
 // ---------- 내 클럽 거리 ----------
@@ -620,9 +660,24 @@ function renderMoney() {
   const extraSum = names.map((_, p) => res.perHole.reduce((a, r) => a + (r.extra ? r.extra[p] : 0), 0));
   const hasExtra = extraSum.some((v) => v);
   const short = (v) => (v === 0 ? "0" : (v > 0 ? "+" : "−") + Math.abs(v).toLocaleString("ko-KR"));
+  const order = names.map((_, p) => p).sort((a, b) => res.total[b] - res.total[a]);
+  const rankOf = (p) => 1 + order.filter((q) => res.total[q] > res.total[p]).length; // 같은 금액은 같은 순위
+  const crown = `<svg class="crown" viewBox="0 0 24 24" aria-label="1위"><path d="M3 8l4.5 4L12 5l4.5 7L21 8l-2 11H5z" fill="currentColor"/></svg>`;
   view.innerHTML = `
+    <div class="card board">
+      <div class="board-h"><h2>순위</h2><span class="muted">${doneCount}/${setup.holes.length}홀 완료</span></div>
+      ${order.map((p) => {
+        const rk = rankOf(p), v = res.total[p];
+        return `<div class="board-row ${p === state.me ? "me" : ""}" style="--c:${PLAYER_COLORS[p % 4]}">
+          <span class="rank">${rk === 1 && v > 0 ? crown : ""}${rk}</span>
+          <span class="avatar" aria-hidden="true">${esc([...names[p]][0] || "?")}</span>
+          <span class="bn"><b>${esc(names[p])}</b><span class="muted">${sf[p] + sb[p] ? sf[p] + sb[p] + "타" : "기록 없음"}${res.handi[p] ? ` · 핸디 ${short(res.handi[p])}` : ""}</span></span>
+          <b class="bamt ${cls(v)}">${won(v)}</b>
+        </div>`;
+      }).join("")}
+    </div>
     <div class="card">
-      <h2>내기 합계 <span class="muted">(${doneCount}/${setup.holes.length}홀 완료)</span></h2>
+      <h2>전반 · 후반 상세</h2>
       <table class="money">
         <tr><th>이름</th><th>전반</th><th>후반</th>${hasHandi ? "<th>핸디</th>" : ""}<th>합계</th></tr>
         ${names.map((n, p) => `<tr><td>${esc(n)}</td>

@@ -272,3 +272,54 @@ table.sc [data-goto] { cursor: pointer; }
   .avatar { width: 34px; height: 34px; font-size: 14px; }
   .ev { padding-left: 46px; }
 }
+
+/* ===== 사진 배너 ===== */
+.hero.photo {
+  min-height: 460px; display: flex; align-items: flex-end; padding: 0; margin: -16px -16px 16px; border-radius: 0 0 28px 28px;
+  background: #0f3b28 url("img/hero.jpg") center 38% / cover no-repeat;
+}
+@media (min-width: 600px) { .hero.photo { background-image: url("img/hero-wide.jpg"); margin: 0 0 16px; border-radius: 28px; } }
+.hero.photo::before {
+  content: ""; position: absolute; inset: 0;
+  background: linear-gradient(180deg, rgba(8,22,14,.45) 0%, rgba(8,22,14,0) 22%, rgba(8,22,14,.25) 42%, rgba(8,22,14,.78) 66%, rgba(8,22,14,.92) 100%);
+}
+.hero-in { position: relative; padding: 22px 20px 22px; width: 100%; }
+.hero.photo h2 { font-size: 30px; text-shadow: 0 2px 16px rgba(0,0,0,.35); }
+.hero.photo p { opacity: .9; text-shadow: 0 1px 8px rgba(0,0,0,.4); }
+.hero.photo .join input { background: rgba(255,255,255,.14); backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px); }
+.hero.photo .join .btn { backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px); }
+.top { transition: background .2s; }
+
+/* ===== 바로가기 ===== */
+.quick { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; margin-bottom: 14px; }
+.quick > * {
+  display: flex; flex-direction: column; align-items: center; gap: 6px; margin: 0; padding: 14px 4px 12px;
+  font: inherit; font-size: 12.5px; font-weight: 600; color: var(--text); text-align: center;
+  background: var(--card); border: 1px solid var(--line); border-radius: 16px; box-shadow: var(--shadow); cursor: pointer;
+}
+.quick svg { width: 24px; height: 24px; color: var(--fairway); }
+.quick > *:active { transform: scale(.97); }
+
+/* ===== 요약 카드 ===== */
+.stats { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+.stat { background: var(--card); border: 1px solid var(--line); border-radius: var(--radius); padding: 14px; box-shadow: var(--shadow); }
+.stat-h { display: flex; align-items: center; gap: 6px; font-size: 14px; font-weight: 700; margin-bottom: 8px; }
+.stat-h svg { width: 18px; height: 18px; color: var(--fairway); }
+.stat-row { display: flex; justify-content: space-between; align-items: baseline; font-size: 13px; color: var(--muted); padding: 4px 0; }
+.stat-row b { color: var(--text); font-size: 16px; }
+.stat-big { font-size: 22px; font-weight: 800; letter-spacing: -0.02em; padding: 2px 0 4px; }
+.rmoney { font-size: 14px; font-weight: 700; white-space: nowrap; }
+
+/* ===== 순위표 ===== */
+.board-h { display: flex; justify-content: space-between; align-items: baseline; }
+.board-row { display: flex; align-items: center; gap: 12px; padding: 12px 0; border-top: 1px solid var(--line); }
+.board-row:nth-child(2) { border-top: 0; }
+.board-row .rank { position: relative; width: 22px; text-align: center; font-weight: 800; font-size: 17px; color: var(--muted); }
+.board-row .crown { position: absolute; left: 50%; top: -15px; width: 18px; height: 18px; transform: translateX(-50%); color: var(--flag); }
+.board-row .bn { flex: 1; min-width: 0; }
+.board-row .bn b { display: block; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.board-row .bn span { font-size: 12.5px; }
+.board-row .bamt { font-size: 19px; font-weight: 800; white-space: nowrap; }
+.board-row.me .avatar { box-shadow: 0 0 0 3px var(--card), 0 0 0 5px var(--c); }
+.board-row:nth-child(2) .rank { color: var(--flag); }
+.hero.photo .kicker { display: inline-block; padding: 4px 10px; border-radius: 99px; background: rgba(217,165,33,.92); color: #1c1503; opacity: 1; font-weight: 700; }
