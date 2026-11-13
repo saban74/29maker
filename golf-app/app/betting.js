@@ -12,7 +12,38 @@ export const DEFAULT_RULES = {
     mult: 2,             //   몇 배로 할지
   },
   skins: { on: false, amount: 1000, carry: true }, // 스킨스(혼자 1등한 사람이 1명당 금액을 받음, 비기면 이월)
+  obFine: 0,             // OB 1개당 벌금 (친 사람이 다른 사람 1명마다 냄)
+  hazardFine: 0,         // 해저드(페널티 구역) 1개당 벌금
+  nearAmount: 0,         // 니어리스트 상금 (파3, 다른 사람 1명마다 받음)
+  longAmount: 0,         // 롱기스트 상금 (파5, 다른 사람 1명마다 받음)
 };
+
+// 벌금·보너스. events: { "홀-사람-종류": 개수 }  종류 = ob, hz, near, long
+export function holeExtras(h, n, rules, events = {}) {
+  const out = new Array(n).fill(0);
+  const pay = (from, each) => { for (let j = 0; j < n; j++) if (j !== from) { out[from] -= each; out[j] += each; } };
+  for (let p = 0; p < n; p++) {
+    const c = (k) => events[`${h}-${p}-${k}`] || 0;
+    if (rules.obFine) pay(p, c("ob") * rules.obFine);
+    if (rules.hazardFine) pay(p, c("hz") * rules.hazardFine);
+    if (rules.nearAmount && c("near")) pay(p, -rules.nearAmount);
+    if (rules.longAmount && c("long")) pay(p, -rules.longAmount);
+  }
+  return out;
+}
+
+// 핸디: 핸디 차이 × 타당 금액을 미리 주고받기 (핸디 많은 사람이 받음)
+export function handicapMoney(handicaps = [], n, unit) {
+  const out = new Array(n).fill(0);
+  for (let i = 0; i < n; i++) {
+    for (let j = i + 1; j < n; j++) {
+      const amt = ((handicaps[i] || 0) - (handicaps[j] || 0)) * unit;
+      out[i] += amt;
+      out[j] -= amt;
+    }
+  }
+  return out;
+}
 
 // 계산에 쓰는 타수 (양파 상한 적용)
 export function effectiveScore(strokes, par, rules) {
@@ -89,22 +120,25 @@ export function holeResult(scores, par, rules, mult = 1, skinsPot = 0) {
 
 // 라운드 전체 계산
 // holes: [{par}, ...] (18개), scores: scores[hole][player] = 타수 또는 undefined
-export function roundResult(holes, playerCount, scores, rules) {
+// extras: { events, handicaps }
+export function roundResult(holes, playerCount, scores, rules, extras = {}) {
   const perHole = [];
   let nextMult = 1;
   let pot = 0;
   for (let h = 0; h < holes.length; h++) {
     const row = (scores[h] || []).slice(0, playerCount);
     const complete = row.length === playerCount && row.every((s) => Number.isInteger(s) && s > 0);
+    const extra = holeExtras(h, playerCount, rules, extras.events);
     if (!complete) {
-      perHole.push({ complete: false, mult: nextMult, money: new Array(playerCount).fill(0) });
-      continue; // 입력이 다 안 된 홀은 계산하지 않음 (배판·이월은 다음 완료 홀로 넘어감)
+      // 타수가 다 안 들어온 홀은 내기 계산을 안 함 (배판·이월은 다음 완료 홀로). 벌금·보너스만 반영
+      perHole.push({ complete: false, mult: nextMult, money: extra, extra });
+      continue;
     }
     const mult = nextMult;
     const r = holeResult(row, holes[h].par, rules, mult, pot);
     pot = r.carryOut;
     nextMult = r.triggers.length ? (rules.baepan.mult || 2) : 1;
-    perHole.push({ complete: true, mult, ...r });
+    perHole.push({ complete: true, mult, ...r, money: r.money.map((v, i) => v + extra[i]), extra });
   }
   const sum = (from, to) => {
     const t = new Array(playerCount).fill(0);
@@ -112,11 +146,13 @@ export function roundResult(holes, playerCount, scores, rules) {
     return t;
   };
   const half = Math.min(9, holes.length);
+  const handi = handicapMoney(extras.handicaps, playerCount, rules.unit);
   return {
     perHole,
     front: sum(0, half),
     back: sum(half, holes.length),
-    total: sum(0, holes.length),
+    handi,
+    total: sum(0, holes.length).map((v, i) => v + handi[i]),
     nextMult,
     pot,
   };

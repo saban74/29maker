@@ -42,3 +42,19 @@ assert.deepEqual(t, [
 ]);
 
 console.log("내기 계산 테스트 모두 통과 ✅");
+
+// 6) 핸디: A 0, B 5, 오장 → B가 A에게서 25,000원
+import { handicapMoney, holeExtras } from "../app/betting.js";
+assert.deepEqual(handicapMoney([0, 5], 2, 5000), [-25000, 25000]);
+assert.deepEqual(handicapMoney([0, 3, 5, 0], 4, 1000), [-8000, 4000, 12000, -8000]); // C: A에게5 + B에게2 + D에게5
+
+// 7) 벌금·보너스: OB 2개(1천), 니어리스트(5천)
+const r4 = { ...structuredClone(DEFAULT_RULES), obFine: 1000, nearAmount: 5000 };
+assert.deepEqual(holeExtras(0, 4, r4, { "0-3-ob": 2, "0-1-near": 1 }), [-3000, 17000, -3000, -11000]);
+
+// 8) 라운드 합계에 핸디·벌금 포함, 전체 합은 항상 0
+const full = roundResult([{ par: 3 }, { par: 4 }], 4, [[3, 4, 4, 5], [4, 4, 4, 4]], r4,
+  { events: { "0-3-ob": 1, "0-0-near": 1, "1-2-ob": 1 }, handicaps: [0, 2, 2, 4] });
+assert.equal(full.total.reduce((a, b) => a + b, 0), 0);
+assert.deepEqual(full.handi, [-8000, 0, 0, 8000]);
+console.log("핸디·벌금 테스트 통과 ✅");

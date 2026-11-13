@@ -44,7 +44,7 @@ export async function createRound(setup) {
     const { error } = await sb.from("rounds").insert({ code, setup });
     if (error) throw new Error("라운드 만들기 실패: " + error.message);
   } else {
-    LS.write(code, { setup, scores: {} });
+    LS.write(code, { setup, scores: {}, events: {} });
   }
   return code;
 }
@@ -59,10 +59,13 @@ export async function loadRound(code) {
     const { data: rows } = await sb.from("scores").select("hole,player,strokes").eq("round_code", code);
     const scores = {};
     (rows || []).forEach((r) => (scores[r.hole + "-" + r.player] = r.strokes));
-    return { code, setup: round.setup, scores };
+    const { data: evs } = await sb.from("events").select("hole,player,kind,count").eq("round_code", code);
+    const events = {};
+    (evs || []).forEach((r) => (events[`${r.hole}-${r.player}-${r.kind}`] = r.count));
+    return { code, setup: round.setup, scores, events };
   }
   const v = LS.read(code);
-  return v ? { code, ...v } : null;
+  return v ? { code, events: {}, ...v } : null;
 }
 
 // 한 칸(한 사람의 한 홀 타수)만 저장 → 4명이 동시에 입력해도 서로 덮어쓰지 않음
@@ -83,27 +86,72 @@ export async function saveScore(code, hole, player, strokes) {
   if (strokes == null) delete v.scores[hole + "-" + player];
   else v.scores[hole + "-" + player] = strokes;
   LS.write(code, v);
-  channel && channel.postMessage({ code, hole, player, strokes });
+  channel && channel.postMessage({ type: "score", code, hole, player, strokes });
 }
 
-// 다른 사람이 입력한 타수를 받기. 반환값을 호출하면 구독 해제.
-export function subscribeScores(code, onChange) {
+// 벌금·보너스 (OB, 해저드, 니어리스트, 롱기스트) 한 칸 저장. count 0 이면 지움
+export async function saveEvent(code, hole, player, kind, count) {
+  if (isShared) {
+    const sb = await client();
+    const q = count
+      ? sb.from("events").upsert({ round_code: code, hole, player, kind, count })
+      : sb.from("events").delete().match({ round_code: code, hole, player, kind });
+    const { error } = await q;
+    if (error) throw new Error("저장 실패: " + error.message);
+    return;
+  }
+  const v = LS.read(code);
+  v.events = v.events || {};
+  const k = `${hole}-${player}-${kind}`;
+  if (count) v.events[k] = count; else delete v.events[k];
+  LS.write(code, v);
+  channel && channel.postMessage({ type: "event", code, hole, player, kind, count });
+}
+
+// 라운드 도중 설정 수정 (이름, 핸디, 내기 규칙)
+export async function updateSetup(code, setup) {
+  if (isShared) {
+    const sb = await client();
+    const { error } = await sb.from("rounds").update({ setup }).eq("code", code);
+    if (error) throw new Error("수정 실패: " + error.message);
+    return;
+  }
+  const v = LS.read(code);
+  v.setup = setup;
+  LS.write(code, v);
+  channel && channel.postMessage({ type: "setup", code, setup });
+}
+
+// 다른 사람이 입력한 내용 받기. on = { score(h,p,s), event(h,p,kind,count), setup(setup) }
+// 반환값을 호출하면 구독 해제.
+export function subscribeRound(code, on) {
   if (isShared) {
     let ch;
     client().then((sb) => {
+      const f = "round_code=eq." + code;
+      // 추가·수정은 라운드 코드로 걸러 받고, 삭제는 Supabase가 거르기를 지원하지 않아 전부 받은 뒤 여기서 거름
+      // (삭제 알림에는 기본 키만 오는데, 기본 키에 round_code 가 들어 있어 거를 수 있음)
+      const mine = (row) => row && row.round_code === code;
       ch = sb
-        .channel("scores-" + code)
-        .on("postgres_changes", { event: "*", schema: "public", table: "scores", filter: "round_code=eq." + code },
-          (p) => {
-            const row = p.new && p.new.hole != null ? p.new : p.old;
-            onChange(row.hole, row.player, p.eventType === "DELETE" ? null : p.new.strokes);
-          })
+        .channel("round-" + code)
+        .on("postgres_changes", { event: "INSERT", schema: "public", table: "scores", filter: f }, (p) => on.score(p.new.hole, p.new.player, p.new.strokes))
+        .on("postgres_changes", { event: "UPDATE", schema: "public", table: "scores", filter: f }, (p) => on.score(p.new.hole, p.new.player, p.new.strokes))
+        .on("postgres_changes", { event: "DELETE", schema: "public", table: "scores" }, (p) => mine(p.old) && on.score(p.old.hole, p.old.player, null))
+        .on("postgres_changes", { event: "INSERT", schema: "public", table: "events", filter: f }, (p) => on.event(p.new.hole, p.new.player, p.new.kind, p.new.count))
+        .on("postgres_changes", { event: "UPDATE", schema: "public", table: "events", filter: f }, (p) => on.event(p.new.hole, p.new.player, p.new.kind, p.new.count))
+        .on("postgres_changes", { event: "DELETE", schema: "public", table: "events" }, (p) => mine(p.old) && on.event(p.old.hole, p.old.player, p.old.kind, 0))
+        .on("postgres_changes", { event: "UPDATE", schema: "public", table: "rounds", filter: "code=eq." + code }, (p) => on.setup(p.new.setup))
         .subscribe();
     });
     return () => ch && ch.unsubscribe();
   }
   if (!channel) return () => {};
-  const h = (e) => e.data.code === code && onChange(e.data.hole, e.data.player, e.data.strokes);
+  const h = ({ data: d }) => {
+    if (d.code !== code) return;
+    if (d.type === "score") on.score(d.hole, d.player, d.strokes);
+    else if (d.type === "event") on.event(d.hole, d.player, d.kind, d.count);
+    else if (d.type === "setup") on.setup(d.setup);
+  };
   channel.addEventListener("message", h);
   return () => channel.removeEventListener("message", h);
 }

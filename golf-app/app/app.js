@@ -182,10 +182,89 @@ function exportMyGreens() {
   });
 }
 
+// ---------- 라운드 만들기 / 수정에 같이 쓰는 입력 폼 ----------
+function playersForm(players = [], handicaps = [], fixed = false) {
+  const rows = fixed ? players.length : 4;
+  return `<div class="card">
+    <h2>함께 칠 사람 <span class="muted">· 오른쪽은 핸디</span></h2>
+    ${Array.from({ length: rows }, (_, i) => `<div class="prow">
+      <input class="pname" value="${esc(players[i] || "")}" placeholder="${i + 1}번 사람 이름${!fixed && i > 1 ? " (비우면 빠짐)" : ""}">
+      <input class="phandi" type="number" inputmode="numeric" min="0" max="60" value="${handicaps[i] || ""}" placeholder="핸디" aria-label="${i + 1}번 사람 핸디">
+    </div>`).join("")}
+    <p class="muted">핸디가 다르면 그 차이 × 타당 금액을 정산 때 주고받아요. 예) 오장, 핸디 0과 5 → 25,000원</p>
+  </div>`;
+}
+function readPlayers() {
+  const players = [], handicaps = [];
+  view.querySelectorAll(".prow").forEach((row) => {
+    const name = row.querySelector(".pname").value.trim();
+    if (!name) return;
+    players.push(name);
+    handicaps.push(Math.max(0, parseInt(row.querySelector(".phandi").value, 10) || 0));
+  });
+  return { players, handicaps };
+}
+function rulesForm(r) {
+  const ck = (v) => (v ? "checked" : "");
+  const n = (v) => v || "";
+  return `
+    <div class="card">
+      <h2>내기 규칙</h2>
+      <label>타당 금액 (1타 차이당)</label>
+      <input id="unit" type="number" inputmode="numeric" step="500" value="${r.unit}">
+      <div class="presets">${[[1000, "일장"], [2000, "이장"], [3000, "삼장"], [5000, "오장"], [10000, "만원"]]
+        .map(([v, nm]) => `<button type="button" data-unit="${v}">${nm}<small>${v.toLocaleString("ko-KR")}</small></button>`).join("")}</div>
+      <label class="check"><input type="checkbox" id="cap" ${ck(r.capDoublePar)}> 양파(더블파) 이상은 더블파로 계산</label>
+      <label>버디 보너스 (1명당, 이글은 2배, 0이면 없음)</label>
+      <input id="birdie" type="number" inputmode="numeric" step="500" value="${r.birdieBonus}">
+      <h2 style="margin-top:18px">배판 (다음 홀을 배로)</h2>
+      <label class="check"><input type="checkbox" id="bp-birdie" ${ck(r.baepan.onBirdie)}> 버디가 나오면</label>
+      <label class="check"><input type="checkbox" id="bp-tie" ${ck(r.baepan.onTie3)}> 3명 이상 동타면</label>
+      <label class="check"><input type="checkbox" id="bp-triple" ${ck(r.baepan.onTriple)}> 누가 트리플보기 이상이면</label>
+      <label>몇 배</label>
+      <select id="bp-mult"><option value="2">2배</option><option value="3" ${r.baepan.mult === 3 ? "selected" : ""}>3배</option></select>
+      <h2 style="margin-top:18px">스킨스 (선택)</h2>
+      <label class="check"><input type="checkbox" id="sk-on" ${ck(r.skins.on)}> 스킨스도 함께 하기</label>
+      <label>스킨 금액 (1명당)</label>
+      <input id="sk-amt" type="number" inputmode="numeric" step="500" value="${r.skins.amount}">
+      <label class="check"><input type="checkbox" id="sk-carry" ${ck(r.skins.carry)}> 비기면 다음 홀로 이월</label>
+    </div>
+    <div class="card">
+      <h2>벌금·보너스 <span class="muted">(비우면 안 함)</span></h2>
+      <div class="row">
+        <div><label>OB 1개 벌금</label><input id="ob" type="number" inputmode="numeric" step="500" value="${n(r.obFine)}" placeholder="0"></div>
+        <div><label>해저드 1개 벌금</label><input id="hz" type="number" inputmode="numeric" step="500" value="${n(r.hazardFine)}" placeholder="0"></div>
+      </div>
+      <div class="row">
+        <div><label>니어리스트 (파3)</label><input id="near" type="number" inputmode="numeric" step="500" value="${n(r.nearAmount)}" placeholder="0"></div>
+        <div><label>롱기스트 (파5)</label><input id="long" type="number" inputmode="numeric" step="500" value="${n(r.longAmount)}" placeholder="0"></div>
+      </div>
+      <p class="muted">벌금은 친 사람이 다른 사람 1명마다 내고, 니어리스트·롱기스트는 이긴 사람이 1명마다 받아요. 배판은 적용되지 않아요.</p>
+    </div>`;
+}
+function bindRulesForm() {
+  const markUnit = () => view.querySelectorAll("[data-unit]").forEach((b) => b.classList.toggle("on", +b.dataset.unit === +$("#unit").value));
+  view.querySelectorAll("[data-unit]").forEach((b) => (b.onclick = () => { $("#unit").value = b.dataset.unit; markUnit(); }));
+  $("#unit").oninput = markUnit; markUnit();
+}
+function readRules() {
+  const num = (id) => Math.max(0, parseInt($(id).value, 10) || 0);
+  return {
+    unit: num("#unit"), capDoublePar: $("#cap").checked, birdieBonus: num("#birdie"),
+    baepan: { onBirdie: $("#bp-birdie").checked, onTie3: $("#bp-tie").checked, onTriple: $("#bp-triple").checked, mult: +$("#bp-mult").value },
+    skins: { on: $("#sk-on").checked, amount: num("#sk-amt"), carry: $("#sk-carry").checked },
+    obFine: num("#ob"), hazardFine: num("#hz"), nearAmount: num("#near"), longAmount: num("#long"),
+  };
+}
+function checkPlayers(players) {
+  if (players.length < 2) return "2명 이상 이름을 넣어주세요";
+  if (new Set(players).size !== players.length) return "이름이 겹치지 않게 해주세요";
+  return null;
+}
+
 // ---------- 라운드 만들기 ----------
 function showSetup() {
   setHeader("라운드 만들기", true);
-  const r = DEFAULT_RULES;
   const courseOpts = state.courses.map((c, i) => `<option value="${i}">${esc(c.name)}</option>`).join("");
   view.innerHTML = `
     <div class="card">
@@ -196,31 +275,8 @@ function showSetup() {
         <div><label>후반 코스</label><select id="back9"></select></div>
       </div>
     </div>
-    <div class="card">
-      <h2>함께 칠 사람</h2>
-      ${[1, 2, 3, 4].map((n) => `<input class="pname" placeholder="${n}번 사람 이름${n > 2 ? " (비우면 빠짐)" : ""}" style="margin-bottom:8px">`).join("")}
-    </div>
-    <div class="card">
-      <h2>내기 규칙</h2>
-      <label>타당 금액 (1타 차이당)</label>
-      <input id="unit" type="number" inputmode="numeric" step="500" value="${r.unit}">
-      <div class="presets">${[[1000, "일장"], [2000, "이장"], [3000, "삼장"], [5000, "오장"], [10000, "만원"]]
-        .map(([v, n]) => `<button type="button" data-unit="${v}">${n}<small>${v.toLocaleString("ko-KR")}</small></button>`).join("")}</div>
-      <label class="check"><input type="checkbox" id="cap" ${r.capDoublePar ? "checked" : ""}> 양파(더블파) 이상은 더블파로 계산</label>
-      <label>버디 보너스 (1명당, 이글은 2배, 0이면 없음)</label>
-      <input id="birdie" type="number" inputmode="numeric" step="500" value="${r.birdieBonus}">
-      <h2 style="margin-top:18px">배판 (다음 홀을 배로)</h2>
-      <label class="check"><input type="checkbox" id="bp-birdie" ${r.baepan.onBirdie ? "checked" : ""}> 버디가 나오면</label>
-      <label class="check"><input type="checkbox" id="bp-tie" ${r.baepan.onTie3 ? "checked" : ""}> 3명 이상 동타면</label>
-      <label class="check"><input type="checkbox" id="bp-triple" ${r.baepan.onTriple ? "checked" : ""}> 누가 트리플보기 이상이면</label>
-      <label>몇 배</label>
-      <select id="bp-mult"><option value="2">2배</option><option value="3">3배</option></select>
-      <h2 style="margin-top:18px">스킨스 (선택)</h2>
-      <label class="check"><input type="checkbox" id="sk-on"> 스킨스도 함께 하기</label>
-      <label>스킨 금액 (1명당)</label>
-      <input id="sk-amt" type="number" inputmode="numeric" step="500" value="${r.skins.amount}">
-      <label class="check"><input type="checkbox" id="sk-carry" checked> 비기면 다음 홀로 이월</label>
-    </div>
+    ${playersForm()}
+    ${rulesForm(DEFAULT_RULES)}
     <button class="btn" id="create">만들고 참여 코드 받기</button>
   `;
   const fillCourses = () => {
@@ -230,34 +286,53 @@ function showSetup() {
     if (club && club.courses.length > 1) $("#back9").value = "1";
   };
   $("#club").onchange = fillCourses; fillCourses();
-  const markUnit = () => view.querySelectorAll("[data-unit]").forEach((b) => b.classList.toggle("on", +b.dataset.unit === +$("#unit").value));
-  view.querySelectorAll("[data-unit]").forEach((b) => (b.onclick = () => { $("#unit").value = b.dataset.unit; markUnit(); }));
-  $("#unit").oninput = markUnit; markUnit();
+  bindRulesForm();
 
   $("#create").onclick = async () => {
     const club = state.courses[$("#club").value];
     if (!club) return toast("골프장을 먼저 등록해 주세요");
-    const players = [...view.querySelectorAll(".pname")].map((i) => i.value.trim()).filter(Boolean);
-    if (players.length < 2) return toast("2명 이상 이름을 넣어주세요");
-    if (new Set(players).size !== players.length) return toast("이름이 겹치지 않게 해주세요");
+    const { players, handicaps } = readPlayers();
+    const bad = checkPlayers(players); if (bad) return toast(bad);
     const f = club.courses[$("#front").value], b = club.courses[$("#back9").value];
     const mine = store.get(greenKey(club.id), {}); // 이 폰에서 현장에서 찍은 그린 위치도 같이 넣어 동반자와 공유
     const withMine = (h, label) => ({ ...h, label, green: { ...(h.green || {}), ...(mine[`${label}|${h.no}`] || {}) } });
     const holes = [...f.holes.map((h) => withMine(h, f.name)), ...b.holes.map((h) => withMine(h, b.name))];
-    const num = (id) => Math.max(0, parseInt($(id).value, 10) || 0);
     const setup = {
-      courseId: club.id, courseName: club.name, holes, players,
+      courseId: club.id, courseName: club.name, holes, players, handicaps,
       createdAt: new Date().toISOString(),
-      rules: {
-        unit: num("#unit"), capDoublePar: $("#cap").checked, birdieBonus: num("#birdie"),
-        baepan: { onBirdie: $("#bp-birdie").checked, onTie3: $("#bp-tie").checked, onTriple: $("#bp-triple").checked, mult: +$("#bp-mult").value },
-        skins: { on: $("#sk-on").checked, amount: num("#sk-amt"), carry: $("#sk-carry").checked },
-      },
+      rules: readRules(),
     };
     try {
       const code = await sync.createRound(setup);
       store.set("golf.me." + code, 0);
       openRound(code);
+    } catch (e) { toast(e.message); }
+  };
+}
+
+// ---------- 라운드 도중 설정 수정 ----------
+function showEdit() {
+  const { setup, code } = state.round;
+  setHeader("라운드 설정 수정", true);
+  $("#tabs").hidden = true;
+  const rules = { ...DEFAULT_RULES, ...setup.rules };
+  view.innerHTML = playersForm(setup.players, setup.handicaps || [], true) + rulesForm(rules) + `
+    <p class="muted">바꾼 규칙은 지나간 홀까지 모두 다시 계산돼요. 골프장과 인원 수는 바꿀 수 없어요.</p>
+    <button class="btn" id="edit-save">저장</button>
+    <button class="btn ghost" id="edit-cancel">취소</button>`;
+  bindRulesForm();
+  $("#edit-cancel").onclick = showRound;
+  $("#edit-save").onclick = async () => {
+    const { players, handicaps } = readPlayers();
+    if (players.length !== setup.players.length) return toast("이름을 모두 넣어주세요");
+    const bad = checkPlayers(players); if (bad) return toast(bad);
+    const next = { ...setup, players, handicaps, rules: readRules() };
+    try {
+      await sync.updateSetup(code, next);
+      state.round.setup = next;
+      remember(code, next);
+      toast("수정했어요");
+      showRound();
     } catch (e) { toast(e.message); }
   };
 }
@@ -275,10 +350,18 @@ async function openRound(code) {
   history.replaceState(null, "", "?r=" + code);
   remember(code, round.setup);
   state.hole = firstEmptyHole();
-  state.unsub = sync.subscribeScores(code, (h, p, s) => {
-    const k = h + "-" + p;
-    if (s == null) delete state.round.scores[k]; else state.round.scores[k] = s;
-    renderTab();
+  state.unsub = sync.subscribeRound(code, {
+    score(h, p, s) {
+      const k = h + "-" + p;
+      if (s == null) delete state.round.scores[k]; else state.round.scores[k] = s;
+      renderTab();
+    },
+    event(h, p, kind, count) {
+      const k = `${h}-${p}-${kind}`;
+      if (count) state.round.events[k] = count; else delete state.round.events[k];
+      renderTab();
+    },
+    setup(next) { state.round.setup = next; renderTab(); },
   });
   const me = store.get("golf.me." + code, null);
   if (me == null) return chooseMe();
@@ -310,7 +393,8 @@ function scoreGrid() {
 }
 function calc() {
   const { setup } = state.round;
-  return roundResult(setup.holes, setup.players.length, scoreGrid(), setup.rules);
+  const rules = { ...DEFAULT_RULES, ...setup.rules };
+  return roundResult(setup.holes, setup.players.length, scoreGrid(), rules, { events: state.round.events, handicaps: setup.handicaps });
 }
 function firstEmptyHole() {
   const g = scoreGrid();
@@ -343,7 +427,7 @@ function bindHoleBar() {
 
 // ---------- 탭 ----------
 function renderTab() {
-  if (!state.round) return;
+  if (!state.round || $("#tabs").hidden) return;
   document.querySelectorAll(".tabs button").forEach((b) => b.classList.toggle("on", b.dataset.tab === state.tab));
   if (state.tab !== "distance" && state.stopGps) { state.stopGps(); state.stopGps = null; }
   if (state.tab === "score") renderScore();
@@ -363,6 +447,15 @@ function renderScore() {
   const hr = res.perHole[h];
   // 지금까지 누적(이 홀 포함)
   const upto = setup.players.map((_, p) => res.perHole.slice(0, h + 1).reduce((a, r) => a + r.money[p], 0));
+  const rules = { ...DEFAULT_RULES, ...setup.rules };
+  const events = state.round.events;
+  const ev = (p, k) => events[`${h}-${p}-${k}`] || 0;
+  const fineKinds = [rules.obFine ? ["ob", "OB"] : null, rules.hazardFine ? ["hz", "해저드"] : null].filter(Boolean);
+  const evRow = (p, name) => fineKinds.length ? `<div class="ev">${fineKinds.map(([k, ko]) => {
+    const c = ev(p, k);
+    return `<span class="evb ${c ? "on" : ""}"><button data-ev="${p}:${k}:1" aria-label="${esc(name)} ${ko} 추가">${ko}${c ? " " + c : ""}</button>${c ? `<button data-ev="${p}:${k}:-1" aria-label="${esc(name)} ${ko} 하나 빼기">−</button>` : ""}</span>`;
+  }).join("")}</div>` : "";
+  const special = par === 3 && rules.nearAmount ? ["near", "니어리스트"] : par === 5 && rules.longAmount ? ["long", "롱기스트"] : null;
   view.innerHTML = holeBar(res) + `
     <div class="card">
       ${setup.players.map((name, p) => {
@@ -377,14 +470,17 @@ function renderScore() {
             <div class="val">${s ?? "–"}<small>${s ? scoreName(s, par) : ""}</small></div>
             <button data-p="${p}" data-d="1" aria-label="${esc(name)} 한 타 더하기">+</button>
           </div>
+          ${evRow(p, name)}
         </div>`;
       }).join("")}
+      ${special ? `<div class="special"><span class="muted">${special[1]}</span>${setup.players.map((n, p) =>
+        `<button data-sp="${p}" class="${ev(p, special[0]) ? "on" : ""}">${esc(n)}</button>`).join("")}</div>` : ""}
       ${hr.complete && hr.triggers.length ? `<p class="muted">다음 홀 배판: ${hr.triggers.join(", ")}</p>` : ""}
       ${hr.complete && hr.carryOut ? `<p class="muted">스킨 이월: 1명당 ${won(hr.carryOut).replace("+", "")}</p>` : ""}
     </div>
     ${hr.complete && h < setup.holes.length - 1 ? `<button class="btn" id="go-next">다음 홀로 →</button>` : ""}
     <div class="card"><span class="muted">참여 코드</span> <span class="code">${code}</span>
-      <button class="btn small ghost" id="share" style="float:right">코드 보내기</button></div>`;
+      <div class="row" style="margin-top:10px"><button class="btn small ghost" id="share">코드 보내기</button><button class="btn small ghost" id="edit">이름·규칙 수정</button></div></div>`;
   bindHoleBar();
   view.querySelectorAll(".stepper button").forEach((b) => (b.onclick = async () => {
     const p = +b.dataset.p, d = +b.dataset.d;
@@ -396,6 +492,23 @@ function renderScore() {
     renderScore();
     try { await sync.saveScore(code, h, p, next); } catch (e) { toast(e.message); }
   }));
+  const saveEv = async (hole, p, kind, count) => {
+    const k = `${hole}-${p}-${kind}`;
+    if (count) events[k] = count; else delete events[k];
+    renderScore();
+    try { await sync.saveEvent(code, hole, p, kind, count); } catch (e) { toast(e.message); }
+  };
+  view.querySelectorAll("[data-ev]").forEach((b) => (b.onclick = () => {
+    const [p, kind, d] = b.dataset.ev.split(":");
+    saveEv(h, +p, kind, Math.max(0, Math.min(20, ev(+p, kind) + +d)));
+  }));
+  view.querySelectorAll("[data-sp]").forEach((b) => (b.onclick = () => {
+    const p = +b.dataset.sp, kind = special[0];
+    const was = ev(p, kind);
+    setup.players.forEach((_, q) => { if (q !== p && ev(q, kind)) saveEv(h, q, kind, 0); }); // 한 홀에 한 명만
+    saveEv(h, p, kind, was ? 0 : 1);
+  }));
+  $("#edit").onclick = showEdit;
   const gn = $("#go-next"); if (gn) gn.onclick = () => { state.hole++; renderTab(); window.scrollTo(0, 0); };
   $("#share").onclick = () => shareText(`골프 라운드 참여 코드: ${code}\n${location.origin + location.pathname}?r=${code}`);
 }
@@ -499,16 +612,22 @@ function renderMoney() {
   const transfers = settle(res.total, names);
   const frontT = settle(res.front, names);
   const cls = (v) => (v > 0 ? "plus" : v < 0 ? "minus" : "");
+  const hasHandi = res.handi.some((v) => v);
+  const extraSum = names.map((_, p) => res.perHole.reduce((a, r) => a + (r.extra ? r.extra[p] : 0), 0));
+  const hasExtra = extraSum.some((v) => v);
+  const short = (v) => (v === 0 ? "0" : (v > 0 ? "+" : "−") + Math.abs(v).toLocaleString("ko-KR"));
   view.innerHTML = `
     <div class="card">
       <h2>내기 합계 <span class="muted">(${doneCount}/${setup.holes.length}홀 완료)</span></h2>
-      <table>
-        <tr><th>이름</th><th>전반</th><th>후반</th><th>합계</th></tr>
+      <table class="money">
+        <tr><th>이름</th><th>전반</th><th>후반</th>${hasHandi ? "<th>핸디</th>" : ""}<th>합계</th></tr>
         ${names.map((n, p) => `<tr><td>${esc(n)}</td>
-          <td class="${cls(res.front[p])}">${won(res.front[p])}</td>
-          <td class="${cls(res.back[p])}">${won(res.back[p])}</td>
+          <td class="${cls(res.front[p])}">${short(res.front[p])}</td>
+          <td class="${cls(res.back[p])}">${short(res.back[p])}</td>
+          ${hasHandi ? `<td class="${cls(res.handi[p])}">${short(res.handi[p])}</td>` : ""}
           <td class="${cls(res.total[p])}"><b>${won(res.total[p])}</b></td></tr>`).join("")}
       </table>
+      ${hasExtra ? `<p class="muted">전반·후반에 포함된 벌금·보너스: ${names.map((n, p) => `${esc(n)} ${short(extraSum[p])}`).join(" · ")}</p>` : ""}
     </div>
     <div class="card">
       <h2>스코어카드 <span class="muted">총타수 ${names.map((n, p) => `${esc(n)} ${sf[p] + sb[p] || "–"}`).join(" · ")}</span></h2>
@@ -529,7 +648,7 @@ function renderMoney() {
   $("#share-money").onclick = () => {
     const lines = [
       `⛳ ${setup.courseName} (${doneCount}/${setup.holes.length}홀)`,
-      ...names.map((n, p) => `${n}: ${sf[p] + sb[p]}타 / ${won(res.total[p])}`),
+      ...names.map((n, p) => `${n}: ${sf[p] + sb[p]}타 / ${won(res.total[p])}${res.handi[p] ? ` (핸디 ${won(res.handi[p])} 포함)` : ""}`),
       "",
       "[정산]",
       ...(transfers.length ? transfers.map((t) => `${t.from} → ${t.to} ${t.amount.toLocaleString("ko-KR")}원`) : ["없음"]),

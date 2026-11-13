@@ -18,6 +18,16 @@ create table if not exists scores (
   primary key (round_code, hole, player)
 );
 
+-- 벌금·보너스: OB(ob), 해저드(hz), 니어리스트(near), 롱기스트(long)
+create table if not exists events (
+  round_code text references rounds(code) on delete cascade,
+  hole int not null,
+  player int not null,
+  kind text not null check (kind in ('ob', 'hz', 'near', 'long')),
+  count int not null check (count between 1 and 20),
+  primary key (round_code, hole, player, kind)
+);
+
 -- 골프장 정보 (관리 프로그램에서 올림)
 create table if not exists courses (
   id text primary key,
@@ -30,9 +40,15 @@ create table if not exists courses (
 alter table rounds enable row level security;
 alter table scores enable row level security;
 alter table courses enable row level security;
+alter table events enable row level security;
 
 create policy "rounds read"   on rounds for select using (true);
 create policy "rounds insert" on rounds for insert with check (true);
+create policy "rounds update" on rounds for update using (true);  -- 라운드 도중 이름·규칙 수정
+create policy "events read"   on events for select using (true);
+create policy "events write"  on events for insert with check (true);
+create policy "events update" on events for update using (true);
+create policy "events delete" on events for delete using (true);
 create policy "scores read"   on scores for select using (true);
 create policy "scores write"  on scores for insert with check (true);
 create policy "scores update" on scores for update using (true);
@@ -44,3 +60,5 @@ create policy "courses admin" on courses for all to authenticated using (true) w
 
 -- 실시간 전달 켜기
 alter publication supabase_realtime add table scores;
+alter publication supabase_realtime add table events;
+alter publication supabase_realtime add table rounds;

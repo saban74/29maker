@@ -144,3 +144,24 @@ table.sc [data-goto] { cursor: pointer; }
 .presets button small { display: block; font-size: 11px; font-weight: 500; color: var(--muted); }
 .presets button.on { background: var(--green); color: #fff; border-color: var(--green); }
 .presets button.on small { color: #d6eadb; }
+
+/* 핸디 입력 */
+.prow { display: flex; gap: 8px; margin-bottom: 8px; }
+.prow .pname { flex: 1; }
+.prow .phandi { width: 76px; flex: none; text-align: center; }
+
+/* 벌금 버튼 (OB, 해저드) */
+.player { flex-wrap: wrap; }
+.ev { flex-basis: 100%; display: flex; gap: 8px; }
+.evb { display: inline-flex; border: 1px solid var(--line); border-radius: 99px; overflow: hidden; }
+.evb button { font: inherit; font-size: 13px; padding: 5px 12px; border: 0; background: var(--bg); color: var(--muted); }
+.evb button + button { border-left: 1px solid var(--line); padding: 5px 10px; }
+.evb.on { border-color: var(--minus); }
+.evb.on button:first-child { color: var(--minus); font-weight: 700; }
+
+/* 니어리스트·롱기스트 */
+.special { display: flex; flex-wrap: wrap; align-items: center; gap: 6px; padding-top: 12px; border-top: 1px solid var(--line); }
+.special .muted { margin-right: 4px; }
+.special button { font: inherit; font-size: 14px; padding: 6px 12px; border-radius: 99px; border: 1px solid var(--line); background: var(--bg); color: var(--text); }
+.special button.on { background: var(--gold); color: #fff; border-color: var(--gold); }
+table.money td, table.money th { font-size: 14px; }
