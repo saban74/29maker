@@ -1,5 +1,6 @@
-<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style><link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#0f1712"><link rel="icon" href="icon-192.png"><link rel="apple-touch-icon" href="icon-192.png"></head><body>
-<title>보병 전선</title>
+<!doctype html>
+<meta charset="utf-8">
+<link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#0f1712"><link rel="icon" href="icon-192.png"><link rel="apple-touch-icon" href="icon-192.png"><title>보병 전선</title>
 <meta name="claude:viewport-fit-sides" content="cover">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Do+Hyeon&family=Noto+Sans+KR:wght@400;500;700&display=swap">
 <style>
@@ -1041,6 +1042,20 @@ function mirrorClip(c,name){const side=/^(Shoulder|UpperArm|LowerArm|Hand|UpperL
     const v=t.values.slice();if(prop==='.quaternion')for(let k=0;k<v.length;k+=4){v[k+1]=-v[k+1];v[k+2]=-v[k+2]}else if(prop==='.position')for(let k=0;k<v.length;k+=3)v[k]=-v[k];
     const T=t.constructor;return new T(nn+prop,t.times.slice(),v)});return new THREE.AnimationClip(name,c.duration,tr)}
 function belPrep(gl){const b=gl.animations.find(c=>c.name==='block');if(b){gl.animations=gl.animations.filter(c=>c!==b);gl.animations.push(mirrorClip(b,'block'))}}
+function seaPrep(gl){belPrep(gl);const i=gl.animations.find(c=>c.name==='idle');if(i){const c=i.clone();c.name='shoot';gl.animations.push(c)}}
+const SEA_POSE={bowU:[.22,.1,1],bowL:[.12,.1,1],drawU:[-.3,.1,-.95],drawL:[.58,.13,.8],roll:0};
+function seaGear(root,M2,tc){const HL=root.getObjectByName('HandL'),wp=root.getObjectByName('Weapon_R');
+  if(wp&&HL){const p=wp.position.clone(),q=wp.quaternion.clone(),sc=wp.scale.clone();HL.add(wp);wp.position.set(-p.x,p.y,p.z);wp.quaternion.set(q.x,-q.y,-q.z,q.w);wp.scale.set(-sc.x,sc.y,sc.z);
+    wp.traverse(o=>{if(o.isMesh&&o.material){o.material=o.material.clone();o.material.side=THREE.DoubleSide}})}
+  const B=n=>root.getObjectByName(n),UL=B('UpperArmL'),LL=B('LowerArmL'),HLb=B('HandL'),UR=B('UpperArmR'),LR=B('LowerArmR'),HR=B('HandR');if(!UL||!UR)return;
+  const a=new THREE.Vector3(),b=new THREE.Vector3(),t=new THREE.Vector3(),rq=new THREE.Quaternion(),wq=new THREE.Quaternion(),pq=new THREE.Quaternion(),dq=new THREE.Quaternion(),I=new THREE.Quaternion();
+  const aim=(bone,child,dir,w)=>{if(w<=.001)return;bone.getWorldPosition(a);child.getWorldPosition(b);b.sub(a).normalize();root.getWorldQuaternion(rq);t.set(...dir).normalize().applyQuaternion(rq);
+    dq.setFromUnitVectors(b,t);dq.slerp(I.identity(),1-w);bone.getWorldQuaternion(wq);bone.parent.getWorldQuaternion(pq);bone.quaternion.copy(pq.invert().multiply(dq.multiply(wq)));bone.updateMatrixWorld(true)};
+  let wl=0,wr=0;
+  root.userData.post=(X,dt)=>{if(!X||!dt&&dt!==0)return;const cd=X.cd||1.4,st=X.shotT??9,combat=st<cd*1.6&&!X.dead;
+    wl+=((combat?1:0)-wl)*Math.min(1,(dt||0)*8);
+    const draw=st<.08?1-st/.08:Math.min(1,Math.max(0,(st-.12)/Math.max(.25,cd*.45)));const tr=combat?draw*draw*(3-2*draw):0;wr+=(tr-wr)*Math.min(1,(dt||0)*14);
+    root.updateMatrixWorld(true);aim(UL,LL,SEA_POSE.bowU,wl);aim(LL,HLb,SEA_POSE.bowL,wl);aim(UR,LR,SEA_POSE.drawU,wr);aim(LR,HR,SEA_POSE.drawL,wr)}}
 function belricGear(root,M2,tc){const HR=root.getObjectByName('HandR'),HL=root.getObjectByName('HandL'),CH=root.getObjectByName('Chest'),wp=root.getObjectByName('Weapon_R');if(!HR||!HL||!CH)return;
   root.updateMatrixWorld(true);const ws=new THREE.Vector3();
   if(wp){const p=wp.position.clone(),q=wp.quaternion.clone(),sc=wp.scale.clone();HL.add(wp);wp.position.set(-p.x,p.y,p.z);wp.quaternion.set(q.x,-q.y,-q.z,q.w);wp.scale.set(-sc.x,sc.y,sc.z);
@@ -1082,6 +1097,7 @@ const MIXCFG={orc:{file:'orcm-model.js',hq:'orcm-hq.js',key:'orc_mixamo',h:1.72,
   rifle:{file:'riflem-model.js',hq:'riflem-hq.js',key:'rifle_mixamo',h:1.64,ts:{idle:1,walk:1,attack1:1.4,death:1},gear:rifleGear,attacks:['attack1']},
   ruk:{file:'rukm-model.js',hq:'rukm-hq.js',key:'ruk_mixamo',h:1.9,ts:{idle:1,walk:1,attack1:1,block:1.2,death:1},gear:()=>{},attacks:['attack1','attack1','block']},
   belric:{file:'belricm-model.js',hq:'belricm-hq.js',key:'belric_mixamo',h:1.9,ts:{idle:1,walk:1,attack1:1,block:1.1,death:1},gear:belricGear,prep:belPrep,attacks:['attack1','attack1','attack1','block']},
+  sea:{file:'seam-model.js',key:'sea_mixamo',h:1.7,ts:{idle:1,walk:1,shoot:1,block:1,death:1},gear:seaGear,prep:seaPrep,attacks:['shoot']},
   wolf:{file:'wolfm-model.js',hq:'wolfm-hq.js',key:'wolf_mixamo',h:.72,ts:{idle:1,walk:1,attack1:1.1,dodge:1,death:1},gear:()=>{},attacks:['attack1','attack1','dodge']}};
 const MIXM={};
 function mixPlay(X,n,restart){const a=X.act[n],old=X.act[X.cur];if(!a)return;if(restart)a.reset();a.enabled=true;a.setEffectiveTimeScale(X.ts[n]||1);a.setEffectiveWeight(1);a.play();if(old&&old!==a)a.crossFadeFrom(old,.15,false);X.cur=n}
@@ -1095,9 +1111,9 @@ function mixModel(k,tc){const S=MIXM[k],cf=S.cf;const s=THREE.SkeletonUtils.clon
   g.userData={legs:[],arms:[],body:w,mix:X,mixRoot:s,mixKey:k};return g}
 function mixUpdate(e,u,rdt,walking){const X=u.mix;const dt=rdt*((G&&G.paused)?0:((G&&G.speed)||1));
   X.ts.walk=Math.max(.6,(e.spd||70)/80);if(X.act.walk&&X.cur==='walk')X.act.walk.setEffectiveTimeScale(X.ts.walk);
-  if(X.trig){X.trig=false;const n=X.attacks[X.ai++%X.attacks.length];X.atkT=Math.min(X.dur[n]/X.ts[n],(e.cd||1.2)*.95);mixPlay(X,n,true)}
+  X.shotT=(X.shotT??9)+dt;X.cd=e.cd;if(X.trig){X.trig=false;X.shotT=0;const n=X.attacks[X.ai++%X.attacks.length];X.atkT=Math.min(X.dur[n]/X.ts[n],(e.cd||1.2)*.95);mixPlay(X,n,true)}
   else if(X.atkT>0)X.atkT-=dt;else{const want=walking?'walk':'idle';if(want!==X.cur)mixPlay(X,want,false)}
-  X.mixer.update(dt);if(X.post)X.post()}
+  X.mixer.update(dt);if(X.post)X.post(X,dt)}
 for(const k of Object.keys(MIXCFG)){const prev=MODELS[k];MODELS[k]=tc=>MIXM[k]?mixModel(k,tc):prev(tc)}
 function loadMixModels(){if(!THREE.SkeletonUtils)return;for(const[k,cf]of Object.entries(MIXCFG)){const sc=document.createElement('script');sc.src=cf.file;sc.onload=()=>{try{
     const bin=atob(window.MODEL_B64[cf.key]),buf=new Uint8Array(bin.length);for(let i=0;i<bin.length;i++)buf[i]=bin.charCodeAt(i);
@@ -1364,7 +1380,7 @@ function sync(rdt){const seen=new Set();let newStatic=false;
   for(const[id,m]of meshes)if(!seen.has(id)){meshes.delete(id);
     if(m.userData.static){scene.remove(m);const r=ruin();r.position.copy(m.position);scene.add(r);ruins.push(r);newStatic=true}
     else if(m.userData.mix){mixPlay(m.userData.mix,'death',true);dying.push({m,t:2.6,mix:true,gy:m.position.y})}else dying.push({m,t:.7,ry:m.rotation.y,gy:m.position.y})}
-  for(let i=dying.length-1;i>=0;i--){const d=dying[i];d.t-=rdt;if(d.mix){d.m.userData.mix.mixer.update(rdt);if(d.m.userData.mix.post)d.m.userData.mix.post();if(d.t<.7)d.m.position.y=d.gy-(.7-d.t)*25;if(d.t<=0){scene.remove(d.m);dying.splice(i,1)}continue}const k=1-d.t/.7;d.m.rotation.z=Math.min(1.5,k*2.4);d.m.position.y=(d.gy||0)-k*k*d.m.userData.s*.4;
+  for(let i=dying.length-1;i>=0;i--){const d=dying[i];d.t-=rdt;if(d.mix){d.m.userData.mix.mixer.update(rdt);if(d.m.userData.mix.post){d.m.userData.mix.dead=true;d.m.userData.mix.post(d.m.userData.mix,rdt)}if(d.t<.7)d.m.position.y=d.gy-(.7-d.t)*25;if(d.t<=0){scene.remove(d.m);dying.splice(i,1)}continue}const k=1-d.t/.7;d.m.rotation.z=Math.min(1.5,k*2.4);d.m.position.y=(d.gy||0)-k*k*d.m.userData.s*.4;
     if(d.t<=0){scene.remove(d.m);dying.splice(i,1)}}
   if(newStatic&&renderer)renderer.shadowMap.needsUpdate=true}
 const fxRing=geo('fxr',()=>new THREE.RingGeometry(.9,1,48)),fxDisc=geo('fxd',()=>new THREE.CircleGeometry(1,40));
@@ -1562,5 +1578,4 @@ if(!renderer){$('bStart').disabled=true;$('bStart').textContent='3D를 쓸 수 �
 requestAnimationFrame(loop);
 if(location.hash==='#dogam'&&renderer)openViewer();
 </script>
-
-<script>if("serviceWorker"in navigator&&location.protocol!=="file:")navigator.serviceWorker.register("sw.js").catch(()=>{});</script></body></html>
+<script>if("serviceWorker"in navigator&&location.protocol!=="file:")navigator.serviceWorker.register("sw.js").catch(()=>{});</script>
