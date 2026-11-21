@@ -114,6 +114,7 @@ details a{color:var(--accent)}
       <div class="hud">
         <button id="bGfx">그래픽: 높음</button>
         <button id="bSound">소리 켜짐</button>
+        <button id="bMusic">음악 켜짐</button>
         <button id="bFull">전체 화면</button>
         <button id="bFollow" class="on" hidden>카메라 영웅 고정</button>
         <button id="bSpeed">속도 ×1</button>
@@ -1498,7 +1499,7 @@ function ui(){if(!G)return;const p=G.P[0],h=p.hero;
 $('bTier').onclick=()=>G&&buyTier(G.P[0]);$('bAtk').onclick=()=>G&&buyAtk(G.P[0]);$('bArm').onclick=()=>G&&buyArm(G.P[0]);$('bSpawn').onclick=()=>G&&buySpawn(G.P[0]);
 $('bSkill').onclick=()=>{if(G&&!useSkill(G.P[0].hero)&&!G.P[0].hero.dead&&G.P[0].hero.skCd<=0)msg('스킬 범위 안에 적이 없어요.','#93a29b')};
 $('bGfx').onclick=()=>applyGfx((GFX+1)%3);
-$('bSound').onclick=()=>{audioInit();muted=!muted;try{localStorage.setItem('fl-mute',muted?'1':'0')}catch(e){}$('bSound').textContent=muted?'소리 꺼짐':'소리 켜짐';$('bSound').classList.toggle('on',!muted)};
+$('bSound').onclick=()=>{audioInit();muted=!muted;try{localStorage.setItem('fl-mute',muted?'1':'0')}catch(e){}$('bSound').textContent=muted?'소리 꺼짐':'소리 켜짐';$('bSound').classList.toggle('on',!muted);if(muted)musicStop();else musicPlay(MUSIC.want)};
 $('bSound').textContent=muted?'소리 꺼짐':'소리 켜짐';$('bSound').classList.toggle('on',!muted);
 $('bFull').onclick=()=>{const g=$('gameBox');const d=document;if(d.fullscreenElement){d.exitFullscreen&&d.exitFullscreen()}else if(g.requestFullscreen){g.requestFullscreen().catch(()=>msg&&G&&msg('이 화면에서는 전체 화면을 쓸 수 없어요.','#93a29b'))}};
 document.addEventListener('fullscreenchange',()=>{$('bFull').textContent=document.fullscreenElement?'전체 화면 끄기':'전체 화면';setTimeout(fit,60)});
@@ -1513,17 +1514,31 @@ renderPick();loadModels();if(renderer&&THREE.GLTFLoader)loadMixModels();if(rende
 $('heroPick').addEventListener('click',e=>{const b=e.target.closest('.hcard');if(!b)return;opts.hero=+b.dataset.i;document.querySelectorAll('.hcard').forEach(x=>x.setAttribute('aria-pressed',x===b))});
 for(const[id,key,num]of[['modePick','mode',false],['diffPick','diff',true]])$(id).addEventListener('click',e=>{const b=e.target.closest('button');if(!b)return;
   opts[key]=num?+b.dataset.v:b.dataset.v;$(id).querySelectorAll('button').forEach(x=>x.setAttribute('aria-pressed',x===b))});
-$('bStart').onclick=()=>{audioInit();$('startOv').hidden=true;newGame()};
+$('bStart').onclick=()=>{audioInit();$('startOv').hidden=true;newGame();musicPlay('battle')};
 function showEnd(won){$('endTitle').textContent=won?'승리!':'패배';
   $('endText').textContent=`${fmt(G.t)} 동안 싸웠어요. 영웅 레벨 ${G.P[0].hero.lv}, 처치 ${G.P[0].kills}, ${DATA.tiers[G.P[0].tier].name}.`;
-  $('bWatch').hidden=won||G.over;$('endOv').hidden=false}
-$('bAgain').onclick=()=>{$('endOv').hidden=true;$('startOv').hidden=false;G=null};
+  $('bWatch').hidden=won||G.over;$('endOv').hidden=false;if(won)musicPlay('victory');else{musicStop();setTimeout(()=>{if(!MUSIC.el&&!(G&&!G.over))musicPlay('menu')},2500)}}
+
+// ---- background music (CC0 tracks from OpenGameArt: RandomMind "Medieval: Exploration", "Medieval: Battle", "Medieval Victory Theme"; Bobjt "Raiders March") ----
+const MUSIC={on:true,el:null,cur:null,want:'menu',vol:.32,i:0,fadeT:null,list:{menu:['music/bgm_menu.mp3'],battle:['music/bgm_battle1.mp3','music/bgm_battle2.mp3'],victory:['music/bgm_victory.mp3']}};
+try{MUSIC.on=localStorage.getItem('fl-music')!=='0'}catch(e){}
+function musicFadeOut(el,done){if(!el){done&&done();return}const v0=el.volume;let k=0;const t=setInterval(()=>{k++;el.volume=Math.max(0,v0*(1-k/12));if(k>=12){clearInterval(t);el.pause();done&&done()}},40)}
+function musicStart(kind){const L=MUSIC.list[kind];const a=new Audio(L[MUSIC.i++%L.length]);a.loop=kind==='menu';a.volume=MUSIC.vol*.25;a.preload='auto';
+  a.onended=()=>{if(MUSIC.el!==a)return;if(kind==='battle')musicStart('battle');else if(kind==='victory'){MUSIC.el=null;MUSIC.cur=null;setTimeout(()=>{if(!MUSIC.el)musicPlay('menu')},1500)}};
+  MUSIC.el=a;MUSIC.cur=kind;a.play().then(()=>{let k=0;const t=setInterval(()=>{k++;a.volume=Math.min(MUSIC.vol,MUSIC.vol*k/20);if(k>=20||MUSIC.el!==a)clearInterval(t)},50)}).catch(()=>{if(MUSIC.el===a){MUSIC.el=null;MUSIC.cur=null}})}
+function musicPlay(kind){MUSIC.want=kind;if(!MUSIC.on||muted){musicStop(true);return}if(MUSIC.cur===kind&&MUSIC.el&&!MUSIC.el.paused)return;const old=MUSIC.el;MUSIC.el=null;MUSIC.cur=null;musicFadeOut(old);musicStart(kind)}
+function musicStop(keepWant){const old=MUSIC.el;MUSIC.el=null;MUSIC.cur=null;musicFadeOut(old)}
+addEventListener('pointerdown',function first(){removeEventListener('pointerdown',first,true);if(!MUSIC.el)musicPlay(G?'battle':'menu')},true);
+document.addEventListener('visibilitychange',()=>{if(!MUSIC.el)return;if(document.hidden)MUSIC.el.pause();else if(MUSIC.on&&!muted)MUSIC.el.play().catch(()=>{})});
+function musicBtn(){const b=$('bMusic');if(b){b.textContent=MUSIC.on?'음악 켜짐':'음악 꺼짐';b.classList.toggle('on',!MUSIC.on)}}
+$('bAgain').onclick=()=>{$('endOv').hidden=true;$('startOv').hidden=false;G=null;musicPlay('menu')};
+$('bMusic').onclick=()=>{MUSIC.on=!MUSIC.on;try{localStorage.setItem('fl-music',MUSIC.on?'1':'0')}catch(e){}musicBtn();if(MUSIC.on)musicPlay(MUSIC.want);else musicStop()};musicBtn();
 function resetHud(){$('bPause').textContent='일시정지';$('bPause').classList.remove('on');$('bSpeed').textContent='속도 ×1'}
 let reWasPaused=false;
 $('bRestart').onclick=()=>{if(!G)return;reWasPaused=G.paused;G.paused=true;$('restartOv').hidden=false};
 $('bReCancel').onclick=()=>{$('restartOv').hidden=true;if(G)G.paused=reWasPaused};
-$('bReSame').onclick=()=>{$('restartOv').hidden=true;$('endOv').hidden=true;audioInit();newGame();resetHud()};
-$('bRePick').onclick=()=>{$('restartOv').hidden=true;$('endOv').hidden=true;G=null;resetHud();$('startOv').hidden=false};
+$('bReSame').onclick=()=>{$('restartOv').hidden=true;$('endOv').hidden=true;audioInit();newGame();resetHud();musicPlay('battle')};
+$('bRePick').onclick=()=>{$('restartOv').hidden=true;$('endOv').hidden=true;G=null;resetHud();$('startOv').hidden=false;musicPlay('menu')};
 $('bWatch').onclick=()=>{G.watch=true;$('endOv').hidden=true;follow=false;$('bFollow').classList.remove('on')};
 
 // ===================== 3D 도감 (viewer): pick a character, watch idle / walk / attack with sound =====================

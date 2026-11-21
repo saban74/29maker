@@ -1,0 +1,8 @@
+Background music (all CC0 / public domain, from OpenGameArt.org)
+
+bgm_menu.mp3    - "Medieval: Exploration" by RandomMind  https://opengameart.org/content/medieval-exploration
+bgm_battle1.mp3 - "Raiders March" by Bobjt               https://opengameart.org/content/raiders-march
+bgm_battle2.mp3 - "Medieval: Battle" by RandomMind       https://opengameart.org/content/medieval-battle
+bgm_victory.mp3 - "Medieval Victory Theme" by RandomMind https://opengameart.org/content/medieval-victory-theme
+
+Files were re-encoded to a lower bitrate for the web. Credit is not required by CC0 but is given with thanks.
