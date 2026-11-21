@@ -30,6 +30,7 @@
   <h1>보병 전선</h1>
   <p>병사가 저절로 나와 싸우는 4인 3D 전장</p>
   <button class="main" id="bWin">새 창으로 게임 시작</button>
+  <button id="bDogam">도감 보기 (새 창)</button>
   <button id="bInstall">앱으로 설치 (바탕화면 아이콘)</button>
   <button id="bHere">이 창에서 시작</button>
   <div id="msg"></div>
@@ -48,6 +49,9 @@ $('bWin').onclick=()=>{
   win.focus();msg('새 창에서 게임이 열렸어요.');
 };
 $('bHere').onclick=()=>location.href=GAME;
+$('bDogam').onclick=()=>{const w=Math.min(1280,screen.availWidth-40),h=Math.min(900,screen.availHeight-60);
+  const win=window.open('dogam.html','footline_dogam',`popup=yes,width=${w},height=${h},left=${Math.max(0,(screen.availWidth-w)/2)},top=${Math.max(0,(screen.availHeight-h)/2)}`);
+  if(!win){msg('팝업이 막혀 있어요. 주소창 오른쪽의 팝업 차단 표시를 눌러 허용해 주세요.');return}win.focus()};
 let deferred=null;
 addEventListener('beforeinstallprompt',e=>{e.preventDefault();deferred=e;$('bInstall').style.display='block'});
 $('bInstall').onclick=async()=>{if(!deferred)return;deferred.prompt();const r=await deferred.userChoice;deferred=null;$('bInstall').style.display='none';
