@@ -117,6 +117,7 @@ details a{color:var(--accent)}
         <button id="bFull">전체 화면</button>
         <button id="bFollow" class="on" hidden>카메라 영웅 고정</button>
         <button id="bSpeed">속도 ×1</button>
+        <button id="bRestart">다시 시작</button>
         <button id="bPause">일시정지</button>
       </div>
 
@@ -154,6 +155,13 @@ details a{color:var(--accent)}
               <button id="vClose">닫기</button>
             </div>
           </div>
+        </div>
+      </div>
+      <div class="overlay" id="restartOv" hidden>
+        <div class="card">
+          <h2>다시 시작할까요?</h2>
+          <p class="help" style="font-size:14px;color:var(--ink)">지금 하던 전투는 사라집니다.</p>
+          <div class="seg"><button class="go" id="bReSame">같은 영웅으로 다시</button><button id="bRePick">영웅 다시 고르기</button><button id="bReCancel">취소</button></div>
         </div>
       </div>
       <div class="overlay" id="endOv" hidden>
@@ -1510,6 +1518,12 @@ function showEnd(won){$('endTitle').textContent=won?'승리!':'패배';
   $('endText').textContent=`${fmt(G.t)} 동안 싸웠어요. 영웅 레벨 ${G.P[0].hero.lv}, 처치 ${G.P[0].kills}, ${DATA.tiers[G.P[0].tier].name}.`;
   $('bWatch').hidden=won||G.over;$('endOv').hidden=false}
 $('bAgain').onclick=()=>{$('endOv').hidden=true;$('startOv').hidden=false;G=null};
+function resetHud(){$('bPause').textContent='일시정지';$('bPause').classList.remove('on');$('bSpeed').textContent='속도 ×1'}
+let reWasPaused=false;
+$('bRestart').onclick=()=>{if(!G)return;reWasPaused=G.paused;G.paused=true;$('restartOv').hidden=false};
+$('bReCancel').onclick=()=>{$('restartOv').hidden=true;if(G)G.paused=reWasPaused};
+$('bReSame').onclick=()=>{$('restartOv').hidden=true;$('endOv').hidden=true;audioInit();newGame();resetHud()};
+$('bRePick').onclick=()=>{$('restartOv').hidden=true;$('endOv').hidden=true;G=null;resetHud();$('startOv').hidden=false};
 $('bWatch').onclick=()=>{G.watch=true;$('endOv').hidden=true;follow=false;$('bFollow').classList.remove('on')};
 
 // ===================== 3D 도감 (viewer): pick a character, watch idle / walk / attack with sound =====================
