@@ -18,8 +18,15 @@ h1{font-size:clamp(28px,4vw,40px);color:var(--gold);text-shadow:0 3px 0 #0006}
 h2{font-size:20px;display:inline-block;background:var(--panel2);padding:4px 14px;border-radius:99px}
 .sub{color:var(--sub);margin:4px 0 0;font-size:14px}
 .team{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:10px}
-.kc{background:var(--panel2);border:2px solid transparent;border-radius:14px;padding:10px 8px;display:grid;justify-items:center;gap:2px;text-align:center;cursor:pointer;color:var(--ink);font:inherit}
-.kc[aria-pressed="true"]{border-color:var(--gold);box-shadow:0 0 0 2px #ffcf4a33}
+.kc{background:var(--panel2);border:2px solid transparent;border-radius:14px;padding:8px;display:grid;gap:6px;align-content:start}
+.kc.on{border-color:var(--gold)}.kc.off{opacity:.45}
+.kc .pick{all:unset;display:grid;justify-items:center;gap:2px;text-align:center;cursor:pointer;color:var(--ink)}
+.kc .pick:disabled{cursor:not-allowed}
+.kc .pick:focus-visible,.kc .star:focus-visible{outline:2px solid var(--gold);outline-offset:2px}
+.kc .star{font:inherit;font-size:12px;border:0;border-radius:8px;padding:4px;background:#1b2747;color:var(--sub);cursor:pointer}
+.kc .star[aria-pressed="true"]{background:var(--gold);color:#3a2a00;font-weight:700}
+.btn.small{font-size:14px;padding:6px 12px;box-shadow:0 3px 0 #18233f}
+.btn:disabled{opacity:.5;cursor:not-allowed}
 .kc img{width:72px;height:72px;object-fit:contain;image-rendering:auto}
 .kc b{font-family:var(--display);font-weight:400;font-size:20px}
 .kc .r{font-size:12px;color:var(--gold)}
@@ -65,7 +72,8 @@ button:focus-visible{outline:2px solid var(--gold);outline-offset:2px}
         <h1>눈싸움 동네 평정기</h1>
         <p class="sub">1단계 시제품 · 놀이터 한 곳에서 5 대 5 눈싸움. 조종할 아이를 고르고 장갑을 챙겨 출발하세요.</p>
       </div>
-      <div class="row" style="justify-content:space-between"><h2>우리 팀</h2><span class="note">카드를 누르면 그 아이를 직접 조종합니다 (★)</span></div>
+      <div class="row" style="justify-content:space-between"><h2>우리 팀 · 다산동 새싹 눈싸움단 <span id="teamCount"></span></h2><span class="row"><span class="ddak" id="today"></span><button class="btn alt small" id="bNextDay">하루 넘기기</button></span></div>
+      <p class="note" style="margin:0">오늘 나올 수 있는 아이 중 5명을 고르세요. 학원·엄마 감시 때문에 요일마다 나오는 아이가 달라요. 하루에 2번 대결하면 해가 집니다.</p>
       <div class="team" id="teamCards"></div>
       <div class="row" style="justify-content:space-between"><h2>문방구 · 장갑</h2><span class="ddak" id="ddak"></span></div>
       <div class="shop" id="shop"></div>
@@ -79,7 +87,7 @@ button:focus-visible{outline:2px solid var(--gold);outline-offset:2px}
         <span><kbd>Tab</kbd> 다른 아이로 바꾸기</span><span><kbd>P</kbd> 잠깐 멈춤</span>
       </div>
       <div class="center"><button class="btn" id="bStart">눈싸움 시작!</button></div>
-      <p class="note">지금은 시트를 받은 5명(지훈·수민·민재·도윤·하린)만 나옵니다. 상대 팀은 같은 그림의 색을 바꿔 임시로 썼습니다. PC 키보드·마우스용입니다.</p>
+      <p class="note">라이벌 팀은 도감의 이름·얼굴·특기를 쓰고, 몸 그림은 아직 시트가 없어 우리 아이들 그림의 색을 바꿔 임시로 썼습니다. PC 키보드·마우스용입니다.</p>
     </div>
   </div>
   <div class="ov" id="result" hidden>
@@ -93,8 +101,9 @@ button:focus-visible{outline:2px solid var(--gold);outline-offset:2px}
 </div>
 
 <script>
-const KMETA={"jihun": {"face": [[0, 0, 76, 72], [78, 0, 75, 72], [155, 0, 70, 72]], "F": [[227, 0, 72, 116], [301, 0, 71, 115], [374, 0, 72, 116], [448, 0, 71, 116]], "S": [[521, 0, 74, 113], [597, 0, 75, 114], [674, 0, 74, 114], [750, 0, 74, 115]], "B": [[826, 0, 70, 118], [898, 0, 70, 118], [0, 120, 70, 118], [72, 120, 70, 119]], "gather": [[144, 120, 86, 133], [232, 120, 111, 101], [345, 120, 109, 105], [456, 120, 95, 128]], "throw": [[553, 120, 93, 134], [648, 120, 98, 135], [748, 120, 106, 128], [856, 120, 101, 128]], "dodge": [[0, 257, 98, 154], [100, 257, 137, 133], [239, 257, 196, 106]], "hit": [[437, 257, 126, 150], [565, 257, 154, 146]], "ko": [[721, 257, 158, 94], [0, 413, 175, 76]]}, "sumin": {"face": [[0, 0, 80, 72], [82, 0, 78, 72], [162, 0, 75, 72]], "F": [[239, 0, 91, 117], [332, 0, 90, 116], [424, 0, 90, 117], [516, 0, 92, 116]], "S": [[610, 0, 84, 113], [696, 0, 84, 114], [782, 0, 84, 113], [868, 0, 85, 114]], "B": [[0, 119, 90, 107], [92, 119, 86, 106], [180, 119, 88, 107], [270, 119, 89, 107]], "gather": [[361, 119, 97, 121], [460, 119, 110, 106], [572, 119, 107, 111], [681, 119, 124, 116]], "throw": [[807, 119, 93, 123], [902, 119, 116, 122], [0, 244, 110, 128], [112, 244, 109, 122]], "dodge": [[223, 244, 107, 130], [332, 244, 162, 108], [496, 244, 117, 115]], "hit": [[615, 244, 124, 128], [741, 244, 113, 130]], "ko": [[856, 244, 118, 108], [0, 376, 164, 76]]}, "minjae": {"face": [[0, 0, 67, 72], [69, 0, 65, 72], [136, 0, 67, 72]], "F": [[205, 0, 76, 114], [283, 0, 76, 117], [361, 0, 76, 116], [439, 0, 77, 116]], "S": [[518, 0, 71, 102], [591, 0, 69, 101], [662, 0, 71, 102], [735, 0, 71, 102]], "B": [[808, 0, 71, 104], [881, 0, 70, 104], [0, 119, 72, 103], [74, 119, 70, 103]], "gather": [[146, 119, 84, 115], [232, 119, 123, 101], [357, 119, 115, 106], [474, 119, 93, 117]], "throw": [[569, 119, 100, 112], [671, 119, 93, 112], [766, 119, 111, 115], [879, 119, 92, 109]], "dodge": [[0, 238, 99, 115], [101, 238, 140, 104], [243, 238, 104, 115]], "hit": [[349, 238, 101, 120], [452, 238, 101, 120]], "ko": [[555, 238, 126, 99], [683, 238, 195, 72]]}, "doyun": {"face": [[0, 0, 66, 72], [68, 0, 66, 72], [136, 0, 67, 72]], "F": [[205, 0, 68, 114], [275, 0, 68, 116], [345, 0, 68, 116], [415, 0, 68, 116]], "S": [[485, 0, 70, 115], [557, 0, 71, 114], [630, 0, 70, 113], [702, 0, 70, 113]], "B": [[774, 0, 70, 117], [846, 0, 68, 117], [916, 0, 68, 117], [0, 119, 68, 116]], "gather": [[70, 119, 73, 118], [145, 119, 95, 96], [242, 119, 92, 113], [336, 119, 92, 118]], "throw": [[430, 119, 99, 120], [531, 119, 93, 119], [626, 119, 106, 120], [734, 119, 115, 118]], "dodge": [[851, 119, 100, 120], [0, 241, 161, 97], [163, 241, 96, 109]], "hit": [[261, 241, 101, 131], [364, 241, 118, 120]], "ko": [[484, 241, 100, 112], [586, 241, 149, 79]]}, "harin": {"face": [[0, 0, 77, 72], [79, 0, 72, 72], [153, 0, 68, 72]], "F": [[223, 0, 81, 116], [306, 0, 77, 115], [385, 0, 77, 115], [464, 0, 78, 118]], "S": [[544, 0, 72, 115], [618, 0, 72, 115], [692, 0, 72, 116], [766, 0, 73, 117]], "B": [[841, 0, 76, 120], [919, 0, 77, 120], [0, 122, 78, 124], [80, 122, 77, 124]], "gather": [[159, 122, 86, 123], [247, 122, 113, 104], [362, 122, 85, 105], [449, 122, 85, 122]], "throw": [[536, 122, 90, 121], [628, 122, 100, 119], [730, 122, 108, 121], [840, 122, 94, 121]], "dodge": [[0, 248, 90, 124], [92, 248, 144, 103], [238, 248, 94, 125]], "hit": [[334, 248, 96, 120], [432, 248, 94, 111]], "ko": [[528, 248, 118, 109], [648, 248, 165, 76]]}};
+const KMETA={"jihun": {"face": [[0, 0, 76, 72], [78, 0, 75, 72], [155, 0, 70, 72]], "F": [[227, 0, 72, 116], [301, 0, 71, 115], [374, 0, 72, 116], [448, 0, 71, 116]], "S": [[521, 0, 74, 113], [597, 0, 75, 114], [674, 0, 74, 114], [750, 0, 74, 115]], "B": [[826, 0, 70, 118], [898, 0, 70, 118], [0, 120, 70, 118], [72, 120, 70, 119]], "gather": [[144, 120, 86, 133], [232, 120, 111, 101], [345, 120, 109, 105], [456, 120, 95, 128]], "throw": [[553, 120, 93, 134], [648, 120, 98, 135], [748, 120, 106, 128], [856, 120, 101, 128]], "dodge": [[0, 257, 98, 154], [100, 257, 137, 133], [239, 257, 196, 106]], "hit": [[437, 257, 126, 150], [565, 257, 154, 146]], "ko": [[721, 257, 158, 94], [0, 413, 175, 76]]}, "sumin": {"face": [[0, 0, 80, 72], [82, 0, 78, 72], [162, 0, 75, 72]], "F": [[239, 0, 91, 117], [332, 0, 90, 116], [424, 0, 90, 117], [516, 0, 92, 116]], "S": [[610, 0, 84, 113], [696, 0, 84, 114], [782, 0, 84, 113], [868, 0, 85, 114]], "B": [[0, 119, 90, 107], [92, 119, 86, 106], [180, 119, 88, 107], [270, 119, 89, 107]], "gather": [[361, 119, 97, 121], [460, 119, 110, 106], [572, 119, 107, 111], [681, 119, 124, 116]], "throw": [[807, 119, 93, 123], [902, 119, 116, 122], [0, 244, 110, 128], [112, 244, 109, 122]], "dodge": [[223, 244, 107, 130], [332, 244, 162, 108], [496, 244, 117, 115]], "hit": [[615, 244, 124, 128], [741, 244, 113, 130]], "ko": [[856, 244, 118, 108], [0, 376, 164, 76]]}, "minjae": {"face": [[0, 0, 67, 72], [69, 0, 65, 72], [136, 0, 67, 72]], "F": [[205, 0, 76, 114], [283, 0, 76, 117], [361, 0, 76, 116], [439, 0, 77, 116]], "S": [[518, 0, 71, 102], [591, 0, 69, 101], [662, 0, 71, 102], [735, 0, 71, 102]], "B": [[808, 0, 71, 104], [881, 0, 70, 104], [0, 119, 72, 103], [74, 119, 70, 103]], "gather": [[146, 119, 84, 115], [232, 119, 123, 101], [357, 119, 115, 106], [474, 119, 93, 117]], "throw": [[569, 119, 100, 112], [671, 119, 93, 112], [766, 119, 111, 115], [879, 119, 92, 109]], "dodge": [[0, 238, 99, 115], [101, 238, 140, 104], [243, 238, 104, 115]], "hit": [[349, 238, 101, 120], [452, 238, 101, 120]], "ko": [[555, 238, 126, 99], [683, 238, 195, 72]]}, "doyun": {"face": [[0, 0, 66, 72], [68, 0, 66, 72], [136, 0, 67, 72]], "F": [[205, 0, 68, 114], [275, 0, 68, 116], [345, 0, 68, 116], [415, 0, 68, 116]], "S": [[485, 0, 70, 115], [557, 0, 71, 114], [630, 0, 70, 113], [702, 0, 70, 113]], "B": [[774, 0, 70, 117], [846, 0, 68, 117], [916, 0, 68, 117], [0, 119, 68, 116]], "gather": [[70, 119, 73, 118], [145, 119, 95, 96], [242, 119, 92, 113], [336, 119, 92, 118]], "throw": [[430, 119, 99, 120], [531, 119, 93, 119], [626, 119, 106, 120], [734, 119, 115, 118]], "dodge": [[851, 119, 100, 120], [0, 241, 161, 97], [163, 241, 96, 109]], "hit": [[261, 241, 101, 131], [364, 241, 118, 120]], "ko": [[484, 241, 100, 112], [586, 241, 149, 79]]}, "harin": {"face": [[0, 0, 77, 72], [79, 0, 72, 72], [153, 0, 68, 72]], "F": [[223, 0, 81, 116], [306, 0, 77, 115], [385, 0, 77, 115], [464, 0, 78, 118]], "S": [[544, 0, 72, 115], [618, 0, 72, 115], [692, 0, 72, 116], [766, 0, 73, 117]], "B": [[841, 0, 76, 120], [919, 0, 77, 120], [0, 122, 78, 124], [80, 122, 77, 124]], "gather": [[159, 122, 86, 123], [247, 122, 113, 104], [362, 122, 85, 105], [449, 122, 85, 122]], "throw": [[536, 122, 90, 121], [628, 122, 100, 119], [730, 122, 108, 121], [840, 122, 94, 121]], "dodge": [[0, 248, 90, 124], [92, 248, 144, 103], [238, 248, 94, 125]], "hit": [[334, 248, 96, 120], [432, 248, 94, 111]], "ko": [[528, 248, 118, 109], [648, 248, 165, 76]]}, "kangmin": {"face": [[0, 0, 73, 72], [75, 0, 73, 72], [150, 0, 75, 72]], "F": [[227, 0, 75, 116], [304, 0, 75, 117], [381, 0, 78, 117], [461, 0, 76, 116]], "S": [[539, 0, 86, 113], [627, 0, 85, 113], [714, 0, 85, 113], [801, 0, 85, 111]], "B": [[888, 0, 75, 109], [0, 119, 74, 111], [76, 119, 74, 111], [152, 119, 74, 111]], "gather": [[228, 119, 101, 128], [331, 119, 122, 105], [455, 119, 106, 128], [563, 119, 99, 129]], "throw": [[664, 119, 115, 126], [781, 119, 99, 128], [882, 119, 129, 127], [0, 250, 104, 127]], "dodge": [[106, 250, 93, 123], [201, 250, 167, 96], [370, 250, 161, 99]], "hit": [[533, 250, 116, 121], [651, 250, 121, 111]], "ko": [[774, 250, 109, 111], [0, 379, 173, 78]]}, "yerin": {"face": [[0, 0, 68, 72], [70, 0, 68, 72], [140, 0, 70, 72]], "F": [[212, 0, 79, 116], [293, 0, 79, 116], [374, 0, 78, 116], [454, 0, 78, 116]], "S": [[534, 0, 75, 116], [611, 0, 75, 116], [688, 0, 73, 116], [763, 0, 74, 117]], "B": [[839, 0, 75, 116], [916, 0, 75, 117], [0, 119, 75, 116], [77, 119, 75, 116]], "gather": [[154, 119, 90, 128], [246, 119, 103, 108], [351, 119, 107, 118], [460, 119, 98, 129]], "throw": [[560, 119, 84, 125], [646, 119, 113, 128], [761, 119, 110, 127], [873, 119, 93, 126]], "dodge": [[0, 250, 90, 121], [92, 250, 142, 106], [236, 250, 115, 106]], "hit": [[353, 250, 104, 129], [459, 250, 120, 128]], "ko": [[581, 250, 108, 91], [691, 250, 152, 75]]}, "seoyeon": {"face": [[0, 0, 72, 72], [74, 0, 70, 72], [146, 0, 71, 72]], "F": [[219, 0, 71, 115], [292, 0, 70, 116], [364, 0, 71, 116], [437, 0, 71, 115]], "S": [[510, 0, 68, 114], [580, 0, 66, 114], [648, 0, 67, 115], [717, 0, 66, 115]], "B": [[785, 0, 69, 116], [856, 0, 68, 117], [926, 0, 68, 117], [0, 119, 69, 117]], "gather": [[71, 119, 80, 129], [153, 119, 101, 112], [256, 119, 99, 110], [357, 119, 86, 122]], "throw": [[445, 119, 92, 128], [539, 119, 91, 126], [632, 119, 92, 126], [726, 119, 103, 128]], "dodge": [[831, 119, 123, 164], [0, 285, 176, 126], [178, 285, 107, 162]], "hit": [[287, 285, 131, 181], [420, 285, 129, 159]], "ko": [[551, 285, 135, 147], [688, 285, 195, 92]]}, "junho": {"face": [[0, 0, 72, 72], [74, 0, 72, 72], [148, 0, 73, 72]], "F": [[223, 0, 74, 117], [299, 0, 71, 114], [372, 0, 71, 115], [445, 0, 72, 115]], "S": [[519, 0, 69, 114], [590, 0, 68, 113], [660, 0, 67, 114], [729, 0, 67, 114]], "B": [[798, 0, 72, 115], [872, 0, 71, 115], [945, 0, 71, 115], [0, 119, 71, 114]], "gather": [[73, 119, 83, 129], [158, 119, 92, 98], [252, 119, 101, 99], [355, 119, 96, 127]], "throw": [[453, 119, 110, 128], [565, 119, 111, 127], [678, 119, 121, 123], [801, 119, 120, 123]], "dodge": [[923, 119, 93, 131], [0, 252, 125, 111], [127, 252, 109, 126]], "hit": [[238, 252, 118, 136], [358, 252, 98, 123]], "ko": [[458, 252, 120, 90], [580, 252, 182, 62]]}, "taeho": {"face": [[0, 0, 62, 72], [64, 0, 63, 72], [129, 0, 66, 72]], "F": [[197, 0, 61, 115], [260, 0, 61, 115], [323, 0, 60, 117], [385, 0, 61, 115]], "S": [[448, 0, 66, 115], [516, 0, 66, 114], [584, 0, 66, 114], [652, 0, 66, 114]], "B": [[720, 0, 61, 121], [783, 0, 61, 122], [846, 0, 61, 122], [909, 0, 61, 122]], "gather": [[0, 124, 61, 105], [63, 124, 100, 89], [165, 124, 98, 87], [265, 124, 82, 100]], "throw": [[349, 124, 63, 97], [414, 124, 85, 98], [501, 124, 76, 97], [579, 124, 73, 99]], "dodge": [[654, 124, 76, 96], [732, 124, 163, 80], [897, 124, 76, 101]], "hit": [[0, 231, 89, 110], [91, 231, 82, 106]], "ko": [[175, 231, 95, 87], [272, 231, 116, 61]]}};
 const OMETA={"pile": [0, 0, 80, 57], "wall": [82, 0, 76, 56], "snowman": [160, 0, 77, 80], "crate": [239, 0, 78, 78], "flag": [319, 0, 75, 103], "pack": [396, 0, 90, 85], "cocoa": [488, 0, 73, 80], "shovel": [563, 0, 84, 92], "bigball": [649, 0, 91, 86], "g1": [742, 0, 57, 45], "g2": [801, 0, 59, 46], "g3": [862, 0, 62, 46], "g4": [926, 0, 70, 48]};
+const RTMETA={"yuri": [0, 0, 94, 96], "hangyeol": [96, 0, 80, 96], "seoho": [178, 0, 86, 96], "jiu": [266, 0, 96, 96], "seungmin": [364, 0, 82, 96], "jaeha": [448, 0, 98, 96], "eunji": [548, 0, 92, 96], "hyeonu": [642, 0, 88, 96], "minseok": [732, 0, 97, 96], "dahui": [831, 0, 106, 96], "siu": [939, 0, 96, 96], "geonu": [1037, 0, 98, 96], "jia": [1137, 0, 106, 96], "roun": [1245, 0, 101, 96], "minha": [1348, 0, 112, 96], "soyeon": [1462, 0, 106, 96], "donghyeon": [1570, 0, 101, 96], "jinho": [1673, 0, 111, 96]};
 </script>
 <script>
 'use strict';
@@ -104,29 +113,51 @@ const KIDS={
   sumin:{n:'수민',role:'지원',d:'근처 친구의 젖음을 말려 줍니다',hp:5,spd:1,dmg:1,cd:.42,bs:520,range:320,acc:.85,pref:250,heal:.3},
   minjae:{n:'민재',role:'눈 공급',d:'뭉치기 2배, 친구에게 눈을 나눠 줍니다',hp:5,spd:.95,dmg:1,cd:.42,bs:520,range:320,acc:.82,pref:270,gather:2,maxAmmo:8,supply:1},
   doyun:{n:'도윤',role:'돌격',d:'빠르게 파고듭니다',hp:5.5,spd:1.25,dmg:1.15,cd:.36,bs:560,range:300,acc:.82,pref:140},
-  harin:{n:'하린',role:'방패',d:'잘 버티고 눈벽을 쌓습니다 (R)',hp:8,spd:.85,dmg:1,cd:.45,bs:520,range:320,acc:.84,pref:190,wall:1},
+  harin:{n:'하린',role:'수비',d:'잘 버티고 눈벽을 쌓습니다 (R)',hp:8,spd:.85,dmg:1,cd:.45,bs:520,range:320,acc:.84,pref:190,wall:1},
+  taeho:{n:'태호',role:'저격',d:'아주 멀리, 정확하게 던집니다',hp:4.5,spd:.95,dmg:1.25,cd:.62,bs:720,range:470,acc:.97,pref:360},
+  seoyeon:{n:'서연',role:'기동',d:'가장 빠르고 자주 구릅니다',hp:4.8,spd:1.4,dmg:1,cd:.38,bs:560,range:300,acc:.84,pref:170,dcd:.7,dodgeAI:.5},
+  junho:{n:'준호',role:'버팀',d:'잘 안 젖고, 맞아도 안 밀립니다',hp:8.5,spd:.85,dmg:1.1,cd:.46,bs:520,range:310,acc:.8,pref:170,armor:1},
+  yerin:{n:'예린',role:'상태해제',d:'친구의 손 시림을 풀어 줍니다',hp:5,spd:1,dmg:1,cd:.42,bs:540,range:320,acc:.86,pref:240,cleanse:1},
+  kangmin:{n:'강민',role:'리더',d:'근처 친구가 더 빨리 던지고 뜁니다',hp:5.5,spd:1,dmg:1,cd:.4,bs:560,range:330,acc:.86,pref:230,lead:1},
 };
-const ORDER=['jihun','sumin','minjae','doyun','harin'];
+const ALL=['jihun','sumin','minjae','doyun','harin','taeho','seoyeon','junho','yerin','kangmin'];
+const SCHED={jihun:[[0,2],'영어학원'],sumin:[[1],'피아노',1],minjae:[[],''],doyun:[[0,4],'태권도'],harin:[[2],'미술학원'],
+  taeho:[[1,3],'수학학원'],seoyeon:[[4],'수영'],junho:[[2,4],'축구교실'],yerin:[[3],'발레',1],kangmin:[[],'']};
+const DAYS=['월','화','수','목','금','토','일'];
 const GLOVES=[{n:'맨손',lim:3,p:0},{n:'일반 장갑',lim:4,p:100,ic:'g1'},{n:'고급 장갑',lim:5,p:250,ic:'g2'},{n:'희귀 장갑',lim:5,fast:1,p:500,ic:'g3',x:'손 시림 회복 빠름'},{n:'영웅 장갑',lim:6,fast:1,p:900,ic:'g4',x:'손 시림 회복 빠름'}];
-const REGIONS=[{n:'다산동',s:1,lv:.72,gl:0,d:'시작 동네. 아파트 놀이터'},{n:'별내동',s:2,lv:.8,gl:1,d:'다산동을 이기면 열려요'},{n:'호평동',s:2,lv:.86,gl:1,d:'별내동을 이기면 열려요'},
-  {n:'진접읍',s:3,lv:.93,gl:2,d:'호평동을 이기면 열려요 · 학교 운동장'},{n:'평내동',s:2,lv:.98,gl:2,d:'진접읍을 이기면 열려요'},{n:'와부읍(덕소)',s:3,lv:1.04,gl:3,d:'평내동을 이기면 열려요 · 한강변'},
-  {n:'화도읍',s:3,lv:1.12,gl:4,d:'👑 최강자의 동네 · 와부읍을 이기면 열려요'},{n:'운길산',s:3,lock:1,d:'도전 지역 (예정)'},{n:'오남읍 · 퇴계원읍 · 수동면',s:0,lock:1,d:'다음 지역 (예정)'}];
+const REGIONS=[{n:'다산동',d:'우리 동네 친구들과 연습 경기',s:1,lv:.72,gl:0},{n:'별내동',d:'별빛 눈토끼단 · 빠른 기동',s:2,lv:.8,gl:1},{n:'호평·평내동',d:'골목 번개단 · 기습',s:2,lv:.86,gl:1},
+  {n:'진접읍',d:'눈보라 수비대 · 튼튼한 수비',s:3,lv:.93,gl:2},{n:'와부읍(덕소)',d:'강바람 원정대 · 원거리',s:3,lv:.98,gl:2},{n:'평내동',d:'한강친구들 · 팀 지원',s:2,lv:1.04,gl:3},
+  {n:'화도읍',d:'👑 설산 호랑이단 · 강력 투척',s:3,lv:1.12,gl:4},{n:'운길산',s:3,lock:1,d:'도전 지역 (예정)'},{n:'오남읍 · 퇴계원읍 · 수동면',s:0,lock:1,d:'다음 지역 (예정)'}];
+const RT={
+  1:{t:'별빛 눈토끼단',h:205,m:[{b:'seoyeon',n:'유리',role:'스피드',f:'yuri',spd:1.45},{b:'doyun',n:'한결',role:'회피',f:'hangyeol',dodgeAI:.6,dcd:.7},{b:'jihun',n:'서호',role:'연속투척',f:'seoho',burst:1,boss:1}]},
+  2:{t:'골목 번개단',h:120,m:[{b:'yerin',n:'지우',role:'교란',f:'jiu',arc:1},{b:'doyun',n:'승민',role:'기습',f:'seungmin',spd:1.3,wall:1},{b:'jihun',n:'재하',role:'폭발눈덩이',f:'jaeha',splash:1,boss:1}]},
+  3:{t:'눈보라 수비대',h:185,m:[{b:'harin',n:'은지',role:'방어막',f:'eunji',shield:1},{b:'minjae',n:'현우',role:'눈요새',f:'hyeonu',wall:1,heal:.2},{b:'junho',n:'민석',role:'중장갑',f:'minseok',armor:1,hp:9,boss:1}]},
+  4:{t:'강바람 원정대',h:95,m:[{b:'sumin',n:'다희',role:'원거리',f:'dahui',range:430,pref:330},{b:'taeho',n:'시우',role:'정확도',f:'siu',acc:.99},{b:'jihun',n:'건우',role:'곡사투척',f:'geonu',arc:1,range:420,boss:1}]},
+  5:{t:'한강친구들',h:265,m:[{b:'sumin',n:'지아',role:'회복',f:'jia',heal:.35},{b:'seoyeon',n:'로운',role:'썰매돌진',f:'roun',spd:1.4,dcd:.6},{b:'kangmin',n:'민하',role:'범위공격',f:'minha',splash:1,cheer:1,boss:1}]},
+  6:{t:'설산 호랑이단',h:25,m:[{b:'yerin',n:'소연',role:'파워던지기',f:'soyeon',big:1},{b:'doyun',n:'동현',role:'돌격',f:'donghyeon',spd:1.35,armor:1},{b:'junho',n:'진호',role:'거대눈덩이',f:'jinho',big:1,armor:1,hp:9,boss:1}]},
+};
 
 /* ---------- 저장 ---------- */
-let SAVE={ddak:200,owned:{},glove:{},cleared:[],me:'jihun',region:0};
-try{const s=JSON.parse(localStorage.getItem('snowfight-save')||'null');if(s)SAVE=Object.assign(SAVE,s)}catch(e){}
-function save(){try{localStorage.setItem('snowfight-save',JSON.stringify(SAVE))}catch(e){}}
-ORDER.forEach(k=>{SAVE.owned[k]=SAVE.owned[k]||[0];if(SAVE.glove[k]==null)SAVE.glove[k]=0});
+let SAVE={ddak:200,owned:{},glove:{},cleared:[],me:'jihun',region:0,day:0,played:0,team:[]};
+try{const s=JSON.parse(localStorage.getItem('snowfight-save2')||'null');if(s)SAVE=Object.assign(SAVE,s)}catch(e){}
+function save(){try{localStorage.setItem('snowfight-save2',JSON.stringify(SAVE))}catch(e){}}
+ALL.forEach(k=>{SAVE.owned[k]=SAVE.owned[k]||[0];if(SAVE.glove[k]==null)SAVE.glove[k]=0});
+function absent(k,day){const [off,why,watch]=SCHED[k],wd=day%7;if(off.includes(wd))return why;
+  if(watch&&((day*7+ALL.indexOf(k)*13)%10)<3)return '엄마가 숙제하래요';return ''}
+function fixTeam(){const av=ALL.filter(k=>!absent(k,SAVE.day));SAVE.team=SAVE.team.filter(k=>av.includes(k)).slice(0,5);
+  for(const k of av){if(SAVE.team.length>=5)break;if(!SAVE.team.includes(k))SAVE.team.push(k)}
+  if(!SAVE.team.includes(SAVE.me))SAVE.me=SAVE.team[0]}
 
 /* ---------- 그림 불러오기 ---------- */
-const IMG={},EIMG={};
+const IMG={},EIMG={};let RMETA={};
+function eimg(id,h){if(!h)return IMG[id];const k=id+':'+h;return EIMG[k]||(EIMG[k]=recolor(IMG[id],h))}
 function load(src){return new Promise((ok,no)=>{const i=new Image();i.onload=()=>ok(i);i.onerror=()=>no(new Error('그림을 불러오지 못했습니다: '+src));i.src=src})}
-function recolor(img){const c=document.createElement('canvas');c.width=img.width;c.height=img.height;const x=c.getContext('2d');x.drawImage(img,0,0);
+function recolor(img,H){const c=document.createElement('canvas');c.width=img.width;c.height=img.height;const x=c.getContext('2d');x.drawImage(img,0,0);
   const d=x.getImageData(0,0,c.width,c.height),p=d.data;
   for(let i=0;i<p.length;i+=4){if(!p[i+3])continue;let r=p[i]/255,g=p[i+1]/255,b=p[i+2]/255;const mx=Math.max(r,g,b),mn=Math.min(r,g,b),dl=mx-mn;if(mx===0)continue;const s=dl/mx;
     let h=0;if(dl){h=mx===r?((g-b)/dl)%6:mx===g?(b-r)/dl+2:(r-g)/dl+4;h*=60;if(h<0)h+=360}
     if(s<.3||mx<.22||(h>=12&&h<=50&&s<.75))continue;
-    h=(h+165)%360;const v=mx*.92,C=v*s,X=C*(1-Math.abs((h/60)%2-1)),m=v-C;let rr,gg,bb;
+    h=(h+H)%360;const v=mx*.92,C=v*s,X=C*(1-Math.abs((h/60)%2-1)),m=v-C;let rr,gg,bb;
     [rr,gg,bb]=h<60?[C,X,0]:h<120?[X,C,0]:h<180?[0,C,X]:h<240?[0,X,C]:h<300?[X,0,C]:[C,0,X];
     p[i]=(rr+m)*255;p[i+1]=(gg+m)*255;p[i+2]=(bb+m)*255}
   x.putImageData(d,0,0);return c}
@@ -164,30 +195,36 @@ function newGame(){
   [[640,330],[640,520]].forEach(([x,y])=>G.crates.push({x,y,on:true,t:0}));
   G.snowman={x:640,y:425};
   const ys=[250,340,425,510,600];
-  ORDER.forEach((k,i)=>G.units.push(mkUnit(k,0,150,ys[i],1,GLOVES[SAVE.glove[k]])));
-  const eo=[...ORDER].sort(()=>Math.random()-.5);
-  eo.forEach((k,i)=>G.units.push(mkUnit(k,1,1130,ys[i],R.lv,GLOVES[R.gl])));
+  SAVE.team.forEach((k,i)=>G.units.push(mkUnit({b:k,...KIDS[k]},0,150,ys[i],1,GLOVES[SAVE.glove[k]],0)));
+  const E=enemyDefs(SAVE.region);G.enemyName=E.t;
+  E.list.forEach((d,i)=>G.units.push(mkUnit(d,1,1130,ys[i],R.lv,GLOVES[R.gl],E.h)));
   G.me=G.units.find(u=>u.team===0&&u.id===SAVE.me)||G.units[0];
   bubble(G.me,'내가 간다!','#ffcf4a');
 }
-function mkUnit(id,team,x,y,lv,glove){const k=KIDS[id];
-  return {id,k,team,x,y,vx:0,vy:0,wet:0,max:k.hp*3.2*(team?Math.max(.85,lv):1),ammo:5,maxAmmo:k.maxAmmo||6,glove,streak:0,streakT:0,coldT:0,cd:0,gT:0,gathering:false,
+function enemyDefs(ri){
+  if(!RT[ri]){const o=ALL.filter(k=>!SAVE.team.includes(k)).sort(()=>Math.random()-.5).slice(0,5);return{t:'다산동 친구들',h:0,list:o.map(k=>({b:k,...KIDS[k]}))}}
+  const T=RT[ri],gen=['harin','minjae'].map(b=>({...KIDS[b],b,n:'단원',f:null}));
+  return{t:T.t,h:T.h,list:[...T.m.map(m=>({...KIDS[m.b],...m})),...gen].sort(()=>Math.random()-.5)}}
+function mkUnit(k,team,x,y,lv,glove,hue){const id=k.b;
+  return {id,k,team,x,y,vx:0,vy:0,wet:0,max:k.hp*3.2*(team?Math.max(.85,lv):1)*(k.boss?1.3:1),img:team?eimg(id,hue):IMG[id],ammo:5,maxAmmo:k.maxAmmo||6,glove,streak:0,streakT:0,coldT:0,cd:0,gT:0,gathering:false,
     throwT:0,pend:null,dodgeT:0,dodgeCd:0,dvx:0,dvy:0,hitT:0,slowT:0,out:false,outT:0,dir:'S',flip:team===1,anim:0,cheerT:0,
     items:team?{}:{pack:1,cocoa:1},wallCd:0,supT:2,hits:0,lv:team?lv:1,
-    ai:{t:null,mode:'fight',goal:null,think:0,wait:rnd(.3,1),seed:Math.random()*9,dodge:team?.22*lv:.3}}}
+    ai:{t:null,mode:'fight',goal:null,think:0,wait:rnd(.3,1),seed:Math.random()*9,dodge:k.dodgeAI||(team?.22*lv:.3)},clT:2,bcd:1,bspd:1,bdef:1,bdmg:1}}
 const alive=team=>G.units.filter(u=>u.team===team&&!u.out);
 
 /* ---------- 행동 ---------- */
 function canThrow(u){return !u.out&&u.ammo>0&&u.coldT<=0&&u.cd<=0&&u.dodgeT<=0&&u.throwT<=0&&u.hitT<=.1}
-function doThrow(u,tx,ty){if(!canThrow(u))return false;u.gathering=false;u.throwT=.3;u.pend={x:tx,y:ty};u.cd=u.k.cd*(u.team?1.25/u.lv:1);
+function doThrow(u,tx,ty){if(!canThrow(u))return false;u.gathering=false;u.throwT=.3;u.pend={x:tx,y:ty};u.cd=u.k.cd*u.bcd*(u.k.burst?1.7:1)*(u.k.big?1.5:1)*(u.team?1.25/u.lv:1);
   u.flip=tx<u.x;u.dir='S';return true}
 function release(u){const p=u.pend;u.pend=null;if(!p)return;u.ammo--;
   const sx=u.x+(u.flip?-14:14),sy=u.y-46,dx=p.x-u.x,dy=p.y-u.y,d=Math.hypot(dx,dy)||1,range=Math.min(d,u.k.range),sp=u.k.bs;
-  G.balls.push({x:sx,y:u.y,sy:sy-u.y,vx:dx/d*sp,vy:dy/d*sp,team:u.team,owner:u,t:0,T:range/sp,dmg:u.k.dmg,big:false});
+  const sp2=sp*(u.k.big?.85:1),base=Math.atan2(dy,dx),angs=u.k.burst?[-.13,0,.13]:[0];
+  for(const a of angs)G.balls.push({x:sx,y:u.y,sy:sy-u.y,vx:Math.cos(base+a)*sp2,vy:Math.sin(base+a)*sp2,team:u.team,owner:u,t:0,T:range/sp2,
+    dmg:u.k.dmg*u.bdmg*(u.k.burst?.55:1)*(u.k.big?1.8:1),big:!!u.k.big,arc:!!u.k.arc,splash:!!u.k.splash});
   u.streak++;u.streakT=0;
   if(u.streak>=u.glove.lim){u.coldT=u.glove.fast?2:3;u.streak=0;bubble(u,'앗 차가워!','#9fd4ff')}}
 function tryDodge(u,mx,my){if(u.out||u.dodgeCd>0||u.dodgeT>0)return;let d=Math.hypot(mx,my);if(!d){mx=u.flip?-1:1;my=0;d=1}
-  u.gathering=false;u.dodgeT=.32;u.dodgeCd=1.3;u.dvx=mx/d;u.dvy=my/d;u.flip=mx<0}
+  u.gathering=false;u.dodgeT=.32;u.dodgeCd=u.k.dcd||1.3;u.dvx=mx/d;u.dvy=my/d;u.flip=mx<0}
 function useItem(u,it){if(!u.items[it])return;u.items[it]--;
   if(it==='pack'){u.coldT=0;u.streak=0;bubble(u,'핫팩! 손이 따뜻해','#ffb14a')}
   else{u.wet=Math.max(0,u.wet-2);bubble(u,'핫초코 꿀꺽','#ffb14a')}}
@@ -242,7 +279,7 @@ function ai(u,dt){
     if(d<120&&(dx*b.vx+dy*b.vy)>0){(b.seen||(b.seen=new Set())).add(u);if(Math.random()<A.dodge){tryDodge(u,-b.vy,b.vx);break}}}
   const t=A.t;
   if(A.mode==='fight'&&t&&!t.out&&A.wait<=0&&canThrow(u)){const d=dist(u,t);
-    if(d<=u.k.range&&los(u,t)){const fl=d/u.k.bs,err=(1-Math.min(.97,u.k.acc*(u.team?u.lv:1)))*d*.55;
+    if(d<=u.k.range&&(u.k.arc||los(u,t))){const fl=d/u.k.bs,err=(1-Math.min(.97,u.k.acc*(u.team?u.lv:1)))*d*.55;
       doThrow(u,t.x+t.vx*fl*.75+gauss()*err,t.y-6+t.vy*fl*.75+gauss()*err);A.wait=rnd(.1,.45)*(u.team?1.3/u.lv:1)}}
   return{mx,my}}
 
@@ -250,6 +287,9 @@ function ai(u,dt){
 function update(dt){
   if(G.over||G.paused)return;
   G.t-=dt;
+  for(const u of G.units){u.bcd=1;u.bspd=1;u.bdef=1;u.bdmg=1}
+  for(const s of G.units){if(s.out||!(s.k.lead||s.k.shield||s.k.cheer))continue;for(const m of alive(s.team))if(dist(s,m)<170){
+    if(s.k.lead){m.bcd*=.8;m.bspd*=1.1}if(s.k.shield)m.bdef*=.8;if(s.k.cheer)m.bdmg*=1.2}}
   for(const u of G.units){
     if(u.out){u.outT+=dt;continue}
     for(const k of['cd','hitT','slowT','wallCd','cheerT','dodgeCd'])u[k]=Math.max(0,u[k]-dt);
@@ -263,7 +303,7 @@ function update(dt){
     else{const r=ai(u,dt);if(r)mv={x:r.mx,y:r.my}}
     if(u.gathering&&u.ammo<u.maxAmmo&&u.hitT<=0){mv={x:0,y:0};u.gT+=dt*(u.k.gather||1)*(onPile(u)?3:1);if(u.gT>=.9){u.gT-=.9;u.ammo++;if(u.ammo>=u.maxAmmo)u.gathering=false}}
     else u.gT=Math.min(u.gT,.5);
-    let sp=BASESPD*u.k.spd*(u.slowT>0?.6:1)*(u.throwT>0?.45:1)*(u.hitT>0?.3:1);
+    let sp=BASESPD*u.k.spd*u.bspd*(u.slowT>0?.6:1)*(u.throwT>0?.45:1)*(u.hitT>0?.3:1);
     if(u.dodgeT>0){u.dodgeT-=dt;u.vx=u.dvx*BASESPD*3;u.vy=u.dvy*BASESPD*3}
     else{const d=Math.hypot(mv.x,mv.y);if(d>0&&!u.gathering){u.vx=mv.x/d*sp;u.vy=mv.y/d*sp}else{u.vx=0;u.vy=0}}
     u.x+=u.vx*dt;u.y+=u.vy*dt;pushOut(u);
@@ -271,6 +311,8 @@ function update(dt){
     else if(u.throwT<=0&&u.dodgeT<=0&&u!==G.me){u.dir='S';const t=u.ai.t;if(t)u.flip=t.x<u.x}
     for(const c of G.crates)if(c.on&&dist(u,c)<30&&u.ammo<u.maxAmmo){c.on=false;c.t=15;u.ammo=u.maxAmmo;bubble(u,'눈상자 득템!','#ffe08a');poof(c.x,c.y-10,8)}
     if(u.k.heal)for(const m of alive(u.team))if(dist(u,m)<140)m.wet=Math.max(0,m.wet-u.k.heal*dt*(m===u?.4:1));
+    if(u.k.cleanse){u.clT-=dt;if(u.clT<=0){u.clT=3;const m=alive(u.team).find(m=>dist(u,m)<220&&(m.coldT>.4||m.slowT>0));
+      if(m){m.coldT=0;m.slowT=0;m.streak=0;bubble(m,'괜찮아! (예린)','#ffe08a');u.clT=4}}}
     if(u.k.supply){u.supT-=dt;if(u.supT<=0){u.supT=3.5;if(u.ammo>=3){const m=alive(u.team).filter(m=>m!==u&&m.ammo<=1&&dist(u,m)<240)[0];
       if(m){u.ammo--;m.ammo++;G.balls.push({x:u.x,y:u.y,sy:-30,vx:(m.x-u.x)/.5,vy:(m.y-u.y)/.5,team:u.team,owner:u,t:0,T:.5,gift:m});}}}}
   }
@@ -278,11 +320,11 @@ function update(dt){
   // 눈덩이
   for(const b of G.balls){b.t+=dt;b.x+=b.vx*dt;b.y+=b.vy*dt;
     if(b.gift){if(b.t>=b.T){b.dead=true}continue}
-    const w=b.t>.05&&blocked(b.x,b.y);if(w){b.dead=true;w.hp--;poof(b.x,b.y-14,5);if(w.hp<=0){G.walls.splice(G.walls.indexOf(w),1);poof(w.x,w.y-12,16)}continue}
-    if(Math.hypot((b.x-G.snowman.x),(b.y-G.snowman.y)*1.4)<26){b.dead=true;poof(b.x,b.y-30,5);continue}
+    const w=!b.arc&&b.t>.05&&blocked(b.x,b.y);if(w){b.dead=true;w.hp--;poof(b.x,b.y-14,5);if(w.hp<=0){G.walls.splice(G.walls.indexOf(w),1);poof(w.x,w.y-12,16)}continue}
+    if(!b.arc&&Math.hypot((b.x-G.snowman.x),(b.y-G.snowman.y)*1.4)<26){b.dead=true;poof(b.x,b.y-30,5);continue}
     for(const u of G.units){if(u.team===b.team||u.out||u.dodgeT>0)continue;
       if(Math.abs(u.x-b.x)<22&&b.y>u.y-32&&b.y<u.y+12){b.dead=true;hit(u,b);break}}
-    if(!b.dead&&b.t>=b.T){b.dead=true;poof(b.x,b.y,4)}}
+    if(!b.dead&&b.t>=b.T){b.dead=true;poof(b.x,b.y,4);if(b.splash)splash(b,null)}}
   G.balls=G.balls.filter(b=>!b.dead);
   for(const p of G.parts){p.t+=dt;p.x+=p.vx*dt;p.y+=p.vy*dt;p.vy+=260*dt}G.parts=G.parts.filter(p=>p.t<p.T);
   for(const s of G.bubbles)s.t+=dt;G.bubbles=G.bubbles.filter(s=>s.t<1.6);
@@ -290,7 +332,9 @@ function update(dt){
   const a=alive(0).length,e=alive(1).length;
   if(!G.over&&(a===0||e===0||G.t<=0)){G.endT+=dt;if(G.endT>1||G.t<=0)finish(a,e)}
 }
-function hit(u,b){const o=b.owner;u.wet+=b.dmg*(u.k.wall?.9:1);u.hitT=.32;u.gathering=false;u.throwT=0;u.pend=null;o.hits++;o.cheerT=1;
+function splash(b,skip){poof(b.x,b.y-10,14);for(const v of G.units)if(v!==skip&&v.team!==b.team&&!v.out&&Math.hypot(v.x-b.x,v.y-b.y)<60){v.wet+=b.dmg*.5*v.bdef;v.hitT=Math.max(v.hitT,.15);if(v.wet>=v.max){v.out=true;v.outT=0;bubble(v,'추워서 집에 갈래…','#cfe3ff')}}}
+function hit(u,b){const o=b.owner;u.wet+=b.dmg*u.bdef;o.hits++;o.cheerT=1;if(b.splash)splash(b,u);
+  if(u.k.armor){u.hitT=.12}else{u.hitT=.32;u.gathering=false;u.throwT=0;u.pend=null}
   poof(b.x,b.y-20,7);G.flash=u===G.me?.25:G.flash;
   if(u.wet>=u.max){u.out=true;u.outT=0;bubble(u,'추워서 집에 갈래…','#cfe3ff');if(o.team===0)bubble(o,'맞았다!','#ffcf4a')}
   else if(Math.random()<.25)bubble(u,['앗!','차가워!','으악'][Math.floor(Math.random()*3)],'#ffffff')}
@@ -303,10 +347,10 @@ function finish(a,e){G.over=true;let win=a>e;
   const hits=G.units.filter(u=>u.team===0).reduce((s,u)=>s+u.hits,0);
   const bonus=1+(G.R.s-1)*.2;let gain=Math.round((win?150+hits*10:30+hits*5)*bonus),first=false;
   if(win&&!SAVE.cleared.includes(SAVE.region)){SAVE.cleared.push(SAVE.region);first=true;gain+=300}
-  SAVE.ddak+=gain;save();
+  SAVE.ddak+=gain;SAVE.played++;let newDay=false;if(SAVE.played>=2){SAVE.played=0;SAVE.day++;newDay=true;fixTeam()}save();
   setTimeout(()=>{
     document.getElementById('resTitle').textContent=win?'승리! 🏆':'패배…';
-    document.getElementById('resSub').textContent=`${G.R.n} · 딱지 +${gain}장${first?' (처음 이긴 보너스 포함)':''} · 지금 딱지 ${SAVE.ddak}장`;
+    document.getElementById('resSub').textContent=`${G.R.n} · 딱지 +${gain}장${first?' (처음 이긴 보너스 포함)':''} · 지금 딱지 ${SAVE.ddak}장${newDay?' · 해가 져서 하루가 끝났어요. 내일은 '+DAYS[SAVE.day%7]+'요일!':''}`;
     const rows=G.units.filter(u=>u.team===0).map(u=>`<tr><td>${u.k.n}</td><td>${u.k.role}</td><td>${u.hits}번</td><td>${u.out?'아웃':'끝까지 버팀'}</td></tr>`).join('');
     document.getElementById('resTab').innerHTML=`<tr><th>이름</th><th>역할</th><th>맞힌 횟수</th><th>결과</th></tr>${rows}`;
     document.getElementById('result').hidden=false},900)}
@@ -338,7 +382,7 @@ function frameOf(u){const M=KMETA[u.id];
   if(u.gathering)return M.gather[Math.min(3,Math.floor(u.gT/.9*4))];
   const moving=Math.abs(u.vx)+Math.abs(u.vy)>1,set=M[u.dir];
   return moving?set[Math.floor(u.anim*8)%4]:set[0]}
-function drawUnit(u){const img=u.team?EIMG[u.id]:IMG[u.id],r=frameOf(u),fade=u.out?Math.max(.35,1-u.outT/3):1;
+function drawUnit(u){const img=u.img,r=frameOf(u),fade=u.out?Math.max(.35,1-u.outT/3):1;
   ctx.fillStyle='rgba(40,60,90,.18)';ctx.beginPath();ctx.ellipse(u.x,u.y,26,8,0,0,7);ctx.fill();
   ctx.strokeStyle=u.team?'rgba(255,107,87,.85)':'rgba(95,180,255,.9)';ctx.lineWidth=2.5;ctx.beginPath();ctx.ellipse(u.x,u.y,27,9,0,0,7);ctx.stroke();
   const bob=(!u.out&&Math.abs(u.vx)+Math.abs(u.vy)<1&&!u.gathering&&u.throwT<=0)?Math.sin(performance.now()/260+u.ai.seed)*1:0;
@@ -348,7 +392,7 @@ function drawUnit(u){const img=u.team?EIMG[u.id]:IMG[u.id],r=frameOf(u),fade=u.o
   const top=u.y-r[3]*SC-6;
   ctx.fillStyle='rgba(20,30,55,.55)';ctx.fillRect(u.x-20,top-6,40,5);
   const f=1-u.wet/u.max;ctx.fillStyle=f>.5?'#56d08a':f>.25?'#ffcf4a':'#ff6b57';ctx.fillRect(u.x-20,top-6,40*f,5);
-  ctx.font='12px Jua, sans-serif';ctx.textAlign='center';ctx.fillStyle=u.team?'#c4473a':'#24508a';ctx.fillText(u.team?u.k.role:u.k.n,u.x,top-10);
+  ctx.font='12px Jua, sans-serif';ctx.textAlign='center';ctx.fillStyle=u.team?'#c4473a':'#24508a';ctx.fillText((u.k.boss?'👑':'')+u.k.n,u.x,top-10);
   if(u===G.me){ctx.fillStyle='#ffcf4a';ctx.beginPath();ctx.moveTo(u.x-7,top-30);ctx.lineTo(u.x+7,top-30);ctx.lineTo(u.x,top-22);ctx.fill()}
   if(u.coldT>0){ctx.font='16px sans-serif';ctx.fillText('🥶',u.x+20,top+6)}
   if(u.slowT>0){ctx.font='14px sans-serif';ctx.fillText('❄',u.x-22,top+6)}
@@ -366,7 +410,7 @@ function draw(){
   list.sort((a,b)=>a.y-b.y).forEach(o=>o.f());
   for(const b of G.balls){const k=b.t/b.T,z=Math.sin(Math.PI*Math.min(1,k))*24-b.sy*(1-k)*.6+(-b.sy)*0;
     ctx.fillStyle='rgba(40,60,90,.2)';ctx.beginPath();ctx.ellipse(b.x,b.y,5,2,0,0,7);ctx.fill();
-    const by=b.y+b.sy*(1-k)-z;ctx.fillStyle='#fff';ctx.strokeStyle='#7f9cc4';ctx.lineWidth=1.5;ctx.beginPath();ctx.arc(b.x,by,b.gift?4:5.5,0,7);ctx.fill();ctx.stroke()}
+    const by=b.y+b.sy*(1-k)-z;ctx.fillStyle='#fff';ctx.strokeStyle='#7f9cc4';ctx.lineWidth=1.5;ctx.beginPath();ctx.arc(b.x,by-(b.arc?Math.sin(Math.PI*Math.min(1,k))*40:0),b.gift?4:b.big?9:5.5,0,7);ctx.fill();ctx.stroke()}
   ctx.fillStyle='#fff';for(const p of G.parts){ctx.globalAlpha=1-p.t/p.T;ctx.beginPath();ctx.arc(p.x,p.y,p.r,0,7);ctx.fill()}ctx.globalAlpha=1;
   ctx.font='15px Jua, sans-serif';ctx.textAlign='center';
   for(const s of G.bubbles){const u=s.u,y=u.y-108-s.t*16;const w=ctx.measureText(s.text).width+14;ctx.globalAlpha=Math.min(1,(1.6-s.t)*2);
@@ -379,12 +423,13 @@ function panel(x,y,w,h){ctx.fillStyle='rgba(22,33,58,.86)';ctx.strokeStyle='#3d5
 function hud(){
   panel(540,8,200,52);ctx.fillStyle=G.t<30?'#ff6b57':'#ffcf4a';ctx.font='30px Jua, sans-serif';ctx.textAlign='center';
   const t=Math.max(0,Math.ceil(G.t));ctx.fillText(`${Math.floor(t/60)}:${String(t%60).padStart(2,'0')}`,640,46);
-  ctx.font='12px Jua, sans-serif';ctx.fillStyle='#a9b8d6';ctx.fillText(G.R.n,640,22);
+  ctx.font='12px Jua, sans-serif';ctx.fillStyle='#a9b8d6';ctx.fillText(G.R.n+' · '+G.enemyName,640,22);
   [0,1].forEach(team=>{const us=G.units.filter(u=>u.team===team),x0=team?760:20;panel(x0,8,500,52);
-    us.forEach((u,i)=>{const x=x0+10+i*98,img=team?EIMG[u.id]:IMG[u.id],fr=KMETA[u.id].face[u.out?2:u.hitT>0?2:u.cheerT>0?0:1];
-      ctx.globalAlpha=u.out?.35:1;ctx.drawImage(img,fr[0],fr[1],fr[2],fr[3],x,12,44,44);
+    us.forEach((u,i)=>{const x=x0+10+i*98;ctx.globalAlpha=u.out?.35:1;
+      if(u.k.f&&RMETA[u.k.f]){const r=RMETA[u.k.f],s=44/r[3];ctx.save();ctx.beginPath();ctx.roundRect(x,12,44,44,8);ctx.clip();ctx.drawImage(IMG.rivals,r[0]+(r[2]-r[3])/2,r[1],r[3],r[3],x,12,44,44);ctx.restore()}
+      else{const fr=KMETA[u.id].face[u.out?2:u.hitT>0?2:u.cheerT>0?0:1];ctx.drawImage(u.img,fr[0],fr[1],fr[2],fr[3],x,12,44,44)}
       ctx.fillStyle='rgba(255,255,255,.15)';ctx.fillRect(x+46,40,44,6);const f=u.out?0:1-u.wet/u.max;ctx.fillStyle=f>.5?'#56d08a':f>.25?'#ffcf4a':'#ff6b57';ctx.fillRect(x+46,40,44*f,6);
-      ctx.fillStyle=team?'#ff9d8f':'#9fd4ff';ctx.font='13px Jua, sans-serif';ctx.textAlign='left';ctx.fillText(team?u.k.role:u.k.n,x+46,32);ctx.globalAlpha=1})});
+      ctx.fillStyle=team?'#ff9d8f':'#9fd4ff';ctx.font='13px Jua, sans-serif';ctx.textAlign='left';ctx.fillText((u.k.boss?'👑':'')+u.k.n,x+46,32);ctx.globalAlpha=1})});
   const me=G.me;if(!me)return;
   panel(16,600,420,108);const fr=KMETA[me.id].face[me.hitT>0||me.out?2:me.cheerT>0?0:1];ctx.drawImage(IMG[me.id],fr[0],fr[1],fr[2],fr[3],26,612,86,86);
   ctx.textAlign='left';ctx.fillStyle='#ffcf4a';ctx.font='20px Jua, sans-serif';ctx.fillText(`${me.k.n} · ${me.k.role}`,124,632);
@@ -402,8 +447,16 @@ function hud(){
 const $=id=>document.getElementById(id);let FACES={},GICON={};
 function lobby(){
   $('ddak').textContent=`딱지 ${SAVE.ddak}장`;
-  $('teamCards').innerHTML=ORDER.map(k=>{const K=KIDS[k];return `<button class="kc" id="kc-${k}" aria-pressed="${SAVE.me===k}" data-k="${k}"><img alt="" src="${FACES[k]}"><b>${SAVE.me===k?'★ ':''}${K.n}</b><span class="r">${K.role}</span><span class="d">${K.d}</span><span class="gl">${GLOVES[SAVE.glove[k]].n}</span></button>`}).join('');
-  document.querySelectorAll('.kc').forEach(b=>b.onclick=()=>{SAVE.me=b.dataset.k;save();lobby()});
+  fixTeam();
+  $('today').textContent=`${Math.floor(SAVE.day/7)+1}주째 ${DAYS[SAVE.day%7]}요일 · 오늘 남은 대결 ${2-SAVE.played}번`;
+  $('teamCards').innerHTML=ALL.map(k=>{const K=KIDS[k],ab=absent(k,SAVE.day),on=SAVE.team.includes(k);
+    return `<div class="kc${ab?' off':''}${on?' on':''}"><button class="pick" id="kc-${k}" data-k="${k}" aria-pressed="${on}" ${ab?'disabled':''}><img alt="" src="${FACES[k]}"><b>${K.n}</b><span class="r">${K.role}</span><span class="d">${ab?'오늘 못 나와요 · '+ab:K.d}</span></button>
+      ${on?`<button class="star" id="me-${k}" data-k="${k}" aria-pressed="${SAVE.me===k}">${SAVE.me===k?'★ 내가 조종':'☆ 조종하기'}</button>`:''}</div>`}).join('');
+  $('teamCount').textContent=`${SAVE.team.length}/5명`;
+  document.querySelectorAll('.pick').forEach(b=>b.onclick=()=>{const k=b.dataset.k,i=SAVE.team.indexOf(k);
+    if(i>=0){if(SAVE.team.length>1)SAVE.team.splice(i,1)}else if(SAVE.team.length<5)SAVE.team.push(k);else{SAVE.team.splice(SAVE.team.indexOf(SAVE.me)===4?3:4,1);SAVE.team.push(k)}
+    if(!SAVE.team.includes(SAVE.me))SAVE.me=SAVE.team[0];save();lobby()});
+  document.querySelectorAll('.star').forEach(b=>b.onclick=()=>{SAVE.me=b.dataset.k;save();lobby()});
   const k=SAVE.me,own=SAVE.owned[k];
   $('shop').innerHTML=GLOVES.map((g,i)=>{const has=own.includes(i),eq=SAVE.glove[k]===i,can=has||SAVE.ddak>=g.p;
     return `<button class="it" id="gl-${i}" data-i="${i}" aria-pressed="${eq}" ${can?'':'disabled'}><span class="ic">${g.ic?`<img alt="" src="${GICON[g.ic]}">`:'✋'}</span><b>${g.n}</b><span>연속 ${g.lim}개${g.x?' · '+g.x:''}</span><span class="p">${eq?'끼는 중':has?'끼기':'딱지 '+g.p}</span></button>`}).join('');
@@ -412,10 +465,11 @@ function lobby(){
     if(!own.includes(i)){if(SAVE.ddak<g.p)return;SAVE.ddak-=g.p;own.push(i)}SAVE.glove[k]=i;save();lobby()});
   $('regions').innerHTML=REGIONS.map((r,i)=>{const open=!r.lock&&(i===0||SAVE.cleared.includes(i-1));
     return `<button class="rg" id="rg-${i}" data-i="${i}" aria-pressed="${SAVE.region===i}" ${open?'':'disabled'}><b>${r.n}${SAVE.cleared.includes(i)?' 🚩':''}</b><span>${r.s?'★'.repeat(r.s):'🔒'}</span><small>${r.d}</small></button>`}).join('');
+  $('bStart').disabled=SAVE.team.length<5;
   document.querySelectorAll('.rg').forEach(b=>b.onclick=()=>{SAVE.region=+b.dataset.i;save();lobby()});
 }
-function start(){$('lobby').hidden=true;$('result').hidden=true;newGame()}
-$('bStart').onclick=start;$('bAgain').onclick=start;
+function start(){if(SAVE.team.length<5)return;$('lobby').hidden=true;$('result').hidden=true;newGame()}
+$('bStart').onclick=start;$('bNextDay').onclick=()=>{SAVE.day++;SAVE.played=0;fixTeam();save();lobby()};$('bAgain').onclick=start;
 $('bLobby').onclick=()=>{$('result').hidden=true;G=null;lobby();$('lobby').hidden=false};
 
 /* ---------- 시작 ---------- */
@@ -423,10 +477,10 @@ let last=performance.now();
 function loop(now){const dt=Math.min(.05,(now-last)/1000);last=now;if(G)update(dt);draw();requestAnimationFrame(loop)}
 (async()=>{
   resize();
-  const names=[...ORDER,'objects'];
+  const names=[...ALL,'objects','rivals'];
   try{const imgs=await Promise.all(names.map(n=>load(`assets/${n}.png`)));names.forEach((n,i)=>IMG[n]=imgs[i])}
   catch(e){document.querySelector('#lobby .box').insertAdjacentHTML('afterbegin',`<p style="color:#ff6b57">${e.message}</p>`);return}
-  ORDER.forEach(k=>{EIMG[k]=recolor(IMG[k]);FACES[k]=faceURL(k,0)});
+  ALL.forEach(k=>{FACES[k]=faceURL(k,0)});RMETA=RTMETA;
   ['g1','g2','g3','g4'].forEach(n=>GICON[n]=objURL(n));
   BG=makeBG();lobby();
   try{await document.fonts.ready}catch(e){}
