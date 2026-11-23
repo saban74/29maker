@@ -9,7 +9,10 @@ html,body{height:100%;background:var(--bg);color:var(--ink);font-family:var(--bo
 *{box-sizing:border-box}
 [hidden]{display:none!important}
 #app{position:relative;height:100%;overflow:hidden}
-canvas{display:block;width:100%;height:100%;cursor:crosshair}
+canvas{display:block;width:100%;height:100%;cursor:crosshair;touch-action:none;-webkit-user-select:none;user-select:none}
+#rot{display:none}
+@media (orientation:portrait) and (pointer:coarse){#rot{display:grid;position:absolute;inset:0;z-index:50;place-items:center;align-content:center;gap:12px;background:var(--bg);color:var(--ink);font-family:var(--display);font-size:24px;text-align:center;padding:16px}#rot span{font-size:64px;animation:spin 2s ease-in-out infinite}}
+@keyframes spin{50%{transform:rotate(90deg)}}
 .ov{position:absolute;inset:0;display:grid;place-items:center;background:color-mix(in srgb,var(--bg) 78%,transparent);overflow:auto;
   padding-block:16px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
 .box{width:min(980px,100%);background:var(--panel);border:2px solid var(--line);border-radius:18px;padding:20px;display:grid;gap:16px}
@@ -99,6 +102,7 @@ button:focus-visible{outline:2px solid var(--gold);outline-offset:2px}
 
 <div id="app">
   <canvas id="cv"></canvas>
+  <div id="rot"><span>📱</span>휴대폰을 가로로 돌려 주세요<small style="font-family:var(--body);font-size:14px;color:var(--sub)">눈싸움은 가로 화면에서 해요</small></div>
   <div class="ov" id="lobby" hidden>
     <div class="box">
       <div>
@@ -232,9 +236,54 @@ addEventListener('keydown',e=>{if(e.code==='Tab'){e.preventDefault();if(G&&!G.ov
   if(e.code==='KeyQ')useItem(me,'pack');if(e.code==='KeyE')useItem(me,'cocoa');if(e.code==='KeyR')buildWall(me,MOUSE.x,MOUSE.y)});
 addEventListener('keyup',e=>{KEY[e.code]=false});
 addEventListener('blur',()=>{for(const k in KEY)KEY[k]=false;MOUSE.down=false;MOUSE.rdown=false});
-cv.addEventListener('pointermove',e=>{const r=cv.getBoundingClientRect();MOUSE.x=(e.clientX-r.left-VX)/VS;MOUSE.y=(e.clientY-r.top-VY)/VS});
-cv.addEventListener('pointerdown',e=>{if(e.button===0)MOUSE.down=true;if(e.button===2)MOUSE.rdown=true;cv.dispatchEvent(new PointerEvent('pointermove',e))});
-addEventListener('pointerup',e=>{if(e.button===0)MOUSE.down=false;if(e.button===2)MOUSE.rdown=false});
+const toGame=e=>{const r=cv.getBoundingClientRect();return{x:(e.clientX-r.left-VX)/VS,y:(e.clientY-r.top-VY)/VS}};
+cv.addEventListener('pointermove',e=>{if(e.pointerType!=='mouse'){tMove(e);return}TOUCH.on=false;const p=toGame(e);MOUSE.x=p.x;MOUSE.y=p.y});
+cv.addEventListener('pointerdown',e=>{if(e.pointerType!=='mouse'){tDown(e);return}TOUCH.on=false;const p=toGame(e);MOUSE.x=p.x;MOUSE.y=p.y;if(e.button===0)MOUSE.down=true;if(e.button===2)MOUSE.rdown=true});
+addEventListener('pointerup',e=>{if(e.pointerType!=='mouse'){tUp(e);return}if(e.button===0)MOUSE.down=false;if(e.button===2)MOUSE.rdown=false});
+addEventListener('pointercancel',e=>{if(e.pointerType!=='mouse')tUp(e,true)});
+/* ---------- 터치 조작 (휴대폰) ---------- */
+const TOUCH={on:matchMedia('(pointer: coarse)').matches,joy:null,jx:0,jy:0,gather:false,auto:false,aiming:false,ptr:{}};
+const JOYR=70,JOYHOME={x:170,y:560};
+function buttons(){const me=G&&G.me,b=[{id:'throw',x:1186,y:500,r:42,t:'던지기'},{id:'gather',x:1186,y:626,r:52,t:'뭉치기'},{id:'dodge',x:1062,y:664,r:38,t:'구르기'},
+  {id:'pack',x:964,y:688,r:25,t:'핫팩'},{id:'cocoa',x:1066,y:568,r:25,t:'핫초코'},{id:'swap',x:1236,y:206,r:24,t:'⇄'},{id:'pause',x:640,y:88,r:18,t:'II'}];
+  if(me&&me.k.wall)b.push({id:'wall',x:964,y:600,r:27,t:'눈벽'});return b}
+function nearestFoe(m){let best=null,bs=1e9;for(const f of alive(1)){let d=dist(m,f)+(los(m,f)?0:200);if(d<bs){bs=d;best=f}}return best}
+function autoThrow(m){const f=nearestFoe(m);if(!f)return;const d=dist(m,f),fl=d/m.k.bs;doThrow(m,f.x+f.vx*fl*.7,f.y-6+f.vy*fl*.7)}
+function press(id,down){const m=G&&G.me;if(!G||G.over||G.demo)return;
+  if(id==='gather')TOUCH.gather=down;if(id==='throw'){TOUCH.auto=down;if(down&&m&&!m.out)autoThrow(m)}
+  if(!down||!m)return;
+  if(id==='pause')G.paused=!G.paused;if(id==='swap')switchKid();if(m.out)return;
+  if(id==='dodge')tryDodge(m,TOUCH.jx,TOUCH.jy);if(id==='pack')useItem(m,'pack');if(id==='cocoa')useItem(m,'cocoa');
+  if(id==='wall'){const f=nearestFoe(m);buildWall(m,f?f.x:m.x+80,f?f.y:m.y)}}
+function tDown(e){e.preventDefault();TOUCH.on=true;if(!G||G.over||G.demo)return;const p=toGame(e);
+  const b=buttons().find(b=>Math.hypot(p.x-b.x,p.y-b.y)<=b.r+10);if(b){TOUCH.ptr[e.pointerId]={k:'btn',id:b.id};press(b.id,true);return}
+  if(p.x<560&&p.y>FY0-40&&!TOUCH.joy){TOUCH.ptr[e.pointerId]={k:'joy'};TOUCH.joy={x:p.x,y:p.y,kx:p.x,ky:p.y};return}
+  TOUCH.ptr[e.pointerId]={k:'aim',sx:p.x,sy:p.y,drag:false};TOUCH.aiming=true;MOUSE.x=p.x;MOUSE.y=p.y}
+function tMove(e){const P=TOUCH.ptr[e.pointerId];if(!P)return;e.preventDefault();const p=toGame(e);
+  if(P.k==='joy'){const J=TOUCH.joy;let dx=p.x-J.x,dy=p.y-J.y,l=Math.hypot(dx,dy);if(l>JOYR){dx*=JOYR/l;dy*=JOYR/l;l=JOYR}J.kx=J.x+dx;J.ky=J.y+dy;
+    TOUCH.jx=l<12?0:dx/JOYR;TOUCH.jy=l<12?0:dy/JOYR}
+  if(P.k==='aim'){if(Math.hypot(p.x-P.sx,p.y-P.sy)>22)P.drag=true;MOUSE.x=p.x;MOUSE.y=p.y-(P.drag?60:0)}}
+function tUp(e,cancel){const P=TOUCH.ptr[e.pointerId];if(!P)return;delete TOUCH.ptr[e.pointerId];
+  if(P.k==='btn')press(P.id,false);
+  if(P.k==='joy'){TOUCH.joy=null;TOUCH.jx=TOUCH.jy=0}
+  if(P.k==='aim'){TOUCH.aiming=Object.values(TOUCH.ptr).some(q=>q.k==='aim');const m=G&&G.me;if(!cancel&&m&&!m.out&&!G.over){if(!doThrow(m,MOUSE.x,MOUSE.y))TOUCH.queued={x:MOUSE.x,y:MOUSE.y,t:.35}}}}
+function drawTouch(){if(!TOUCH.on||!G||G.demo||G.over)return;const m=G.me;ctx.save();ctx.textAlign='center';ctx.textBaseline='middle';
+  const J=TOUCH.joy||{x:JOYHOME.x,y:JOYHOME.y,kx:JOYHOME.x,ky:JOYHOME.y};ctx.globalAlpha=TOUCH.joy?.9:.45;
+  ctx.fillStyle='rgba(18,30,66,.35)';ctx.strokeStyle='#8cc4ff';ctx.lineWidth=3;ctx.beginPath();ctx.arc(J.x,J.y,JOYR,0,7);ctx.fill();ctx.stroke();
+  ctx.fillStyle='rgba(140,196,255,.85)';ctx.beginPath();ctx.arc(J.kx,J.ky,30,0,7);ctx.fill();if(!TOUCH.joy){ctx.fillStyle='#24508a';ctx.font='15px Jua, sans-serif';ctx.fillText('이동',J.x,J.y)}
+  ctx.globalAlpha=1;
+  for(const b of buttons()){let lab=b.t,sub='',dim=false,fill=0;
+    if(m){if(b.id==='throw'){sub=`${m.ammo}개`;dim=!canThrow(m)}
+      if(b.id==='gather'){fill=m.gathering?m.gT/.9:0;dim=m.ammo>=m.maxAmmo;sub=onPile(m)?'눈더미 ×3':''}
+      if(b.id==='dodge'&&m.dodgeCd>0){dim=true;sub=m.dodgeCd.toFixed(1)}
+      if(b.id==='pack'||b.id==='cocoa'){sub='×'+(m.items[b.id]||0);dim=!m.items[b.id]}
+      if(b.id==='wall'){dim=m.wallCd>0||m.ammo<3;sub=m.wallCd>0?m.wallCd.toFixed(0):'눈3'}}
+    const held=Object.values(TOUCH.ptr).some(q=>q.k==='btn'&&q.id===b.id);
+    ctx.globalAlpha=dim?.45:.9;ctx.fillStyle=held?'rgba(255,207,74,.55)':'rgba(18,30,66,.6)';ctx.strokeStyle=b.id==='throw'?'#ff8f7a':b.id==='gather'?'#9fd4ff':'#8cc4ff';ctx.lineWidth=3;
+    ctx.beginPath();ctx.arc(b.x,b.y,b.r,0,7);ctx.fill();ctx.stroke();
+    if(fill>0){ctx.strokeStyle='#ffffff';ctx.lineWidth=5;ctx.beginPath();ctx.arc(b.x,b.y,b.r-5,-Math.PI/2,-Math.PI/2+fill*Math.PI*2);ctx.stroke()}
+    ctx.fillStyle='#fff';ctx.font=`${b.r>30?18:13}px Jua, sans-serif`;ctx.fillText(lab,b.x,b.y-(sub?7:0));if(sub){ctx.font='12px Jua, sans-serif';ctx.fillStyle='#ffe08a';ctx.fillText(sub,b.x,b.y+12)}}
+  ctx.restore()}
 cv.addEventListener('contextmenu',e=>e.preventDefault());
 
 /* ---------- 유틸 ---------- */
@@ -292,7 +341,7 @@ function buildWall(u,tx,ty){if(!u.k.wall||u.wallCd>0||u.ammo<3||u.out)return fal
   if(G.walls.some(o=>Math.abs(o.x-w.x)<70&&Math.abs(o.y-w.y)<34))return false;
   G.walls.push(w);u.ammo-=3;u.wallCd=7;poof(w.x,w.y-10,10);bubble(u,'눈벽 완성!','#e8f3ff');return true}
 function switchKid(){const team=alive(0);if(!team.length)return;const i=team.indexOf(G.me);G.me=team[(i+1)%team.length];bubble(G.me,'내 차례!','#ffcf4a')}
-function moveVec(){let x=0,y=0;if(KEY.KeyA||KEY.ArrowLeft)x--;if(KEY.KeyD||KEY.ArrowRight)x++;if(KEY.KeyW||KEY.ArrowUp)y--;if(KEY.KeyS||KEY.ArrowDown)y++;return{x,y}}
+function moveVec(){let x=TOUCH.jx,y=TOUCH.jy;if(KEY.KeyA||KEY.ArrowLeft)x--;if(KEY.KeyD||KEY.ArrowRight)x++;if(KEY.KeyW||KEY.ArrowUp)y--;if(KEY.KeyS||KEY.ArrowDown)y++;return{x,y}}
 function onPile(u){return G.piles.some(p=>Math.abs(p.x-u.x)<40&&Math.abs(p.y-u.y)<26)}
 
 /* ---------- 충돌 ---------- */
@@ -356,9 +405,11 @@ function update(dt){
     u.streakT+=dt;if(u.streak>0&&u.streakT>(u.glove.fast?.6:1)){u.streak--;u.streakT-=.45}
     if(u.throwT>0){const before=u.throwT;u.throwT-=dt;if(before>.15&&u.throwT<=.15)release(u)}
     let mv={x:0,y:0};
-    if(u===G.me){mv=moveVec();u.gathering=!!(KEY.Space||MOUSE.rdown)&&u.ammo<u.maxAmmo&&u.throwT<=0&&u.dodgeT<=0;
+    if(u===G.me){mv=moveVec();u.gathering=!!(KEY.Space||MOUSE.rdown||TOUCH.gather)&&u.ammo<u.maxAmmo&&u.throwT<=0&&u.dodgeT<=0;
       if(MOUSE.down&&canThrow(u))doThrow(u,MOUSE.x,MOUSE.y);
-      if(u.throwT<=0&&!u.gathering)u.flip=MOUSE.x<u.x}
+      if(TOUCH.queued){TOUCH.queued.t-=dt;if(canThrow(u)){doThrow(u,TOUCH.queued.x,TOUCH.queued.y);TOUCH.queued=null}else if(TOUCH.queued.t<=0)TOUCH.queued=null}
+      if(TOUCH.auto&&canThrow(u))autoThrow(u);
+      if(u.throwT<=0&&!u.gathering){if(TOUCH.on&&!TOUCH.aiming){if(Math.abs(mv.x)>.1)u.flip=mv.x<0}else u.flip=MOUSE.x<u.x}}
     else{const r=ai(u,dt);if(r)mv={x:r.mx,y:r.my}}
     if(u.gathering&&u.ammo<u.maxAmmo&&u.hitT<=0){mv={x:0,y:0};u.gT+=dt*(u.k.gather||1)*(onPile(u)?3:1);if(u.gT>=.9){u.gT-=.9;u.ammo++;if(u.ammo>=u.maxAmmo)u.gathering=false}}
     else u.gT=Math.min(u.gT,.5);
@@ -554,13 +605,14 @@ function draw(){
     ctx.fillStyle='rgba(22,33,58,.82)';ctx.beginPath();ctx.roundRect(u.x-w/2,y-16,w,22,8);ctx.fill();ctx.fillStyle=s.c;ctx.fillText(s.text,u.x,y);ctx.globalAlpha=1}
   if(G.flash>0&&!G.demo){ctx.fillStyle=`rgba(180,220,255,${G.flash})`;ctx.fillRect(0,0,W,H);G.flash=Math.max(0,G.flash-.02)}
   if(!G.demo)hud();
-  if(G.me&&!G.me.out&&!G.over&&!G.demo&&!G.paused){const m=G.me,dx=MOUSE.x-m.x,dy=MOUSE.y-m.y,d=Math.hypot(dx,dy)||1,L=Math.min(d,m.k.range),ex=m.x+dx/d*L,ey=m.y+dy/d*L,ok=canThrow(m)||m.throwT>0;
+  drawTouch();
+  if(G.me&&!G.me.out&&!G.over&&!G.demo&&!G.paused&&(!TOUCH.on||TOUCH.aiming)){const m=G.me,dx=MOUSE.x-m.x,dy=MOUSE.y-m.y,d=Math.hypot(dx,dy)||1,L=Math.min(d,m.k.range),ex=m.x+dx/d*L,ey=m.y+dy/d*L,ok=canThrow(m)||m.throwT>0;
     ctx.setLineDash([6,7]);ctx.lineWidth=2.5;ctx.strokeStyle=ok?'rgba(36,80,138,.55)':'rgba(200,70,60,.45)';ctx.beginPath();ctx.moveTo(m.x,m.y-30);
     ctx.quadraticCurveTo((m.x+ex)/2,(m.y+ey)/2-30-L*.12,ex,ey);ctx.stroke();ctx.setLineDash([]);
     ctx.fillStyle=ok?'rgba(36,80,138,.18)':'rgba(200,70,60,.18)';ctx.beginPath();ctx.ellipse(ex,ey,16,6,0,0,7);ctx.fill();
     if(d>m.k.range){ctx.font='12px Jua, sans-serif';ctx.textAlign='center';ctx.fillStyle='rgba(36,80,138,.8)';ctx.fillText('사거리 밖',MOUSE.x,MOUSE.y+26)}
-    if(!ok){ctx.font='13px Jua, sans-serif';ctx.textAlign='center';ctx.fillStyle='#c4473a';ctx.fillText(m.coldT>0?'손이 시려요':m.ammo<=0?'눈이 없어요! (Space/우클릭)':'',MOUSE.x,MOUSE.y-18)}}
-  if(G.me&&!G.me.out&&!G.over&&!G.demo){ctx.strokeStyle='rgba(36,80,138,.8)';ctx.lineWidth=2;ctx.beginPath();ctx.arc(MOUSE.x,MOUSE.y,9,0,7);ctx.moveTo(MOUSE.x-14,MOUSE.y);ctx.lineTo(MOUSE.x+14,MOUSE.y);ctx.moveTo(MOUSE.x,MOUSE.y-14);ctx.lineTo(MOUSE.x,MOUSE.y+14);ctx.stroke()}
+    if(!ok){ctx.font='13px Jua, sans-serif';ctx.textAlign='center';ctx.fillStyle='#c4473a';ctx.fillText(m.coldT>0?'손이 시려요':m.ammo<=0?(TOUCH.on?'눈이 없어요! (뭉치기)':'눈이 없어요! (Space/우클릭)'):'',MOUSE.x,MOUSE.y-18)}}
+  if(G.me&&!G.me.out&&!G.over&&!G.demo&&(!TOUCH.on||TOUCH.aiming)){ctx.strokeStyle='rgba(36,80,138,.8)';ctx.lineWidth=2;ctx.beginPath();ctx.arc(MOUSE.x,MOUSE.y,9,0,7);ctx.moveTo(MOUSE.x-14,MOUSE.y);ctx.lineTo(MOUSE.x+14,MOUSE.y);ctx.moveTo(MOUSE.x,MOUSE.y-14);ctx.lineTo(MOUSE.x,MOUSE.y+14);ctx.stroke()}
   if(G.paused){ctx.fillStyle='rgba(22,33,58,.6)';ctx.fillRect(0,0,W,H);ctx.fillStyle='#fff';ctx.font='48px Jua, sans-serif';ctx.fillText('잠깐 멈춤 (P)',W/2,H/2)}}
 function panel(x,y,w,h){const g=ctx.createLinearGradient(0,y,0,y+h);g.addColorStop(0,'rgba(36,58,112,.95)');g.addColorStop(1,'rgba(18,30,66,.95)');ctx.fillStyle=g;ctx.strokeStyle='#8cc4ff';ctx.lineWidth=3;ctx.beginPath();ctx.roundRect(x,y,w,h,12);ctx.fill();ctx.stroke();ctx.strokeStyle='rgba(255,255,255,.18)';ctx.lineWidth=1;ctx.beginPath();ctx.roundRect(x+4,y+4,w-8,h-8,9);ctx.stroke()}
 function hud(){
@@ -574,7 +626,7 @@ function hud(){
       ctx.fillStyle='rgba(255,255,255,.15)';ctx.fillRect(x+46,40,44,6);const f=u.out?0:1-u.wet/u.max;ctx.fillStyle=f>.5?'#56d08a':f>.25?'#ffcf4a':'#ff6b57';ctx.fillRect(x+46,40,44*f,6);
       ctx.fillStyle=team?'#ff9d8f':'#9fd4ff';ctx.font='13px Jua, sans-serif';ctx.textAlign='left';ctx.fillText((u.k.boss?'👑':'')+u.k.n,x+46,32);ctx.globalAlpha=1})});
   const me=G.me;if(!me)return;
-  panel(8,644,1264,70);const fr=KMETA[me.id].face[me.hitT>0||me.out?2:me.cheerT>0?0:1];ctx.drawImage(IMG[me.id],fr[0],fr[1],fr[2],fr[3],16,648,62,62);
+  panel(8,644,TOUCH.on?880:1264,70);const fr=KMETA[me.id].face[me.hitT>0||me.out?2:me.cheerT>0?0:1];ctx.drawImage(IMG[me.id],fr[0],fr[1],fr[2],fr[3],16,648,62,62);
   ctx.textAlign='left';ctx.fillStyle='#ffcf4a';ctx.font='20px Jua, sans-serif';ctx.fillText(me.k.n,86,672);ctx.fillStyle='#a9b8d6';ctx.font='13px Jua, sans-serif';ctx.fillText(me.k.role,86,696);
   ctx.fillText('눈덩이',160,672);for(let i=0;i<me.maxAmmo;i++){ctx.fillStyle=i<me.ammo?'#fff':'rgba(255,255,255,.15)';ctx.beginPath();ctx.arc(214+i*17,667,6.5,0,7);ctx.fill()}
   if(me.gathering){ctx.fillStyle='#5fb4ff';ctx.fillRect(208,678,me.gT/.9*120,4)}
@@ -585,6 +637,7 @@ function hud(){
   items.forEach(([n,k,c],i)=>{const x=470+i*52;ctx.globalAlpha=c?1:.3;obj(n,x,690,.34);ctx.globalAlpha=1;ctx.fillStyle='#fff';ctx.font='12px Jua, sans-serif';ctx.textAlign='center';ctx.fillText(`${k} ×${c}`,x,708)});
   ctx.textAlign='left';ctx.font='13px Jua, sans-serif';
   if(me.k.wall){ctx.fillStyle=me.wallCd>0||me.ammo<3?'#6c7ea6':'#9fd4ff';ctx.fillText(me.wallCd>0?`R 눈벽 ${me.wallCd.toFixed(0)}초`:'R 눈벽 (눈 3개)',540,672)}
+  if(TOUCH.on)return;
   ctx.fillStyle=me.dodgeCd>0?'#6c7ea6':'#9fd4ff';ctx.fillText(me.dodgeCd>0?`구르기 ${me.dodgeCd.toFixed(1)}초`:'Shift 구르기 준비',540,699);
   const keys=[['WASD','이동'],['좌클릭','던지기 (누르고 있으면 연속)'],['우클릭 / Space','눈 뭉치기'],['Tab','다른 아이'],['P','멈춤']];
   ctx.font='12px Jua, sans-serif';keys.forEach(([k,v],i)=>{const x=700+(i%2)*280,y=664+Math.floor(i/2)*18;ctx.fillStyle='#ffcf4a';ctx.fillText(k,x,y);ctx.fillStyle='#a9b8d6';ctx.fillText(v,x+ctx.measureText(k).width+8,y)})}
