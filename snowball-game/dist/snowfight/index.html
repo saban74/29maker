@@ -306,6 +306,9 @@ const worldOf=p=>({x:p.x/CAM.z+CAM.x,y:p.y/CAM.z+CAM.y});
 function buttons(){const T=touchScale(),me=G&&G.me,b=[{id:'throw',x:1186,y:500,r:42,t:'던지기'},{id:'gather',x:1186,y:626,r:52,t:'뭉치기'},{id:'dodge',x:1062,y:664,r:38,t:'구르기'},
   {id:'pack',x:964,y:688,r:25,t:'핫팩'},{id:'cocoa',x:1066,y:568,r:25,t:'핫초코'},{id:'special',x:1066,y:470,r:34,t:'필살기'},{id:'swap',x:1236,y:206,r:24,t:'⇄'},{id:'pause',x:640,y:88,r:18,t:'II'}];
   if(me&&me.k.wall)b.push({id:'wall',x:964,y:600,r:27,t:'눈벽'});
+  const barW=VX/VS;if(TOUCH.on&&barW>=90){const rb=Math.min(70,barW*.45),xr=W+barW/2,xl=-barW/2,
+    P={special:[xr,.19,.68],throw:[xr,.43,1],gather:[xr,.7,1],dodge:[xr,.91,.66],swap:[xl,.22,.55],pause:[xl,.36,.45],wall:[xl,.52,.62],pack:[xl,.69,.58],cocoa:[xl,.86,.58]};
+    return b.map(o=>{const q=P[o.id];return q?{...o,x:q[0],y:H*q[1],r:rb*q[2]}:o})}
   return b.map(o=>o.id==='pause'?o:o.id==='swap'?{...o,x:W-(W-o.x)*T,r:o.r*T}:{...o,x:W-(W-o.x)*T,y:H-(H-o.y)*T,r:o.r*T})}
 function nearestFoe(m){let best=null,bs=1e9;for(const f of alive(1)){let d=dist(m,f)+(los(m,f)?0:200);if(d<bs){bs=d;best=f}}return best}
 function autoThrow(m){const f=(G.lock&&!G.lock.out)?G.lock:nearestFoe(m);if(!f)return;const d=dist(m,f),fl=d/m.k.bs;doThrow(m,f.x+f.vx*fl*.7,f.y-6+f.vy*fl*.7)}
