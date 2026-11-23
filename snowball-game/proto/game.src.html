@@ -163,6 +163,7 @@ button:focus-visible{outline:2px solid var(--gold);outline-offset:2px}
 <script>
 const KMETA=/*KMETA*/;
 const OMETA=/*OMETA*/;
+const PMETA=/*PMETA*/;
 const RTMETA=/*RMETA*/;
 </script>
 <script>
@@ -298,8 +299,15 @@ let G=null;
 function newGame(demo){
   const R=REGIONS[SAVE.region];
   G={t:180,units:[],balls:[],parts:[],bubbles:[],walls:[],piles:[],crates:[],over:false,paused:false,R,endT:0,flash:0};
+  const dasan=(demo||SAVE.region===0)&&IMG.props;G.pond=null;
+  if(dasan){
+    [[330,275],[330,545],[470,410],[950,545],[810,410]].forEach(([x,y])=>G.walls.push({x,y,hp:6,max:6}));
+    [[175,240],[175,590],[640,222],[640,612],[1105,240],[1000,612]].forEach(([x,y])=>G.piles.push({x,y}));
+    [['igloo',985,262,58,26],['sign',80,440,14,10],['planter',1200,400,38,12],['bench',470,622,52,12]].forEach(([k,x,y,rw,rh])=>G.walls.push({x,y,hp:1e9,max:1e9,prop:k,rw,rh}));
+    G.pond={x:1140,y:540,rx:78,ry:32};
+  }else{
   [[330,275],[330,545],[470,410],[950,275],[950,545],[810,410]].forEach(([x,y])=>G.walls.push({x,y,hp:6,max:6}));
-  [[175,240],[175,590],[640,222],[640,612],[1105,240],[1105,590]].forEach(([x,y])=>G.piles.push({x,y}));
+  [[175,240],[175,590],[640,222],[640,612],[1105,240],[1105,590]].forEach(([x,y])=>G.piles.push({x,y}));}
   [[640,325],[640,500]].forEach(([x,y])=>G.crates.push({x,y,on:true,t:0}));
   G.snowman={x:640,y:412};G.wx={type:null,t:0,next:rnd(18,26),wind:0};G.drops=[];G.dropT=rnd(10,16);G.banner=null;G.ground=makeArena(demo?0:SAVE.region);G.band=(demo||SAVE.region===0)&&IMG.bg_dasan?IMG.bg_dasan:null;G.gx=G.ground.getContext('2d');
   const ys=[245,328,410,492,575];
@@ -349,7 +357,7 @@ function moveVec(){let x=TOUCH.jx,y=TOUCH.jy;if(KEY.KeyA||KEY.ArrowLeft)x--;if(K
 function onPile(u){return G.piles.some(p=>Math.abs(p.x-u.x)<40&&Math.abs(p.y-u.y)<26)}
 
 /* ---------- 충돌 ---------- */
-function wallRect(w){return[w.x-34,w.y-16,w.x+34,w.y+8]}
+function wallRect(w){const r=w.rw||34;return[w.x-r,w.y-(w.rh||16),w.x+r,w.y+8]}
 function pushOut(u){
   for(const w of G.walls){const[a,b,c,d]=wallRect(w);if(u.x>a-14&&u.x<c+14&&u.y>b-4&&u.y<d+4){
     const l=u.x-(a-14),r=c+14-u.x,t=u.y-(b-4),bt=d+4-u.y,m=Math.min(l,r,t,bt);
@@ -470,7 +478,7 @@ function update(dt){
     let sp=BASESPD*u.k.spd*u.bspd*(u.slowT>0?.6:1)*(u.throwT>0?.45:1)*(u.hitT>0?.3:1);
     if(u.dodgeT>0){u.dodgeT-=dt;u.vx=u.dvx*BASESPD*3;u.vy=u.dvy*BASESPD*3}
     else{const d=Math.hypot(mv.x,mv.y);let tx=0,ty=0;if(d>0&&!u.gathering){tx=mv.x/d*sp;ty=mv.y/d*sp}
-      if(G.wx&&G.wx.type==='ice'){const k=Math.min(1,dt*2.2);u.vx+=(tx-u.vx)*k;u.vy+=(ty-u.vy)*k}else{u.vx=tx;u.vy=ty}}
+      if((G.wx&&G.wx.type==='ice')||onPond(u)){const k=Math.min(1,dt*2.2);u.vx+=(tx-u.vx)*k;u.vy+=(ty-u.vy)*k}else{u.vx=tx;u.vy=ty}}
     u.x+=u.vx*dt;u.y+=u.vy*dt;pushOut(u);
     u.fp=(u.fp||0)+Math.hypot(u.vx,u.vy)*dt;if(u.fp>15){u.fp=0;u.fs=!u.fs;const nx=-u.vy,ny=u.vx,nl=Math.hypot(nx,ny)||1;
       G.gx.fillStyle=u.dodgeT>0?'rgba(170,192,222,.7)':'rgba(176,197,224,.75)';G.gx.fillRect(Math.round((u.x+(u.fs?5:-5)*nx/nl)/PX),Math.round((u.y+(u.fs?5:-5)*ny/nl)/PX),1,1)}
@@ -651,8 +659,9 @@ function draw(){
   if(!G)return;
   ctx.imageSmoothingEnabled=false;ctx.drawImage(G.ground,0,0,W,H);ctx.imageSmoothingEnabled=true;
   if(G.band){const bh=G.band.height,by=FY0+12-bh;ctx.fillStyle='#bcd6f6';ctx.fillRect(0,0,W,by+2);ctx.drawImage(G.band,0,by,W,bh)}
+  if(G.pond){const r=PMETA.pond;ctx.drawImage(IMG.props,r[0],r[1],r[2],r[3],G.pond.x-r[2]/2,G.pond.y-r[3]/2,r[2],r[3])}
   for(const p of G.piles)obj('pile',p.x,p.y+12,.85);
-  const list=[...G.units.map(u=>({y:u.y,f:()=>drawUnit(u)})),...G.walls.map(w=>({y:w.y,f:()=>w.sm?obj('snowman',w.x,w.y+8,1.05,.5+.5*w.hp/w.max):obj('wall',w.x,w.y+10,.95,.45+.55*Math.max(0,w.hp)/w.max)})),
+  const list=[...G.units.map(u=>({y:u.y,f:()=>drawUnit(u)})),...G.walls.map(w=>({y:w.y,f:()=>w.prop?drawProp(w):w.sm?obj('snowman',w.x,w.y+8,1.05,.5+.5*w.hp/w.max):obj('wall',w.x,w.y+10,.95,.45+.55*Math.max(0,w.hp)/w.max)})),
     ...(G.drops||[]).map(p=>({y:p.y,f:()=>drawDrop(p)})),
     {y:G.snowman.y,f:()=>obj('snowman',G.snowman.x,G.snowman.y+6,.85)},...G.crates.filter(c=>c.on).map(c=>({y:c.y,f:()=>obj('crate',c.x,c.y+8,.55)})),
     {y:FY0+30,f:()=>obj('flag',80,FY0+50,.6)},{y:FY0+30,f:()=>{ctx.save();ctx.translate(1200,0);ctx.scale(-1,1);obj('flag',0,FY0+50,.6);ctx.restore()}}];
@@ -679,6 +688,8 @@ function draw(){
     if(!ok){ctx.font='13px Jua, sans-serif';ctx.textAlign='center';ctx.fillStyle='#c4473a';ctx.fillText(m.coldT>0?'손이 시려요':m.ammo<=0?(TOUCH.on?'눈이 없어요! (뭉치기)':'눈이 없어요! (Space/우클릭)'):'',MOUSE.x,MOUSE.y-18)}}
   if(G.me&&!G.me.out&&!G.over&&!G.demo&&(!TOUCH.on||TOUCH.aiming)){ctx.strokeStyle='rgba(36,80,138,.8)';ctx.lineWidth=2;ctx.beginPath();ctx.arc(MOUSE.x,MOUSE.y,9,0,7);ctx.moveTo(MOUSE.x-14,MOUSE.y);ctx.lineTo(MOUSE.x+14,MOUSE.y);ctx.moveTo(MOUSE.x,MOUSE.y-14);ctx.lineTo(MOUSE.x,MOUSE.y+14);ctx.stroke()}
   if(G.paused){ctx.fillStyle='rgba(22,33,58,.6)';ctx.fillRect(0,0,W,H);ctx.fillStyle='#fff';ctx.font='48px Jua, sans-serif';ctx.fillText('잠깐 멈춤 (P)',W/2,H/2)}}
+function drawProp(w){const r=PMETA[w.prop];ctx.drawImage(IMG.props,r[0],r[1],r[2],r[3],w.x-r[2]/2,w.y+8-r[3],r[2],r[3])}
+function onPond(u){const P=G.pond;return P&&((u.x-P.x)/P.rx)**2+((u.y-P.y)/P.ry)**2<1}
 function drawDrop(p){const s=1-p.z/520;ctx.fillStyle='rgba(40,60,90,.22)';ctx.beginPath();ctx.ellipse(p.x,p.y,10+18*s,4+5*s,0,0,7);ctx.fill();
   const y=p.y-p.z;if(p.z>0){ctx.fillStyle='#ff6b57';ctx.beginPath();ctx.arc(p.x,y-46,26,Math.PI,0);ctx.fill();ctx.fillStyle='#fff';ctx.beginPath();ctx.arc(p.x,y-46,26,Math.PI*1.33,Math.PI*1.66);ctx.lineTo(p.x,y-46);ctx.fill();
     ctx.strokeStyle='#5a4a3a';ctx.lineWidth=1;ctx.beginPath();ctx.moveTo(p.x-25,y-46);ctx.lineTo(p.x-10,y-14);ctx.moveTo(p.x+25,y-46);ctx.lineTo(p.x+10,y-14);ctx.stroke()}
@@ -793,7 +804,7 @@ const SPEEDS=[['느리게',.7],['보통',.85],['빠르게',1]];const gspeed=()=>
 function loop(now){const dt=Math.min(.05,(now-last)/1000);last=now;if(G)update(dt*gspeed());draw();requestAnimationFrame(loop)}
 (async()=>{
   resize();
-  const names=[...ALL,'objects','rivals'];
+  const names=[...ALL,'objects','rivals','props'];
   try{const imgs=await Promise.all(names.map(n=>load(`assets/${n}.png`)));names.forEach((n,i)=>IMG[n]=imgs[i])}
   catch(e){document.querySelector('#lobby .box').insertAdjacentHTML('afterbegin',`<p style="color:#ff6b57">${e.message}</p>`);return}
   try{IMG.bg_dasan=await load('assets/bg_dasan.jpg')}catch(e){}
