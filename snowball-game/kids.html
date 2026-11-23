@@ -1,0 +1,433 @@
+<title>동네 꼬마 도감</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Jua&family=Noto+Sans+KR:wght@400;500;700&display=swap">
+<style>
+/* Layout: 놀이터 무대(3D) 가운데, 왼쪽 꼬마 명단, 오른쪽 프로필·장비 / 아래 아이템 도감·디자인 원칙 */
+:root{
+  --bg:#eaf1f6; --panel:#ffffff; --ink:#1c2935; --sub:#5a6b7b; --line:#d3dee7;
+  --accent:#d6432e; --cold:#2d6db0; --st1:#d6e5f0; --st2:#f6fafc; --chip:#eef3f7;
+  --ok:#2f9a5c; --no:#c9452f; --half:#d79a22;
+  --display:"Jua","Noto Sans KR",system-ui,sans-serif;
+  --body:"Noto Sans KR",system-ui,-apple-system,"Malgun Gothic",sans-serif;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --bg:#0e1721; --panel:#162230; --ink:#e4edf4; --sub:#93a6b7; --line:#26384a;
+  --accent:#ff6a51; --cold:#73a9e6; --st1:#1a2a3b; --st2:#2b4057; --chip:#1d2c3c;
+  --ok:#5cc489; --no:#ff7a62; --half:#f0bc4c; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#0e1721; --panel:#162230; --ink:#e4edf4; --sub:#93a6b7; --line:#26384a;
+  --accent:#ff6a51; --cold:#73a9e6; --st1:#1a2a3b; --st2:#2b4057; --chip:#1d2c3c;
+  --ok:#5cc489; --no:#ff7a62; --half:#f0bc4c; color-scheme:dark}
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--ink);font-family:var(--body);font-size:15px;line-height:1.55}
+.wrap{max-width:1280px;margin:0 auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-block:20px 48px;display:grid;gap:28px}
+h1,h2,h3{font-family:var(--display);font-weight:400;margin:0;text-wrap:balance}
+h1{font-size:clamp(28px,4vw,40px);letter-spacing:.01em}
+h2{font-size:26px}
+h3{font-size:19px}
+.lead{color:var(--sub);margin:6px 0 0;max-width:64ch}
+header{display:grid;gap:4px}
+.eyebrow{font-size:12px;letter-spacing:.12em;color:var(--cold);font-weight:700}
+
+.studio{display:grid;grid-template-columns:220px minmax(0,1fr) 340px;gap:16px;align-items:start}
+.list{display:grid;gap:6px}
+.kidbtn{display:flex;align-items:center;gap:10px;width:100%;text-align:left;padding:9px 12px;border-radius:12px;border:1px solid transparent;background:transparent;color:var(--ink);font:inherit;cursor:pointer}
+.kidbtn:hover{background:var(--panel)}
+.kidbtn[aria-pressed="true"]{background:var(--panel);border-color:var(--line)}
+.kidbtn:focus-visible,.opt:focus-visible,.btn:focus-visible,.card:focus-visible{outline:2px solid var(--cold);outline-offset:2px}
+.dot{width:14px;height:14px;border-radius:50%;flex:none;box-shadow:inset 0 0 0 2px #fff6}
+.kidbtn b{font-family:var(--display);font-weight:400;font-size:17px;display:block;line-height:1.2}
+.kidbtn small{color:var(--sub);font-size:12px}
+
+.stage{position:relative;border-radius:20px;overflow:hidden;height:560px;background:linear-gradient(180deg,var(--st1),var(--st2))}
+.stage canvas{display:block;width:100%;height:100%;touch-action:none}
+.stage .tag{position:absolute;left:16px;top:14px;display:grid;gap:2px;pointer-events:none}
+.stage .tag b{font-family:var(--display);font-weight:400;font-size:30px;line-height:1.1}
+.stage .tag span{color:var(--sub);font-size:13px}
+.stage .hint{position:absolute;right:14px;bottom:12px;font-size:12px;color:var(--sub);pointer-events:none}
+
+.side{display:grid;gap:14px}
+.panel{background:var(--panel);border:1px solid var(--line);border-radius:16px;padding:16px;display:grid;gap:12px;min-width:0}
+.quote{margin:0;color:var(--sub)}
+.chips{display:flex;flex-wrap:wrap;gap:6px}
+.chip{font-size:12px;padding:3px 9px;border-radius:99px;background:var(--chip);color:var(--ink);font-weight:500}
+.chip.warn{background:color-mix(in srgb,var(--accent) 16%,transparent);color:var(--accent)}
+.stats{display:grid;grid-template-columns:auto 1fr auto;gap:5px 10px;align-items:center;font-size:13px}
+.bar{height:8px;border-radius:9px;background:var(--chip);overflow:hidden}
+.bar i{display:block;height:100%;border-radius:9px;background:var(--cold)}
+.num{font-variant-numeric:tabular-nums;color:var(--sub)}
+.week{display:grid;grid-template-columns:repeat(7,1fr);gap:4px;text-align:center;font-size:12px}
+.week div{padding:5px 0;border-radius:8px;background:var(--chip)}
+.week .x{background:color-mix(in srgb,var(--no) 20%,transparent);color:var(--no);font-weight:700}
+.week .h{background:color-mix(in srgb,var(--half) 22%,transparent);color:var(--half);font-weight:700}
+.week .q{color:var(--sub)}
+.legend{font-size:12px;color:var(--sub)}
+
+.slot{display:grid;gap:6px}
+.slot>span{font-size:12px;color:var(--sub);font-weight:700;letter-spacing:.04em}
+.opts{display:flex;flex-wrap:wrap;gap:6px}
+.opt{font:inherit;font-size:13px;padding:5px 10px;border-radius:10px;border:1px solid var(--line);background:transparent;color:var(--ink);cursor:pointer}
+.opt[aria-pressed="true"]{background:var(--ink);color:var(--panel);border-color:var(--ink)}
+.row{display:flex;gap:8px;flex-wrap:wrap}
+.btn{font:inherit;font-weight:700;font-size:14px;padding:8px 14px;border-radius:10px;border:0;cursor:pointer;background:var(--accent);color:#fff}
+.btn.ghost{background:var(--chip);color:var(--ink)}
+.metrics{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.metric{background:var(--chip);border-radius:12px;padding:8px 10px}
+.metric b{display:block;font-family:var(--display);font-weight:400;font-size:22px;font-variant-numeric:tabular-nums}
+.metric span{font-size:11px;color:var(--sub)}
+.tip{font-size:14px;margin:0}
+.tip strong{color:var(--cold)}
+
+.catalog{display:grid;gap:14px}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:12px}
+.card{background:var(--panel);border:1px solid var(--line);border-radius:16px;padding:12px;display:grid;gap:4px;text-align:left;font:inherit;color:var(--ink);cursor:pointer}
+.card.static{cursor:default}
+.card img{width:100%;aspect-ratio:1;max-width:100%;border-radius:12px;background:linear-gradient(180deg,var(--st1),var(--st2))}
+.card b{font-family:var(--display);font-weight:400;font-size:18px}
+.card .eff{font-size:13px;color:var(--sub)}
+.card .price{font-size:12px;font-weight:700;color:var(--accent);font-variant-numeric:tabular-nums}
+.card[aria-pressed="true"]{border-color:var(--cold);box-shadow:0 0 0 1px var(--cold)}
+.grouphead{display:flex;align-items:baseline;gap:10px;flex-wrap:wrap}
+.grouphead small{color:var(--sub)}
+
+.guide{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:12px}
+.guide .panel p{margin:0;color:var(--sub);font-size:14px}
+.swatches{display:flex;flex-wrap:wrap;gap:8px}
+.sw{display:flex;align-items:center;gap:6px;font-size:12px}
+.sw i{width:22px;height:22px;border-radius:7px;display:block}
+.note{font-size:13px;color:var(--sub)}
+
+@media (max-width:1060px){
+  .studio{grid-template-columns:minmax(0,1fr) 340px}
+  .list{grid-column:1/-1;grid-row:1;display:flex;overflow-x:auto;padding-bottom:4px}
+  .kidbtn{width:auto;flex:none}
+}
+@media (max-width:760px){
+  .studio{grid-template-columns:minmax(0,1fr)}
+  .stage{height:400px}
+}
+</style>
+
+<div class="wrap">
+  <header>
+    <div class="eyebrow">눈싸움 동네 평정기 · 디자인 시안 v0.1</div>
+    <h1>동네 꼬마 도감</h1>
+    <p class="lead">같이 다닐 꼬마 10명과 장비를 3D로 그려 본 시안입니다. 왼쪽에서 아이를 고르고, 오른쪽에서 장갑·모자·겉옷·신발·목도리를 바꿔 입혀 보세요. 숫자와 가격은 모두 초안입니다.</p>
+  </header>
+
+  <section class="studio" aria-label="꼬마와 장비 미리보기">
+    <nav class="list" id="kidList" aria-label="꼬마 명단"></nav>
+    <div class="stage" id="stage">
+      <div class="tag"><b id="stName"></b><span id="stRole"></span></div>
+      <div class="hint">끌어서 돌려 보기</div>
+    </div>
+    <div class="side">
+      <div class="panel" id="profile"></div>
+      <div class="panel" id="gear"></div>
+    </div>
+  </section>
+
+  <section class="catalog" aria-label="아이템 도감">
+    <div class="grouphead"><h2>아이템 도감</h2><small>장비 카드를 누르면 지금 고른 아이에게 입혀집니다</small></div>
+    <div class="grid" id="itemGrid"></div>
+    <div class="grouphead"><h3>한 판 소모품</h3><small>대결 중 한 번 쓰고 없어지는 아이템</small></div>
+    <div class="grid" id="useGrid"></div>
+  </section>
+
+  <section class="catalog" aria-label="디자인 원칙">
+    <h2>디자인 원칙</h2>
+    <div class="guide">
+      <div class="panel"><h3>2.5등신 꼬마</h3><p>머리를 크게(키의 약 40%) 그려서 멀리서 봐도 표정이 보이게 합니다. 덩치(태민)와 막내(서아)는 키와 몸 폭만 바꿔 같은 틀로 만듭니다.</p></div>
+      <div class="panel"><h3>털실과 점토 느낌</h3><p>반짝이지 않는 부드러운 재질로 겨울옷 느낌을 냅니다. 방수 장갑과 얼음 눈덩이만 조금 반짝이게 해서 "다른 재질"임을 보여 줍니다.</p></div>
+      <div class="panel"><h3>아이마다 대표색 하나</h3><p>겉옷 색이 곧 그 아이의 색입니다. 눈밭에서 10명이 섞여도 누가 누군지 색으로 바로 구분됩니다.</p>
+        <div class="swatches" id="swatches"></div></div>
+      <div class="panel"><h3>장비는 눈에 보이게</h3><p>장갑을 끼면 손이 커지고, 롱패딩은 무릎까지 내려오고, 방울 비니는 방울이 달립니다. 사고 나면 모습이 바로 달라져야 모으는 재미가 생깁니다.</p></div>
+      <div class="panel"><h3>우리 팀 / 상대 팀</h3><p>상대 팀은 아이 색 대신 팔에 두른 띠와 모자 방울 색으로 구분하는 것을 제안합니다. 대표색은 그대로 두고 팀만 표시하는 방식입니다.</p></div>
+      <div class="panel"><h3>실제 3D 모델로 바꿀 때</h3><p>지금 시안은 코드로 만든 도형입니다. AI로 캐릭터를 만들 때는 <strong>옷을 입지 않은 기본 아이 몸</strong>과 <strong>장비를 따로</strong> 만들어야 갈아입히기가 됩니다. 옷이 붙어 있는 한 덩어리 모델은 장비 교체가 어렵습니다.</p></div>
+    </div>
+  </section>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js"></script>
+<script>
+const $=id=>document.getElementById(id);
+const SLOTS=[['glove','장갑'],['hat','모자'],['outer','겉옷'],['shoe','신발'],['scarf','목도리']];
+const ITEMS={
+ glove:[{id:'none',n:'맨손',e:'연속 3개 던지면 손 시림',p:0,th:3},
+        {id:'knit',n:'털장갑',e:'연속 4개 · 젖으면 효과 줄어듦',p:120,th:4},
+        {id:'water',n:'방수 장갑',e:'연속 5개',p:300,th:5},
+        {id:'ski',n:'스키 장갑',e:'연속 6개 · 손 시림 회복 빠름',p:600,th:6}],
+ hat:[{id:'none',n:'없음',e:'머리에 맞으면 더 많이 젖음',p:0},
+      {id:'beanie',n:'털모자',e:'머리에 맞아도 추가 피해 없음',p:100},
+      {id:'muff',n:'귀마개',e:'추위 저항 + · 손 시림 회복 조금 빠름',p:150},
+      {id:'pom',n:'방울 비니',e:'맞은 직후 잠깐 피해 줄어듦',p:250}],
+ outer:[{id:'jumper',n:'점퍼',e:'젖음 피해 −10%',p:0,wet:10},
+        {id:'long',n:'롱패딩',e:'젖음 피해 −30% · 이동 −10%',p:400,wet:30,spd:-10},
+        {id:'parka',n:'방수 파카',e:'젖음 피해 −20% · 젖음 회복 빠름',p:550,wet:20}],
+ shoe:[{id:'sneaker',n:'운동화',e:'기본 · 눈밭에서 미끄러짐',p:0},
+       {id:'fur',n:'털 장화',e:'미끄러지지 않음',p:150},
+       {id:'snow',n:'눈 신발',e:'깊은 눈에서도 속도 유지',p:300},
+       {id:'hike',n:'등산화',e:'언덕·구르기 빠름 · 무거움',p:350,spd:-5}],
+ scarf:[{id:'none',n:'없음',e:'',p:0},
+        {id:'scarf',n:'털목도리',e:'아웃 직전 한 번 버팀',p:200}]
+};
+const USES=[{id:'pack',n:'핫팩',e:'손 시림 게이지 바로 0'},{id:'cocoa',n:'핫초코',e:'젖음 게이지 회복'},
+  {id:'shovel',n:'눈삽',e:'20초 동안 눈 뭉치기 2배'},{id:'big',n:'큰 눈덩이',e:'굴려서 여러 명을 한꺼번에'},
+  {id:'ice',n:'얼음 눈덩이',e:'잘 안 부서지는 센 공 · 대장전 금지'}];
+const STATN=['힘','정확도','달리기','손재주','추위 저항','깡'];
+const DEF={glove:'none',hat:'none',outer:'jumper',shoe:'sneaker',scarf:'none'};
+const KIDS=[
+ {n:'강속구 도윤',role:'에이스 투수',c:'#d6432e',pants:'#2e3a55',hair:'spiky',hc:'#2a221f',skin:'#f0c6a3',s:1,
+  q:'승부욕 대장. 지면 한 판 더 하자고 조른다.',st:[9,6,6,4,5,6],wk:'xoxoooo',watch:'중',
+  tip:'<strong>힘 → 정확도</strong> 순서로 키웁니다. 손 시림이 가장 빨리 차는 아이라 장갑을 먼저 사 주세요.',rec:{glove:'ski'}},
+ {n:'손 빠른 하은',role:'눈 공급',c:'#efa233',pants:'#4a3b5c',hair:'pony',hc:'#3a2a21',skin:'#f3cdb0',s:.95,
+  q:'말없이 눈만 뭉친다. 뭉치는 손이 안 보일 정도.',st:[4,5,6,10,5,5],wk:'oxooooo',watch:'하',
+  tip:'<strong>손재주 → 달리기</strong>. 뒤에서 눈을 만들어 친구들에게 날라 줍니다. 털 장화로 미끄러지지 않게.',rec:{shoe:'fur',hat:'beanie'}},
+ {n:'날다람쥐 준호',role:'돌격',c:'#36a468',pants:'#2b3440',hair:'buzz',hc:'#1d1917',skin:'#e7b994',s:.97,
+  q:'가만히 있질 못한다. 제일 먼저 뛰어나가 제일 먼저 맞기도 한다.',st:[5,5,10,5,4,7],wk:'oooHooo',watch:'하',
+  tip:'<strong>달리기 → 깡</strong>. 옆으로 돌아 들어가 상대 투수를 먼저 노립니다. 눈 신발이 잘 맞습니다.',rec:{shoe:'snow'}},
+ {n:'덩치 태민',role:'방패',c:'#566db0',pants:'#33302c',hair:'short',hc:'#231b17',skin:'#edc29f',s:1.12,sx:1.22,
+  q:'덩치는 크지만 순하다. 친구 앞에 서서 대신 맞아 준다.',st:[7,4,3,5,10,8],wk:'ooooxoo',watch:'하',
+  tip:'<strong>추위 저항 → 깡</strong>. 롱패딩으로 느려져도 가장 오래 버티는 아이입니다.',rec:{outer:'long',scarf:'scarf'}},
+ {n:'저격수 지유',role:'원거리',c:'#8758cf',pants:'#2f2a3d',hair:'bob',hc:'#2a1e19',skin:'#f4d0b6',s:.98,glasses:1,
+  q:'새침하지만 한 번 조준하면 거의 안 놓친다.',st:[6,10,4,5,4,4],wk:'xooxooo',watch:'상',
+  tip:'<strong>정확도 → 힘</strong>. 엄마 감시가 심해 자주 못 나오니, 나오는 날을 잘 활용하세요.',rec:{hat:'muff',glove:'water'}},
+ {n:'꾀돌이 민재',role:'교란',c:'#2c9db1',pants:'#3a3a3a',hair:'bowl',hc:'#3a291e',skin:'#ebbf9c',s:.96,band:1,
+  q:'장난꾸러기. 미끄럼틀 밑에 숨었다가 툭 튀어나온다.',st:[4,6,8,6,4,6],wk:'ooxoooo',watch:'중',
+  tip:'<strong>달리기 → 정확도</strong>. 숨어서 상대 눈더미 쪽을 막습니다. 방울 비니가 어울립니다.',rec:{hat:'pom'}},
+ {n:'막내 서아',role:'응원',c:'#ee7aa0',pants:'#5a4660',hair:'twin',hc:'#3a2418',skin:'#f6d5bf',s:.82,
+  q:'언니 오빠들 응원 담당. 서아가 근처에 있으면 손이 덜 시리다.',st:[2,4,5,6,5,3],wk:'hhhhhoo',watch:'상',
+  tip:'<strong>추위 저항 → 손재주</strong>. 일찍 아웃되면 응원 효과가 사라지니 목도리를 챙겨 주세요.',rec:{scarf:'scarf',hat:'pom'}},
+ {n:'쌍둥이 형 시우',role:'콤보',c:'#2f5fa8',pants:'#2a2f3a',hair:'curly',hc:'#2b1f17',skin:'#eec4a1',s:1,
+  q:'동생이 맞으면 화가 나서 더 세진다.',st:[6,6,6,6,5,6],wk:'oxoxooo',watch:'중',
+  tip:'<strong>정확도 → 힘</strong>. 화·목은 둘 다 수영이라 대결 날을 피하세요. 같이 나가야 강합니다.',rec:{glove:'water'}},
+ {n:'쌍둥이 동생 시안',role:'콤보',c:'#38b8c9',pants:'#2a2f3a',hair:'curly',hc:'#2b1f17',skin:'#eec4a1',s:.97,
+  q:'형 뒤에 꼭 붙어 다닌다. 형이 던지면 같이 던진다.',st:[5,7,6,6,5,5],wk:'oxoxooo',watch:'중',
+  tip:'<strong>정확도 → 깡</strong>. 형과 같은 장비 등급을 맞추면 합동기가 안정적입니다.',rec:{glove:'water'}},
+ {n:'전학생 레오',role:'만능',c:'#7a8d3a',pants:'#3b3328',hair:'short',hc:'#b98236',skin:'#f6dccb',s:1.02,freckle:1,
+  q:'이번 겨울에 이사 온 전학생. 아직 잘 모르는 게 많다.',st:[6,6,6,6,6,6],wk:'???????',watch:'하',
+  tip:'<strong>그날 비는 역할</strong>의 능력을 올려 빈자리를 채웁니다. 스케줄을 아직 몰라 매일 깜짝 등장합니다.',rec:{}}
+];
+let cur=0;const gear=KIDS.map(()=>({...DEF}));
+
+/* ---------- 3D 도구 ---------- */
+const M=(c,o={})=>new THREE.MeshStandardMaterial(Object.assign({color:c,roughness:.88,metalness:0},o));
+const S=(r,a=22,b=16)=>new THREE.SphereGeometry(r,a,b);
+const C=(t,b,h,s=22)=>new THREE.CylinderGeometry(t,b,h,s);
+function mk(g,m,x=0,y=0,z=0){const o=new THREE.Mesh(g,m);o.position.set(x,y,z);o.castShadow=true;o.receiveShadow=true;return o}
+function grp(...a){const g=new THREE.Group();a.forEach(o=>g.add(o));return g}
+
+function buildGlove(id,skin){
+  const g=new THREE.Group();
+  if(id==='none'){g.add(mk(S(.08),M(skin)));return g}
+  const P={knit:['#d9402f','#f4ece2',.11,.88,0],water:['#24365e','#24365e',.115,.32,.05],ski:['#23252b','#f0b12f',.13,.6,0]}[id];
+  const m=M(P[0],{roughness:P[3],metalness:P[4]});
+  const palm=mk(S(P[2]),m,0,-.02,0);palm.scale.set(1,1.15,.85);g.add(palm);
+  g.add(mk(S(P[2]*.42),m,P[2]*.78,.02,.03));
+  const cuff=mk(C(P[2]*.85,P[2]*.95,P[2]*.7),M(P[1]),0,P[2]*.95,0);g.add(cuff);
+  if(id==='ski')g.add(mk(new THREE.BoxGeometry(P[2]*1.1,.025,P[2]*1.75),M('#f0b12f'),0,.0,0));
+  return g}
+
+function buildHat(id){
+  const g=new THREE.Group();if(id==='none')return g;
+  if(id==='beanie'||id==='pom'){
+    const col=id==='beanie'?'#3c6e9e':'#f2f0ea',rim=id==='beanie'?'#2f5a83':'#d6432e';
+    const dome=mk(new THREE.SphereGeometry(.44,26,16,0,Math.PI*2,0,Math.PI*.5),M(col),0,.06,0);dome.scale.set(1,1.08,1);g.add(dome);
+    const r=mk(new THREE.TorusGeometry(.425,.075,12,30),M(rim),0,.08,0);r.rotation.x=Math.PI/2;g.add(r);
+    if(id==='pom'){[.22,.34].forEach(y=>{const s=mk(new THREE.TorusGeometry(.44*Math.cos(Math.asin(Math.min(.98,y/.47))),.025,8,30),M('#d6432e'),0,.06+y,0);s.rotation.x=Math.PI/2;g.add(s)});
+      g.add(mk(S(.13),M('#d6432e'),0,.56,0))}
+  }else if(id==='muff'){
+    const band=mk(new THREE.TorusGeometry(.44,.035,10,30,Math.PI),M('#7b4fb0'),0,0,0);g.add(band);
+    [-1,1].forEach(s=>{const p=mk(S(.14),M('#f6eef7'),s*.43,0,0);p.scale.set(.75,1,1);g.add(p)})}
+  return g}
+
+function buildOuter(id,c){
+  const g=new THREE.Group(),m=M(c),dark=M(new THREE.Color(c).multiplyScalar(.72));
+  if(id==='jumper'){
+    g.add(mk(C(.27,.315,.56),m,0,.83,0));
+    g.add(mk(C(.318,.318,.07),dark,0,.56,0));
+    const col=mk(new THREE.TorusGeometry(.19,.055,10,24),dark,0,1.1,0);col.rotation.x=Math.PI/2;g.add(col);
+    g.add(mk(new THREE.BoxGeometry(.03,.5,.02),M('#e9e4da'),0,.84,.295));
+  }else if(id==='long'){
+    g.add(mk(C(.29,.37,.9),m,0,.68,0));
+    [.38,.6,.82,1.0].forEach(y=>{const r=.37-(y-.23)*.1;const t=mk(new THREE.TorusGeometry(r+.005,.018,8,30),dark,0,y,0);t.rotation.x=Math.PI/2;g.add(t)});
+    g.add(mk(C(.2,.25,.16),m,0,1.13,0));
+  }else{
+    g.add(mk(C(.28,.345,.7),m,0,.76,0));
+    g.add(mk(C(.35,.35,.06),M('#e9e1d2'),0,.42,0));
+    const hood=mk(S(.24),m,0,1.04,-.27);hood.scale.set(1.25,.85,.75);g.add(hood);
+    const fur=mk(new THREE.TorusGeometry(.2,.06,10,24),M('#ece3d3'),0,1.08,-.08);fur.rotation.x=Math.PI/2-.35;g.add(fur);
+    [-.12,.12].forEach(x=>g.add(mk(new THREE.BoxGeometry(.1,.08,.02),dark,x,.7,.3)));
+  }
+  return g}
+const sleeveR=id=>id==='long'?.105:.088;
+
+function buildShoe(id){
+  const g=new THREE.Group();
+  if(id==='sneaker'){const b=mk(S(.11),M('#f3f3f0'),0,.055,.03);b.scale.set(.85,.55,1.35);g.add(b);
+    const s=mk(S(.112),M('#d6432e'),0,.06,.0);s.scale.set(.86,.35,1.1);g.add(s)}
+  else if(id==='fur'||id==='snow'){
+    const col=id==='fur'?'#9a6b44':'#3d6fa5';
+    g.add(mk(C(.12,.13,.22),M(col),0,.15,0));
+    const f=mk(S(.12),M(col),0,.06,.05);f.scale.set(.95,.6,1.3);g.add(f);
+    const r=mk(new THREE.TorusGeometry(.12,.04,8,20),M('#f1ebe0'),0,.26,0);r.rotation.x=Math.PI/2;g.add(r);
+    if(id==='snow'){const pad=mk(C(.19,.19,.03,28),M('#59636e',{roughness:.5}),0,.015,.04);pad.scale.z=1.5;g.add(pad);
+      const fr=mk(new THREE.TorusGeometry(.19,.016,6,28),M('#c7ced6'),0,.02,.04);fr.rotation.x=Math.PI/2;fr.scale.y=1.5;g.add(fr)}}
+  else{const b=mk(S(.125),M('#7a5232'),0,.07,.04);b.scale.set(.95,.62,1.4);g.add(b);
+    g.add(mk(new THREE.BoxGeometry(.22,.04,.36),M('#2e2620'),0,.02,.04));
+    g.add(mk(C(.11,.12,.12),M('#7a5232'),0,.16,0));
+    [.06,.12].forEach(z=>g.add(mk(new THREE.BoxGeometry(.12,.015,.018),M('#f08a2b'),0,.13,z+.04)))}
+  return g}
+
+function buildScarf(){
+  const g=new THREE.Group(),m=M('#e1b23a');
+  const t=mk(new THREE.TorusGeometry(.2,.075,10,24),m,0,1.1,0);t.rotation.x=Math.PI/2;g.add(t);
+  const tail=mk(new THREE.BoxGeometry(.13,.36,.05),m,.12,.92,.27);tail.rotation.z=.12;g.add(tail);
+  [.84,.96].forEach(y=>{const b=mk(new THREE.BoxGeometry(.135,.03,.055),M('#d6432e'),.12-(1.1-y)*.012,y,.27);b.rotation.z=.12;g.add(b)});
+  return g}
+
+function buildHair(k){
+  const g=new THREE.Group(),m=M(k.hc);
+  const cap=(r,th,tilt)=>{const o=mk(new THREE.SphereGeometry(r,28,18,0,Math.PI*2,0,th),m);o.rotation.x=tilt;return o};
+  switch(k.hair){
+    case'buzz':g.add(cap(.412,1.12,-.22));break;
+    case'bob':{const o=cap(.44,1.85,-.58);o.scale.set(1.06,1,1.04);g.add(o);break}
+    case'bowl':g.add(cap(.43,1.5,-.12));break;
+    case'curly':g.add(cap(.42,1.2,-.3));
+      for(let i=0;i<26;i++){const th=Math.acos(1-Math.random()*.75),ph=Math.random()*Math.PI*2;
+        const v=new THREE.Vector3(Math.sin(th)*Math.cos(ph),Math.cos(th),Math.sin(th)*Math.sin(ph));
+        v.applyAxisAngle(new THREE.Vector3(1,0,0),-.35).multiplyScalar(.42);
+        if(v.z>.2&&v.y<.25)continue;g.add(mk(S(.1,12,10),m,v.x,v.y,v.z))}break;
+    default:g.add(cap(.425,1.28,-.3));
+  }
+  if(k.hair==='spiky')for(let i=0;i<8;i++){const a=i/8*Math.PI*2;const sp=mk(new THREE.ConeGeometry(.08,.2,8),m,Math.cos(a)*.22,.36,Math.sin(a)*.22-.05);
+    sp.lookAt(Math.cos(a)*.9,1.1,Math.sin(a)*.9-.2);sp.rotateX(Math.PI/2);g.add(sp)}
+  if(k.hair==='pony'){g.add(mk(S(.08),M('#e0503c'),0,.12,-.42));const t=mk(new THREE.ConeGeometry(.12,.42,12),m,0,-.1,-.5);t.rotation.x=Math.PI+.35;g.add(t)}
+  if(k.hair==='twin')[-1,1].forEach(s=>g.add(mk(S(.13),m,s*.31,.28,-.06)));
+  return g}
+
+function buildHead(k,hat){
+  const h=new THREE.Group(),skin=M(k.skin);
+  h.add(mk(S(.4,32,22),skin));
+  [-1,1].forEach(s=>{h.add(mk(S(.075),skin,s*.395,-.02,0));
+    h.add(mk(S(.047,14,10),M('#1d1a1a',{roughness:.4}),s*.14,.02,.37));
+    h.add(mk(S(.015,8,6),M('#ffffff'),s*.14+.015,.04,.41));
+    const ck=mk(S(.06,14,10),M('#f19a9a'),s*.24,-.09,.31);ck.scale.set(1,.6,.4);h.add(ck)});
+  const mouth=mk(new THREE.TorusGeometry(.05,.013,8,16,Math.PI),M('#7a2f2a'),0,-.11,.385);mouth.rotation.z=Math.PI;h.add(mouth);
+  h.add(mk(S(.03,10,8),M(new THREE.Color(k.skin).multiplyScalar(.9)),0,-.04,.4));
+  if(k.glasses){const gm=M('#2b2b33',{roughness:.4});[-1,1].forEach(s=>h.add(mk(new THREE.TorusGeometry(.085,.013,8,24),gm,s*.14,.02,.405)));
+    h.add(mk(new THREE.BoxGeometry(.1,.015,.015),gm,0,.03,.41))}
+  if(k.band){const b=mk(new THREE.BoxGeometry(.12,.045,.02),M('#e7b98a'),.22,.04,.33);b.rotation.set(0,.5,.5);h.add(b)}
+  if(k.freckle)[-1,1].forEach(s=>[[0,0],[.04,.02],[.03,-.03]].forEach(([dx,dy])=>h.add(mk(S(.009,6,4),M('#a86a3c'),s*(.2+dx),-.03+dy,.35))));
+  h.add(buildHair(k));
+  h.add(buildHat(hat));
+  return h}
+
+function buildKid(k,gr){
+  const root=new THREE.Group(),body=new THREE.Group();root.add(body);
+  const skin=k.skin,pm=M(k.pants);
+  [-1,1].forEach(s=>{body.add(mk(C(.1,.105,.44),pm,s*.12,.33,0));const sh=buildShoe(gr.shoe);sh.position.set(s*.12,0,.0);body.add(sh)});
+  body.add(buildOuter(gr.outer,k.c));
+  if(gr.scarf==='scarf')body.add(buildScarf());
+  const head=buildHead(k,gr.hat);head.position.y=1.43;body.add(head);
+  const arms=[];
+  [-1,1].forEach(s=>{const a=new THREE.Group();a.position.set(s*.33,1.0,0);const r=sleeveR(gr.outer);
+    a.add(mk(C(r,r*1.08,.4),M(k.c),0,-.2,0));
+    const gl=buildGlove(gr.glove,skin);gl.position.y=-.45;a.add(gl);
+    if(s>0){const ball=mk(S(.085,16,12),M('#fbfdff',{roughness:.95}),0,-.47,.1);a.add(ball)}
+    a.rotation.z=s*.22;body.add(a);arms.push(a)});
+  const sc=k.s;root.scale.set(sc*(k.sx||1),sc,sc);
+  root.userData={body,arms,head};
+  return root}
+
+/* ---------- 무대 ---------- */
+const stage=$('stage'),renderer=new THREE.WebGLRenderer({antialias:true,alpha:true});
+renderer.setPixelRatio(Math.min(2,devicePixelRatio));renderer.shadowMap.enabled=true;renderer.shadowMap.type=THREE.PCFSoftShadowMap;
+stage.prepend(renderer.domElement);
+const scene=new THREE.Scene(),cam=new THREE.PerspectiveCamera(34,1,.1,50);cam.position.set(1.2,1.55,5);
+const ctl=new THREE.OrbitControls(cam,renderer.domElement);ctl.target.set(0,.95,0);ctl.enablePan=false;ctl.enableDamping=true;
+ctl.minDistance=2.6;ctl.maxDistance=8;ctl.maxPolarAngle=Math.PI*.52;
+const reduce=matchMedia('(prefers-reduced-motion: reduce)').matches;ctl.autoRotate=!reduce;ctl.autoRotateSpeed=1.1;
+scene.add(new THREE.HemisphereLight('#eaf4ff','#9fb3c4',.75));
+const sun=new THREE.DirectionalLight('#fff1dc',.95);sun.position.set(3,5,3.5);sun.castShadow=true;sun.shadow.mapSize.set(1024,1024);
+Object.assign(sun.shadow.camera,{left:-3,right:3,top:3,bottom:-3});sun.shadow.bias=-.0005;scene.add(sun);
+const snowM=M('#fbfdff',{roughness:1});
+const ground=mk(C(2.3,2.4,.3,56),snowM,0,-.15,0);scene.add(ground);
+[[1.6,-.9,.45],[-1.7,-.5,.35],[-1.2,1.3,.28],[1.3,1.3,.22]].forEach(([x,z,r])=>{const m=mk(S(r),snowM,x,0,z);m.scale.y=.45;scene.add(m)});
+const man=grp(mk(S(.3),snowM,0,.28,0),mk(S(.21),snowM,0,.7,0),mk(S(.15),snowM,0,1.0,0),
+  mk(new THREE.ConeGeometry(.035,.16,10),M('#ee7b26'),0,1.0,.2),mk(S(.022),M('#222'),-.05,1.05,.13),mk(S(.022),M('#222'),.05,1.05,.13));
+man.children[3].rotation.x=Math.PI/2;man.position.set(-1.35,0,-1.05);man.rotation.y=.6;scene.add(man);
+const flakes=new THREE.BufferGeometry(),FN=260,fp=new Float32Array(FN*3);
+for(let i=0;i<FN;i++){fp[i*3]=(Math.random()-.5)*6;fp[i*3+1]=Math.random()*4;fp[i*3+2]=(Math.random()-.5)*6}
+flakes.setAttribute('position',new THREE.BufferAttribute(fp,3));
+scene.add(new THREE.Points(flakes,new THREE.PointsMaterial({color:'#ffffff',size:.04,transparent:true,opacity:.9})));
+let kid=null;
+function showKid(){if(kid)scene.remove(kid);kid=buildKid(KIDS[cur],gear[cur]);scene.add(kid)}
+function fit(){const w=stage.clientWidth,h=stage.clientHeight;renderer.setSize(w,h,false);cam.aspect=w/h;cam.updateProjectionMatrix()}
+new ResizeObserver(fit).observe(stage);fit();
+const clock=new THREE.Clock();
+renderer.setAnimationLoop(()=>{const t=clock.getElapsedTime();
+  if(kid&&!reduce){const u=kid.userData;u.body.position.y=Math.abs(Math.sin(t*2.2))*.03;
+    u.arms[1].rotation.x=-2.35+Math.sin(t*1.6)*.28;u.arms[0].rotation.x=Math.sin(t*2.2)*.15;u.head.rotation.z=Math.sin(t*1.1)*.05}
+  if(!reduce){const p=flakes.attributes.position.array;for(let i=0;i<FN;i++){p[i*3+1]-=.006;p[i*3]+=Math.sin(t+i)*.0012;if(p[i*3+1]<0)p[i*3+1]=4}flakes.attributes.position.needsUpdate=true}
+  ctl.update();renderer.render(scene,cam)});
+
+/* ---------- 아이템 그림 (작은 렌더러로 찍기) ---------- */
+const tr=new THREE.WebGLRenderer({antialias:true,alpha:true,preserveDrawingBuffer:true});tr.setSize(200,200);
+const ts=new THREE.Scene();ts.add(new THREE.HemisphereLight('#f2f8ff','#9fb0c0',.85));const tl=new THREE.DirectionalLight('#fff3e2',.8);tl.position.set(2,3,3);ts.add(tl);
+const tc=new THREE.PerspectiveCamera(30,1,.01,50);
+function snap(obj){ts.add(obj);const b=new THREE.Box3().setFromObject(obj),c=b.getCenter(new THREE.Vector3()),r=b.getSize(new THREE.Vector3()).length()/2;
+  tc.position.set(c.x+r*1.6,c.y+r*1.2,c.z+r*2.9);tc.lookAt(c);tr.render(ts,tc);const u=tr.domElement.toDataURL();ts.remove(obj);return u}
+function previewOf(slot,id){
+  if(slot==='glove'){const g=buildGlove(id,'#f0c6a3');g.rotation.set(.3,-.5,0);return g}
+  if(slot==='hat'){const g=buildHat(id);if(id==='none')g.add(mk(S(.4),M('#f0c6a3')));return g}
+  if(slot==='outer'){const g=buildOuter(id,'#566db0'),r=sleeveR(id);[-1,1].forEach(s=>{const sl=mk(C(r,r*1.08,.42),M('#566db0'),s*.36,.84,0);sl.rotation.z=s*.22;g.add(sl)});g.rotation.y=-.5;return g}
+  if(slot==='shoe'){const g=grp(buildShoe(id),buildShoe(id));g.children[0].position.x=-.15;g.children[1].position.x=.15;g.rotation.y=-.6;return g}
+  if(slot==='scarf'){const g=buildScarf();g.rotation.y=-.3;return g}
+}
+function useOf(id){
+  if(id==='pack')return grp(mk(new THREE.BoxGeometry(.5,.66,.08),M('#ef8a3b')),mk(new THREE.BoxGeometry(.3,.2,.01),M('#fff6ea'),0,.05,.045));
+  if(id==='cocoa'){const g=grp(mk(C(.22,.18,.4),M('#f6f2ec')),mk(C(.2,.2,.02),M('#6b3d24'),0,.19,0),mk(new THREE.BoxGeometry(.07,.05,.07),M('#ffffff'),.05,.22,.03),mk(new THREE.BoxGeometry(.06,.05,.06),M('#fde6ec'),-.06,.22,-.02));
+    const hd=mk(new THREE.TorusGeometry(.1,.03,8,16),M('#f6f2ec'),.24,0,0);g.add(hd);return g}
+  if(id==='shovel'){const g=grp(mk(new THREE.BoxGeometry(.42,.04,.46),M('#d6432e',{roughness:.5}),0,0,0),mk(C(.03,.03,.9),M('#b8854f'),0,.04,-.66),mk(new THREE.BoxGeometry(.2,.05,.05),M('#2b2b2b'),0,.04,-1.1));g.children[1].rotation.x=Math.PI/2;g.rotation.set(.5,.7,0);return g}
+  if(id==='big'){const g=grp(mk(S(.42),snowM));[[.3,.2,.2],[-.25,.25,.25],[.1,-.1,.38]].forEach(([x,y,z])=>g.add(mk(S(.1),snowM,x,y,z)));return g}
+  return mk(new THREE.IcosahedronGeometry(.36,1),M('#bfe3f5',{roughness:.15,metalness:.1,transparent:true,opacity:.92}));
+}
+
+/* ---------- 화면 ---------- */
+const item=(slot,id)=>ITEMS[slot].find(i=>i.id===id);
+function renderList(){$('kidList').innerHTML=KIDS.map((k,i)=>`<button class="kidbtn" id="kid-${i}" aria-pressed="${i===cur}" data-i="${i}"><span class="dot" style="background:${k.c}"></span><span><b>${k.n}</b><small>${k.role}</small></span></button>`).join('');
+  $('kidList').querySelectorAll('.kidbtn').forEach(b=>b.onclick=()=>{cur=+b.dataset.i;refresh()})}
+function renderProfile(){const k=KIDS[cur],days='월화수목금토일';
+  const wk=[...k.wk].map((c,i)=>{const cl={x:'x',h:'h',H:'h','?':'q'}[c]||'';return `<div class="${cl}">${days[i]}<br>${c==='x'?'✕':c==='?'?'?':(c==='h'||c==='H')?'△':'○'}</div>`}).join('');
+  $('profile').innerHTML=`<div class="chips"><span class="chip">${k.role}</span><span class="chip ${k.watch==='상'?'warn':''}">엄마 감시 ${k.watch}</span></div>
+  <p class="quote">${k.q}</p>
+  <div class="stats">${k.st.map((v,i)=>`<span>${STATN[i]}</span><div class="bar"><i style="width:${v*10}%"></i></div><span class="num">${v}</span>`).join('')}</div>
+  <div><div class="week">${wk}</div><div class="legend">○ 나옴 · △ 일부 시간만 · ✕ 학원·과외 · ? 모름</div></div>
+  <p class="tip">키우기: ${k.tip}</p>`}
+function renderGear(){const g=gear[cur];
+  const th=item('glove',g.glove).th,wet=item('outer',g.outer).wet,spd=(item('outer',g.outer).spd||0)+(item('shoe',g.shoe).spd||0);
+  const cost=SLOTS.reduce((a,[s])=>a+item(s,g[s]).p,0);
+  $('gear').innerHTML=`<h3>장비 입히기</h3>
+  ${SLOTS.map(([s,l])=>`<div class="slot"><span>${l}</span><div class="opts">${ITEMS[s].map(it=>`<button class="opt" id="opt-${s}-${it.id}" aria-pressed="${g[s]===it.id}" data-s="${s}" data-id="${it.id}">${it.n}</button>`).join('')}</div></div>`).join('')}
+  <div class="metrics"><div class="metric"><b>${th}개</b><span>연속 던지기</span></div><div class="metric"><b>−${wet}%</b><span>젖음 피해</span></div><div class="metric"><b>${spd?spd+'%':'기본'}</b><span>이동 속도</span></div></div>
+  <div class="note">장비값 합계: 딱지 ${cost.toLocaleString()}장</div>
+  <div class="row"><button class="btn" id="bRec">추천 장비 입히기</button><button class="btn ghost" id="bBase">기본 차림</button></div>`;
+  $('gear').querySelectorAll('.opt').forEach(b=>b.onclick=()=>{gear[cur][b.dataset.s]=b.dataset.id;refresh(true)});
+  $('bRec').onclick=()=>{gear[cur]={...DEF,...KIDS[cur].rec};refresh(true)};
+  $('bBase').onclick=()=>{gear[cur]={...DEF};refresh(true)}}
+let thumbs={};
+function renderCatalog(){const g=gear[cur];
+  $('itemGrid').innerHTML=SLOTS.flatMap(([s,l])=>ITEMS[s].filter(it=>it.id!=='none').map(it=>`<button class="card" id="card-${s}-${it.id}" data-s="${s}" data-id="${it.id}" aria-pressed="${g[s]===it.id}">
+   <img alt="${it.n}" src="${thumbs[s+it.id]}"><span class="chip" style="justify-self:start">${l}</span><b>${it.n}</b><span class="eff">${it.e}</span><span class="price">${it.p?'딱지 '+it.p+'장':'처음부터 가진 것'}</span></button>`)).join('');
+  $('itemGrid').querySelectorAll('.card').forEach(b=>b.onclick=()=>{gear[cur][b.dataset.s]=b.dataset.id;refresh(true);stage.scrollIntoView({behavior:reduce?'auto':'smooth',block:'center'})})}
+function refresh(keep){renderList();renderProfile();renderGear();renderCatalog();$('stName').textContent=KIDS[cur].n;$('stRole').textContent=KIDS[cur].role;showKid()}
+
+SLOTS.forEach(([s])=>ITEMS[s].forEach(it=>{if(it.id!=='none')thumbs[s+it.id]=snap(previewOf(s,it.id))}));
+$('useGrid').innerHTML=USES.map(u=>`<div class="card static"><img alt="${u.n}" src="${snap(useOf(u.id))}"><span class="chip" style="justify-self:start">소모품</span><b>${u.n}</b><span class="eff">${u.e}</span></div>`).join('');
+$('swatches').innerHTML=KIDS.map(k=>`<span class="sw"><i style="background:${k.c}"></i>${k.n.split(' ').pop()}</span>`).join('');
+tr.dispose();
+refresh();
+</script>
