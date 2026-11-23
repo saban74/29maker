@@ -328,15 +328,45 @@ function audioInit(){if(SND.ac){if(SND.ac.state==='suspended')SND.ac.resume();re
   const AC=window.AudioContext||window.webkitAudioContext;if(!AC)return;const ac=SND.ac=new AC();
   SND.master=ac.createGain();SND.master.gain.value=sndOn()?1:0;SND.master.connect(ac.destination);
   SND.sfx=ac.createGain();SND.sfx.gain.value=.55;SND.sfx.connect(SND.master);SND.mus=ac.createGain();SND.mus.gain.value=.16;SND.mus.connect(SND.master);
+  SND.bgm=ac.createGain();SND.bgm.gain.value=.34;SND.bgm.connect(SND.master);SND.amb=ac.createGain();SND.amb.gain.value=.22;SND.amb.connect(SND.master);SND.voice=ac.createGain();SND.voice.gain.value=.5;SND.voice.connect(SND.master);
+  loadPack();
   const b=ac.createBuffer(1,ac.sampleRate,ac.sampleRate),d=b.getChannelData(0);for(let i=0;i<d.length;i++)d[i]=Math.random()*2-1;SND.noise=b;
-  if(SND.want)music(SND.want,true)}
+  if(SND.want)music(SND.want,true);if(SND.ambWant)ambience(SND.ambWant)}
 addEventListener('pointerdown',audioInit,{capture:true});addEventListener('keydown',audioInit,{capture:true});
 function tone(f,t0,dur,type='square',vol=.3,f2=null,dest=SND.sfx){const ac=SND.ac,o=ac.createOscillator(),g=ac.createGain();o.type=type;o.frequency.setValueAtTime(f,t0);
   if(f2)o.frequency.exponentialRampToValueAtTime(f2,t0+dur);g.gain.setValueAtTime(vol,t0);g.gain.exponentialRampToValueAtTime(.001,t0+dur);o.connect(g);g.connect(dest);o.start(t0);o.stop(t0+dur+.02)}
 function noise(t0,dur,vol=.3,ftype='bandpass',f=1200,f2=null,q=1){const ac=SND.ac,n=ac.createBufferSource(),fl=ac.createBiquadFilter(),g=ac.createGain();n.buffer=SND.noise;
   fl.type=ftype;fl.frequency.setValueAtTime(f,t0);if(f2)fl.frequency.exponentialRampToValueAtTime(f2,t0+dur);fl.Q.value=q;g.gain.setValueAtTime(vol,t0);g.gain.exponentialRampToValueAtTime(.001,t0+dur);
   n.connect(fl);fl.connect(g);g.connect(SND.sfx);n.start(t0,Math.random()*.5);n.stop(t0+dur+.02)}
-function sfx(name,vol=1){if(!SND.ac||!sndOn())return;const now=SND.ac.currentTime;if(SND.last[name]&&now-SND.last[name]<.045)return;SND.last[name]=now;const t=now+.005,v=vol;
+/* 사운드팩 (assets/audio/*.mp3) */
+const PACK=['bgm_dasan_afterschool','bgm_byeollae_bunny','bgm_hopyeong_chase','bgm_jinjeop_fort','bgm_deokso_river','bgm_hwado_boss',
+  'amb_calm_wind','amb_snowfall','amb_park_wind','amb_market_distant','amb_ice_valley',
+  'snow_gather','snow_throw','snow_hit','snow_miss','snow_wall_build','snow_wall_break','snow_step_01','snow_step_02','snow_slide','cold_hands','snow_reload',
+  'item_pickup','item_hotpack','item_hotcocoa','crate_break','ice_skid','ice_crack','shield_block','snowball_big','round_start','round_win','round_lose',
+  'button_hover','button_confirm','team_switch','clock_warning','home_call',
+  'voice_jihun_cheer','voice_sumin_support','voice_minjae_ready','voice_doyun_charge','voice_seoyeon_tease','voice_ouch','voice_cold','voice_victory'];
+const BUF={},LOOPPT={};
+function loadPack(){for(const id of PACK)fetch(`assets/audio/${id}.mp3`).then(r=>{if(!r.ok)throw 0;return r.arrayBuffer()}).then(a=>SND.ac.decodeAudioData(a)).then(b=>{BUF[id]=b;
+  if(/^(bgm|amb)_/.test(id)){const d=b.getChannelData(0);let i=0,j=d.length-1;while(i<d.length&&Math.abs(d[i])<.002)i++;while(j>i&&Math.abs(d[j])<.002)j--;LOOPPT[id]=[i/b.sampleRate,(j+1)/b.sampleRate]}
+  if(id===SND.want||(SND.want&&SND.want===MUSICMAP[SND.want]))music(SND.want,true);if(id===SND.ambWant)ambience(id,true)}).catch(()=>{if(/^bgm_/.test(id)&&!SND.packFail){SND.packFail=true;if(SND.want)music(SND.want,true)}})}
+function play(id,vol=1,bus){if(!SND.ac||!sndOn()||!BUF[id])return false;const now=SND.ac.currentTime;if(SND.last['f'+id]&&now-SND.last['f'+id]<.06)return true;SND.last['f'+id]=now;
+  const s=SND.ac.createBufferSource(),g=SND.ac.createGain();s.buffer=BUF[id];g.gain.value=vol;s.connect(g);g.connect(bus||(id.startsWith('voice')?SND.voice:SND.sfx));s.start();return true}
+function loopBuf(id,bus,slot,force){const ac=SND.ac,cur=SND[slot];if(cur&&cur.id===id&&!force)return true;if(!BUF[id])return false;
+  if(cur){cur.g.gain.setTargetAtTime(0,ac.currentTime,.25);cur.s.stop(ac.currentTime+1.2)}
+  const s=ac.createBufferSource(),g=ac.createGain();s.buffer=BUF[id];s.loop=true;const L=LOOPPT[id];if(L){s.loopStart=L[0];s.loopEnd=L[1]}
+  g.gain.setValueAtTime(0,ac.currentTime);g.gain.linearRampToValueAtTime(1,ac.currentTime+.6);s.connect(g);g.connect(bus);s.start(0,L?L[0]:0);SND[slot]={id,s,g};return true}
+function stopLoop(slot){const cur=SND[slot];if(!cur||!SND.ac)return;cur.g.gain.setTargetAtTime(0,SND.ac.currentTime,.2);cur.s.stop(SND.ac.currentTime+1);SND[slot]=null}
+function ambience(id,force){SND.ambWant=id;if(!SND.ac)return;if(!id){stopLoop('ambS');return}loopBuf(id,SND.amb,'ambS',force)}
+const VOICE={jihun:'voice_jihun_cheer',sumin:'voice_sumin_support',minjae:'voice_minjae_ready',doyun:'voice_doyun_charge',seoyeon:'voice_seoyeon_tease',
+  harin:'voice_sumin_support',taeho:'voice_minjae_ready',junho:'voice_doyun_charge',yerin:'voice_seoyeon_tease',kangmin:'voice_jihun_cheer'};
+const FILEMAP={throw:['snow_throw'],hit:['snow_hit'],hitme:['snow_hit','voice_ouch'],wall:['snow_miss'],miss:['snow_miss'],break:['snow_wall_break'],gather:['snow_gather'],
+  full:['snow_reload'],crate:['snow_reload','item_pickup'],cold:['cold_hands','voice_cold'],dodge:['snow_slide'],pack:['item_hotpack'],cocoa:['item_hotcocoa'],buildwall:['snow_wall_build'],
+  specialfoe:['snowball_big'],pickup:['item_pickup'],win:['round_win','voice_victory'],lose:['round_lose'],click:['button_confirm'],start:['round_start'],
+  swap:['team_switch'],clock:['clock_warning'],home:['home_call'],skid:['ice_skid'],step1:['snow_step_01'],step2:['snow_step_02'],block:['shield_block']};
+function sfx(name,vol=1){if(!SND.ac||!sndOn())return;
+  const F=FILEMAP[name];if(F&&BUF[F[0]]){const sv=/^step|gather|miss/.test(name)?.45:1;F.forEach((id,i)=>{if(i===0||vol>.8)play(id,vol*sv)});return}
+  if(name==='special'&&BUF.snowball_big){play('snowball_big',vol);return}
+  const now=SND.ac.currentTime;if(SND.last[name]&&now-SND.last[name]<.045)return;SND.last[name]=now;const t=now+.005,v=vol;
   switch(name){
     case'throw':noise(t,.14,.22*v,'bandpass',2600,700,1.2);break;
     case'hit':noise(t,.12,.45*v,'lowpass',1800,300);tone(220,t,.12,'triangle',.3*v,70);break;
@@ -368,7 +398,9 @@ const SONGS={
     bass:[48,48,55,55,53,53,55,55,48,48,55,55,53,53,55,55],drum:'k.h.s.h.k.h.s.hh'},
   battle:{bpm:138,mel:[76,76,0,79,0,76,74,72,74,0,74,76,79,0,76,0, 81,0,79,76,79,0,76,74,72,74,76,0,72,0,0,0],
     bass:[45,45,57,45,43,43,55,43,41,41,53,41,43,43,55,47],drum:'k.hsk.hsk.hsk.ss'}};
-function music(name,force){SND.want=name;if(!SND.ac)return;if(SND.song===name&&!force)return;SND.song=name;SND.step=0;SND.next=SND.ac.currentTime+.1;
+const MUSICMAP={};
+function music(name,force){SND.want=name;if(!SND.ac)return;if(PACK.includes(name)&&!BUF[name]&&SND.packFail)name=/dasan|deokso/.test(name)?'menu':'battle';if(BUF[name]||PACK.includes(name)){if(BUF[name]){SND.song=null;loopBuf(name,SND.bgm,'bgmS',force)}return}
+  stopLoop('bgmS');if(SND.song===name&&!force)return;SND.song=name;SND.step=0;SND.next=SND.ac.currentTime+.1;
   if(!SND.timer)SND.timer=setInterval(schedule,50)}
 function schedule(){const ac=SND.ac;if(!ac||!SND.song)return;const S=SONGS[SND.song],dt=60/S.bpm/2;
   while(SND.next<ac.currentTime+.2){const i=SND.step,t=SND.next;
@@ -378,8 +410,8 @@ function schedule(){const ac=SND.ac;if(!ac||!SND.song)return;const S=SONGS[SND.s
         f.type=d==='k'?'lowpass':'highpass';f.frequency.value=d==='k'?180:d==='s'?1800:7000;g.gain.setValueAtTime(d==='k'?.9:d==='s'?.35:.18,t);g.gain.exponentialRampToValueAtTime(.001,t+(d==='h'?.04:.12));
         n.connect(f);f.connect(g);g.connect(SND.mus);n.start(t,Math.random()*.5);n.stop(t+.15);if(d==='k')tone(110,t,.1,'sine',.6,45,SND.mus)}}
     SND.step++;SND.next+=dt}}
-function musicStop(){SND.song=null;SND.want=null}
-function setSound(on){SAVE.sound=on;save();if(SND.master)SND.master.gain.value=on?1:0;document.getElementById('bSnd').textContent=on?'🔊':'🔇'}
+function musicStop(){SND.song=null;SND.want=null;stopLoop('bgmS')}
+function setSound(on){SAVE.sound=on;save();if(on){if(SND.want)music(SND.want,true);if(SND.ambWant)ambience(SND.ambWant,true)}if(SND.master)SND.master.gain.value=on?1:0;document.getElementById('bSnd').textContent=on?'🔊':'🔇'}
 const near=u=>!G||!G.me?.5:Math.max(.25,1-dist(u,G.me)/900);
 
 /* ---------- 유틸 ---------- */
@@ -466,14 +498,14 @@ function release(u){const p=u.pend;u.pend=null;if(!p)return;u.ammo--;if(!G.demo)
   if(u.streak>=u.glove.lim){u.coldT=u.glove.fast?2:3;u.streak=0;if(u===G.me)sfx('cold');bubble(u,'앗 차가워!','#9fd4ff')}}
 function tryDodge(u,mx,my){if(u.out||u.dodgeCd>0||u.dodgeT>0)return;if(u===G.me)sfx('dodge');let d=Math.hypot(mx,my);if(!d){mx=u.flip?-1:1;my=0;d=1}
   u.gathering=false;u.dodgeT=.32;u.dodgeCd=u.fx.gale>0?.15:(u.k.dcd||1.3);u.dvx=mx/d;u.dvy=my/d;u.flip=mx<0}
-function useItem(u,it){if(!u.items[it])return;u.items[it]--;sfx('item');
+function useItem(u,it){if(!u.items[it])return;u.items[it]--;sfx(BUF.item_hotpack?it:'item');
   if(it==='pack'){u.coldT=0;u.streak=0;bubble(u,'핫팩! 손이 따뜻해','#ffb14a')}
   else{u.wet=Math.max(0,u.wet-2);bubble(u,'핫초코 꿀꺽','#ffb14a')}}
 function buildWall(u,tx,ty){if(!u.k.wall||u.wallCd>0||u.ammo<3||u.out)return false;const dx=tx-u.x,dy=ty-u.y,d=Math.hypot(dx,dy)||1;
   const w={x:clamp(u.x+dx/d*48,FX0+40,FX1-40),y:clamp(u.y+dy/d*48+6,FY0+20,FY1-10),hp:4,max:4};
   if(G.walls.some(o=>Math.abs(o.x-w.x)<70&&Math.abs(o.y-w.y)<34))return false;
   G.walls.push(w);u.ammo-=3;u.wallCd=7;if(!G.demo)sfx('buildwall',near(u));poof(w.x,w.y-10,10);bubble(u,'눈벽 완성!','#e8f3ff');return true}
-function switchKid(){const team=alive(0);if(!team.length)return;const i=team.indexOf(G.me);G.me=team[(i+1)%team.length];bubble(G.me,'내 차례!','#ffcf4a')}
+function switchKid(){const team=alive(0);if(!team.length)return;sfx('swap');const i=team.indexOf(G.me);G.me=team[(i+1)%team.length];bubble(G.me,'내 차례!','#ffcf4a')}
 function moveVec(){let x=TOUCH.jx,y=TOUCH.jy;if(KEY.KeyA||KEY.ArrowLeft)x--;if(KEY.KeyD||KEY.ArrowRight)x++;if(KEY.KeyW||KEY.ArrowUp)y--;if(KEY.KeyS||KEY.ArrowDown)y++;return{x,y}}
 function onPile(u){return G.piles.some(p=>Math.abs(p.x-u.x)<40&&Math.abs(p.y-u.y)<26)}
 
@@ -494,7 +526,7 @@ const SPECIAL={jihun:['슈퍼 스노볼','거대한 눈덩이 한 방'],sumin:['
   seoyeon:['질풍','5초 동안 빠르고 구르기 무제한'],junho:['철벽','6초 동안 피해 70% 감소'],yerin:['손난로 파티','팀 전원 7초 동안 손 안 시림'],kangmin:['작전 지시','팀 전원 8초 동안 빨리 던지고 뜀']};
 function spGain(u,v){if(!u.out&&!G.demo)u.sp=Math.min(100,u.sp+v)}
 function banner(text,sub,col){G.banner={text,sub,col,t:0}}
-function doSpecial(u,tx,ty){if(!u||u.out||u.sp<100||G.over)return false;u.sp=0;sfx(u.team?'specialfoe':'special');if(u.team===0&&G.ms)G.ms.specials++;const S=SPECIAL[u.id],mates=alive(u.team);
+function doSpecial(u,tx,ty){if(!u||u.out||u.sp<100||G.over)return false;u.sp=0;sfx(u.team?'specialfoe':'special');if(!u.team&&VOICE[u.id])play(VOICE[u.id],.9);if(u.team===0&&G.ms)G.ms.specials++;const S=SPECIAL[u.id],mates=alive(u.team);
   banner(`${u.k.n} · ${S[0]}!`,S[1],u.team?'#ff8f7a':'#ffcf4a');poof(u.x,u.y-40,18);
   const dx=tx-u.x,dy=ty-u.y,d=Math.hypot(dx,dy)||1;
   switch(u.id){
@@ -575,7 +607,7 @@ function ai(u,dt){
 /* ---------- 업데이트 ---------- */
 function update(dt){
   if(G.over||G.paused)return;
-  G.t-=dt/gspeed();
+  {const pt=G.t;G.t-=dt/gspeed();if(!G.demo&&pt>10&&G.t<=10)sfx('clock')}
   if(!G.demo)weatherTick(dt);
   for(const u of G.units){u.bcd=1;u.bspd=1;u.bdef=1;u.bdmg=1;const F=u.fx;for(const k in F)F[k]=Math.max(0,F[k]-dt);
     if(F.order>0){u.bcd*=.6;u.bspd*=1.2}if(F.guard>0)u.bdef*=.3;if(F.gale>0)u.bspd*=1.6;if(F.sled>0)u.bspd*=1.8;if(F.dash>0)u.bspd*=2.4;
@@ -595,14 +627,14 @@ function update(dt){
       if(TOUCH.auto&&canThrow(u))autoThrow(u);
       if(u.throwT<=0&&!u.gathering){if(TOUCH.on&&!TOUCH.aiming){if(Math.abs(mv.x)>.1)u.flip=mv.x<0}else u.flip=MOUSE.x<u.x}}
     else{const r=ai(u,dt);if(r)mv={x:r.mx,y:r.my}}
-    if(u.gathering&&u.ammo<u.maxAmmo&&u.hitT<=0){mv={x:0,y:0};if(u===G.me&&Math.random()<dt*6)sfx('gather');u.gT+=dt*(u.k.gather||1)*(onPile(u)?3:1)*(G.wx&&G.wx.type==='heavy'?2:1);if(u.gT>=.9){u.gT-=.9;u.ammo++;if(u===G.me)sfx('ammo');if(u.ammo>=u.maxAmmo)u.gathering=false}}
+    if(u.gathering&&u.ammo<u.maxAmmo&&u.hitT<=0){mv={x:0,y:0};if(u===G.me&&Math.random()<dt*6)sfx('gather');u.gT+=dt*(u.k.gather||1)*(onPile(u)?3:1)*(G.wx&&G.wx.type==='heavy'?2:1);if(u.gT>=.9){u.gT-=.9;u.ammo++;if(u===G.me&&!BUF.snow_reload)sfx('ammo');if(u.ammo>=u.maxAmmo){if(u===G.me)sfx('full')}if(u.ammo>=u.maxAmmo)u.gathering=false}}
     else u.gT=Math.min(u.gT,.5);
     let sp=BASESPD*u.k.spd*u.bspd*(u.slowT>0?.6:1)*(u.throwT>0?.45:1)*(u.hitT>0?.3:1);
     if(u.dodgeT>0){u.dodgeT-=dt;u.vx=u.dvx*BASESPD*3;u.vy=u.dvy*BASESPD*3}
     else{const d=Math.hypot(mv.x,mv.y);let tx=0,ty=0;if(d>0&&!u.gathering){tx=mv.x/d*sp;ty=mv.y/d*sp}
       if((G.wx&&G.wx.type==='ice')||onIce(u)){const k=Math.min(1,dt*2.2);u.vx+=(tx-u.vx)*k;u.vy+=(ty-u.vy)*k}else{u.vx=tx;u.vy=ty}}
     u.x+=u.vx*dt;u.y+=u.vy*dt;pushOut(u);
-    u.fp=(u.fp||0)+Math.hypot(u.vx,u.vy)*dt;if(u.fp>15){u.fp=0;u.fs=!u.fs;const nx=-u.vy,ny=u.vx,nl=Math.hypot(nx,ny)||1;
+    u.fp=(u.fp||0)+Math.hypot(u.vx,u.vy)*dt;if(u.fp>15){u.fp=0;u.fs=!u.fs;if(u===G.me&&!G.demo){if(onIce(u)&&Math.hypot(u.vx,u.vy)>60)sfx('skid',.6);else if(Math.random()<.5)sfx(u.fs?'step1':'step2',.6)}const nx=-u.vy,ny=u.vx,nl=Math.hypot(nx,ny)||1;
       G.gx.fillStyle=u.dodgeT>0?'rgba(170,192,222,.7)':'rgba(176,197,224,.75)';G.gx.fillRect(Math.round((u.x+(u.fs?5:-5)*nx/nl)/PX),Math.round((u.y+(u.fs?5:-5)*ny/nl)/PX),1,1)}
     if(Math.abs(u.vx)>1||Math.abs(u.vy)>1){u.anim+=dt;if(u.throwT<=0&&u.dodgeT<=0){if(Math.abs(u.vx)>Math.abs(u.vy)*.8){u.dir='S';u.flip=u.vx<0}else u.dir=u.vy>0?'F':'B'}}
     else if(u.throwT<=0&&u.dodgeT<=0&&u!==G.me){u.dir='S';const t=u.ai.t;if(t)u.flip=t.x<u.x}
@@ -622,7 +654,7 @@ function update(dt){
     for(const u of G.units){if(u.team===b.team||u.out||u.dodgeT>0)continue;
       if(b.pierce&&b.hitSet.has(u))continue;
       if(Math.abs(u.x-b.x)<(b.giant?34:22)&&b.y>u.y-36&&b.y<u.y+14){if(b.pierce){b.hitSet.add(u);hit(u,b);continue}b.dead=true;hit(u,b);break}}
-    if(!b.dead&&b.t>=b.T){b.dead=true;poof(b.x,b.y,4);if(!b.gift){G.gx.fillStyle='rgba(255,255,255,.95)';G.gx.fillRect(Math.round(b.x/PX)-1,Math.round(b.y/PX),3,1);G.gx.fillRect(Math.round(b.x/PX),Math.round(b.y/PX)-1,1,1)}if(b.splash)splash(b,null)}}
+    if(!b.dead&&b.t>=b.T){b.dead=true;poof(b.x,b.y,4);if(!G.demo&&!b.gift)sfx('miss',near(b)*.6);if(!b.gift){G.gx.fillStyle='rgba(255,255,255,.95)';G.gx.fillRect(Math.round(b.x/PX)-1,Math.round(b.y/PX),3,1);G.gx.fillRect(Math.round(b.x/PX),Math.round(b.y/PX)-1,1,1)}if(b.splash)splash(b,null)}}
   G.balls=G.balls.filter(b=>!b.dead);
   for(const p of G.parts){p.t+=dt;p.x+=p.vx*dt;p.y+=p.vy*dt;p.vy+=260*dt}G.parts=G.parts.filter(p=>p.t<p.T);
   for(const s of G.bubbles)s.t+=dt;G.bubbles=G.bubbles.filter(s=>s.t<1.6);
@@ -650,7 +682,7 @@ function finish(a,e){G.over=true;let win=a>e;
   let extra=[];if(G.revenge&&win){gain*=2;SAVE.revenge=null;extra.push('⚔ 복수전 승리! 딱지 2배')}
   if(win&&first&&RT[SAVE.region]&&!SAVE.recruits.includes(SAVE.region)){SAVE.recruits.push(SAVE.region);initKid('r'+SAVE.region);const m=RT[SAVE.region].m.find(m=>m.boss);extra.push(`👑 대장 ${m.n}이(가) 우리 팀 동료가 됐어요!`)}
   if(G.mission){const M=G.mission;if(M.ok(win,G)){gain+=M.b;extra.push(`🎯 미션 '${M.t}' 성공! +${M.b}`)}else extra.push(`🎯 미션 '${M.t}' 실패`)}
-  SAVE.ddak+=gain;let newDay=false;if(SAVE.realDay===false){SAVE.played++;if(SAVE.played>=2){SAVE.played=0;SAVE.day++;newDay=true;rollRevenge();fixTeam()}}save();
+  SAVE.ddak+=gain;let newDay=false;if(SAVE.realDay===false){SAVE.played++;if(SAVE.played>=2){SAVE.played=0;SAVE.day++;newDay=true;setTimeout(()=>sfx('home'),2400);rollRevenge();fixTeam()}}save();
   setTimeout(()=>{
     document.getElementById('resTitle').textContent=win?'승리! 🏆':'패배…';
     document.getElementById('resSub').textContent=`${G.R.n} · 딱지 +${gain}장${first?' (처음 이긴 보너스 포함)':''} · 지금 딱지 ${SAVE.ddak}장${newDay?' · 해가 져서 하루가 끝났어요. 내일은 '+DAYS[SAVE.day%7]+'요일!':''}`+(extra.length?'\n'+extra.join('\n'):'');
@@ -930,17 +962,19 @@ function lobby(){
   document.querySelectorAll('.rg').forEach(b=>b.onclick=()=>{SAVE.region=+b.dataset.i;save();lobby()});
 }
 function start(){if(SAVE.team.length<5)return;showMissions()}
-function go(){hideAll();newGame();sfx('start');music('battle')}
+const REGION_BGM=['bgm_dasan_afterschool','bgm_byeollae_bunny','bgm_hopyeong_chase','bgm_jinjeop_fort','bgm_hopyeong_chase','bgm_deokso_river','bgm_hwado_boss'];
+const REGION_AMB=['amb_calm_wind','amb_park_wind','amb_market_distant','amb_snowfall','amb_market_distant','amb_park_wind','amb_ice_valley'];
+function go(){hideAll();newGame();sfx('start');music(REGION_BGM[SAVE.region]);ambience(REGION_AMB[SAVE.region])}
 function hideAll(){['title','map','lobby','result','mission'].forEach(id=>$(id).hidden=true)}
 function progress(){return Math.round(SAVE.cleared.filter(i=>i>0).length/6*100)}
 let titleStage=0,resetArm=false;
-function showTitle(){music('menu');hideAll();$('title').hidden=false;G=null;newGame(true);titleStage=0;$('titleMenu').hidden=true;$('tapHint').hidden=false;
+function showTitle(){music('bgm_dasan_afterschool');ambience('amb_snowfall');hideAll();$('title').hidden=false;G=null;newGame(true);titleStage=0;$('titleMenu').hidden=true;$('tapHint').hidden=false;
   const has=SAVE.day>0||SAVE.cleared.length||SAVE.ddak!==200;
   $('bContinue').innerHTML=has?`이어하기<small>${dayLabel()} · 평정도 ${progress()}% · 딱지 ${SAVE.ddak}장</small>`:'시작하기<small>다산동 새싹 눈싸움단과 함께</small>';
   $('bReset').hidden=!has;$('bReset').textContent='처음부터 다시';resetArm=false}
 function rivalFace(f){const r=RMETA[f],c=document.createElement('canvas');c.width=c.height=r[3];c.getContext('2d').drawImage(IMG.rivals,r[0]+(r[2]-r[3])/2,r[1],r[3],r[3],0,0,r[3],r[3]);return c.toDataURL()}
 function open_(i){return i===0||SAVE.cleared.includes(i-1)}
-function showMap(){music('menu');hideAll();G=null;newGame(true);fixTeam();$('map').hidden=false;$('regionCard').hidden=true;
+function showMap(){music('bgm_deokso_river');ambience('amb_snowfall');hideAll();G=null;newGame(true);fixTeam();$('map').hidden=false;$('regionCard').hidden=true;
   $('mapDdak').textContent=`딱지 ${SAVE.ddak}장`;$('mapDay').textContent=dayLabel()+(SAVE.realDay===false?` · 남은 대결 ${2-SAVE.played}번`:'');
   $('mapPct').textContent=progress()+'%';$('mapBar').style.width=progress()+'%';
   $('mapTeam').innerHTML=SAVE.team.map(k=>`<span class="mt"><img alt="" src="${face(k)}"><b>${SAVE.me===k?'★':''}${kname(k)}</b></span>`).join('')+`<span class="mtc">오늘의 멤버 · 동료 ${ROSTER().length}/16 · 🔥 출석 ${SAVE.streak}일째</span>`;
