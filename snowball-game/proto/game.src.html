@@ -125,6 +125,8 @@ button:focus-visible{outline:2px solid var(--gold);outline-offset:2px}
 .chip2{font-size:11px;background:#0003;color:var(--gold);border-radius:99px;padding:1px 8px}
 .dst{display:grid;grid-template-columns:auto 1fr 16px;gap:2px 6px;align-items:center;font-size:11px;color:var(--sub);margin-top:4px}
 .dst i{height:6px;border-radius:9px;background:#0004;overflow:hidden;display:block}.dst i b{display:block;height:100%;background:var(--blue)}.dst em{font-style:normal;text-align:right;color:var(--ink)}
+.xpb{display:block;width:70%;height:5px;border-radius:9px;background:#0004;overflow:hidden;margin:2px auto}.xpb i{display:block;height:100%;background:linear-gradient(90deg,#ffcf4a,#ffe9a0)}
+td .xpb{display:inline-block;width:60px;vertical-align:middle;margin:0 0 0 4px}.lvt{font-family:var(--body);font-size:12px;color:var(--gold);font-weight:700}
 @media (max-width:720px){.mcards{grid-template-columns:1fr}.team,.shop{grid-template-columns:repeat(3,minmax(0,1fr))}.regions{grid-template-columns:1fr 1fr}}
 </style>
 
@@ -249,7 +251,19 @@ const RT={
 let SAVE={ddak:200,owned:{},glove:{},cleared:[],me:'jihun',region:0,day:0,played:0,team:[],recruits:[],realDay:true,streak:0,lastLogin:-1,revenge:null};
 try{const s=JSON.parse(localStorage.getItem('snowfight-save3')||'null');if(s)SAVE=Object.assign(SAVE,s)}catch(e){}
 function save(){try{localStorage.setItem('snowfight-save3',JSON.stringify(SAVE))}catch(e){}}
-function initKid(k){SAVE.owned[k]=SAVE.owned[k]||[0];if(SAVE.glove[k]==null)SAVE.glove[k]=0}
+function initKid(k){SAVE.owned[k]=SAVE.owned[k]||[0];if(SAVE.glove[k]==null)SAVE.glove[k]=0;SAVE.lv=SAVE.lv||{};if(!SAVE.lv[k])SAVE.lv[k]={L:1,xp:0,g:[0,0,0,0,0,0]}}
+/* ---------- 레벨업 ---------- */
+const MAXLV=10,PRIO={jihun:[0,1,4],sumin:[4,2,3],minjae:[3,2,4],doyun:[2,5,4],harin:[4,3,5],taeho:[1,0,2],seoyeon:[2,1,5],junho:[4,5,0],yerin:[1,2,4],kangmin:[5,4,1]};
+const xpNeed=L=>40+L*30;
+const baseOf=k=>k[0]==='r'?kdef(k).b:k;
+function lvOf(k){initKid(k);return SAVE.lv[k]}
+function statNow(k){const b=STATS[baseOf(k)],g=lvOf(k).g;return b.map((v,i)=>Math.max(1,Math.min(10,v-2+g[i])))}
+function mults(k){const V=lvOf(k),gl=.02*(V.L-1);return V.g.map(x=>.82+.035*x+gl)}
+function applyGrowth(d,k){const m=mults(k);d.hp*=m[4];d.spd*=m[2];d.dmg*=m[0];d.bs*=(.5+.5*m[0]);d.range*=(.92+.08*m[0]);d.acc=Math.min(.99,d.acc*(.9+.1*m[1]+ (m[1]-1)*.3));
+  d.gather=(d.gather||1)*m[3];d.stag=1/m[5];return d}
+function gainXP(k,x){const V=lvOf(k),ups=[];if(V.L>=MAXLV)return ups;V.xp+=x;
+  while(V.L<MAXLV&&V.xp>=xpNeed(V.L)){V.xp-=xpNeed(V.L);V.L++;const P=PRIO[baseOf(k)],a=P[0],b=P[V.L%2?1:2];V.g[a]++;V.g[b]++;ups.push(`${SNAME[a]}+1 ${SNAME[b]}+1`)}
+  if(V.L>=MAXLV)V.xp=0;return ups}
 [...ALL,...(SAVE.recruits||[]).map(r=>'r'+r)].forEach(initKid);
 function realDayNum(){const d=new Date();return Math.floor((d.getTime()-d.getTimezoneOffset()*6e4)/864e5)+3}
 function today(){return SAVE.realDay===false?SAVE.day:realDayNum()}
@@ -513,7 +527,7 @@ function newGame(demo){
   if(demo){G.demo=true;const sh=[...ALL].sort(()=>Math.random()-.5);
     sh.slice(0,5).forEach((k,i)=>G.units.push(mkUnit({b:k,...KIDS[k]},0,LX+40,ys[i],1,GLOVES[2],0)));
     sh.slice(5).forEach((k,i)=>G.units.push(mkUnit({b:k,...KIDS[k]},1,RX-40,ys[i],1,GLOVES[2],0)));G.me=null;G.enemyName='';return}
-  SAVE.team.forEach((k,i)=>{const d=kdef(k);G.units.push(mkUnit(d,0,LX,ys[i],1,GLOVES[SAVE.glove[k]],d.hue||0))});
+  SAVE.team.forEach((k,i)=>{const d=applyGrowth(kdef(k),k);const u=mkUnit(d,0,LX,ys[i],1,GLOVES[SAVE.glove[k]],d.hue||0);u.key=k;G.units.push(u)});
   const E=enemyDefs(SAVE.region);G.enemyName=E.t;G.revenge=revengeOn(SAVE.region);if(G.revenge)G.enemyName='⚔복수전 '+E.t;const LV=R.lv+(G.revenge?.12:0);
   E.list.forEach((d,i)=>G.units.push(mkUnit(d,1,RX,ys[i],LV,GLOVES[Math.min(4,R.gl+(G.revenge?1:0))],E.h)));
   G.ms={crates:0,drops:0,specials:0,myHits:0,boss:false};G.mission=MISSION_PICK;
@@ -713,7 +727,7 @@ function update(dt){
 }
 function splash(b,skip){poof(b.x,b.y-10,14);for(const v of G.units)if(v!==skip&&v.team!==b.team&&!v.out&&Math.hypot(v.x-b.x,v.y-b.y)<60){v.wet+=b.dmg*.5*v.bdef;v.hitT=Math.max(v.hitT,.15);if(v.wet>=v.max){v.out=true;v.outT=0;bubble(v,'추워서 집에 갈래…','#cfe3ff')}}}
 function hit(u,b){const o=b.owner;if(u.fx.dash>0){poof(u.x,u.y-30,4);return}if(!G.demo)sfx(u===G.me?'hitme':'hit',u===G.me||o===G.me?1:near(u)*.7);if(!G.demo)u.wet+=b.dmg*u.bdef;o.hits++;o.cheerT=1;if(o===G.me&&G.ms)G.ms.myHits++;if(b.splash)splash(b,u);spGain(o,14);spGain(u,5);
-  if(u.k.armor||u.fx.guard>0){u.hitT=.12}else{u.hitT=.32;u.gathering=false;u.throwT=0;u.pend=null}
+  if(u.k.armor||u.fx.guard>0){u.hitT=.12}else{u.hitT=.32*(u.k.stag||1);u.gathering=false;u.throwT=0;u.pend=null}
   poof(b.x,b.y-20,7);G.flash=u===G.me?.25:G.flash;
   if(u.wet>=u.max){u.out=true;u.outT=0;sfx(u.team?'outfoe':'out');if(u.k.boss&&o===G.me&&G.ms)G.ms.boss=true;bubble(u,'추워서 집에 갈래…','#cfe3ff');if(o.team===0)bubble(o,'맞았다!','#ffcf4a')}
   else if(Math.random()<.1)bubble(u,['앗!','차가워!','으악'][Math.floor(Math.random()*3)],'#ffffff')}
@@ -730,12 +744,14 @@ function finish(a,e){G.over=true;let win=a>e;
   let extra=[];if(G.revenge&&win){gain*=2;SAVE.revenge=null;extra.push('⚔ 복수전 승리! 딱지 2배')}
   if(win&&first&&RT[SAVE.region]&&!SAVE.recruits.includes(SAVE.region)){SAVE.recruits.push(SAVE.region);initKid('r'+SAVE.region);const m=RT[SAVE.region].m.find(m=>m.boss);extra.push(`👑 대장 ${m.n}이(가) 우리 팀 동료가 됐어요!`)}
   if(G.mission){const M=G.mission;if(M.ok(win,G)){gain+=M.b;extra.push(`🎯 미션 '${M.t}' 성공! +${M.b}`)}else extra.push(`🎯 미션 '${M.t}' 실패`)}
+  const xpRows={};const RB=1+(G.R.s-1)*.15;for(const u of G.units.filter(u=>u.team===0&&u.key)){const x=Math.round((20+(win?30:0)+u.hits*4+(u.out?0:10)+(G.revenge?20:0))*RB);
+    const ups=gainXP(u.key,x);xpRows[u.key]={x,ups};if(ups.length)extra.push(`⬆ ${u.k.n} Lv.${lvOf(u.key).L}! ${ups[ups.length-1]}`)}
   SAVE.ddak+=gain;let newDay=false;if(SAVE.realDay===false){SAVE.played++;if(SAVE.played>=2){SAVE.played=0;SAVE.day++;newDay=true;setTimeout(()=>sfx('home'),2400);rollRevenge();fixTeam()}}save();
   setTimeout(()=>{
     document.getElementById('resTitle').textContent=win?'승리! 🏆':'패배…';
     document.getElementById('resSub').textContent=`${G.R.n} · 딱지 +${gain}장${first?' (처음 이긴 보너스 포함)':''} · 지금 딱지 ${SAVE.ddak}장${newDay?' · 해가 져서 하루가 끝났어요. 내일은 '+DAYS[SAVE.day%7]+'요일!':''}`+(extra.length?'\n'+extra.join('\n'):'');
-    const rows=G.units.filter(u=>u.team===0).map(u=>`<tr><td>${u.k.n}</td><td>${u.k.role}</td><td>${u.hits}번</td><td>${u.out?'아웃':'끝까지 버팀'}</td></tr>`).join('');
-    document.getElementById('resTab').innerHTML=`<tr><th>이름</th><th>역할</th><th>맞힌 횟수</th><th>결과</th></tr>${rows}`;
+    const rows=G.units.filter(u=>u.team===0).map(u=>{const X=xpRows[u.key]||{x:0,ups:[]},V=u.key?lvOf(u.key):{L:1,xp:0};return `<tr><td>${u.k.n}</td><td>${u.k.role}</td><td>${u.hits}번</td><td>${u.out?'아웃':'끝까지 버팀'}</td><td>+${X.x} XP ${X.ups.length?'<b style="color:var(--gold)">⬆ LEVEL UP!</b>':''}</td><td>Lv.${V.L}${V.L<MAXLV?` <span class="xpb"><i style="width:${V.xp/xpNeed(V.L)*100}%"></i></span>`:' MAX'}</td></tr>`}).join('');
+    document.getElementById('resTab').innerHTML=`<tr><th>이름</th><th>역할</th><th>맞힌 횟수</th><th>결과</th><th>경험치</th><th>레벨</th></tr>${rows}`;
     document.getElementById('result').hidden=false},900)}
 
 /* ---------- 미션 카드 ---------- */
@@ -783,14 +799,14 @@ function showDogam(tab){hideAll();$('dogam').hidden=false;
   document.querySelectorAll('#dTabs button').forEach(b=>b.onclick=()=>showDogam(+b.dataset.i));
   const R_=REGIONS[tab],T=RT[tab],lvl=`<div class="dlv"><b>Lv.${tab+1}</b><span>${'★'.repeat(R_.s)}</span><span>상대 능력 ${Math.round(R_.lv*100)}% · 장갑 ${GLOVES[R_.gl].n}(연속 ${GLOVES[R_.gl].lim}개)</span></div>`;
   if(!T){$('dBody').innerHTML=`<div class="dhead"><div><h3>다산동 · 새싹 눈싸움단 (우리 팀)</h3><p class="sub" style="margin:0">균형 잡힌 10명. 연습 경기 상대는 오늘 안 뽑힌 친구들이에요.</p></div>${lvl}</div>
-    <div class="dgrid">${ALL.map(k=>{const K=KIDS[k],S=SPECIAL[k];return dCard(FACES[k],K.n,K.role,[`<b>특기</b> ${K.d}`,`<b>필살기</b> ${S[0]} — ${S[1]}`,`<b>못 나오는 날</b> ${schedText(k)}`],STATS[k],`<p class="lvl">장갑: ${GLOVES[SAVE.glove[k]||0].n}</p>`)}).join('')}</div>`;return}
+    <div class="dgrid">${ALL.map(k=>{const K=KIDS[k],S=SPECIAL[k];const V=lvOf(k);return dCard(FACES[k],`${K.n} <small class="lvt">Lv.${V.L}</small>`,K.role,[`<b>특기</b> ${K.d}`,`<b>필살기</b> ${S[0]} — ${S[1]}`,`<b>못 나오는 날</b> ${schedText(k)}`,`<b>레벨업 때 오르는 능력</b> ${PRIO[k].map(i=>SNAME[i]).join(' · ')}`],statNow(k),`<p class="lvl">경험치 ${V.L>=MAXLV?'MAX':V.xp+' / '+xpNeed(V.L)} · 장갑: ${GLOVES[SAVE.glove[k]||0].n}</p>`)}).join('')}</div>`;return}
   const rec=SAVE.recruits.includes(tab),boss=T.m.find(m=>m.boss);
   $('dBody').innerHTML=`<div class="dhead"><div><h3>${R_.n} · ${T.t}</h3><p class="sub" style="margin:0">${T.st}${SAVE.cleared.includes(tab)?' · 🚩 이긴 동네':''}${rec?` · 👑 ${boss.n} 영입함`:''}</p></div>${lvl}</div>
-    <div class="dgrid">${T.m.map((m,i)=>{const st=STATS[m.b].map(v=>Math.min(10,Math.round(v*R_.lv*(m.boss?1.1:1))));
+    <div class="dgrid">${T.m.map((m,i)=>{const st=STATS[m.b].map(v=>Math.max(1,Math.min(10,Math.round((v-2)*R_.lv/.86*(m.boss?1.1:1)))));
       return dCard(rivalFace(m.f),(m.boss?'👑 ':'')+m.n,m.role+(m.boss?' · 대장':''),[`<b>특기</b> ${T.sk[i]}`,`<b>필살기(임시)</b> ${SPECIAL[m.b][0]} — ${SPECIAL[m.b][1]}`,m.boss?`<b>체력</b> 대장이라 1.3배`:''].filter(Boolean),st,
       m.boss?`<p class="lvl">${rec?'✅ 우리 팀 동료가 됐어요':'처음 이기면 동료로 영입'}</p>`:'')}).join('')}
     <div class="dcard"><div class="dh"><div><b>단원 2명</b><span class="chip2">일반</span></div></div><p>이름 없는 팀원들이에요. 수비(하린 타입)와 눈 공급(민재 타입)을 맡아요.</p><p>능력은 동네 레벨에 맞춰 올라가요.</p></div></div>
-    <p class="note">※ 능력치는 기본 아이 능력에 동네 레벨(상대 능력 %)을 곱해 계산한 값이에요. 라이벌 몸 그림은 아직 임시예요.</p>`}
+    <p class="note">※ 라이벌 능력치는 기본 아이 능력에 동네 레벨(상대 능력 %)을 곱해 계산한 값이에요. 우리 팀 Lv.1과 비교해 보세요. 라이벌 몸 그림은 아직 임시예요.</p>`}
 
 /* ---------- 그리기 ---------- */
 let BG=null;
@@ -1020,7 +1036,7 @@ function lobby(){
   $('today').textContent=dayLabel()+(SAVE.realDay===false?` · 오늘 남은 대결 ${2-SAVE.played}번`:'');
   $('bNextDay').hidden=SAVE.realDay!==false;$('bDayMode').textContent=SAVE.realDay===false?'요일: 게임 속 날짜':'요일: 실제 오늘';
   $('teamCards').innerHTML=ROSTER().map(k=>{const K=kdef(k),ab=absent(k,today()),on=SAVE.team.includes(k);
-    return `<div class="kc${ab?' off':''}${on?' on':''}${k[0]==='r'?' rec':''}"><button class="pick" id="kc-${k}" data-k="${k}" aria-pressed="${on}" ${ab?'disabled':''}><img alt="" src="${face(k)}"><b>${K.n}</b><span class="r">${K.role}</span><span class="d">${ab?'오늘 못 나와요 · '+ab:K.d}</span></button>
+    return `<div class="kc${ab?' off':''}${on?' on':''}${k[0]==='r'?' rec':''}"><button class="pick" id="kc-${k}" data-k="${k}" aria-pressed="${on}" ${ab?'disabled':''}><img alt="" src="${face(k)}"><b>${K.n} <small class="lvt">Lv.${lvOf(k).L}</small></b><span class="xpb"><i style="width:${lvOf(k).L>=MAXLV?100:lvOf(k).xp/xpNeed(lvOf(k).L)*100}%"></i></span><span class="r">${K.role}</span><span class="d">${ab?'오늘 못 나와요 · '+ab:K.d}</span></button>
       ${on?`<button class="star" id="me-${k}" data-k="${k}" aria-pressed="${SAVE.me===k}">${SAVE.me===k?'★ 내가 조종':'☆ 조종하기'}</button>`:''}</div>`}).join('');
   $('teamCount').textContent=`${SAVE.team.length}/5명`;
   document.querySelectorAll('.pick').forEach(b=>b.onclick=()=>{const k=b.dataset.k,i=SAVE.team.indexOf(k);
