@@ -70,7 +70,7 @@ button:focus-visible{outline:2px solid var(--gold);outline-offset:2px}
       <div class="row" style="justify-content:space-between"><h2>문방구 · 장갑</h2><span class="ddak" id="ddak"></span></div>
       <div class="shop" id="shop"></div>
       <p class="note" id="shopNote"></p>
-      <h2>도전할 동네</h2>
+      <h2>남양주시 · 도전할 동네</h2>
       <div class="regions" id="regions"></div>
       <div class="keys">
         <span><kbd>W A S D</kbd> 이동</span><span><kbd>마우스</kbd> 조준 · <kbd>클릭</kbd> 던지기</span>
@@ -98,7 +98,7 @@ const OMETA=/*OMETA*/;
 </script>
 <script>
 'use strict';
-const W=1280,H=720,FX0=40,FX1=1240,FY0=150,FY1=694,SC=.74,BASESPD=150;
+const W=1280,H=720,FX0=40,FX1=1240,FY0=150,FY1=694,SC=.78,BASESPD=150;
 const KIDS={
   jihun:{n:'지훈',role:'투수',d:'공이 빠르고 셉니다',hp:5,spd:1,dmg:1.4,cd:.34,bs:640,range:360,acc:.93,pref:230},
   sumin:{n:'수민',role:'지원',d:'근처 친구의 젖음을 말려 줍니다',hp:5,spd:1,dmg:1,cd:.42,bs:520,range:320,acc:.85,pref:250,heal:.3},
@@ -108,8 +108,9 @@ const KIDS={
 };
 const ORDER=['jihun','sumin','minjae','doyun','harin'];
 const GLOVES=[{n:'맨손',lim:3,p:0},{n:'일반 장갑',lim:4,p:100,ic:'g1'},{n:'고급 장갑',lim:5,p:250,ic:'g2'},{n:'희귀 장갑',lim:5,fast:1,p:500,ic:'g3',x:'손 시림 회복 빠름'},{n:'영웅 장갑',lim:6,fast:1,p:900,ic:'g4',x:'손 시림 회복 빠름'}];
-const REGIONS=[{n:'새싹 아파트 놀이터',s:1,lv:.72,gl:0,d:'가장 약한 동네. 저학년이 많아요'},{n:'시장 골목 공터',s:2,lv:.92,gl:1,d:'새싹 아파트를 이기면 열려요'},{n:'강변 공원',s:3,lv:1.12,gl:2,d:'시장 골목을 이기면 열려요'},
-  {n:'언덕 마을',s:3,lock:1,d:'다음 단계'},{n:'학원가 신도시',s:4,lock:1,d:'다음 단계'},{n:'산 아래 얼음골',s:5,lock:1,d:'다음 단계 · 최강자'}];
+const REGIONS=[{n:'다산동',s:1,lv:.72,gl:0,d:'시작 동네. 아파트 놀이터'},{n:'별내동',s:2,lv:.8,gl:1,d:'다산동을 이기면 열려요'},{n:'호평동',s:2,lv:.86,gl:1,d:'별내동을 이기면 열려요'},
+  {n:'진접읍',s:3,lv:.93,gl:2,d:'호평동을 이기면 열려요 · 학교 운동장'},{n:'평내동',s:2,lv:.98,gl:2,d:'진접읍을 이기면 열려요'},{n:'와부읍(덕소)',s:3,lv:1.04,gl:3,d:'평내동을 이기면 열려요 · 한강변'},
+  {n:'화도읍',s:3,lv:1.12,gl:4,d:'👑 최강자의 동네 · 와부읍을 이기면 열려요'},{n:'운길산',s:3,lock:1,d:'도전 지역 (예정)'},{n:'오남읍 · 퇴계원읍 · 수동면',s:0,lock:1,d:'다음 지역 (예정)'}];
 
 /* ---------- 저장 ---------- */
 let SAVE={ddak:200,owned:{},glove:{},cleared:[],me:'jihun',region:0};
@@ -170,7 +171,7 @@ function newGame(){
   bubble(G.me,'내가 간다!','#ffcf4a');
 }
 function mkUnit(id,team,x,y,lv,glove){const k=KIDS[id];
-  return {id,k,team,x,y,vx:0,vy:0,wet:0,max:k.hp*(team?lv:1),ammo:3,maxAmmo:k.maxAmmo||6,glove,streak:0,streakT:0,coldT:0,cd:0,gT:0,gathering:false,
+  return {id,k,team,x,y,vx:0,vy:0,wet:0,max:k.hp*3.2*(team?Math.max(.85,lv):1),ammo:5,maxAmmo:k.maxAmmo||6,glove,streak:0,streakT:0,coldT:0,cd:0,gT:0,gathering:false,
     throwT:0,pend:null,dodgeT:0,dodgeCd:0,dvx:0,dvy:0,hitT:0,slowT:0,out:false,outT:0,dir:'S',flip:team===1,anim:0,cheerT:0,
     items:team?{}:{pack:1,cocoa:1},wallCd:0,supT:2,hits:0,lv:team?lv:1,
     ai:{t:null,mode:'fight',goal:null,think:0,wait:rnd(.3,1),seed:Math.random()*9,dodge:team?.22*lv:.3}}}
@@ -181,7 +182,7 @@ function canThrow(u){return !u.out&&u.ammo>0&&u.coldT<=0&&u.cd<=0&&u.dodgeT<=0&&
 function doThrow(u,tx,ty){if(!canThrow(u))return false;u.gathering=false;u.throwT=.3;u.pend={x:tx,y:ty};u.cd=u.k.cd*(u.team?1.25/u.lv:1);
   u.flip=tx<u.x;u.dir='S';return true}
 function release(u){const p=u.pend;u.pend=null;if(!p)return;u.ammo--;
-  const sx=u.x+(u.flip?-14:14),sy=u.y-34,dx=p.x-u.x,dy=p.y-u.y,d=Math.hypot(dx,dy)||1,range=Math.min(d,u.k.range),sp=u.k.bs;
+  const sx=u.x+(u.flip?-14:14),sy=u.y-46,dx=p.x-u.x,dy=p.y-u.y,d=Math.hypot(dx,dy)||1,range=Math.min(d,u.k.range),sp=u.k.bs;
   G.balls.push({x:sx,y:u.y,sy:sy-u.y,vx:dx/d*sp,vy:dy/d*sp,team:u.team,owner:u,t:0,T:range/sp,dmg:u.k.dmg,big:false});
   u.streak++;u.streakT=0;
   if(u.streak>=u.glove.lim){u.coldT=u.glove.fast?2:3;u.streak=0;bubble(u,'앗 차가워!','#9fd4ff')}}
@@ -201,10 +202,10 @@ function onPile(u){return G.piles.some(p=>Math.abs(p.x-u.x)<40&&Math.abs(p.y-u.y
 /* ---------- 충돌 ---------- */
 function wallRect(w){return[w.x-34,w.y-16,w.x+34,w.y+8]}
 function pushOut(u){
-  for(const w of G.walls){const[a,b,c,d]=wallRect(w);if(u.x>a-10&&u.x<c+10&&u.y>b-4&&u.y<d+4){
-    const l=u.x-(a-10),r=c+10-u.x,t=u.y-(b-4),bt=d+4-u.y,m=Math.min(l,r,t,bt);
-    if(m===l)u.x=a-10;else if(m===r)u.x=c+10;else if(m===t)u.y=b-4;else u.y=d+4}}
-  const s=G.snowman,dx=u.x-s.x,dy=(u.y-s.y)*1.6,d=Math.hypot(dx,dy);if(d<34){const k=34/(d||1);u.x=s.x+dx*k;u.y=s.y+dy*k/1.6}
+  for(const w of G.walls){const[a,b,c,d]=wallRect(w);if(u.x>a-14&&u.x<c+14&&u.y>b-4&&u.y<d+4){
+    const l=u.x-(a-14),r=c+14-u.x,t=u.y-(b-4),bt=d+4-u.y,m=Math.min(l,r,t,bt);
+    if(m===l)u.x=a-14;else if(m===r)u.x=c+14;else if(m===t)u.y=b-4;else u.y=d+4}}
+  const s=G.snowman,dx=u.x-s.x,dy=(u.y-s.y)*1.6,d=Math.hypot(dx,dy);if(d<38){const k=38/(d||1);u.x=s.x+dx*k;u.y=s.y+dy*k/1.6}
   u.x=clamp(u.x,FX0+14,FX1-14);u.y=clamp(u.y,FY0+10,FY1)}
 function blocked(x,y){for(const w of G.walls){const[a,b,c,d]=wallRect(w);if(x>a&&x<c&&y>b-26&&y<d)return w}return null}
 function los(a,b){const n=Math.ceil(dist(a,b)/14);for(let i=1;i<n;i++){const t=i/n;if(blocked(a.x+(b.x-a.x)*t,a.y+(b.y-a.y)*t-6))return false}return true}
@@ -215,7 +216,7 @@ function decide(u,A,foes,mates){
   const near=foes.reduce((m,f)=>Math.min(m,dist(u,f)),1e9);
   if(u.gathering&&u.ammo<Math.min(u.maxAmmo,5)&&!(near<130&&u.ammo>=1)){A.mode='gather';return}
   if(u.ammo===0||(u.ammo<2&&near>280)){
-    A.mode='gather';const cr=G.crates.filter(c=>c.on&&dist(u,c)<300).sort((a,b)=>dist(u,a)-dist(u,b))[0];
+    A.mode='gather';const cr=G.crates.filter(c=>c.on&&dist(u,c)<200).sort((a,b)=>dist(u,a)-dist(u,b))[0];
     const pl=G.piles.filter(p=>dist(u,p)<340).sort((a,b)=>dist(u,a)-dist(u,b))[0];
     A.goal=cr?{x:cr.x,y:cr.y}:pl?{x:pl.x,y:pl.y}:null;return}
   u.gathering=false;
@@ -280,7 +281,7 @@ function update(dt){
     const w=b.t>.05&&blocked(b.x,b.y);if(w){b.dead=true;w.hp--;poof(b.x,b.y-14,5);if(w.hp<=0){G.walls.splice(G.walls.indexOf(w),1);poof(w.x,w.y-12,16)}continue}
     if(Math.hypot((b.x-G.snowman.x),(b.y-G.snowman.y)*1.4)<26){b.dead=true;poof(b.x,b.y-30,5);continue}
     for(const u of G.units){if(u.team===b.team||u.out||u.dodgeT>0)continue;
-      if(Math.abs(u.x-b.x)<17&&b.y>u.y-24&&b.y<u.y+10){b.dead=true;hit(u,b);break}}
+      if(Math.abs(u.x-b.x)<22&&b.y>u.y-32&&b.y<u.y+12){b.dead=true;hit(u,b);break}}
     if(!b.dead&&b.t>=b.T){b.dead=true;poof(b.x,b.y,4)}}
   G.balls=G.balls.filter(b=>!b.dead);
   for(const p of G.parts){p.t+=dt;p.x+=p.vx*dt;p.y+=p.vy*dt;p.vy+=260*dt}G.parts=G.parts.filter(p=>p.t<p.T);
@@ -338,8 +339,8 @@ function frameOf(u){const M=KMETA[u.id];
   const moving=Math.abs(u.vx)+Math.abs(u.vy)>1,set=M[u.dir];
   return moving?set[Math.floor(u.anim*8)%4]:set[0]}
 function drawUnit(u){const img=u.team?EIMG[u.id]:IMG[u.id],r=frameOf(u),fade=u.out?Math.max(.35,1-u.outT/3):1;
-  ctx.fillStyle='rgba(40,60,90,.18)';ctx.beginPath();ctx.ellipse(u.x,u.y,20,6,0,0,7);ctx.fill();
-  ctx.strokeStyle=u.team?'rgba(255,107,87,.85)':'rgba(95,180,255,.9)';ctx.lineWidth=2.5;ctx.beginPath();ctx.ellipse(u.x,u.y,21,7,0,0,7);ctx.stroke();
+  ctx.fillStyle='rgba(40,60,90,.18)';ctx.beginPath();ctx.ellipse(u.x,u.y,26,8,0,0,7);ctx.fill();
+  ctx.strokeStyle=u.team?'rgba(255,107,87,.85)':'rgba(95,180,255,.9)';ctx.lineWidth=2.5;ctx.beginPath();ctx.ellipse(u.x,u.y,27,9,0,0,7);ctx.stroke();
   const bob=(!u.out&&Math.abs(u.vx)+Math.abs(u.vy)<1&&!u.gathering&&u.throwT<=0)?Math.sin(performance.now()/260+u.ai.seed)*1:0;
   spr(img,r,u.x,u.y+2+bob,u.flip,SC,fade);
   if(u.hitT>0){ctx.save();ctx.globalCompositeOperation='lighter';spr(img,r,u.x,u.y+2,u.flip,SC,u.hitT*1.4);ctx.restore()}
@@ -368,7 +369,7 @@ function draw(){
     const by=b.y+b.sy*(1-k)-z;ctx.fillStyle='#fff';ctx.strokeStyle='#7f9cc4';ctx.lineWidth=1.5;ctx.beginPath();ctx.arc(b.x,by,b.gift?4:5.5,0,7);ctx.fill();ctx.stroke()}
   ctx.fillStyle='#fff';for(const p of G.parts){ctx.globalAlpha=1-p.t/p.T;ctx.beginPath();ctx.arc(p.x,p.y,p.r,0,7);ctx.fill()}ctx.globalAlpha=1;
   ctx.font='15px Jua, sans-serif';ctx.textAlign='center';
-  for(const s of G.bubbles){const u=s.u,y=u.y-80-s.t*16;const w=ctx.measureText(s.text).width+14;ctx.globalAlpha=Math.min(1,(1.6-s.t)*2);
+  for(const s of G.bubbles){const u=s.u,y=u.y-108-s.t*16;const w=ctx.measureText(s.text).width+14;ctx.globalAlpha=Math.min(1,(1.6-s.t)*2);
     ctx.fillStyle='rgba(22,33,58,.82)';ctx.beginPath();ctx.roundRect(u.x-w/2,y-16,w,22,8);ctx.fill();ctx.fillStyle=s.c;ctx.fillText(s.text,u.x,y);ctx.globalAlpha=1}
   if(G.flash>0){ctx.fillStyle=`rgba(180,220,255,${G.flash})`;ctx.fillRect(0,0,W,H);G.flash=Math.max(0,G.flash-.02)}
   hud();
@@ -410,7 +411,7 @@ function lobby(){
   document.querySelectorAll('.it').forEach(b=>b.onclick=()=>{const i=+b.dataset.i,g=GLOVES[i];
     if(!own.includes(i)){if(SAVE.ddak<g.p)return;SAVE.ddak-=g.p;own.push(i)}SAVE.glove[k]=i;save();lobby()});
   $('regions').innerHTML=REGIONS.map((r,i)=>{const open=!r.lock&&(i===0||SAVE.cleared.includes(i-1));
-    return `<button class="rg" id="rg-${i}" data-i="${i}" aria-pressed="${SAVE.region===i}" ${open?'':'disabled'}><b>${r.n}${SAVE.cleared.includes(i)?' 🚩':''}</b><span>${'★'.repeat(r.s)}</span><small>${r.d}</small></button>`}).join('');
+    return `<button class="rg" id="rg-${i}" data-i="${i}" aria-pressed="${SAVE.region===i}" ${open?'':'disabled'}><b>${r.n}${SAVE.cleared.includes(i)?' 🚩':''}</b><span>${r.s?'★'.repeat(r.s):'🔒'}</span><small>${r.d}</small></button>`}).join('');
   document.querySelectorAll('.rg').forEach(b=>b.onclick=()=>{SAVE.region=+b.dataset.i;save();lobby()});
 }
 function start(){$('lobby').hidden=true;$('result').hidden=true;newGame()}
