@@ -140,7 +140,8 @@ button:focus-visible{outline:2px solid var(--gold);outline-offset:2px}
         <span><kbd>Q</kbd> 핫팩 · <kbd>E</kbd> 핫초코</span><span><kbd>R</kbd> 눈벽 쌓기 (하린)</span>
         <span><kbd>Tab</kbd> 다른 아이로 바꾸기</span><span><kbd>P</kbd> 잠깐 멈춤</span>
       </div>
-      <div class="row" style="justify-content:center;gap:6px"><span class="note">게임 속도</span><span id="speedOpts" class="row" style="gap:6px"></span></div>
+      <div class="row" style="justify-content:center;gap:6px 18px"><span class="row" style="gap:6px"><span class="note">게임 속도</span><span id="speedOpts" class="row" style="gap:6px"></span></span><span class="row" style="gap:6px"><span class="note">조준</span><span id="aimOpts" class="row" style="gap:6px"></span></span></div>
+      <p class="note" id="aimNote" style="margin:0;text-align:center"></p>
       <div class="center" style="align-items:center"><button class="btn alt" id="bToMap">← 지도로</button><span class="ddak" id="prepRegion"></span><button class="btn" id="bStart">눈싸움 시작!</button></div>
       <p class="note">라이벌 팀은 도감의 이름·얼굴·특기를 쓰고, 몸 그림은 아직 시트가 없어 우리 아이들 그림의 색을 바꿔 임시로 썼습니다. PC 키보드·마우스용입니다.</p>
     </div>
@@ -275,7 +276,7 @@ const KEY={},MOUSE={x:W/2,y:H/2,down:false};
 addEventListener('keydown',e=>{if(e.code==='Tab'){e.preventDefault();if(G&&!G.over&&!G.demo)switchKid()}KEY[e.code]=true;
   if(!G||G.over||G.demo)return;if(e.code==='KeyP')G.paused=!G.paused;const me=G.me;if(!me||me.out)return;
   if(e.code==='ShiftLeft'||e.code==='ShiftRight')tryDodge(me,moveVec().x,moveVec().y);
-  if(e.code==='KeyF')doSpecial(me,MOUSE.x,MOUSE.y);if(e.code==='KeyQ')useItem(me,'pack');if(e.code==='KeyE')useItem(me,'cocoa');if(e.code==='KeyR')buildWall(me,MOUSE.x,MOUSE.y)});
+  if(e.code==='KeyC')cycleTarget();if(e.code==='KeyF'){const a=aimXY(me);doSpecial(me,a.x,a.y)}if(e.code==='KeyQ')useItem(me,'pack');if(e.code==='KeyE')useItem(me,'cocoa');if(e.code==='KeyR')(a=>buildWall(me,a.x,a.y))(aimXY(me))});
 addEventListener('keyup',e=>{KEY[e.code]=false});
 addEventListener('blur',()=>{for(const k in KEY)KEY[k]=false;MOUSE.down=false;MOUSE.rdown=false});
 const toGame=e=>{const r=cv.getBoundingClientRect();return{x:(e.clientX-r.left-VX)/VS,y:(e.clientY-r.top-VY)/VS}};
@@ -290,7 +291,19 @@ function buttons(){const me=G&&G.me,b=[{id:'throw',x:1186,y:500,r:42,t:'던지�
   {id:'pack',x:964,y:688,r:25,t:'핫팩'},{id:'cocoa',x:1066,y:568,r:25,t:'핫초코'},{id:'special',x:1066,y:470,r:34,t:'필살기'},{id:'swap',x:1236,y:206,r:24,t:'⇄'},{id:'pause',x:640,y:88,r:18,t:'II'}];
   if(me&&me.k.wall)b.push({id:'wall',x:964,y:600,r:27,t:'눈벽'});return b}
 function nearestFoe(m){let best=null,bs=1e9;for(const f of alive(1)){let d=dist(m,f)+(los(m,f)?0:200);if(d<bs){bs=d;best=f}}return best}
-function autoThrow(m){const f=nearestFoe(m);if(!f)return;const d=dist(m,f),fl=d/m.k.bs;doThrow(m,f.x+f.vx*fl*.7,f.y-6+f.vy*fl*.7)}
+function autoThrow(m){const f=(G.lock&&!G.lock.out)?G.lock:nearestFoe(m);if(!f)return;const d=dist(m,f),fl=d/m.k.bs;doThrow(m,f.x+f.vx*fl*.7,f.y-6+f.vy*fl*.7)}
+/* ---------- 조준 방식: 자동(가까운 적 고정) / 보조(마우스 근처 적에 달라붙음) / 수동 ---------- */
+const AIMS=[['auto','자동'],['assist','보조'],['manual','수동']];
+const aimMode=()=>SAVE.aim||'auto';
+function pickAim(m){const foes=alive(1);if(!foes.length)return null;const mode=aimMode();
+  if(mode==='manual'&&!(TOUCH.on&&!TOUCH.aiming))return null;
+  if(G.forced&&!G.forced.out&&G.forcedT>0)return G.forced;
+  if(mode==='assist'&&!(TOUCH.on&&!TOUCH.aiming)){let b=null,bd=120;for(const f of foes){const d=Math.hypot(f.x-MOUSE.x,f.y-30-MOUSE.y);if(d<bd){bd=d;b=f}}return b}
+  const sc=f=>dist(m,f)+(los(m,f)?0:220)+(dist(m,f)>m.k.range?300:0);let b=null,bs=1e9;for(const f of foes){const v=sc(f);if(v<bs){bs=v;b=f}}
+  const cur=G.lock;if(cur&&!cur.out&&cur!==b&&sc(cur)<bs+70)return cur;return b}
+function aimXY(m){const f=G.lock;if(!f||f.out)return{x:MOUSE.x,y:MOUSE.y,f:null};const d=dist(m,f),fl=d/m.k.bs;return{x:f.x+f.vx*fl*.75,y:f.y-6+f.vy*fl*.75,f}}
+function aimThrow(m){const a=aimXY(m);if(!a.f)return doThrow(m,a.x,a.y);const d=dist(m,a.f);if(d>m.k.range*1.08)return false;const e=(1-Math.min(.97,m.k.acc))*d*.3;return doThrow(m,a.x+gauss()*e,a.y+gauss()*e)}
+function cycleTarget(){const m=G&&G.me;if(!m)return;const fs=alive(1).sort((a,b)=>dist(m,a)-dist(m,b));if(!fs.length)return;const i=fs.indexOf(G.lock);G.forced=fs[(i+1)%fs.length];G.forcedT=4;G.lock=G.forced;sfx('click')}
 function press(id,down){const m=G&&G.me;if(!G||G.over||G.demo)return;
   if(id==='gather')TOUCH.gather=down;if(id==='throw'){TOUCH.auto=down;if(down&&m&&!m.out)autoThrow(m)}
   if(!down||!m)return;
@@ -631,10 +644,11 @@ function update(dt){
     if(u.throwT>0){const before=u.throwT;u.throwT-=dt;if(before>.15&&u.throwT<=.15)release(u)}
     let mv={x:0,y:0};
     if(u===G.me){mv=moveVec();u.gathering=!!(KEY.Space||MOUSE.rdown||TOUCH.gather)&&u.ammo<u.maxAmmo&&u.throwT<=0&&u.dodgeT<=0;
-      if(MOUSE.down&&canThrow(u))doThrow(u,MOUSE.x,MOUSE.y);
+      if(G.forcedT>0)G.forcedT-=dt;G.lock=pickAim(u);
+      if((MOUSE.down||KEY.KeyJ)&&canThrow(u))aimThrow(u);
       if(TOUCH.queued){TOUCH.queued.t-=dt;if(canThrow(u)){doThrow(u,TOUCH.queued.x,TOUCH.queued.y);TOUCH.queued=null}else if(TOUCH.queued.t<=0)TOUCH.queued=null}
       if(TOUCH.auto&&canThrow(u))autoThrow(u);
-      if(u.throwT<=0&&!u.gathering){if(TOUCH.on&&!TOUCH.aiming){if(Math.abs(mv.x)>.1)u.flip=mv.x<0}else u.flip=MOUSE.x<u.x}}
+      if(u.throwT<=0&&!u.gathering){if(G.lock&&!G.lock.out)u.flip=G.lock.x<u.x;else if(TOUCH.on&&!TOUCH.aiming){if(Math.abs(mv.x)>.1)u.flip=mv.x<0}else u.flip=MOUSE.x<u.x}}
     else{const r=ai(u,dt);if(r)mv={x:r.mx,y:r.my}}
     if(u.gathering&&u.ammo<u.maxAmmo&&u.hitT<=0){mv={x:0,y:0};if(u===G.me&&Math.random()<dt*6)sfx('gather');u.gT+=dt*(u.k.gather||1)*(onPile(u)?3:1)*(G.wx&&G.wx.type==='heavy'?2:1);if(u.gT>=.9){u.gT-=.9;u.ammo++;if(u===G.me&&!BUF.snow_reload)sfx('ammo');if(u.ammo>=u.maxAmmo){if(u===G.me)sfx('full')}if(u.ammo>=u.maxAmmo)u.gathering=false}}
     else u.gT=Math.min(u.gT,.5);
@@ -886,13 +900,17 @@ function draw(){
   drawBanner();
   if(G.mission&&!G.demo&&!G.over){const M=G.mission,t=`🎯 ${M.t} · ${M.pr(G)}`;ctx.font='14px Jua, sans-serif';const w=ctx.measureText(t).width+22;ctx.fillStyle='rgba(18,30,66,.85)';ctx.beginPath();ctx.roundRect(20,66,w,24,12);ctx.fill();ctx.fillStyle=M.ok(false,G)||(M.id==='clean'||M.id==='fast')?'#ffe08a':'#e8f1ff';ctx.textAlign='left';ctx.fillText(t,31,83)}
   drawTouch();
-  if(G.me&&!G.me.out&&!G.over&&!G.demo&&!G.paused&&(!TOUCH.on||TOUCH.aiming)){const m=G.me,dx=MOUSE.x-m.x,dy=MOUSE.y-m.y,d=Math.hypot(dx,dy)||1,L=Math.min(d,m.k.range),ex=m.x+dx/d*L,ey=m.y+dy/d*L,ok=canThrow(m)||m.throwT>0;
+  if(G.me&&!G.me.out&&!G.over&&!G.demo&&G.lock&&!G.lock.out){const f=G.lock,t=performance.now()/1000,S=SC*DS(f.y),hh=KMETA[f.id].F[0][3]*S,pad=6+Math.sin(t*6)*2,x0=f.x-24-pad,x1=f.x+24+pad,y0=f.y-hh-pad,y1=f.y+8+pad,L=12;
+    ctx.save();ctx.strokeStyle=G.forcedT>0?'#ffcf4a':'#ff5a45';ctx.lineWidth=3.5;ctx.lineCap='round';ctx.beginPath();
+    for(const [cx,cy,sx,sy] of [[x0,y0,1,1],[x1,y0,-1,1],[x0,y1,1,-1],[x1,y1,-1,-1]]){ctx.moveTo(cx,cy+sy*L);ctx.lineTo(cx,cy);ctx.lineTo(cx+sx*L,cy)}ctx.stroke();
+    ctx.fillStyle=ctx.strokeStyle;ctx.beginPath();ctx.moveTo(f.x-7,y0-14+Math.sin(t*5)*2);ctx.lineTo(f.x+7,y0-14+Math.sin(t*5)*2);ctx.lineTo(f.x,y0-5+Math.sin(t*5)*2);ctx.fill();ctx.restore()}
+  if(G.me&&!G.me.out&&!G.over&&!G.demo&&!G.paused&&(!TOUCH.on||TOUCH.aiming||G.lock)){const m=G.me,AM=aimXY(m),dx=AM.x-m.x,dy=AM.y-m.y,d=Math.hypot(dx,dy)||1,L=Math.min(d,m.k.range),ex=m.x+dx/d*L,ey=m.y+dy/d*L,ok=canThrow(m)||m.throwT>0;
     ctx.setLineDash([6,7]);ctx.lineWidth=2.5;ctx.strokeStyle=ok?'rgba(36,80,138,.55)':'rgba(200,70,60,.45)';ctx.beginPath();ctx.moveTo(m.x,m.y-30);
     ctx.quadraticCurveTo((m.x+ex)/2,(m.y+ey)/2-30-L*.12,ex,ey);ctx.stroke();ctx.setLineDash([]);
     ctx.fillStyle=ok?'rgba(36,80,138,.18)':'rgba(200,70,60,.18)';ctx.beginPath();ctx.ellipse(ex,ey,16,6,0,0,7);ctx.fill();
-    if(d>m.k.range){ctx.font='12px Jua, sans-serif';ctx.textAlign='center';ctx.fillStyle='rgba(36,80,138,.8)';ctx.fillText('사거리 밖',MOUSE.x,MOUSE.y+26)}
-    if(!ok){ctx.font='13px Jua, sans-serif';ctx.textAlign='center';ctx.fillStyle='#c4473a';ctx.fillText(m.coldT>0?'손이 시려요':m.ammo<=0?(TOUCH.on?'눈이 없어요! (뭉치기)':'눈이 없어요! (Space/우클릭)'):'',MOUSE.x,MOUSE.y-18)}}
-  if(G.me&&!G.me.out&&!G.over&&!G.demo&&(!TOUCH.on||TOUCH.aiming)){ctx.strokeStyle='rgba(36,80,138,.8)';ctx.lineWidth=2;ctx.beginPath();ctx.arc(MOUSE.x,MOUSE.y,9,0,7);ctx.moveTo(MOUSE.x-14,MOUSE.y);ctx.lineTo(MOUSE.x+14,MOUSE.y);ctx.moveTo(MOUSE.x,MOUSE.y-14);ctx.lineTo(MOUSE.x,MOUSE.y+14);ctx.stroke()}
+    if(d>m.k.range){ctx.font='12px Jua, sans-serif';ctx.textAlign='center';ctx.fillStyle='rgba(36,80,138,.8)';ctx.fillText(AM.f?'가까이 가세요':'사거리 밖',AM.x,AM.y+26)}
+    if(!ok){ctx.font='13px Jua, sans-serif';ctx.textAlign='center';ctx.fillStyle='#c4473a';ctx.fillText(m.coldT>0?'손이 시려요':m.ammo<=0?(TOUCH.on?'눈이 없어요! (뭉치기)':'눈이 없어요! (Space/우클릭)'):'',AM.x,AM.y-(AM.f?60:18))}}
+  if(G.me&&!G.me.out&&!G.over&&!G.demo&&(!TOUCH.on||TOUCH.aiming)&&aimMode()!=='auto'){ctx.strokeStyle='rgba(36,80,138,.8)';ctx.lineWidth=2;ctx.beginPath();ctx.arc(MOUSE.x,MOUSE.y,9,0,7);ctx.moveTo(MOUSE.x-14,MOUSE.y);ctx.lineTo(MOUSE.x+14,MOUSE.y);ctx.moveTo(MOUSE.x,MOUSE.y-14);ctx.lineTo(MOUSE.x,MOUSE.y+14);ctx.stroke()}
   if(G.paused){ctx.fillStyle='rgba(22,33,58,.6)';ctx.fillRect(0,0,W,H);ctx.fillStyle='#fff';ctx.font='48px Jua, sans-serif';ctx.fillText('잠깐 멈춤 (P)',W/2,H/2)}}
 function drawProp(w){const r=PMETA[w.prop];ctx.drawImage(IMG.props,r[0],r[1],r[2],r[3],w.x-r[2]/2,w.y+8-r[3],r[2],r[3])}
 function onPond(u){const P=G.pond;return P&&((u.x-P.x)/P.rx)**2+((u.y-P.y)/P.ry)**2<1}
@@ -940,7 +958,7 @@ function hud(){
   if(me.k.wall){ctx.fillStyle=me.wallCd>0||me.ammo<3?'#6c7ea6':'#9fd4ff';ctx.fillText(me.wallCd>0?`R 눈벽 ${me.wallCd.toFixed(0)}초`:'R 눈벽 (눈 3개)',540,672)}
   if(TOUCH.on)return;
   ctx.fillStyle=me.dodgeCd>0?'#6c7ea6':'#9fd4ff';ctx.fillText(me.dodgeCd>0?`구르기 ${me.dodgeCd.toFixed(1)}초`:'Shift 구르기 준비',540,699);
-  const keys=[['WASD','이동'],['좌클릭','던지기 (누르고 있으면 연속)'],['우클릭 / Space','눈 뭉치기'],['F','필살기'],['Tab','다른 아이'],['P','멈춤']];
+  const keys=[['WASD','이동'],[aimMode()==='manual'?'좌클릭':'좌클릭 / J',aimMode()==='auto'?'던지기 (자동 조준)':aimMode()==='assist'?'던지기 (적 근처 조준)':'던지기 (마우스 조준)'],['우클릭 / Space','눈 뭉치기'],['F','필살기'],['C','다른 적 노리기 · Tab 다른 아이'],['P','멈춤']];
   ctx.font='12px Jua, sans-serif';keys.forEach(([k,v],i)=>{const x=700+(i%2)*280,y=662+Math.floor(i/2)*17;ctx.fillStyle='#ffcf4a';ctx.fillText(k,x,y);ctx.fillStyle='#a9b8d6';ctx.fillText(v,x+ctx.measureText(k).width+8,y)})}
 
 /* ---------- 로비 ---------- */
@@ -966,6 +984,9 @@ function lobby(){
     if(!own.includes(i)){if(SAVE.ddak<g.p)return;SAVE.ddak-=g.p;own.push(i)}SAVE.glove[k]=i;save();lobby()});
   $('speedOpts').innerHTML=SPEEDS.map(([n],i)=>`<button class="btn alt small" id="spd-${i}" data-i="${i}" aria-pressed="${(SAVE.speed??1)===i}" style="${(SAVE.speed??1)===i?'background:var(--gold);color:#3a2a00':''}">${n}</button>`).join('');
   document.querySelectorAll('#speedOpts button').forEach(b=>b.onclick=()=>{SAVE.speed=+b.dataset.i;save();lobby()});
+  $('aimOpts').innerHTML=AIMS.map(([id,n])=>`<button class="btn alt small" id="aim-${id}" data-a="${id}" aria-pressed="${aimMode()===id}" style="${aimMode()===id?'background:var(--gold);color:#3a2a00':''}">${n}</button>`).join('');
+  document.querySelectorAll('#aimOpts button').forEach(b=>b.onclick=()=>{SAVE.aim=b.dataset.a;save();lobby()});
+  $('aimNote').textContent={auto:'자동: 가장 가까운 적을 알아서 노려요. 클릭(또는 J)만 하면 던져요. C로 다른 적을 고를 수 있어요.',assist:'보조: 마우스를 적 근처에 대면 그 적에 조준이 착 달라붙어요.',manual:'수동: 마우스로 직접 조준해요. (예전 방식)'}[aimMode()];
   const RR=REGIONS[SAVE.region],TT=RT[SAVE.region];$('prepRegion').textContent=`${revengeOn(SAVE.region)?'⚔ 복수전: ':'도전: '}${RR.n} ${'★'.repeat(RR.s)} · ${TT?TT.t:'연습 경기'}`;
   $('bStart').disabled=SAVE.team.length<5;
   document.querySelectorAll('.rg').forEach(b=>b.onclick=()=>{SAVE.region=+b.dataset.i;save();lobby()});
