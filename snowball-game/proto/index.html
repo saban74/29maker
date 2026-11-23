@@ -122,6 +122,7 @@ button:focus-visible{outline:2px solid var(--gold);outline-offset:2px}
         <span><kbd>Q</kbd> 핫팩 · <kbd>E</kbd> 핫초코</span><span><kbd>R</kbd> 눈벽 쌓기 (하린)</span>
         <span><kbd>Tab</kbd> 다른 아이로 바꾸기</span><span><kbd>P</kbd> 잠깐 멈춤</span>
       </div>
+      <div class="row" style="justify-content:center;gap:6px"><span class="note">게임 속도</span><span id="speedOpts" class="row" style="gap:6px"></span></div>
       <div class="center" style="align-items:center"><button class="btn alt" id="bToMap">← 지도로</button><span class="ddak" id="prepRegion"></span><button class="btn" id="bStart">눈싸움 시작!</button></div>
       <p class="note">라이벌 팀은 도감의 이름·얼굴·특기를 쓰고, 몸 그림은 아직 시트가 없어 우리 아이들 그림의 색을 바꿔 임시로 썼습니다. PC 키보드·마우스용입니다.</p>
     </div>
@@ -444,7 +445,7 @@ function ai(u,dt){
 /* ---------- 업데이트 ---------- */
 function update(dt){
   if(G.over||G.paused)return;
-  G.t-=dt;
+  G.t-=dt/gspeed();
   if(!G.demo)weatherTick(dt);
   for(const u of G.units){u.bcd=1;u.bspd=1;u.bdef=1;u.bdmg=1;const F=u.fx;for(const k in F)F[k]=Math.max(0,F[k]-dt);
     if(F.order>0){u.bcd*=.6;u.bspd*=1.2}if(F.guard>0)u.bdef*=.3;if(F.gale>0)u.bspd*=1.6;if(F.sled>0)u.bspd*=1.8;if(F.dash>0)u.bspd*=2.4;
@@ -745,6 +746,8 @@ function lobby(){
   $('shopNote').textContent=`★ ${KIDS[k].n}에게 끼울 장갑입니다. 산 장갑은 그 아이 것이 됩니다.`;
   document.querySelectorAll('.it').forEach(b=>b.onclick=()=>{const i=+b.dataset.i,g=GLOVES[i];
     if(!own.includes(i)){if(SAVE.ddak<g.p)return;SAVE.ddak-=g.p;own.push(i)}SAVE.glove[k]=i;save();lobby()});
+  $('speedOpts').innerHTML=SPEEDS.map(([n],i)=>`<button class="btn alt small" id="spd-${i}" data-i="${i}" aria-pressed="${(SAVE.speed??1)===i}" style="${(SAVE.speed??1)===i?'background:var(--gold);color:#3a2a00':''}">${n}</button>`).join('');
+  document.querySelectorAll('#speedOpts button').forEach(b=>b.onclick=()=>{SAVE.speed=+b.dataset.i;save();lobby()});
   const RR=REGIONS[SAVE.region],TT=RT[SAVE.region];$('prepRegion').textContent=`도전: ${RR.n} ${'★'.repeat(RR.s)} · ${TT?TT.t:'연습 경기'}`;
   $('bStart').disabled=SAVE.team.length<5;
   document.querySelectorAll('.rg').forEach(b=>b.onclick=()=>{SAVE.region=+b.dataset.i;save();lobby()});
@@ -786,7 +789,8 @@ $('bLobby').onclick=()=>{$('result').hidden=true;showMap()};
 
 /* ---------- 시작 ---------- */
 let last=performance.now();
-function loop(now){const dt=Math.min(.05,(now-last)/1000);last=now;if(G)update(dt);draw();requestAnimationFrame(loop)}
+const SPEEDS=[['느리게',.7],['보통',.85],['빠르게',1]];const gspeed=()=>G&&G.demo?.85:SPEEDS[SAVE.speed??1][1];
+function loop(now){const dt=Math.min(.05,(now-last)/1000);last=now;if(G)update(dt*gspeed());draw();requestAnimationFrame(loop)}
 (async()=>{
   resize();
   const names=[...ALL,'objects','rivals'];
