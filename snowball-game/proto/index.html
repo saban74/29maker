@@ -115,6 +115,16 @@ button:focus-visible{outline:2px solid var(--gold);outline-offset:2px}
   .rcard{width:min(320px,62%);padding:10px;gap:6px}.rch b{font-size:20px}.rm img{width:40px;height:40px}.rsk{display:none}
   .box{padding:12px;gap:10px}.kc img{width:52px;height:52px}.kc .d{display:none}
   h1{font-size:24px}.logo{width:min(420px,60vw)}.sub2{font-size:18px}.btn.big{font-size:20px;padding:10px 28px}}
+.dg{width:min(1180px,100%)}.dtabs{display:flex;flex-wrap:wrap;gap:6px}
+.dhead{display:flex;flex-wrap:wrap;gap:10px 20px;justify-content:space-between;align-items:center}.dhead h3{font-size:22px}
+.dlv{display:flex;flex-wrap:wrap;gap:4px 10px;align-items:baseline;background:var(--panel2);border-radius:12px;padding:6px 12px;font-size:13px;color:var(--sub)}.dlv b{font-family:var(--display);font-weight:400;font-size:24px;color:var(--gold)}.dlv span:first-of-type{color:var(--gold)}
+.dgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:10px;margin-top:10px}
+.dcard{background:var(--panel2);border-radius:14px;padding:10px 12px;display:grid;gap:4px;align-content:start;font-size:12.5px;min-width:0}
+.dcard p{margin:0;color:var(--sub);line-height:1.45}.dcard p b{color:var(--ink);font-weight:700}.dcard .lvl{color:var(--ok)}
+.dh{display:flex;gap:10px;align-items:center}.dh img{width:52px;height:52px;border-radius:10px;background:#0002}.dh b{font-family:var(--display);font-weight:400;font-size:20px;display:block}
+.chip2{font-size:11px;background:#0003;color:var(--gold);border-radius:99px;padding:1px 8px}
+.dst{display:grid;grid-template-columns:auto 1fr 16px;gap:2px 6px;align-items:center;font-size:11px;color:var(--sub);margin-top:4px}
+.dst i{height:6px;border-radius:9px;background:#0004;overflow:hidden;display:block}.dst i b{display:block;height:100%;background:var(--blue)}.dst em{font-style:normal;text-align:right;color:var(--ink)}
 @media (max-width:720px){.mcards{grid-template-columns:1fr}.team,.shop{grid-template-columns:repeat(3,minmax(0,1fr))}.regions{grid-template-columns:1fr 1fr}}
 </style>
 
@@ -162,7 +172,7 @@ button:focus-visible{outline:2px solid var(--gold);outline-offset:2px}
         <button class="btn alt small" id="bToTitle">≡ 첫 화면</button>
         <span class="ddak" id="mapDay"></span><span class="ddak" id="mapDdak"></span>
         <span class="pct"><span>남양주시 평정도</span><span class="pbar"><i id="mapBar"></i></span><b id="mapPct"></b></span>
-        <button class="btn small" id="bMembers">오늘의 멤버 · 문방구</button>
+        <button class="btn alt small" id="bDogam">📖 도감</button><button class="btn small" id="bMembers">오늘의 멤버 · 문방구</button>
       </div>
       <div class="mapwrap"><img src="assets/map.jpg" alt="남양주시 월드맵"><div id="spots"></div>
         <div class="rcard" id="regionCard" hidden></div></div>
@@ -181,6 +191,10 @@ button:focus-visible{outline:2px solid var(--gold);outline-offset:2px}
       <div class="attd" id="attDays"></div><p class="sub" id="attMsg" style="margin:0;font-size:16px;color:var(--ink)"></p>
       <p class="note" style="margin:0">매일 들어오면 보상이 커지고, 7일째에는 희귀 장갑을 받아요. 하루라도 빠지면 1일째부터 다시 시작해요.</p>
       <div class="center"><button class="btn" id="bAttOk">좋아요!</button></div></div>
+  </div>
+  <div class="ov" id="dogam" hidden>
+    <div class="box dg"><div class="row" style="justify-content:space-between"><h2>📖 동네별 아이들 도감</h2><button class="btn alt small" id="bDgClose">← 지도로</button></div>
+      <div class="dtabs" id="dTabs"></div><div id="dBody"></div></div>
   </div>
   <div class="ov" id="result" hidden>
     <div class="box res">
@@ -757,6 +771,27 @@ function checkAttendance(){const d=realDayNum();if(SAVE.lastLogin===d)return fal
   $('attend').hidden=false;return true}
 
 
+/* ---------- 도감 ---------- */
+const STATS={jihun:[9,7,6,4,5,6],sumin:[3,5,6,6,6,5],minjae:[4,5,5,10,5,4],doyun:[6,5,8,4,5,9],harin:[5,5,4,7,8,7],
+  taeho:[6,10,4,5,4,4],seoyeon:[5,6,10,5,4,6],junho:[7,4,3,5,10,8],yerin:[4,7,6,6,5,5],kangmin:[5,6,6,5,6,7]};
+const SNAME=['힘','정확도','달리기','손재주','추위 저항','깡'];
+function bars(st){return `<div class="dst">${st.map((v,i)=>`<span>${SNAME[i]}</span><i><b style="width:${v*10}%"></b></i><em>${v}</em>`).join('')}</div>`}
+function schedText(k){const [off,why,watch]=SCHED[k];return (off.length?off.map(d=>DAYS[d]).join('·')+' '+why:'학원 없음')+(watch?' · 엄마 감시 <b style="color:var(--red)">상</b>':'')}
+function dCard(face,name,role,lines,st,extra=''){return `<div class="dcard"><div class="dh"><img alt="" src="${face}"><div><b>${name}</b><span class="chip2">${role}</span></div></div>${lines.map(l=>`<p>${l}</p>`).join('')}${bars(st)}${extra}</div>`}
+function showDogam(tab){hideAll();$('dogam').hidden=false;
+  $('dTabs').innerHTML=REGIONS.map((r,i)=>`<button class="btn alt small" id="dt-${i}" data-i="${i}" style="${i===tab?'background:var(--gold);color:#3a2a00':''}">${i+1}. ${r.n}</button>`).join('');
+  document.querySelectorAll('#dTabs button').forEach(b=>b.onclick=()=>showDogam(+b.dataset.i));
+  const R_=REGIONS[tab],T=RT[tab],lvl=`<div class="dlv"><b>Lv.${tab+1}</b><span>${'★'.repeat(R_.s)}</span><span>상대 능력 ${Math.round(R_.lv*100)}% · 장갑 ${GLOVES[R_.gl].n}(연속 ${GLOVES[R_.gl].lim}개)</span></div>`;
+  if(!T){$('dBody').innerHTML=`<div class="dhead"><div><h3>다산동 · 새싹 눈싸움단 (우리 팀)</h3><p class="sub" style="margin:0">균형 잡힌 10명. 연습 경기 상대는 오늘 안 뽑힌 친구들이에요.</p></div>${lvl}</div>
+    <div class="dgrid">${ALL.map(k=>{const K=KIDS[k],S=SPECIAL[k];return dCard(FACES[k],K.n,K.role,[`<b>특기</b> ${K.d}`,`<b>필살기</b> ${S[0]} — ${S[1]}`,`<b>못 나오는 날</b> ${schedText(k)}`],STATS[k],`<p class="lvl">장갑: ${GLOVES[SAVE.glove[k]||0].n}</p>`)}).join('')}</div>`;return}
+  const rec=SAVE.recruits.includes(tab),boss=T.m.find(m=>m.boss);
+  $('dBody').innerHTML=`<div class="dhead"><div><h3>${R_.n} · ${T.t}</h3><p class="sub" style="margin:0">${T.st}${SAVE.cleared.includes(tab)?' · 🚩 이긴 동네':''}${rec?` · 👑 ${boss.n} 영입함`:''}</p></div>${lvl}</div>
+    <div class="dgrid">${T.m.map((m,i)=>{const st=STATS[m.b].map(v=>Math.min(10,Math.round(v*R_.lv*(m.boss?1.1:1))));
+      return dCard(rivalFace(m.f),(m.boss?'👑 ':'')+m.n,m.role+(m.boss?' · 대장':''),[`<b>특기</b> ${T.sk[i]}`,`<b>필살기(임시)</b> ${SPECIAL[m.b][0]} — ${SPECIAL[m.b][1]}`,m.boss?`<b>체력</b> 대장이라 1.3배`:''].filter(Boolean),st,
+      m.boss?`<p class="lvl">${rec?'✅ 우리 팀 동료가 됐어요':'처음 이기면 동료로 영입'}</p>`:'')}).join('')}
+    <div class="dcard"><div class="dh"><div><b>단원 2명</b><span class="chip2">일반</span></div></div><p>이름 없는 팀원들이에요. 수비(하린 타입)와 눈 공급(민재 타입)을 맡아요.</p><p>능력은 동네 레벨에 맞춰 올라가요.</p></div></div>
+    <p class="note">※ 능력치는 기본 아이 능력에 동네 레벨(상대 능력 %)을 곱해 계산한 값이에요. 라이벌 몸 그림은 아직 임시예요.</p>`}
+
 /* ---------- 그리기 ---------- */
 let BG=null;
 document.getElementById('bSnd').onclick=e=>{e.stopPropagation();audioInit();setSound(!sndOn())};
@@ -1011,7 +1046,7 @@ function start(){if(SAVE.team.length<5)return;showMissions()}
 const REGION_BGM=['bgm_dasan_afterschool','bgm_byeollae_bunny','bgm_hopyeong_chase','bgm_jinjeop_fort','bgm_hopyeong_chase','bgm_deokso_river','bgm_hwado_boss'];
 const REGION_AMB=['amb_calm_wind','amb_park_wind','amb_market_distant','amb_snowfall','amb_market_distant','amb_park_wind','amb_ice_valley'];
 function go(){hideAll();newGame();sfx('start');music(REGION_BGM[SAVE.region]);ambience(REGION_AMB[SAVE.region])}
-function hideAll(){['title','map','lobby','result','mission'].forEach(id=>$(id).hidden=true)}
+function hideAll(){['title','map','lobby','result','mission','dogam'].forEach(id=>$(id).hidden=true)}
 function progress(){return Math.round(SAVE.cleared.filter(i=>i>0).length/6*100)}
 let titleStage=0,resetArm=false;
 function showTitle(){music('bgm_dasan_afterschool');ambience('amb_snowfall');hideAll();$('title').hidden=false;G=null;newGame(true);titleStage=0;$('titleMenu').hidden=true;$('tapHint').hidden=false;
@@ -1042,6 +1077,7 @@ $('bContinue').onclick=e=>{e.stopPropagation();showMap();checkAttendance();showM
 $('bReset').onclick=e=>{e.stopPropagation();if(!resetArm){resetArm=true;$('bReset').textContent='정말요? 한 번 더 누르면 처음부터';return}
   SAVE={ddak:200,owned:{},glove:{},cleared:[],me:'jihun',region:0,day:0,played:0,team:[],recruits:[],realDay:true,streak:0,lastLogin:realDayNum(),revenge:null};ALL.forEach(k=>{SAVE.owned[k]=[0];SAVE.glove[k]=0});save();showMap()};
 $('bToMap').onclick=()=>showMap();$('bToTitle').onclick=()=>showTitle();
+$('bDogam').onclick=()=>showDogam(0);$('bDgClose').onclick=()=>showMap();
 $('bMembers').onclick=()=>{hideAll();lobby();$('lobby').hidden=false};
 $('bStart').onclick=start;$('bNextDay').onclick=()=>{SAVE.day++;SAVE.played=0;rollRevenge();fixTeam();save();lobby()};
 $('bDayMode').onclick=()=>{if(SAVE.realDay===false){SAVE.realDay=true}else{SAVE.realDay=false;SAVE.day=realDayNum()}SAVE.revenge=null;fixTeam();save();lobby()};$('bAgain').onclick=start;
