@@ -98,7 +98,15 @@ button:focus-visible{outline:2px solid var(--gold);outline-offset:2px}
 .rm b{font-family:var(--display);font-weight:400;font-size:16px}.rm span{font-size:11px;color:var(--sub)}
 .rsk{margin:0;padding-left:18px;font-size:13px;color:var(--sub);display:grid;gap:2px}
 .mt{display:flex;align-items:center;gap:4px}.mt img{width:34px;height:34px}.mt b{font-family:var(--display);font-weight:400;font-size:15px}.mtc{margin-left:auto;font-size:12px;color:var(--sub)}
-@media (max-width:720px){.team,.shop{grid-template-columns:repeat(3,minmax(0,1fr))}.regions{grid-template-columns:1fr 1fr}}
+.mcards{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}
+.mc{background:var(--panel2);border:2px solid var(--line);border-radius:16px;padding:18px 14px;display:grid;gap:8px;text-align:center;color:var(--ink);font:inherit;cursor:pointer;transition:transform .15s}
+.mc:hover{transform:translateY(-4px);border-color:var(--gold)}.mc .mt2{font-family:var(--display);font-size:22px;color:var(--gold)}.mc b{color:var(--ok)}
+.attd{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:6px}.ad{background:var(--panel2);border-radius:10px;padding:6px 2px;display:grid;justify-items:center;gap:2px;opacity:.55;font-size:12px}
+.ad b{font-size:22px}.ad.got{opacity:1}.ad.now{outline:2px solid var(--gold)}
+.kc.rec{background:linear-gradient(180deg,#3a3260,var(--panel2))}
+.spot.rv{box-shadow:0 0 0 4px #ff6b57cc,0 0 30px 8px #ff6b5799}.spot.rv span{background:var(--red)}
+#resSub{white-space:pre-line}
+@media (max-width:720px){.mcards{grid-template-columns:1fr}.team,.shop{grid-template-columns:repeat(3,minmax(0,1fr))}.regions{grid-template-columns:1fr 1fr}}
 </style>
 
 <div id="app">
@@ -110,7 +118,7 @@ button:focus-visible{outline:2px solid var(--gold);outline-offset:2px}
         <h1>오늘의 멤버 · 준비</h1>
         <p class="sub">오늘 나올 수 있는 아이 5명을 고르고, 조종할 아이(★)와 장갑을 챙겨 출발하세요.</p>
       </div>
-      <div class="row" style="justify-content:space-between"><h2>우리 팀 · 다산동 새싹 눈싸움단 <span id="teamCount"></span></h2><span class="row"><span class="ddak" id="today"></span><button class="btn alt small" id="bNextDay">하루 넘기기</button></span></div>
+      <div class="row" style="justify-content:space-between"><h2>우리 팀 · 다산동 새싹 눈싸움단 <span id="teamCount"></span></h2><span class="row"><span class="ddak" id="today"></span><button class="btn alt small" id="bDayMode">요일: 실제 오늘</button><button class="btn alt small" id="bNextDay">하루 넘기기</button></span></div>
       <p class="note" style="margin:0">오늘 나올 수 있는 아이 중 5명을 고르세요. 학원·엄마 감시 때문에 요일마다 나오는 아이가 달라요. 하루에 2번 대결하면 해가 집니다.</p>
       <div class="team" id="teamCards"></div>
       <div class="row" style="justify-content:space-between"><h2>문방구 · 장갑</h2><span class="ddak" id="ddak"></span></div>
@@ -152,6 +160,18 @@ button:focus-visible{outline:2px solid var(--gold);outline-offset:2px}
     </div>
   </div>
   <button id="bSnd" aria-label="소리 켜기/끄기">🔊</button>
+  <div class="ov" id="mission" hidden>
+    <div class="box"><h2 style="justify-self:start">오늘의 미션 · 하나를 고르세요</h2>
+      <p class="sub" style="margin:0">고른 미션을 해내면 보너스 딱지를 받아요. 지거나 실패해도 벌칙은 없어요.</p>
+      <div class="mcards" id="mcards"></div>
+      <div class="center"><button class="btn alt small" id="bNoMission">미션 없이 시작</button></div></div>
+  </div>
+  <div class="ov" id="attend" hidden>
+    <div class="box" style="width:min(640px,100%)"><h2 style="justify-self:start">📅 출석 보상</h2>
+      <div class="attd" id="attDays"></div><p class="sub" id="attMsg" style="margin:0;font-size:16px;color:var(--ink)"></p>
+      <p class="note" style="margin:0">매일 들어오면 보상이 커지고, 7일째에는 희귀 장갑을 받아요. 하루라도 빠지면 1일째부터 다시 시작해요.</p>
+      <div class="center"><button class="btn" id="bAttOk">좋아요!</button></div></div>
+  </div>
   <div class="ov" id="result" hidden>
     <div class="box res">
       <h1 id="resTitle"></h1>
@@ -202,13 +222,22 @@ const RT={
 };
 
 /* ---------- 저장 ---------- */
-let SAVE={ddak:200,owned:{},glove:{},cleared:[],me:'jihun',region:0,day:0,played:0,team:[]};
+let SAVE={ddak:200,owned:{},glove:{},cleared:[],me:'jihun',region:0,day:0,played:0,team:[],recruits:[],realDay:true,streak:0,lastLogin:-1,revenge:null};
 try{const s=JSON.parse(localStorage.getItem('snowfight-save3')||'null');if(s)SAVE=Object.assign(SAVE,s)}catch(e){}
 function save(){try{localStorage.setItem('snowfight-save3',JSON.stringify(SAVE))}catch(e){}}
-ALL.forEach(k=>{SAVE.owned[k]=SAVE.owned[k]||[0];if(SAVE.glove[k]==null)SAVE.glove[k]=0});
-function absent(k,day){const [off,why,watch]=SCHED[k],wd=day%7;if(off.includes(wd))return why;
+function initKid(k){SAVE.owned[k]=SAVE.owned[k]||[0];if(SAVE.glove[k]==null)SAVE.glove[k]=0}
+[...ALL,...(SAVE.recruits||[]).map(r=>'r'+r)].forEach(initKid);
+function realDayNum(){const d=new Date();return Math.floor((d.getTime()-d.getTimezoneOffset()*6e4)/864e5)+3}
+function today(){return SAVE.realDay===false?SAVE.day:realDayNum()}
+function dayLabel(){const t=today();return SAVE.realDay===false?`${Math.floor(SAVE.day/7)+1}주째 ${DAYS[t%7]}요일`:`오늘 ${DAYS[t%7]}요일 (실제 요일)`}
+function ROSTER(){return [...ALL,...SAVE.recruits.map(r=>'r'+r)]}
+function kdef(k){if(k[0]==='r'){const ri=+k.slice(1),T=RT[ri],m=T.m.find(m=>m.boss);return {...KIDS[m.b],...m,b:m.b,hue:T.h,from:REGIONS[ri].n,d:`${REGIONS[ri].n}에서 온 대장 · ${m.role}`}}return {...KIDS[k],b:k}}
+const kname=k=>kdef(k).n;
+function face(k){if(!FACES[k]&&k[0]==='r')FACES[k]=rivalFace(kdef(k).f);return FACES[k]}
+function absent(k,day){if(k[0]==='r'){const ri=+k.slice(1);return day%7===(ri+3)%7?'자기 동네 일 보러 감':''}
+  const [off,why,watch]=SCHED[k],wd=day%7;if(off.includes(wd))return why;
   if(watch&&((day*7+ALL.indexOf(k)*13)%10)<3)return '엄마가 숙제하래요';return ''}
-function fixTeam(){const av=ALL.filter(k=>!absent(k,SAVE.day));SAVE.team=SAVE.team.filter(k=>av.includes(k)).slice(0,5);
+function fixTeam(){const av=ROSTER().filter(k=>!absent(k,today()));SAVE.team=SAVE.team.filter(k=>av.includes(k)).slice(0,5);
   for(const k of av){if(SAVE.team.length>=5)break;if(!SAVE.team.includes(k))SAVE.team.push(k)}
   if(!SAVE.team.includes(SAVE.me))SAVE.me=SAVE.team[0]}
 
@@ -405,9 +434,10 @@ function newGame(demo){
   if(demo){G.demo=true;const sh=[...ALL].sort(()=>Math.random()-.5);
     sh.slice(0,5).forEach((k,i)=>G.units.push(mkUnit({b:k,...KIDS[k]},0,LX+40,ys[i],1,GLOVES[2],0)));
     sh.slice(5).forEach((k,i)=>G.units.push(mkUnit({b:k,...KIDS[k]},1,RX-40,ys[i],1,GLOVES[2],0)));G.me=null;G.enemyName='';return}
-  SAVE.team.forEach((k,i)=>G.units.push(mkUnit({b:k,...KIDS[k]},0,LX,ys[i],1,GLOVES[SAVE.glove[k]],0)));
-  const E=enemyDefs(SAVE.region);G.enemyName=E.t;
-  E.list.forEach((d,i)=>G.units.push(mkUnit(d,1,RX,ys[i],R.lv,GLOVES[R.gl],E.h)));
+  SAVE.team.forEach((k,i)=>{const d=kdef(k);G.units.push(mkUnit(d,0,LX,ys[i],1,GLOVES[SAVE.glove[k]],d.hue||0))});
+  const E=enemyDefs(SAVE.region);G.enemyName=E.t;G.revenge=revengeOn(SAVE.region);if(G.revenge)G.enemyName='⚔복수전 '+E.t;const LV=R.lv+(G.revenge?.12:0);
+  E.list.forEach((d,i)=>G.units.push(mkUnit(d,1,RX,ys[i],LV,GLOVES[Math.min(4,R.gl+(G.revenge?1:0))],E.h)));
+  G.ms={crates:0,drops:0,specials:0,myHits:0,boss:false};G.mission=MISSION_PICK;
   G.me=G.units.find(u=>u.team===0&&u.id===SAVE.me)||G.units[0];
   bubble(G.me,'내가 간다!','#ffcf4a');
 }
@@ -416,7 +446,7 @@ function enemyDefs(ri){
   const T=RT[ri],gen=['harin','minjae'].map(b=>({...KIDS[b],b,n:'단원',f:null}));
   return{t:T.t,h:T.h,list:[...T.m.map(m=>({...KIDS[m.b],...m})),...gen].sort(()=>Math.random()-.5)}}
 function mkUnit(k,team,x,y,lv,glove,hue){const id=k.b;
-  return {id,k,team,x,y,vx:0,vy:0,wet:0,max:k.hp*3.2*(team?Math.max(.85,lv):1)*(k.boss?1.3:1),img:team?eimg(id,hue):IMG[id],ammo:5,maxAmmo:k.maxAmmo||6,glove,streak:0,streakT:0,coldT:0,cd:0,gT:0,gathering:false,
+  return {id,k,team,x,y,vx:0,vy:0,wet:0,max:k.hp*3.2*(team?Math.max(.85,lv):1)*(k.boss?1.3:1),img:hue?eimg(id,hue):IMG[id],ammo:5,maxAmmo:k.maxAmmo||6,glove,streak:0,streakT:0,coldT:0,cd:0,gT:0,gathering:false,
     throwT:0,pend:null,dodgeT:0,dodgeCd:0,dvx:0,dvy:0,hitT:0,slowT:0,out:false,outT:0,dir:'S',flip:team===1,anim:0,cheerT:0,
     items:team?{}:{pack:1,cocoa:1},wallCd:0,supT:2,hits:0,lv:team?lv:1,
     ai:{t:null,mode:'fight',goal:null,think:0,wait:rnd(.3,1),seed:Math.random()*9,dodge:k.dodgeAI||(team?.22*lv:.3)},clT:2,bcd:1,bspd:1,bdef:1,bdmg:1,sp:team?rnd(0,30):0,fx:{},gold:0}}
@@ -464,7 +494,7 @@ const SPECIAL={jihun:['슈퍼 스노볼','거대한 눈덩이 한 방'],sumin:['
   seoyeon:['질풍','5초 동안 빠르고 구르기 무제한'],junho:['철벽','6초 동안 피해 70% 감소'],yerin:['손난로 파티','팀 전원 7초 동안 손 안 시림'],kangmin:['작전 지시','팀 전원 8초 동안 빨리 던지고 뜀']};
 function spGain(u,v){if(!u.out&&!G.demo)u.sp=Math.min(100,u.sp+v)}
 function banner(text,sub,col){G.banner={text,sub,col,t:0}}
-function doSpecial(u,tx,ty){if(!u||u.out||u.sp<100||G.over)return false;u.sp=0;sfx(u.team?'specialfoe':'special');const S=SPECIAL[u.id],mates=alive(u.team);
+function doSpecial(u,tx,ty){if(!u||u.out||u.sp<100||G.over)return false;u.sp=0;sfx(u.team?'specialfoe':'special');if(u.team===0&&G.ms)G.ms.specials++;const S=SPECIAL[u.id],mates=alive(u.team);
   banner(`${u.k.n} · ${S[0]}!`,S[1],u.team?'#ff8f7a':'#ffcf4a');poof(u.x,u.y-40,18);
   const dx=tx-u.x,dy=ty-u.y,d=Math.hypot(dx,dy)||1;
   switch(u.id){
@@ -494,7 +524,7 @@ function weatherTick(dt){const X=G.wx;
     let dx=640,dy=400;for(let k=0;k<30;k++){dx=rnd(420,860);dy=rnd(FY0+60,FY1-60);if(!blocked(dx,dy+10)&&!blocked(dx,dy-10))break}
     G.drops.push({x:dx,y:dy,z:520,kind:k,t:0});sfx('drop');banner('📦 보급 투하!',DROPS[k][0]+' · '+DROPS[k][1],'#ffe08a')}
   for(const p of G.drops){p.t+=dt;if(p.z>0){p.z=Math.max(0,p.z-dt*360);if(p.z===0)poof(p.x,p.y-10,14);continue}
-    const u=G.units.find(u=>!u.out&&dist(u,p)<34);if(!u)continue;p.dead=true;sfx('pickup');poof(p.x,p.y-20,12);
+    const u=G.units.find(u=>!u.out&&dist(u,p)<34);if(!u)continue;p.dead=true;sfx('pickup');if(u.team===0&&G.ms)G.ms.drops++;poof(p.x,p.y-20,12);
     if(p.kind==='gold'){u.gold=2;bubble(u,'황금 눈덩이!','#ffd34a')}
     if(p.kind==='sled'){u.fx.sled=7;bubble(u,'썰매 타자!','#ffe08a')}
     if(p.kind==='snowman'){const f=nearestFoeOf(u),dx=(f?f.x:(u.team?0:W))-u.x,dy=(f?f.y:u.y)-u.y,d=Math.hypot(dx,dy)||1;
@@ -576,7 +606,7 @@ function update(dt){
       G.gx.fillStyle=u.dodgeT>0?'rgba(170,192,222,.7)':'rgba(176,197,224,.75)';G.gx.fillRect(Math.round((u.x+(u.fs?5:-5)*nx/nl)/PX),Math.round((u.y+(u.fs?5:-5)*ny/nl)/PX),1,1)}
     if(Math.abs(u.vx)>1||Math.abs(u.vy)>1){u.anim+=dt;if(u.throwT<=0&&u.dodgeT<=0){if(Math.abs(u.vx)>Math.abs(u.vy)*.8){u.dir='S';u.flip=u.vx<0}else u.dir=u.vy>0?'F':'B'}}
     else if(u.throwT<=0&&u.dodgeT<=0&&u!==G.me){u.dir='S';const t=u.ai.t;if(t)u.flip=t.x<u.x}
-    for(const c of G.crates)if(c.on&&dist(u,c)<30&&u.ammo<u.maxAmmo){c.on=false;c.t=15;u.ammo=u.maxAmmo;if(!G.demo)sfx('crate',u===G.me?1:near(u)*.7);bubble(u,'눈상자 득템!','#ffe08a');poof(c.x,c.y-10,8)}
+    for(const c of G.crates)if(c.on&&dist(u,c)<30&&u.ammo<u.maxAmmo){c.on=false;c.t=15;u.ammo=u.maxAmmo;if(u.team===0&&G.ms)G.ms.crates++;if(!G.demo)sfx('crate',u===G.me?1:near(u)*.7);bubble(u,'눈상자 득템!','#ffe08a');poof(c.x,c.y-10,8)}
     if(u.k.heal)for(const m of alive(u.team))if(dist(u,m)<140)m.wet=Math.max(0,m.wet-u.k.heal*dt*(m===u?.4:1));
     if(u.k.cleanse){u.clT-=dt;if(u.clT<=0){u.clT=3;const m=alive(u.team).find(m=>dist(u,m)<220&&(m.coldT>.4||m.slowT>0));
       if(m){m.coldT=0;m.slowT=0;m.streak=0;bubble(m,'괜찮아! (예린)','#ffe08a');u.clT=4}}}
@@ -602,10 +632,10 @@ function update(dt){
   if(!G.over&&(a===0||e===0||G.t<=0)){G.endT+=dt;if(G.endT>1||G.t<=0)finish(a,e)}
 }
 function splash(b,skip){poof(b.x,b.y-10,14);for(const v of G.units)if(v!==skip&&v.team!==b.team&&!v.out&&Math.hypot(v.x-b.x,v.y-b.y)<60){v.wet+=b.dmg*.5*v.bdef;v.hitT=Math.max(v.hitT,.15);if(v.wet>=v.max){v.out=true;v.outT=0;bubble(v,'추워서 집에 갈래…','#cfe3ff')}}}
-function hit(u,b){const o=b.owner;if(u.fx.dash>0){poof(u.x,u.y-30,4);return}if(!G.demo)sfx(u===G.me?'hitme':'hit',u===G.me||o===G.me?1:near(u)*.7);if(!G.demo)u.wet+=b.dmg*u.bdef;o.hits++;o.cheerT=1;if(b.splash)splash(b,u);spGain(o,14);spGain(u,5);
+function hit(u,b){const o=b.owner;if(u.fx.dash>0){poof(u.x,u.y-30,4);return}if(!G.demo)sfx(u===G.me?'hitme':'hit',u===G.me||o===G.me?1:near(u)*.7);if(!G.demo)u.wet+=b.dmg*u.bdef;o.hits++;o.cheerT=1;if(o===G.me&&G.ms)G.ms.myHits++;if(b.splash)splash(b,u);spGain(o,14);spGain(u,5);
   if(u.k.armor||u.fx.guard>0){u.hitT=.12}else{u.hitT=.32;u.gathering=false;u.throwT=0;u.pend=null}
   poof(b.x,b.y-20,7);G.flash=u===G.me?.25:G.flash;
-  if(u.wet>=u.max){u.out=true;u.outT=0;sfx(u.team?'outfoe':'out');bubble(u,'추워서 집에 갈래…','#cfe3ff');if(o.team===0)bubble(o,'맞았다!','#ffcf4a')}
+  if(u.wet>=u.max){u.out=true;u.outT=0;sfx(u.team?'outfoe':'out');if(u.k.boss&&o===G.me&&G.ms)G.ms.boss=true;bubble(u,'추워서 집에 갈래…','#cfe3ff');if(o.team===0)bubble(o,'맞았다!','#ffcf4a')}
   else if(Math.random()<.1)bubble(u,['앗!','차가워!','으악'][Math.floor(Math.random()*3)],'#ffffff')}
 function poof(x,y,n){for(let i=0;i<n;i++)G.parts.push({x,y,vx:rnd(-90,90),vy:rnd(-160,-40),t:0,T:rnd(.35,.6),r:rnd(2,4.5)})}
 function bubble(u,text,c){G.bubbles.push({u,text,c,t:0})}
@@ -617,13 +647,49 @@ function finish(a,e){G.over=true;let win=a>e;
   const hits=G.units.filter(u=>u.team===0).reduce((s,u)=>s+u.hits,0);
   const bonus=1+(G.R.s-1)*.2;let gain=Math.round((win?150+hits*10:30+hits*5)*bonus),first=false;
   if(win&&!SAVE.cleared.includes(SAVE.region)){SAVE.cleared.push(SAVE.region);first=true;gain+=300}
-  SAVE.ddak+=gain;SAVE.played++;let newDay=false;if(SAVE.played>=2){SAVE.played=0;SAVE.day++;newDay=true;fixTeam()}save();
+  let extra=[];if(G.revenge&&win){gain*=2;SAVE.revenge=null;extra.push('⚔ 복수전 승리! 딱지 2배')}
+  if(win&&first&&RT[SAVE.region]&&!SAVE.recruits.includes(SAVE.region)){SAVE.recruits.push(SAVE.region);initKid('r'+SAVE.region);const m=RT[SAVE.region].m.find(m=>m.boss);extra.push(`👑 대장 ${m.n}이(가) 우리 팀 동료가 됐어요!`)}
+  if(G.mission){const M=G.mission;if(M.ok(win,G)){gain+=M.b;extra.push(`🎯 미션 '${M.t}' 성공! +${M.b}`)}else extra.push(`🎯 미션 '${M.t}' 실패`)}
+  SAVE.ddak+=gain;let newDay=false;if(SAVE.realDay===false){SAVE.played++;if(SAVE.played>=2){SAVE.played=0;SAVE.day++;newDay=true;rollRevenge();fixTeam()}}save();
   setTimeout(()=>{
     document.getElementById('resTitle').textContent=win?'승리! 🏆':'패배…';
-    document.getElementById('resSub').textContent=`${G.R.n} · 딱지 +${gain}장${first?' (처음 이긴 보너스 포함)':''} · 지금 딱지 ${SAVE.ddak}장${newDay?' · 해가 져서 하루가 끝났어요. 내일은 '+DAYS[SAVE.day%7]+'요일!':''}`;
+    document.getElementById('resSub').textContent=`${G.R.n} · 딱지 +${gain}장${first?' (처음 이긴 보너스 포함)':''} · 지금 딱지 ${SAVE.ddak}장${newDay?' · 해가 져서 하루가 끝났어요. 내일은 '+DAYS[SAVE.day%7]+'요일!':''}`+(extra.length?'\n'+extra.join('\n'):'');
     const rows=G.units.filter(u=>u.team===0).map(u=>`<tr><td>${u.k.n}</td><td>${u.k.role}</td><td>${u.hits}번</td><td>${u.out?'아웃':'끝까지 버팀'}</td></tr>`).join('');
     document.getElementById('resTab').innerHTML=`<tr><th>이름</th><th>역할</th><th>맞힌 횟수</th><th>결과</th></tr>${rows}`;
     document.getElementById('result').hidden=false},900)}
+
+/* ---------- 미션 카드 ---------- */
+const MISSIONS=[
+  {id:'clean',t:'무사히 이기기',d:'우리 편 아웃 1명 이하로 승리',b:150,ok:(w,G)=>w&&G.units.filter(u=>u.team===0&&u.out).length<=1,pr:G=>`아웃 ${G.units.filter(u=>u.team===0&&u.out).length}/1`},
+  {id:'fast',t:'번개 승리',d:'2분 안에 이기기',b:120,ok:(w,G)=>w&&G.t>=60,pr:G=>`남은 ${Math.max(0,Math.ceil(G.t-60))}초`},
+  {id:'sniper',t:'명사수',d:'내 아이가 6번 이상 맞히기',b:100,ok:(w,G)=>G.ms.myHits>=6,pr:G=>`${G.ms.myHits}/6`},
+  {id:'crate',t:'눈상자 수집가',d:'눈상자 3개 이상 먹기',b:80,ok:(w,G)=>G.ms.crates>=3,pr:G=>`${G.ms.crates}/3`},
+  {id:'drop',t:'보급 쟁탈전',d:'보급 상자 2개 이상 차지하기',b:100,ok:(w,G)=>G.ms.drops>=2,pr:G=>`${G.ms.drops}/2`},
+  {id:'special',t:'필살기 쇼',d:'우리 팀 필살기 3번 이상',b:80,ok:(w,G)=>G.ms.specials>=3,pr:G=>`${G.ms.specials}/3`},
+  {id:'boss',t:'대장 사냥',d:'👑 대장을 내 아이가 아웃시키기',b:150,ok:(w,G)=>G.ms.boss,pr:G=>G.ms.boss?'성공!':'아직',rival:1}];
+let MISSION_PICK=null;
+function showMissions(){const pool=MISSIONS.filter(m=>!m.rival||RT[SAVE.region]).sort(()=>Math.random()-.5).slice(0,3);
+  $('mcards').innerHTML=pool.map(m=>`<button class="mc" id="mc-${m.id}" data-id="${m.id}"><span class="mt2">🎯 ${m.t}</span><span>${m.d}</span><b>보너스 딱지 +${m.b}</b></button>`).join('');
+  document.querySelectorAll('.mc').forEach(b=>b.onclick=()=>{MISSION_PICK=MISSIONS.find(m=>m.id===b.dataset.id);go()});
+  hideAll();$('mission').hidden=false}
+
+/* ---------- 복수전 ---------- */
+function revengeOn(ri){const R=SAVE.revenge;return !!(R&&R.r===ri&&R.day===today())}
+function rollRevenge(){const c=SAVE.cleared.filter(i=>i>0&&RT[i]);if(!c.length||Math.random()>.45){SAVE.revenge=null;return}
+  SAVE.revenge={r:c[Math.floor(Math.random()*c.length)],day:today()}}
+/* ---------- 출석 ---------- */
+const ATT=[50,60,80,100,120,150,'glove'];
+function checkAttendance(){const d=realDayNum();if(SAVE.lastLogin===d)return false;
+  SAVE.streak=SAVE.lastLogin===d-1&&SAVE.streak<7?SAVE.streak+1:1;SAVE.lastLogin=d;
+  if(SAVE.realDay!==false){SAVE.played=0;rollRevenge()}
+  const r=ATT[SAVE.streak-1];let msg;
+  if(r==='glove'){const k=SAVE.me;if(!SAVE.owned[k].includes(3))SAVE.owned[k].push(3);SAVE.glove[k]=Math.max(SAVE.glove[k],3);SAVE.ddak+=200;msg=`7일 개근! ${kname(k)}에게 <b>희귀 장갑</b> + 딱지 200장`}
+  else{SAVE.ddak+=r;msg=`딱지 <b>${r}장</b>을 받았어요`}
+  save();
+  $('attDays').innerHTML=ATT.map((v,i)=>`<div class="ad${i<SAVE.streak?' got':''}${i===SAVE.streak-1?' now':''}"><small>${i+1}일</small><b>${v==='glove'?'🧤':'🎫'}</b><span>${v==='glove'?'희귀 장갑':v+'장'}</span></div>`).join('');
+  $('attMsg').innerHTML=`출석 ${SAVE.streak}일째! ${msg}`+(SAVE.revenge?`<br><span style="color:var(--red)">⚔ ${REGIONS[SAVE.revenge.r].n} ${RT[SAVE.revenge.r].t}이(가) 복수전을 걸어왔어요! (오늘만)</span>`:'');
+  $('attend').hidden=false;return true}
+
 
 /* ---------- 그리기 ---------- */
 let BG=null;
@@ -777,6 +843,7 @@ function draw(){
   drawWeather();
   if(!G.demo)hud();
   drawBanner();
+  if(G.mission&&!G.demo&&!G.over){const M=G.mission,t=`🎯 ${M.t} · ${M.pr(G)}`;ctx.font='14px Jua, sans-serif';const w=ctx.measureText(t).width+22;ctx.fillStyle='rgba(18,30,66,.85)';ctx.beginPath();ctx.roundRect(20,66,w,24,12);ctx.fill();ctx.fillStyle=M.ok(false,G)||(M.id==='clean'||M.id==='fast')?'#ffe08a':'#e8f1ff';ctx.textAlign='left';ctx.fillText(t,31,83)}
   drawTouch();
   if(G.me&&!G.me.out&&!G.over&&!G.demo&&!G.paused&&(!TOUCH.on||TOUCH.aiming)){const m=G.me,dx=MOUSE.x-m.x,dy=MOUSE.y-m.y,d=Math.hypot(dx,dy)||1,L=Math.min(d,m.k.range),ex=m.x+dx/d*L,ey=m.y+dy/d*L,ok=canThrow(m)||m.throwT>0;
     ctx.setLineDash([6,7]);ctx.lineWidth=2.5;ctx.strokeStyle=ok?'rgba(36,80,138,.55)':'rgba(200,70,60,.45)';ctx.beginPath();ctx.moveTo(m.x,m.y-30);
@@ -840,9 +907,10 @@ const $=id=>document.getElementById(id);let FACES={},GICON={};
 function lobby(){
   $('ddak').textContent=`딱지 ${SAVE.ddak}장`;
   fixTeam();
-  $('today').textContent=`${Math.floor(SAVE.day/7)+1}주째 ${DAYS[SAVE.day%7]}요일 · 오늘 남은 대결 ${2-SAVE.played}번`;
-  $('teamCards').innerHTML=ALL.map(k=>{const K=KIDS[k],ab=absent(k,SAVE.day),on=SAVE.team.includes(k);
-    return `<div class="kc${ab?' off':''}${on?' on':''}"><button class="pick" id="kc-${k}" data-k="${k}" aria-pressed="${on}" ${ab?'disabled':''}><img alt="" src="${FACES[k]}"><b>${K.n}</b><span class="r">${K.role}</span><span class="d">${ab?'오늘 못 나와요 · '+ab:K.d}</span></button>
+  $('today').textContent=dayLabel()+(SAVE.realDay===false?` · 오늘 남은 대결 ${2-SAVE.played}번`:'');
+  $('bNextDay').hidden=SAVE.realDay!==false;$('bDayMode').textContent=SAVE.realDay===false?'요일: 게임 속 날짜':'요일: 실제 오늘';
+  $('teamCards').innerHTML=ROSTER().map(k=>{const K=kdef(k),ab=absent(k,today()),on=SAVE.team.includes(k);
+    return `<div class="kc${ab?' off':''}${on?' on':''}${k[0]==='r'?' rec':''}"><button class="pick" id="kc-${k}" data-k="${k}" aria-pressed="${on}" ${ab?'disabled':''}><img alt="" src="${face(k)}"><b>${K.n}</b><span class="r">${K.role}</span><span class="d">${ab?'오늘 못 나와요 · '+ab:K.d}</span></button>
       ${on?`<button class="star" id="me-${k}" data-k="${k}" aria-pressed="${SAVE.me===k}">${SAVE.me===k?'★ 내가 조종':'☆ 조종하기'}</button>`:''}</div>`}).join('');
   $('teamCount').textContent=`${SAVE.team.length}/5명`;
   document.querySelectorAll('.pick').forEach(b=>b.onclick=()=>{const k=b.dataset.k,i=SAVE.team.indexOf(k);
@@ -852,50 +920,53 @@ function lobby(){
   const k=SAVE.me,own=SAVE.owned[k];
   $('shop').innerHTML=GLOVES.map((g,i)=>{const has=own.includes(i),eq=SAVE.glove[k]===i,can=has||SAVE.ddak>=g.p;
     return `<button class="it" id="gl-${i}" data-i="${i}" aria-pressed="${eq}" ${can?'':'disabled'}><span class="ic">${g.ic?`<img alt="" src="${GICON[g.ic]}">`:'✋'}</span><b>${g.n}</b><span>연속 ${g.lim}개${g.x?' · '+g.x:''}</span><span class="p">${eq?'끼는 중':has?'끼기':'딱지 '+g.p}</span></button>`}).join('');
-  $('shopNote').textContent=`★ ${KIDS[k].n}에게 끼울 장갑입니다. 산 장갑은 그 아이 것이 됩니다.`;
+  $('shopNote').textContent=`★ ${kname(k)}에게 끼울 장갑입니다. 산 장갑은 그 아이 것이 됩니다.`;
   document.querySelectorAll('.it').forEach(b=>b.onclick=()=>{const i=+b.dataset.i,g=GLOVES[i];
     if(!own.includes(i)){if(SAVE.ddak<g.p)return;SAVE.ddak-=g.p;own.push(i)}SAVE.glove[k]=i;save();lobby()});
   $('speedOpts').innerHTML=SPEEDS.map(([n],i)=>`<button class="btn alt small" id="spd-${i}" data-i="${i}" aria-pressed="${(SAVE.speed??1)===i}" style="${(SAVE.speed??1)===i?'background:var(--gold);color:#3a2a00':''}">${n}</button>`).join('');
   document.querySelectorAll('#speedOpts button').forEach(b=>b.onclick=()=>{SAVE.speed=+b.dataset.i;save();lobby()});
-  const RR=REGIONS[SAVE.region],TT=RT[SAVE.region];$('prepRegion').textContent=`도전: ${RR.n} ${'★'.repeat(RR.s)} · ${TT?TT.t:'연습 경기'}`;
+  const RR=REGIONS[SAVE.region],TT=RT[SAVE.region];$('prepRegion').textContent=`${revengeOn(SAVE.region)?'⚔ 복수전: ':'도전: '}${RR.n} ${'★'.repeat(RR.s)} · ${TT?TT.t:'연습 경기'}`;
   $('bStart').disabled=SAVE.team.length<5;
   document.querySelectorAll('.rg').forEach(b=>b.onclick=()=>{SAVE.region=+b.dataset.i;save();lobby()});
 }
-function start(){if(SAVE.team.length<5)return;hideAll();newGame();sfx('start');music('battle')}
-function hideAll(){['title','map','lobby','result'].forEach(id=>$(id).hidden=true)}
+function start(){if(SAVE.team.length<5)return;showMissions()}
+function go(){hideAll();newGame();sfx('start');music('battle')}
+function hideAll(){['title','map','lobby','result','mission'].forEach(id=>$(id).hidden=true)}
 function progress(){return Math.round(SAVE.cleared.filter(i=>i>0).length/6*100)}
 let titleStage=0,resetArm=false;
 function showTitle(){music('menu');hideAll();$('title').hidden=false;G=null;newGame(true);titleStage=0;$('titleMenu').hidden=true;$('tapHint').hidden=false;
   const has=SAVE.day>0||SAVE.cleared.length||SAVE.ddak!==200;
-  $('bContinue').innerHTML=has?`이어하기<small>${Math.floor(SAVE.day/7)+1}주째 ${DAYS[SAVE.day%7]}요일 · 평정도 ${progress()}% · 딱지 ${SAVE.ddak}장</small>`:'시작하기<small>다산동 새싹 눈싸움단과 함께</small>';
+  $('bContinue').innerHTML=has?`이어하기<small>${dayLabel()} · 평정도 ${progress()}% · 딱지 ${SAVE.ddak}장</small>`:'시작하기<small>다산동 새싹 눈싸움단과 함께</small>';
   $('bReset').hidden=!has;$('bReset').textContent='처음부터 다시';resetArm=false}
 function rivalFace(f){const r=RMETA[f],c=document.createElement('canvas');c.width=c.height=r[3];c.getContext('2d').drawImage(IMG.rivals,r[0]+(r[2]-r[3])/2,r[1],r[3],r[3],0,0,r[3],r[3]);return c.toDataURL()}
 function open_(i){return i===0||SAVE.cleared.includes(i-1)}
 function showMap(){music('menu');hideAll();G=null;newGame(true);fixTeam();$('map').hidden=false;$('regionCard').hidden=true;
-  $('mapDdak').textContent=`딱지 ${SAVE.ddak}장`;$('mapDay').textContent=`${Math.floor(SAVE.day/7)+1}주째 ${DAYS[SAVE.day%7]}요일 · 남은 대결 ${2-SAVE.played}번`;
+  $('mapDdak').textContent=`딱지 ${SAVE.ddak}장`;$('mapDay').textContent=dayLabel()+(SAVE.realDay===false?` · 남은 대결 ${2-SAVE.played}번`:'');
   $('mapPct').textContent=progress()+'%';$('mapBar').style.width=progress()+'%';
-  $('mapTeam').innerHTML=SAVE.team.map(k=>`<span class="mt"><img alt="" src="${FACES[k]}"><b>${SAVE.me===k?'★':''}${KIDS[k].n}</b></span>`).join('')+`<span class="mtc">오늘의 멤버 · 동료 10/16</span>`;
-  $('spots').innerHTML=REGIONS.map((r,i)=>{const cl=SAVE.cleared.includes(i),op=open_(i),next=op&&!cl;
-    return `<button class="spot${cl?' won':''}${next?' next':''}${op?'':' locked'}" id="spot-${i}" data-i="${i}" style="left:${r.x}%;top:${r.y}%" aria-label="${r.n}">${cl?'🚩':op?'':'🔒'}<span>${cl?'승리!':next?'도전!':''}</span></button>`}).join('');
+  $('mapTeam').innerHTML=SAVE.team.map(k=>`<span class="mt"><img alt="" src="${face(k)}"><b>${SAVE.me===k?'★':''}${kname(k)}</b></span>`).join('')+`<span class="mtc">오늘의 멤버 · 동료 ${ROSTER().length}/16 · 🔥 출석 ${SAVE.streak}일째</span>`;
+  $('spots').innerHTML=REGIONS.map((r,i)=>{const cl=SAVE.cleared.includes(i),op=open_(i),rv=revengeOn(i),next=(op&&!cl)||rv;
+    return `<button class="spot${cl&&!rv?' won':''}${next?' next':''}${rv?' rv':''}${op?'':' locked'}" id="spot-${i}" data-i="${i}" style="left:${r.x}%;top:${r.y}%" aria-label="${r.n}">${rv?'⚔':cl?'🚩':op?'':'🔒'}<span>${rv?'복수전!':cl?'승리!':next?'도전!':''}</span></button>`}).join('');
   document.querySelectorAll('.spot').forEach(b=>b.onclick=()=>regionCard(+b.dataset.i))}
 function regionCard(i){const r=REGIONS[i],T=RT[i],op=open_(i),c=$('regionCard');c.hidden=false;
   const mem=T?T.m.map(m=>`<div class="rm"><img alt="" src="${rivalFace(m.f)}"><b>${m.boss?'👑 ':''}${m.n}</b><span>${m.role}${m.boss?' · 대장':''}</span></div>`).join(''):
     `<p class="note" style="margin:0">오늘 뽑히지 않은 다산동 친구들과 연습 경기를 합니다. 처음이라면 여기서 손을 풀어 보세요.</p>`;
   c.innerHTML=`<button class="x" id="rcClose" aria-label="닫기">✕</button><div class="rch"><b>${r.n}</b><span>${'★'.repeat(r.s)}${SAVE.cleared.includes(i)?' · 🚩 이긴 동네':''}</span></div>
-    <div class="rct">${T?T.t+' · '+T.st:'다산동 친구들'}</div><div class="rms">${mem}</div>
+    <div class="rct">${T?T.t+' · '+T.st:'다산동 친구들'}</div>${revengeOn(i)?'<div class="rct" style="color:var(--red)">⚔ 복수전! 오늘만 · 상대가 더 강해요 · 이기면 딱지 2배</div>':''}${T&&SAVE.recruits.includes(i)?'<div class="rct" style="color:var(--ok)">👑 대장이 이미 우리 동료예요</div>':T?'<div class="rct" style="color:var(--gold)">처음 이기면 👑 대장이 동료로 들어와요</div>':''}<div class="rms">${mem}</div>
     ${T?`<ul class="rsk">${T.sk.map(x=>`<li>${x}</li>`).join('')}</ul>`:''}
     <button class="btn" id="bPrep" ${op?'':'disabled'}>${op?'도전 준비 →':'🔒 앞 동네를 먼저 이겨야 해요'}</button>`;
   $('rcClose').onclick=()=>c.hidden=true;
   if(op)$('bPrep').onclick=()=>{SAVE.region=i;save();hideAll();lobby();$('lobby').hidden=false}}
 document.addEventListener('click',e=>{if(e.target.closest&&e.target.closest('button'))sfx('click')});
 $('title').onclick=e=>{if(titleStage===0){titleStage=1;$('tapHint').hidden=true;$('titleMenu').hidden=false}};
-$('bContinue').onclick=e=>{e.stopPropagation();showMap()};
+$('bContinue').onclick=e=>{e.stopPropagation();showMap();checkAttendance();showMap()};
 $('bReset').onclick=e=>{e.stopPropagation();if(!resetArm){resetArm=true;$('bReset').textContent='정말요? 한 번 더 누르면 처음부터';return}
-  SAVE={ddak:200,owned:{},glove:{},cleared:[],me:'jihun',region:0,day:0,played:0,team:[]};ALL.forEach(k=>{SAVE.owned[k]=[0];SAVE.glove[k]=0});save();showMap()};
+  SAVE={ddak:200,owned:{},glove:{},cleared:[],me:'jihun',region:0,day:0,played:0,team:[],recruits:[],realDay:true,streak:0,lastLogin:realDayNum(),revenge:null};ALL.forEach(k=>{SAVE.owned[k]=[0];SAVE.glove[k]=0});save();showMap()};
 $('bToMap').onclick=()=>showMap();$('bToTitle').onclick=()=>showTitle();
 $('bMembers').onclick=()=>{hideAll();lobby();$('lobby').hidden=false};
-$('bStart').onclick=start;$('bNextDay').onclick=()=>{SAVE.day++;SAVE.played=0;fixTeam();save();lobby()};$('bAgain').onclick=start;
+$('bStart').onclick=start;$('bNextDay').onclick=()=>{SAVE.day++;SAVE.played=0;rollRevenge();fixTeam();save();lobby()};
+$('bDayMode').onclick=()=>{if(SAVE.realDay===false){SAVE.realDay=true}else{SAVE.realDay=false;SAVE.day=realDayNum()}SAVE.revenge=null;fixTeam();save();lobby()};$('bAgain').onclick=start;
 $('bLobby').onclick=()=>{$('result').hidden=true;showMap()};
+$('bNoMission').onclick=()=>{MISSION_PICK=null;go()};$('bAttOk').onclick=()=>{$('attend').hidden=true};
 
 /* ---------- 시작 ---------- */
 let last=performance.now();
