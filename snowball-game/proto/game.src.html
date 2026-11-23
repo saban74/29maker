@@ -127,6 +127,7 @@ button:focus-visible{outline:2px solid var(--gold);outline-offset:2px}
 .dst i{height:6px;border-radius:9px;background:#0004;overflow:hidden;display:block}.dst i b{display:block;height:100%;background:var(--blue)}.dst em{font-style:normal;text-align:right;color:var(--ink)}
 .xpb{display:block;width:70%;height:5px;border-radius:9px;background:#0004;overflow:hidden;margin:2px auto}.xpb i{display:block;height:100%;background:linear-gradient(90deg,#ffcf4a,#ffe9a0)}
 td .xpb{display:inline-block;width:60px;vertical-align:middle;margin:0 0 0 4px}.lvt{font-family:var(--body);font-size:12px;color:var(--gold);font-weight:700}
+.gr{font-size:11px;font-weight:700}.it small{font-weight:400;color:var(--sub)}.itc{cursor:default}.gl2{display:flex;gap:2px;justify-content:center;flex-wrap:wrap;min-height:20px}.gi{width:20px;height:20px;object-fit:contain}
 @media (max-width:720px){.mcards{grid-template-columns:1fr}.team,.shop{grid-template-columns:repeat(3,minmax(0,1fr))}.regions{grid-template-columns:1fr 1fr}}
 </style>
 
@@ -142,14 +143,15 @@ td .xpb{display:inline-block;width:60px;vertical-align:middle;margin:0 0 0 4px}.
       <div class="row" style="justify-content:space-between"><h2>우리 팀 · 다산동 새싹 눈싸움단 <span id="teamCount"></span></h2><span class="row"><span class="ddak" id="today"></span><button class="btn alt small" id="bDayMode">요일: 실제 오늘</button><button class="btn alt small" id="bNextDay">하루 넘기기</button></span></div>
       <p class="note" style="margin:0">오늘 나올 수 있는 아이 중 5명을 고르세요. 학원·엄마 감시 때문에 요일마다 나오는 아이가 달라요. 하루에 2번 대결하면 해가 집니다.</p>
       <div class="team" id="teamCards"></div>
-      <div class="row" style="justify-content:space-between"><h2>문방구 · 장갑</h2><span class="ddak" id="ddak"></span></div>
+      <div class="row" style="justify-content:space-between"><h2>문방구</h2><span class="ddak" id="ddak"></span></div>
+      <div class="dtabs" id="shopTabs"></div>
       <div class="shop" id="shop"></div>
       <p class="note" id="shopNote"></p>
 
       <div class="keys">
         <span><kbd>W A S D</kbd> 이동</span><span><kbd>마우스</kbd> 조준 · <kbd>클릭</kbd> 던지기</span>
         <span><kbd>Space</kbd> 누르고 있기: 눈 뭉치기</span><span><kbd>Shift</kbd> 피하기(구르기)</span>
-        <span><kbd>Q</kbd> 핫팩 · <kbd>E</kbd> 핫초코</span><span><kbd>R</kbd> 눈벽 쌓기 (하린)</span>
+        <span><kbd>Q</kbd> <kbd>E</kbd> 가방 아이템 1·2</span><span><kbd>R</kbd> 눈벽 쌓기 (하린)</span>
         <span><kbd>Tab</kbd> 다른 아이로 바꾸기</span><span><kbd>P</kbd> 잠깐 멈춤</span>
       </div>
       <div class="row" style="justify-content:center;gap:6px 18px"><span class="row" style="gap:6px"><span class="note">게임 속도</span><span id="speedOpts" class="row" style="gap:6px"></span></span><span class="row" style="gap:6px"><span class="note">조준</span><span id="aimOpts" class="row" style="gap:6px"></span></span></div>
@@ -211,6 +213,7 @@ td .xpb{display:inline-block;width:60px;vertical-align:middle;margin:0 0 0 4px}.
 <script>
 const KMETA=/*KMETA*/;
 const OMETA=/*OMETA*/;
+const IMETA=/*IMETA*/;
 const PMETA=/*PMETA*/;
 const RTMETA=/*RMETA*/;
 </script>
@@ -234,7 +237,19 @@ const ALL=['jihun','sumin','minjae','doyun','harin','taeho','seoyeon','junho','y
 const SCHED={jihun:[[0,2],'영어학원'],sumin:[[1],'피아노',1],minjae:[[],''],doyun:[[0,4],'태권도'],harin:[[2],'미술학원'],
   taeho:[[1,3],'수학학원'],seoyeon:[[4],'수영'],junho:[[2,4],'축구교실'],yerin:[[3],'발레',1],kangmin:[[],'']};
 const DAYS=['월','화','수','목','금','토','일'];
-const GLOVES=[{n:'맨손',lim:3,p:0},{n:'일반 장갑',lim:4,p:100,ic:'g1'},{n:'고급 장갑',lim:5,p:250,ic:'g2'},{n:'희귀 장갑',lim:5,fast:1,p:500,ic:'g3',x:'손 시림 회복 빠름'},{n:'영웅 장갑',lim:6,fast:1,p:900,ic:'g4',x:'손 시림 회복 빠름'}];
+const GLOVES=[{n:'맨손',lim:3,p:0},{n:'흰 털장갑',g:'일반',lim:4,p:100,ic:'g1'},{n:'빨간 장갑',g:'고급',lim:5,p:250,ic:'g2'},{n:'파란 눈꽃 장갑',g:'희귀',lim:5,fast:1,p:500,ic:'g3',x:'손 시림 회복 빠름'},{n:'황금 장갑',g:'영웅',lim:6,fast:1,p:900,ic:'g4',x:'손 시림 회복 빠름'}];
+const GEAR={
+ hat:{t:'모자',it:[{n:'없음',p:0,e:'—'},{n:'파란 털모자',g:'일반',p:80,ic:'h1',e:'받는 피해 −8%'},{n:'빨간 비니',g:'고급',p:200,ic:'h2',e:'받는 피해 −12% · 손 시림 빨리 풀림'},
+   {n:'고글 모자',g:'희귀',p:450,ic:'h3',e:'받는 피해 −15% · 눈보라에도 조준 안 흔들림'},{n:'곰돌이 모자',g:'영웅',p:800,ic:'h4',e:'받는 피해 −20% · 맞은 직후 1초 피해 절반'}]},
+ outer:{t:'겉옷',it:[{n:'없음',p:0,e:'—'},{n:'파란 점퍼',g:'일반',p:120,ic:'o1',e:'젖음 피해 −10%'},{n:'노란 털 파카',g:'고급',p:300,ic:'o2',e:'젖음 피해 −20%'},
+   {n:'빨간 패딩',g:'희귀',p:600,ic:'o3',e:'젖음 피해 −25% · 젖음 천천히 마름'},{n:'하얀 파카',g:'영웅',p:1000,ic:'o4',e:'젖음 피해 −30% · 젖음 천천히 마름'}]},
+ shoe:{t:'신발',it:[{n:'운동화',p:0,e:'빙판에서 미끄러짐'},{n:'갈색 부츠',g:'일반',p:80,ic:'s1',e:'빙판에서 안 미끄러짐'},{n:'파란 눈 부츠',g:'고급',p:200,ic:'s2',e:'안 미끄러짐 · 이동 +5%'},
+   {n:'털 부츠',g:'희귀',p:450,ic:'s3',e:'안 미끄러짐 · 이동 +5% · 구르기 대기 −20%'},{n:'보라 부츠',g:'영웅',p:800,ic:'s4',e:'안 미끄러짐 · 이동 +10% · 구르기 대기 −30%'}]},
+ scarf:{t:'목도리',it:[{n:'없음',p:0,e:'—'},{n:'빨간 목도리',g:'일반',p:80,ic:'f1',e:'체력 +8%'},{n:'파란 줄무늬 목도리',g:'고급',p:250,ic:'f2',e:'아웃 직전 한 번 버팀'},
+   {n:'노란 목도리',g:'희귀',p:500,ic:'f3',e:'한 번 버팀 + 버틴 뒤 젖음 30% 회복'},{n:'보라 별 목도리',g:'영웅',p:850,ic:'f4',e:'한 번 버팀 + 회복 + 근처 친구 손 시림 해소'}]}};
+const ITEMS={pack:{n:'핫팩',p:30,e:'손 시림 즉시 0',src:'o'},cocoa:{n:'핫초코',p:40,e:'젖음(체력) 30% 회복',src:'o'},shovel:{n:'눈삽',p:50,e:'그 자리에서 눈덩이 가득 + 8초 뭉치기 2배',src:'i',ic:'shovel'},
+  big:{n:'큰 눈덩이',p:80,e:'굴려서 앞의 여러 명을 한꺼번에 맞힘',src:'i',ic:'bigball'}};
+const GRADE={일반:'#e8f1ff',고급:'#ff8f7a',희귀:'#6fb8ff',영웅:'#ffcf4a'};
 const REGIONS=[{n:'다산동',d:'우리 동네 친구들과 연습 경기',s:1,lv:.72,gl:0,x:18,y:72},{n:'별내동',d:'별빛 눈토끼단',s:2,lv:.8,gl:1,x:21,y:39},{n:'호평동',d:'골목 번개단',s:2,lv:.86,gl:1,x:40,y:49},
   {n:'진접읍',d:'눈보라 수비대',s:3,lv:.93,gl:2,x:49,y:29},{n:'평내동',d:'한강친구들',s:2,lv:.98,gl:2,x:63,y:50},{n:'와부읍(덕소)',d:'강바람 원정대',s:3,lv:1.04,gl:3,x:51,y:70},
   {n:'화도읍',d:'설산 호랑이단',s:3,lv:1.12,gl:4,x:84,y:55,crown:1}];
@@ -248,10 +263,11 @@ const RT={
 };
 
 /* ---------- 저장 ---------- */
-let SAVE={ddak:200,owned:{},glove:{},cleared:[],me:'jihun',region:0,day:0,played:0,team:[],recruits:[],realDay:true,streak:0,lastLogin:-1,revenge:null};
+let SAVE={ddak:50,inv:{pack:1,cocoa:1},bag:['pack','cocoa'],gear:{},gown:{},owned:{},glove:{},cleared:[],me:'jihun',region:0,day:0,played:0,team:[],recruits:[],realDay:true,streak:0,lastLogin:-1,revenge:null};
 try{const s=JSON.parse(localStorage.getItem('snowfight-save3')||'null');if(s)SAVE=Object.assign(SAVE,s)}catch(e){}
 function save(){try{localStorage.setItem('snowfight-save3',JSON.stringify(SAVE))}catch(e){}}
-function initKid(k){SAVE.owned[k]=SAVE.owned[k]||[0];if(SAVE.glove[k]==null)SAVE.glove[k]=0;SAVE.lv=SAVE.lv||{};if(!SAVE.lv[k])SAVE.lv[k]={L:1,xp:0,g:[0,0,0,0,0,0]}}
+function initKid(k){SAVE.owned[k]=SAVE.owned[k]||[0];if(SAVE.glove[k]==null)SAVE.glove[k]=0;SAVE.gear=SAVE.gear||{};SAVE.gown=SAVE.gown||{};SAVE.inv=SAVE.inv||{};SAVE.bag=SAVE.bag||[];
+  if(!SAVE.gear[k])SAVE.gear[k]={hat:0,outer:0,shoe:0,scarf:0};if(!SAVE.gown[k])SAVE.gown[k]={hat:[0],outer:[0],shoe:[0],scarf:[0]};SAVE.lv=SAVE.lv||{};if(!SAVE.lv[k])SAVE.lv[k]={L:1,xp:0,g:[0,0,0,0,0,0]}}
 /* ---------- 레벨업 ---------- */
 const MAXLV=10,PRIO={jihun:[0,1,4],sumin:[4,2,3],minjae:[3,2,4],doyun:[2,5,4],harin:[4,3,5],taeho:[1,0,2],seoyeon:[2,1,5],junho:[4,5,0],yerin:[1,2,4],kangmin:[5,4,1]};
 const xpNeed=L=>40+L*30;
@@ -293,6 +309,9 @@ function recolor(img,H){const c=document.createElement('canvas');c.width=img.wid
     p[i]=(rr+m)*255;p[i+1]=(gg+m)*255;p[i+2]=(bb+m)*255}
   x.putImageData(d,0,0);return c}
 function faceURL(k,i){const r=KMETA[k].face[i],c=document.createElement('canvas');c.width=r[2];c.height=r[3];c.getContext('2d').drawImage(IMG[k],r[0],r[1],r[2],r[3],0,0,r[2],r[3]);return c.toDataURL()}
+function iconURL(n){const r=IMETA[n];if(!r)return objURL(n);const c=document.createElement('canvas');c.width=r[2];c.height=r[3];c.getContext('2d').drawImage(IMG.items,r[0],r[1],r[2],r[3],0,0,r[2],r[3]);return c.toDataURL()}
+function itemIcon(id){const I=ITEMS[id];return I.src==='i'?iconURL(I.ic):objURL(id)}
+function drawItem(id,x,y,h){const I=ITEMS[id];if(I.src==='i'){const r=IMETA[I.ic],s=h/r[3];ctx.drawImage(IMG.items,r[0],r[1],r[2],r[3],x-r[2]*s/2,y-h,r[2]*s,h)}else obj(id,x,y,h/OMETA[id][3])}
 function objURL(n){const r=OMETA[n],c=document.createElement('canvas');c.width=r[2];c.height=r[3];c.getContext('2d').drawImage(IMG.objects,r[0],r[1],r[2],r[3],0,0,r[2],r[3]);return c.toDataURL()}
 
 /* ---------- 캔버스 ---------- */
@@ -304,7 +323,7 @@ const KEY={},MOUSE={x:W/2,y:H/2,down:false};
 addEventListener('keydown',e=>{if(e.code==='Tab'){e.preventDefault();if(G&&!G.over&&!G.demo)switchKid()}KEY[e.code]=true;
   if(!G||G.over||G.demo)return;if(e.code==='KeyP')G.paused=!G.paused;const me=G.me;if(!me||me.out)return;
   if(e.code==='ShiftLeft'||e.code==='ShiftRight')tryDodge(me,moveVec().x,moveVec().y);
-  if(e.code==='KeyC')cycleTarget();if(e.code==='KeyF'){const a=aimXY(me);doSpecial(me,a.x,a.y)}if(e.code==='KeyQ')useItem(me,'pack');if(e.code==='KeyE')useItem(me,'cocoa');if(e.code==='KeyR')(a=>buildWall(me,a.x,a.y))(aimXY(me))});
+  if(e.code==='KeyC')cycleTarget();if(e.code==='KeyF'){const a=aimXY(me);doSpecial(me,a.x,a.y)}if(e.code==='KeyQ')useBag(0);if(e.code==='KeyE')useBag(1);if(e.code==='KeyR')(a=>buildWall(me,a.x,a.y))(aimXY(me))});
 addEventListener('keyup',e=>{KEY[e.code]=false});
 addEventListener('blur',()=>{for(const k in KEY)KEY[k]=false;MOUSE.down=false;MOUSE.rdown=false});
 const toGame=e=>{const r=cv.getBoundingClientRect();return{x:(e.clientX-r.left-VX)/VS,y:(e.clientY-r.top-VY)/VS}};
@@ -348,7 +367,7 @@ function press(id,down){const m=G&&G.me;if(!G||G.over||G.demo)return;
   if(!down||!m)return;
   if(id==='pause')G.paused=!G.paused;if(id==='swap')switchKid();if(m.out)return;
   if(id==='special'){const f=nearestFoe(m);doSpecial(m,f?f.x:m.x+200,f?f.y:m.y)}
-  if(id==='dodge')tryDodge(m,TOUCH.jx,TOUCH.jy);if(id==='pack')useItem(m,'pack');if(id==='cocoa')useItem(m,'cocoa');
+  if(id==='dodge')tryDodge(m,TOUCH.jx,TOUCH.jy);if(id==='pack')useBag(0);if(id==='cocoa')useBag(1);
   if(id==='wall'){const f=nearestFoe(m);buildWall(m,f?f.x:m.x+80,f?f.y:m.y)}}
 function tDown(e){e.preventDefault();TOUCH.on=true;if(!G||G.over||G.demo)return;const p=toGame(e);
   const b=buttons().find(b=>Math.hypot(p.x-b.x,p.y-b.y)<=b.r+10);if(b){TOUCH.ptr[e.pointerId]={k:'btn',id:b.id};press(b.id,true);return}
@@ -372,7 +391,7 @@ function drawTouch(){if(!TOUCH.on||!G||G.demo||G.over)return;const m=G.me;ctx.sa
       if(b.id==='gather'){fill=m.gathering?m.gT/.9:0;dim=m.ammo>=m.maxAmmo;sub=onPile(m)?'눈더미 ×3':''}
       if(b.id==='special'){fill=m.sp/100;dim=m.sp<100;sub=m.sp<100?Math.floor(m.sp)+'%':'준비!'}
       if(b.id==='dodge'&&m.dodgeCd>0){dim=true;sub=m.dodgeCd.toFixed(1)}
-      if(b.id==='pack'||b.id==='cocoa'){sub='×'+(m.items[b.id]||0);dim=!m.items[b.id]}
+      if(b.id==='pack'||b.id==='cocoa'){const sl=G.bag&&G.bag[b.id==='pack'?0:1];lab=sl?ITEMS[sl.id].n:'빈칸';sub=sl?(sl.used?'사용함':'1개'):'';dim=!sl||sl.used}
       if(b.id==='wall'){dim=m.wallCd>0||m.ammo<3;sub=m.wallCd>0?m.wallCd.toFixed(0):'눈3'}}
     const held=Object.values(TOUCH.ptr).some(q=>q.k==='btn'&&q.id===b.id);
     ctx.globalAlpha=dim?.45:.9;ctx.fillStyle=held?'rgba(255,207,74,.55)':'rgba(18,30,66,.6)';ctx.strokeStyle=b.id==='throw'?'#ff8f7a':b.id==='gather'?'#9fd4ff':'#8cc4ff';ctx.lineWidth=3;
@@ -527,9 +546,10 @@ function newGame(demo){
   if(demo){G.demo=true;const sh=[...ALL].sort(()=>Math.random()-.5);
     sh.slice(0,5).forEach((k,i)=>G.units.push(mkUnit({b:k,...KIDS[k]},0,LX+40,ys[i],1,GLOVES[2],0)));
     sh.slice(5).forEach((k,i)=>G.units.push(mkUnit({b:k,...KIDS[k]},1,RX-40,ys[i],1,GLOVES[2],0)));G.me=null;G.enemyName='';return}
-  SAVE.team.forEach((k,i)=>{const d=applyGrowth(kdef(k),k);const u=mkUnit(d,0,LX,ys[i],1,GLOVES[SAVE.glove[k]],d.hue||0);u.key=k;G.units.push(u)});
+  SAVE.team.forEach((k,i)=>{const d=applyGrowth(kdef(k),k);const u=mkUnit(d,0,LX,ys[i],1,GLOVES[SAVE.glove[k]],d.hue||0);u.key=k;wear(u,SAVE.gear[k]||{});G.units.push(u)});
+  G.bag=SAVE.bag.filter(id=>(SAVE.inv[id]||0)>0).slice(0,2).map(id=>({id,used:false}));
   const E=enemyDefs(SAVE.region);G.enemyName=E.t;G.revenge=revengeOn(SAVE.region);if(G.revenge)G.enemyName='⚔복수전 '+E.t;const LV=R.lv+(G.revenge?.12:0);
-  E.list.forEach((d,i)=>G.units.push(mkUnit(d,1,RX,ys[i],LV,GLOVES[Math.min(4,R.gl+(G.revenge?1:0))],E.h)));
+  E.list.forEach((d,i)=>{const u=mkUnit(d,1,RX,ys[i],LV,GLOVES[Math.min(4,R.gl+(G.revenge?1:0))],E.h);const t=Math.max(0,R.gl-2+(G.revenge?1:0));wear(u,{hat:t,outer:t,shoe:t,scarf:t});G.units.push(u)});
   G.ms={crates:0,drops:0,specials:0,myHits:0,boss:false};G.mission=MISSION_PICK;
   G.me=G.units.find(u=>u.team===0&&u.id===SAVE.me)||G.units[0];
   bubble(G.me,'내가 간다!','#ffcf4a');
@@ -541,10 +561,16 @@ function enemyDefs(ri){
 function mkUnit(k,team,x,y,lv,glove,hue){const id=k.b;
   return {id,k,team,x,y,vx:0,vy:0,wet:0,max:k.hp*3.2*(team?Math.max(.85,lv):1)*(k.boss?1.3:1),img:hue?eimg(id,hue):IMG[id],ammo:5,maxAmmo:k.maxAmmo||6,glove,streak:0,streakT:0,coldT:0,cd:0,gT:0,gathering:false,
     throwT:0,pend:null,dodgeT:0,dodgeCd:0,dvx:0,dvy:0,hitT:0,slowT:0,out:false,outT:0,dir:'S',flip:team===1,anim:0,cheerT:0,
-    items:team?{}:{pack:1,cocoa:1},wallCd:0,supT:2,hits:0,lv:team?lv:1,
+    items:{},bag:[],wallCd:0,supT:2,hits:0,lv:team?lv:1,
     ai:{t:null,mode:'fight',goal:null,think:0,wait:rnd(.3,1),seed:Math.random()*9,dodge:k.dodgeAI||(team?.22*lv:.3)},clT:2,bcd:1,bspd:1,bdef:1,bdmg:1,sp:team?rnd(0,30):0,fx:{},gold:0}}
 const alive=team=>G.units.filter(u=>u.team===team&&!u.out);
 
+function wear(u,g){u.gear={hat:g.hat||0,outer:g.outer||0,shoe:g.shoe||0,scarf:g.scarf||0};const G_=u.gear;
+  u.dmgMul=(1-[0,.08,.12,.15,.2][G_.hat])*(1-[0,.1,.2,.25,.3][G_.outer]);u.shoeSp=[1,1,1.05,1.05,1.1][G_.shoe];u.dodgeMul=[1,1,1,.8,.7][G_.shoe];
+  if(G_.scarf>=1)u.max*=1.08;u.saved=false;u.ahT=0}
+function scarfSave(u){if(u.saved||!u.gear||u.gear.scarf<2)return false;u.saved=true;u.wet=u.max*(u.gear.scarf>=3?.68:.96);bubble(u,'목도리 덕분에 버텼다!','#ffe08a');poof(u.x,u.y-40,10);
+  if(u.gear.scarf>=4)for(const m of alive(u.team))if(dist(m,u)<220){m.coldT=0;m.streak=0}return true}
+function useBag(i){const m=G&&G.me,s=G&&G.bag&&G.bag[i];if(!m||m.out||!s||s.used||!(SAVE.inv[s.id]>0))return;s.used=true;SAVE.inv[s.id]--;save();useItem(m,s.id)}
 /* ---------- 행동 ---------- */
 function canThrow(u){return !u.out&&u.ammo>0&&u.coldT<=0&&u.cd<=0&&u.dodgeT<=0&&u.throwT<=0&&u.hitT<=.1}
 function doThrow(u,tx,ty){if(!canThrow(u))return false;u.gathering=false;u.throwT=.3;u.pend={x:tx,y:ty};u.cd=u.k.cd*u.bcd*(u.k.burst?1.7:1)*(u.k.big?1.5:1)*(u.team?1.25/u.lv:1);
@@ -552,16 +578,19 @@ function doThrow(u,tx,ty){if(!canThrow(u))return false;u.gathering=false;u.throw
 function release(u){const p=u.pend;u.pend=null;if(!p)return;u.ammo--;if(!G.demo)sfx('throw',u===G.me?1:near(u)*.6);
   const sx=u.x+(u.flip?-14:14),sy=u.y-50*DS(u.y),dx=p.x-u.x,dy=p.y-u.y,d=Math.hypot(dx,dy)||1,range=Math.min(d,u.k.range),sp=u.k.bs;
   const sp2=sp*(u.k.big?.85:1),base=Math.atan2(dy,dx),angs=u.k.burst?[-.13,0,.13]:[0];
-  const gold=u.gold>0;if(gold)u.gold--;const jit=G.wx&&G.wx.type==='blizzard'?gauss()*.1:0;
+  const gold=u.gold>0;if(gold)u.gold--;const jit=G.wx&&G.wx.type==='blizzard'&&!(u.gear&&u.gear.hat>=3)?gauss()*.1:0;
   for(const a of angs)G.balls.push({x:sx,y:u.y,sy:sy-u.y,vx:Math.cos(base+a+jit)*sp2,vy:Math.sin(base+a+jit)*sp2,team:u.team,owner:u,t:0,T:range/sp2,
     dmg:u.k.dmg*u.bdmg*(u.k.burst?.55:1)*(u.k.big?1.8:1)*(gold?3:1),big:!!u.k.big||gold,gold,arc:!!u.k.arc,splash:!!u.k.splash});
   if(u.fx.warm>0)return;u.streak++;u.streakT=0;
   if(u.streak>=u.glove.lim){u.coldT=u.glove.fast?2:3;u.streak=0;if(u===G.me)sfx('cold');bubble(u,'앗 차가워!','#9fd4ff')}}
 function tryDodge(u,mx,my){if(u.out||u.dodgeCd>0||u.dodgeT>0)return;if(u===G.me)sfx('dodge');let d=Math.hypot(mx,my);if(!d){mx=u.flip?-1:1;my=0;d=1}
-  u.gathering=false;u.dodgeT=.32;u.dodgeCd=u.fx.gale>0?.15:(u.k.dcd||1.3);u.dvx=mx/d;u.dvy=my/d;u.flip=mx<0}
-function useItem(u,it){if(!u.items[it])return;u.items[it]--;sfx(BUF.item_hotpack?it:'item');
+  u.gathering=false;u.dodgeT=.32;u.dodgeCd=u.fx.gale>0?.15:(u.k.dcd||1.3)*(u.dodgeMul||1);u.dvx=mx/d;u.dvy=my/d;u.flip=mx<0}
+function useItem(u,it){sfx(BUF.item_hotpack&&(it==='pack'||it==='cocoa')?it:'item');
   if(it==='pack'){u.coldT=0;u.streak=0;bubble(u,'핫팩! 손이 따뜻해','#ffb14a')}
-  else{u.wet=Math.max(0,u.wet-2);bubble(u,'핫초코 꿀꺽','#ffb14a')}}
+  else if(it==='cocoa'){u.wet=Math.max(0,u.wet-u.max*.3);bubble(u,'핫초코 꿀꺽 (+30%)','#ffb14a')}
+  else if(it==='shovel'){u.ammo=u.maxAmmo;u.fx.shovel=8;sfx('full');bubble(u,'눈삽으로 푹푹!','#e8f3ff')}
+  else if(it==='big'){const a=aimXY(u),dx=a.x-u.x,dy=a.y-u.y,d=Math.hypot(dx,dy)||1,sp=380;sfx('specialfoe');
+    G.balls.push({x:u.x,y:u.y,sy:-8,vx:dx/d*sp,vy:dy/d*sp,team:u.team,owner:u,t:0,T:620/sp,dmg:u.k.dmg*2.2,big:true,giant:true,pierce:true,roll:true,hitSet:new Set()});bubble(u,'큰 눈덩이 굴러간다!','#e8f3ff')}}
 function buildWall(u,tx,ty){if(!u.k.wall||u.wallCd>0||u.ammo<3||u.out)return false;const dx=tx-u.x,dy=ty-u.y,d=Math.hypot(dx,dy)||1;
   const w={x:clamp(u.x+dx/d*48,FX0+40,FX1-40),y:clamp(u.y+dy/d*48+6,FY0+20,FY1-10),hp:4,max:4};
   if(G.walls.some(o=>Math.abs(o.x-w.x)<70&&Math.abs(o.y-w.y)<34))return false;
@@ -678,7 +707,8 @@ function update(dt){
   for(const u of G.units){
     if(u.out){u.outT+=dt;continue}
     for(const k of['cd','hitT','slowT','wallCd','cheerT','dodgeCd'])u[k]=Math.max(0,u[k]-dt);
-    if(u.coldT>0)u.coldT=Math.max(0,u.coldT-dt*(G.wx&&G.wx.type==='sun'?2:1));
+    if(u.coldT>0)u.coldT=Math.max(0,u.coldT-dt*(G.wx&&G.wx.type==='sun'?2:1)*(u.gear&&u.gear.hat>=2?1.3:1));
+    if(u.gear&&u.gear.outer>=3&&u.hitT<=0)u.wet=Math.max(0,u.wet-dt*u.max*.008);if(u.ahT>0)u.ahT-=dt;
     u.streakT+=dt;if(u.streak>0&&u.streakT>(u.glove.fast?.6:1)){u.streak--;u.streakT-=.45}
     if(u.throwT>0){const before=u.throwT;u.throwT-=dt;if(before>.15&&u.throwT<=.15)release(u)}
     let mv={x:0,y:0};
@@ -689,12 +719,12 @@ function update(dt){
       if(TOUCH.auto&&canThrow(u))autoThrow(u);
       if(u.throwT<=0&&!u.gathering){if(G.lock&&!G.lock.out)u.flip=G.lock.x<u.x;else if(TOUCH.on&&!TOUCH.aiming){if(Math.abs(mv.x)>.1)u.flip=mv.x<0}else u.flip=MOUSE.x<u.x}}
     else{const r=ai(u,dt);if(r)mv={x:r.mx,y:r.my}}
-    if(u.gathering&&u.ammo<u.maxAmmo&&u.hitT<=0){mv={x:0,y:0};if(u===G.me&&Math.random()<dt*6)sfx('gather');u.gT+=dt*(u.k.gather||1)*(onPile(u)?3:1)*(G.wx&&G.wx.type==='heavy'?2:1);if(u.gT>=.9){u.gT-=.9;u.ammo++;if(u===G.me&&!BUF.snow_reload)sfx('ammo');if(u.ammo>=u.maxAmmo){if(u===G.me)sfx('full')}if(u.ammo>=u.maxAmmo)u.gathering=false}}
+    if(u.gathering&&u.ammo<u.maxAmmo&&u.hitT<=0){mv={x:0,y:0};if(u===G.me&&Math.random()<dt*6)sfx('gather');u.gT+=dt*(u.k.gather||1)*(u.fx.shovel>0?2:1)*(onPile(u)?3:1)*(G.wx&&G.wx.type==='heavy'?2:1);if(u.gT>=.9){u.gT-=.9;u.ammo++;if(u===G.me&&!BUF.snow_reload)sfx('ammo');if(u.ammo>=u.maxAmmo){if(u===G.me)sfx('full')}if(u.ammo>=u.maxAmmo)u.gathering=false}}
     else u.gT=Math.min(u.gT,.5);
-    let sp=BASESPD*u.k.spd*u.bspd*(u.slowT>0?.6:1)*(u.throwT>0?.45:1)*(u.hitT>0?.3:1);
+    let sp=BASESPD*u.k.spd*u.bspd*(u.shoeSp||1)*(u.slowT>0?.6:1)*(u.throwT>0?.45:1)*(u.hitT>0?.3:1);
     if(u.dodgeT>0){u.dodgeT-=dt;u.vx=u.dvx*BASESPD*3;u.vy=u.dvy*BASESPD*3}
     else{const d=Math.hypot(mv.x,mv.y);let tx=0,ty=0;if(d>0&&!u.gathering){tx=mv.x/d*sp;ty=mv.y/d*sp}
-      if((G.wx&&G.wx.type==='ice')||onIce(u)){const k=Math.min(1,dt*2.2);u.vx+=(tx-u.vx)*k;u.vy+=(ty-u.vy)*k}else{u.vx=tx;u.vy=ty}}
+      if(((G.wx&&G.wx.type==='ice')||onIce(u))&&!(u.gear&&u.gear.shoe>=1)){const k=Math.min(1,dt*2.2);u.vx+=(tx-u.vx)*k;u.vy+=(ty-u.vy)*k}else{u.vx=tx;u.vy=ty}}
     u.x+=u.vx*dt;u.y+=u.vy*dt;pushOut(u);
     u.fp=(u.fp||0)+Math.hypot(u.vx,u.vy)*dt;if(u.fp>15){u.fp=0;u.fs=!u.fs;if(u===G.me&&!G.demo){if(onIce(u)&&Math.hypot(u.vx,u.vy)>60)sfx('skid',.6);else if(Math.random()<.5)sfx(u.fs?'step1':'step2',.6)}const nx=-u.vy,ny=u.vx,nl=Math.hypot(nx,ny)||1;
       G.gx.fillStyle=u.dodgeT>0?'rgba(170,192,222,.7)':'rgba(176,197,224,.75)';G.gx.fillRect(Math.round((u.x+(u.fs?5:-5)*nx/nl)/PX),Math.round((u.y+(u.fs?5:-5)*ny/nl)/PX),1,1)}
@@ -725,11 +755,11 @@ function update(dt){
   const a=alive(0).length,e=alive(1).length;
   if(!G.over&&(a===0||e===0||G.t<=0)){G.endT+=dt;if(G.endT>1||G.t<=0)finish(a,e)}
 }
-function splash(b,skip){poof(b.x,b.y-10,14);for(const v of G.units)if(v!==skip&&v.team!==b.team&&!v.out&&Math.hypot(v.x-b.x,v.y-b.y)<60){v.wet+=b.dmg*.5*v.bdef;v.hitT=Math.max(v.hitT,.15);if(v.wet>=v.max){v.out=true;v.outT=0;bubble(v,'추워서 집에 갈래…','#cfe3ff')}}}
-function hit(u,b){const o=b.owner;if(u.fx.dash>0){poof(u.x,u.y-30,4);return}if(!G.demo)sfx(u===G.me?'hitme':'hit',u===G.me||o===G.me?1:near(u)*.7);if(!G.demo)u.wet+=b.dmg*u.bdef;o.hits++;o.cheerT=1;if(o===G.me&&G.ms)G.ms.myHits++;if(b.splash)splash(b,u);spGain(o,14);spGain(u,5);
+function splash(b,skip){poof(b.x,b.y-10,14);for(const v of G.units)if(v!==skip&&v.team!==b.team&&!v.out&&Math.hypot(v.x-b.x,v.y-b.y)<60){v.wet+=b.dmg*.5*v.bdef*(v.dmgMul||1);v.hitT=Math.max(v.hitT,.15);if(v.wet>=v.max&&!scarfSave(v)){v.out=true;v.outT=0;bubble(v,'추워서 집에 갈래…','#cfe3ff')}}}
+function hit(u,b){const o=b.owner;if(u.fx.dash>0){poof(u.x,u.y-30,4);return}if(!G.demo)sfx(u===G.me?'hitme':'hit',u===G.me||o===G.me?1:near(u)*.7);if(!G.demo){u.wet+=b.dmg*u.bdef*(u.dmgMul||1)*(u.ahT>0?.5:1);if(u.gear&&u.gear.hat>=4&&u.ahT<=0)u.ahT=1}o.hits++;o.cheerT=1;if(o===G.me&&G.ms)G.ms.myHits++;if(b.splash)splash(b,u);spGain(o,14);spGain(u,5);
   if(u.k.armor||u.fx.guard>0){u.hitT=.12}else{u.hitT=.32*(u.k.stag||1);u.gathering=false;u.throwT=0;u.pend=null}
   poof(b.x,b.y-20,7);G.flash=u===G.me?.25:G.flash;
-  if(u.wet>=u.max){u.out=true;u.outT=0;sfx(u.team?'outfoe':'out');if(u.k.boss&&o===G.me&&G.ms)G.ms.boss=true;bubble(u,'추워서 집에 갈래…','#cfe3ff');if(o.team===0)bubble(o,'맞았다!','#ffcf4a')}
+  if(u.wet>=u.max&&!scarfSave(u)){u.out=true;u.outT=0;sfx(u.team?'outfoe':'out');if(u.k.boss&&o===G.me&&G.ms)G.ms.boss=true;bubble(u,'추워서 집에 갈래…','#cfe3ff');if(o.team===0)bubble(o,'맞았다!','#ffcf4a')}
   else if(Math.random()<.1)bubble(u,['앗!','차가워!','으악'][Math.floor(Math.random()*3)],'#ffffff')}
 function poof(x,y,n){for(let i=0;i<n;i++)G.parts.push({x,y,vx:rnd(-90,90),vy:rnd(-160,-40),t:0,T:rnd(.35,.6),r:rnd(2,4.5)})}
 function bubble(u,text,c){G.bubbles.push({u,text,c,t:0})}
@@ -797,9 +827,9 @@ function dCard(face,name,role,lines,st,extra=''){return `<div class="dcard"><div
 function showDogam(tab){hideAll();$('dogam').hidden=false;
   $('dTabs').innerHTML=REGIONS.map((r,i)=>`<button class="btn alt small" id="dt-${i}" data-i="${i}" style="${i===tab?'background:var(--gold);color:#3a2a00':''}">${i+1}. ${r.n}</button>`).join('');
   document.querySelectorAll('#dTabs button').forEach(b=>b.onclick=()=>showDogam(+b.dataset.i));
-  const R_=REGIONS[tab],T=RT[tab],lvl=`<div class="dlv"><b>Lv.${tab+1}</b><span>${'★'.repeat(R_.s)}</span><span>상대 능력 ${Math.round(R_.lv*100)}% · 장갑 ${GLOVES[R_.gl].n}(연속 ${GLOVES[R_.gl].lim}개)</span></div>`;
+  const R_=REGIONS[tab],T=RT[tab],lvl=`<div class="dlv"><b>Lv.${tab+1}</b><span>${'★'.repeat(R_.s)}</span><span>상대 능력 ${Math.round(R_.lv*100)}% · 장갑 ${GLOVES[R_.gl].n}(연속 ${GLOVES[R_.gl].lim}개)${R_.gl>1?' · 다른 장비 '+['','일반','고급','희귀'][R_.gl-1]:''}</span></div>`;
   if(!T){$('dBody').innerHTML=`<div class="dhead"><div><h3>다산동 · 새싹 눈싸움단 (우리 팀)</h3><p class="sub" style="margin:0">균형 잡힌 10명. 연습 경기 상대는 오늘 안 뽑힌 친구들이에요.</p></div>${lvl}</div>
-    <div class="dgrid">${ALL.map(k=>{const K=KIDS[k],S=SPECIAL[k];const V=lvOf(k);return dCard(FACES[k],`${K.n} <small class="lvt">Lv.${V.L}</small>`,K.role,[`<b>특기</b> ${K.d}`,`<b>필살기</b> ${S[0]} — ${S[1]}`,`<b>못 나오는 날</b> ${schedText(k)}`,`<b>레벨업 때 오르는 능력</b> ${PRIO[k].map(i=>SNAME[i]).join(' · ')}`],statNow(k),`<p class="lvl">경험치 ${V.L>=MAXLV?'MAX':V.xp+' / '+xpNeed(V.L)} · 장갑: ${GLOVES[SAVE.glove[k]||0].n}</p>`)}).join('')}</div>`;return}
+    <div class="dgrid">${ALL.map(k=>{const K=KIDS[k],S=SPECIAL[k];const V=lvOf(k);return dCard(FACES[k],`${K.n} <small class="lvt">Lv.${V.L}</small>`,K.role,[`<b>특기</b> ${K.d}`,`<b>필살기</b> ${S[0]} — ${S[1]}`,`<b>못 나오는 날</b> ${schedText(k)}`,`<b>레벨업 때 오르는 능력</b> ${PRIO[k].map(i=>SNAME[i]).join(' · ')}`],statNow(k),`<p class="lvl">경험치 ${V.L>=MAXLV?'MAX':V.xp+' / '+xpNeed(V.L)}</p><p class="gl2">${gearLine(k)}</p>`)}).join('')}</div>`;return}
   const rec=SAVE.recruits.includes(tab),boss=T.m.find(m=>m.boss);
   $('dBody').innerHTML=`<div class="dhead"><div><h3>${R_.n} · ${T.t}</h3><p class="sub" style="margin:0">${T.st}${SAVE.cleared.includes(tab)?' · 🚩 이긴 동네':''}${rec?` · 👑 ${boss.n} 영입함`:''}</p></div>${lvl}</div>
     <div class="dgrid">${T.m.map((m,i)=>{const st=STATS[m.b].map(v=>Math.max(1,Math.min(10,Math.round((v-2)*R_.lv/.86*(m.boss?1.1:1)))));
@@ -950,7 +980,7 @@ function draw(){
   list.sort((a,b)=>a.y-b.y).forEach(o=>o.f());
   for(const b of G.balls){const k=b.t/b.T,z=Math.sin(Math.PI*Math.min(1,k))*24-b.sy*(1-k)*.6+(-b.sy)*0;
     ctx.fillStyle='rgba(40,60,90,.2)';ctx.beginPath();ctx.ellipse(b.x,b.y,5,2,0,0,7);ctx.fill();
-    const by=b.y+b.sy*(1-k)-z-(b.arc?Math.sin(Math.PI*Math.min(1,k))*40:0);
+    const by=b.roll?b.y-14:b.y+b.sy*(1-k)-z-(b.arc?Math.sin(Math.PI*Math.min(1,k))*40:0);
     if(b.pierce){ctx.strokeStyle='rgba(120,200,255,.8)';ctx.lineWidth=6;ctx.beginPath();ctx.moveTo(b.x-b.vx*.04,by-b.vy*.04);ctx.lineTo(b.x,by);ctx.stroke()}
     ctx.fillStyle=b.gold?'#ffd34a':'#fff';ctx.strokeStyle=b.gold?'#b8860b':'#7f9cc4';ctx.lineWidth=1.5;ctx.beginPath();ctx.arc(b.x,by,b.gift?4:b.giant?16:b.big?9:5.5,0,7);ctx.fill();ctx.stroke()}
   ctx.fillStyle='#fff';for(const p of G.parts){ctx.globalAlpha=1-p.t/p.T;ctx.beginPath();ctx.arc(p.x,p.y,p.r,0,7);ctx.fill()}ctx.globalAlpha=1;
@@ -1019,36 +1049,52 @@ function hud(){
   ctx.fillStyle='#a9b8d6';ctx.fillText('손 시림',160,699);
   const lim=me.glove.lim;for(let i=0;i<lim;i++){ctx.fillStyle=me.coldT>0?'#5fb4ff':i<me.streak?(i>=lim-1?'#ff6b57':'#ffb14a'):'rgba(255,255,255,.15)';ctx.fillRect(208+i*20,690,16,11)}
   ctx.fillStyle=me.coldT>0?'#9fd4ff':'#a9b8d6';ctx.fillText(me.coldT>0?`손이 시려요! ${me.coldT.toFixed(1)}초`:me.glove.n,214+lim*20,700);
-  const items=[['pack','Q',me.items.pack||0],['cocoa','E',me.items.cocoa||0]];
-  items.forEach(([n,k,c],i)=>{const x=470+i*52;ctx.globalAlpha=c?1:.3;obj(n,x,690,.34);ctx.globalAlpha=1;ctx.fillStyle='#fff';ctx.font='12px Jua, sans-serif';ctx.textAlign='center';ctx.fillText(`${k} ×${c}`,x,708)});
+  [0,1].forEach(i=>{const s=G.bag&&G.bag[i],x=462+i*74;ctx.globalAlpha=s&&!s.used?1:.3;if(s)drawItem(s.id,x,694,30);ctx.globalAlpha=1;ctx.fillStyle='#fff';ctx.font='11px Jua, sans-serif';ctx.textAlign='center';ctx.fillText(`${TOUCH.on?'':i?'E ':'Q '}${s?ITEMS[s.id].n:'빈칸'}`,x,710)});
   ctx.textAlign='left';ctx.font='13px Jua, sans-serif';
-  if(me.k.wall){ctx.fillStyle=me.wallCd>0||me.ammo<3?'#6c7ea6':'#9fd4ff';ctx.fillText(me.wallCd>0?`R 눈벽 ${me.wallCd.toFixed(0)}초`:'R 눈벽 (눈 3개)',540,672)}
+  if(me.k.wall){ctx.fillStyle=me.wallCd>0||me.ammo<3?'#6c7ea6':'#9fd4ff';ctx.fillText(me.wallCd>0?`R 눈벽 ${me.wallCd.toFixed(0)}초`:'R 눈벽 (눈 3개)',552,672)}
   if(TOUCH.on){ctx.restore();return}
-  ctx.fillStyle=me.dodgeCd>0?'#6c7ea6':'#9fd4ff';ctx.fillText(me.dodgeCd>0?`구르기 ${me.dodgeCd.toFixed(1)}초`:'Shift 구르기 준비',540,699);
+  ctx.fillStyle=me.dodgeCd>0?'#6c7ea6':'#9fd4ff';ctx.fillText(me.dodgeCd>0?`구르기 ${me.dodgeCd.toFixed(1)}초`:'Shift 구르기 준비',552,699);
   const keys=[['WASD','이동'],[aimMode()==='manual'?'좌클릭':'좌클릭 / J',aimMode()==='auto'?'던지기 (자동 조준)':aimMode()==='assist'?'던지기 (적 근처 조준)':'던지기 (마우스 조준)'],['우클릭 / Space','눈 뭉치기'],['F','필살기'],['C','다른 적 노리기 · Tab 다른 아이'],['P','멈춤']];
   ctx.font='12px Jua, sans-serif';keys.forEach(([k,v],i)=>{const x=700+(i%2)*280,y=662+Math.floor(i/2)*17;ctx.fillStyle='#ffcf4a';ctx.fillText(k,x,y);ctx.fillStyle='#a9b8d6';ctx.fillText(v,x+ctx.measureText(k).width+8,y)})}
 
 /* ---------- 로비 ---------- */
 const $=id=>document.getElementById(id);let FACES={},GICON={};
+let SHOPTAB='glove';
+function gearLine(k){initKid(k);const g=SAVE.gear[k],a=[GLOVES[SAVE.glove[k]||0]].concat(['hat','outer','shoe','scarf'].map(s=>GEAR[s].it[g[s]])).filter(x=>x.ic);return a.length?a.map(x=>`<img class="gi" alt="${x.n}" title="${x.n}" src="${iconURL(x.ic)}">`).join(''):'<small>장비 없음</small>'}
 function lobby(){
   $('ddak').textContent=`딱지 ${SAVE.ddak}장`;
   fixTeam();
   $('today').textContent=dayLabel()+(SAVE.realDay===false?` · 오늘 남은 대결 ${2-SAVE.played}번`:'');
   $('bNextDay').hidden=SAVE.realDay!==false;$('bDayMode').textContent=SAVE.realDay===false?'요일: 게임 속 날짜':'요일: 실제 오늘';
   $('teamCards').innerHTML=ROSTER().map(k=>{const K=kdef(k),ab=absent(k,today()),on=SAVE.team.includes(k);
-    return `<div class="kc${ab?' off':''}${on?' on':''}${k[0]==='r'?' rec':''}"><button class="pick" id="kc-${k}" data-k="${k}" aria-pressed="${on}" ${ab?'disabled':''}><img alt="" src="${face(k)}"><b>${K.n} <small class="lvt">Lv.${lvOf(k).L}</small></b><span class="xpb"><i style="width:${lvOf(k).L>=MAXLV?100:lvOf(k).xp/xpNeed(lvOf(k).L)*100}%"></i></span><span class="r">${K.role}</span><span class="d">${ab?'오늘 못 나와요 · '+ab:K.d}</span></button>
+    return `<div class="kc${ab?' off':''}${on?' on':''}${k[0]==='r'?' rec':''}"><button class="pick" id="kc-${k}" data-k="${k}" aria-pressed="${on}" ${ab?'disabled':''}><img alt="" src="${face(k)}"><b>${K.n} <small class="lvt">Lv.${lvOf(k).L}</small></b><span class="xpb"><i style="width:${lvOf(k).L>=MAXLV?100:lvOf(k).xp/xpNeed(lvOf(k).L)*100}%"></i></span><span class="r">${K.role}</span><span class="gl2">${gearLine(k)}</span><span class="d">${ab?'오늘 못 나와요 · '+ab:K.d}</span></button>
       ${on?`<button class="star" id="me-${k}" data-k="${k}" aria-pressed="${SAVE.me===k}">${SAVE.me===k?'★ 내가 조종':'☆ 조종하기'}</button>`:''}</div>`}).join('');
   $('teamCount').textContent=`${SAVE.team.length}/5명`;
   document.querySelectorAll('.pick').forEach(b=>b.onclick=()=>{const k=b.dataset.k,i=SAVE.team.indexOf(k);
     if(i>=0){if(SAVE.team.length>1)SAVE.team.splice(i,1)}else if(SAVE.team.length<5)SAVE.team.push(k);else{SAVE.team.splice(SAVE.team.indexOf(SAVE.me)===4?3:4,1);SAVE.team.push(k)}
     if(!SAVE.team.includes(SAVE.me))SAVE.me=SAVE.team[0];save();lobby()});
   document.querySelectorAll('.star').forEach(b=>b.onclick=()=>{SAVE.me=b.dataset.k;save();lobby()});
-  const k=SAVE.me,own=SAVE.owned[k];
-  $('shop').innerHTML=GLOVES.map((g,i)=>{const has=own.includes(i),eq=SAVE.glove[k]===i,can=has||SAVE.ddak>=g.p;
-    return `<button class="it" id="gl-${i}" data-i="${i}" aria-pressed="${eq}" ${can?'':'disabled'}><span class="ic">${g.ic?`<img alt="" src="${GICON[g.ic]}">`:'✋'}</span><b>${g.n}</b><span>연속 ${g.lim}개${g.x?' · '+g.x:''}</span><span class="p">${eq?'끼는 중':has?'끼기':'딱지 '+g.p}</span></button>`}).join('');
-  $('shopNote').textContent=`★ ${kname(k)}에게 끼울 장갑입니다. 산 장갑은 그 아이 것이 됩니다.`;
-  document.querySelectorAll('.it').forEach(b=>b.onclick=()=>{const i=+b.dataset.i,g=GLOVES[i];
-    if(!own.includes(i)){if(SAVE.ddak<g.p)return;SAVE.ddak-=g.p;own.push(i)}SAVE.glove[k]=i;save();lobby()});
+  const k=SAVE.me;initKid(k);const TABS=[['glove','🧤 장갑'],['hat','🧢 모자'],['outer','🧥 겉옷'],['shoe','👢 신발'],['scarf','🧣 목도리'],['item','🎒 소모품']];
+  $('shopTabs').innerHTML=TABS.map(([id,n])=>`<button class="btn alt small" id="st-${id}" data-t="${id}" style="${SHOPTAB===id?'background:var(--gold);color:#3a2a00':''}">${n}</button>`).join('');
+  document.querySelectorAll('#shopTabs button').forEach(b=>b.onclick=()=>{SHOPTAB=b.dataset.t;lobby()});
+  const gr=g=>g?`<span class="gr" style="color:${GRADE[g]}">${g}</span>`:'';
+  if(SHOPTAB==='glove'){const own=SAVE.owned[k];
+    $('shop').innerHTML=GLOVES.map((g,i)=>{const has=own.includes(i),eq=SAVE.glove[k]===i,can=has||SAVE.ddak>=g.p;
+      return `<button class="it" id="gl-${i}" data-i="${i}" aria-pressed="${eq}" ${can?'':'disabled'}><span class="ic">${g.ic?`<img alt="" src="${iconURL(g.ic)}">`:'✋'}</span>${gr(g.g)}<b>${g.n}</b><span>연속 ${g.lim}개${g.x?' · '+g.x:''}</span><span class="p">${eq?'끼는 중':has?'끼기':'딱지 '+g.p}</span></button>`}).join('');
+    $('shopNote').textContent=`★ ${kname(k)}에게 끼울 장갑이에요. 산 장비는 그 아이 것이 됩니다.`;
+    document.querySelectorAll('.it').forEach(b=>b.onclick=()=>{const i=+b.dataset.i,g=GLOVES[i];if(!own.includes(i)){if(SAVE.ddak<g.p)return;SAVE.ddak-=g.p;own.push(i)}SAVE.glove[k]=i;save();lobby()})}
+  else if(SHOPTAB==='item'){
+    $('shop').innerHTML=Object.entries(ITEMS).map(([id,I])=>{const n=SAVE.inv[id]||0,inBag=SAVE.bag.includes(id);
+      return `<div class="it itc"><span class="ic"><img alt="" src="${itemIcon(id)}"></span><b>${I.n} <small>보유 ${n}개</small></b><span>${I.e}</span>
+        <span class="row" style="gap:4px;justify-content:center"><button class="btn small buy" id="buy-${id}" data-id="${id}" ${SAVE.ddak>=I.p?'':'disabled'}>사기 ${I.p}</button><button class="btn alt small bagb" id="bag-${id}" data-id="${id}" ${n||inBag?'':'disabled'} style="${inBag?'background:var(--blue);color:#fff':''}">${inBag?'가방 ✓':'가방에'}</button></span></div>`}).join('');
+    $('shopNote').textContent=`🎒 가방(한 판에 2개까지): ${SAVE.bag.length?SAVE.bag.map(id=>ITEMS[id].n).join(', '):'비어 있음'} · 대결 중 Q / E로 씁니다. 쓴 것만 없어지고, 안 쓰면 그대로 남아요.`;
+    document.querySelectorAll('.buy').forEach(b=>b.onclick=()=>{const id=b.dataset.id,I=ITEMS[id];if(SAVE.ddak<I.p)return;SAVE.ddak-=I.p;SAVE.inv[id]=(SAVE.inv[id]||0)+1;if(SAVE.bag.length<2&&!SAVE.bag.includes(id))SAVE.bag.push(id);save();lobby()});
+    document.querySelectorAll('.bagb').forEach(b=>b.onclick=()=>{const id=b.dataset.id,i=SAVE.bag.indexOf(id);if(i>=0)SAVE.bag.splice(i,1);else{if(SAVE.bag.length>=2)SAVE.bag.shift();SAVE.bag.push(id)}save();lobby()})}
+  else{const S=GEAR[SHOPTAB],own=SAVE.gown[k][SHOPTAB],cur=SAVE.gear[k][SHOPTAB];
+    $('shop').innerHTML=S.it.map((g,i)=>{const has=own.includes(i),eq=cur===i,can=has||SAVE.ddak>=g.p;
+      return `<button class="it" id="gr-${i}" data-i="${i}" aria-pressed="${eq}" ${can?'':'disabled'}><span class="ic">${g.ic?`<img alt="" src="${iconURL(g.ic)}">`:'—'}</span>${gr(g.g)}<b>${g.n}</b><span>${g.e}</span><span class="p">${eq?'입는 중':has?'입기':'딱지 '+g.p}</span></button>`}).join('');
+    $('shopNote').textContent=`★ ${kname(k)}의 ${S.t}. 산 장비는 그 아이 것이 됩니다.`;
+    document.querySelectorAll('.it').forEach(b=>b.onclick=()=>{const i=+b.dataset.i,g=S.it[i];if(!own.includes(i)){if(SAVE.ddak<g.p)return;SAVE.ddak-=g.p;own.push(i)}SAVE.gear[k][SHOPTAB]=i;save();lobby()})}
   $('speedOpts').innerHTML=SPEEDS.map(([n],i)=>`<button class="btn alt small" id="spd-${i}" data-i="${i}" aria-pressed="${(SAVE.speed??1)===i}" style="${(SAVE.speed??1)===i?'background:var(--gold);color:#3a2a00':''}">${n}</button>`).join('');
   document.querySelectorAll('#speedOpts button').forEach(b=>b.onclick=()=>{SAVE.speed=+b.dataset.i;save();lobby()});
   $('aimOpts').innerHTML=AIMS.map(([id,n])=>`<button class="btn alt small" id="aim-${id}" data-a="${id}" aria-pressed="${aimMode()===id}" style="${aimMode()===id?'background:var(--gold);color:#3a2a00':''}">${n}</button>`).join('');
@@ -1066,7 +1112,7 @@ function hideAll(){['title','map','lobby','result','mission','dogam'].forEach(id
 function progress(){return Math.round(SAVE.cleared.filter(i=>i>0).length/6*100)}
 let titleStage=0,resetArm=false;
 function showTitle(){music('bgm_dasan_afterschool');ambience('amb_snowfall');hideAll();$('title').hidden=false;G=null;newGame(true);titleStage=0;$('titleMenu').hidden=true;$('tapHint').hidden=false;
-  const has=SAVE.day>0||SAVE.cleared.length||SAVE.ddak!==200;
+  const has=SAVE.day>0||SAVE.cleared.length||SAVE.ddak!==50;
   $('bContinue').innerHTML=has?`이어하기<small>${dayLabel()} · 평정도 ${progress()}% · 딱지 ${SAVE.ddak}장</small>`:'시작하기<small>다산동 새싹 눈싸움단과 함께</small>';
   $('bReset').hidden=!has;$('bReset').textContent='처음부터 다시';resetArm=false}
 function rivalFace(f){const r=RMETA[f],c=document.createElement('canvas');c.width=c.height=r[3];c.getContext('2d').drawImage(IMG.rivals,r[0]+(r[2]-r[3])/2,r[1],r[3],r[3],0,0,r[3],r[3]);return c.toDataURL()}
@@ -1091,7 +1137,7 @@ document.addEventListener('click',e=>{if(e.target.closest&&e.target.closest('but
 $('title').onclick=e=>{if(titleStage===0){titleStage=1;$('tapHint').hidden=true;$('titleMenu').hidden=false}};
 $('bContinue').onclick=e=>{e.stopPropagation();showMap();checkAttendance();showMap()};
 $('bReset').onclick=e=>{e.stopPropagation();if(!resetArm){resetArm=true;$('bReset').textContent='정말요? 한 번 더 누르면 처음부터';return}
-  SAVE={ddak:200,owned:{},glove:{},cleared:[],me:'jihun',region:0,day:0,played:0,team:[],recruits:[],realDay:true,streak:0,lastLogin:realDayNum(),revenge:null};ALL.forEach(k=>{SAVE.owned[k]=[0];SAVE.glove[k]=0});save();showMap()};
+  SAVE={ddak:50,inv:{pack:1,cocoa:1},bag:['pack','cocoa'],gear:{},gown:{},owned:{},glove:{},cleared:[],me:'jihun',region:0,day:0,played:0,team:[],recruits:[],realDay:true,streak:0,lastLogin:realDayNum(),revenge:null};ALL.forEach(k=>{SAVE.owned[k]=[0];SAVE.glove[k]=0});save();showMap()};
 $('bToMap').onclick=()=>showMap();$('bToTitle').onclick=()=>showTitle();
 $('bDogam').onclick=()=>showDogam(0);$('bDgClose').onclick=()=>showMap();
 $('bMembers').onclick=()=>{hideAll();lobby();$('lobby').hidden=false};
@@ -1106,7 +1152,7 @@ const SPEEDS=[['느리게',.7],['보통',.85],['빠르게',1]];const gspeed=()=>
 function loop(now){const dt=Math.min(.05,(now-last)/1000);last=now;if(G)update(dt*gspeed());draw();requestAnimationFrame(loop)}
 (async()=>{
   resize();
-  const names=[...ALL,'objects','rivals','props'];
+  const names=[...ALL,'objects','rivals','props','items'];
   try{const imgs=await Promise.all(names.map(n=>load(`assets/${n}.png`)));names.forEach((n,i)=>IMG[n]=imgs[i])}
   catch(e){document.querySelector('#lobby .box').insertAdjacentHTML('afterbegin',`<p style="color:#ff6b57">${e.message}</p>`);return}
   for(const n of['arena26','arena27','arena28','arena29'])try{IMG[n]=await load(`assets/${n}.jpg`)}catch(e){}
