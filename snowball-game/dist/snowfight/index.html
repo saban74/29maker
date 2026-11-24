@@ -5,6 +5,12 @@
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <style>html,body{margin:0;height:100%}</style>
 <title>눈싸움 동네 평정기</title>
+<link rel="manifest" href="manifest.webmanifest">
+<meta name="theme-color" content="#16213a">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<link rel="apple-touch-icon" href="assets/icon192.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Jua&family=Noto+Sans+KR:wght@400;700&display=swap">
 <style>
@@ -113,7 +119,8 @@ button:focus-visible{outline:2px solid var(--gold);outline-offset:2px}
 .spot.rv{box-shadow:0 0 0 4px #ff6b57cc,0 0 30px 8px #ff6b5799}.spot.rv span{background:var(--red)}
 #resSub{white-space:pre-line}
 .mapbar .lbl{white-space:nowrap}
-@media (pointer:coarse){#bSnd{bottom:auto;top:calc(env(safe-area-inset-top,0px) + 8px);right:auto;left:max(8px,env(safe-area-inset-left,0px));width:34px;height:34px;font-size:15px}}
+#bFull{position:absolute;z-index:40;right:max(10px,env(safe-area-inset-right,0px));bottom:calc(10% + 50px);width:40px;height:40px;border-radius:50%;border:2px solid #8cc4ff;background:rgba(18,30,66,.75);color:#fff;font-size:18px;cursor:pointer;display:grid;place-items:center}
+@media (pointer:coarse){#bFull{bottom:auto;top:calc(env(safe-area-inset-top,0px) + 8px);right:auto;left:calc(max(8px,env(safe-area-inset-left,0px)) + 42px);width:34px;height:34px;font-size:15px}#bSnd{bottom:auto;top:calc(env(safe-area-inset-top,0px) + 8px);right:auto;left:max(8px,env(safe-area-inset-left,0px));width:34px;height:34px;font-size:15px}}
 @media (max-height:560px){
   .ov{padding-block:6px}.mapbox{gap:4px;width:min(1280px,100%,calc((100vh - 76px) * 1.777))}
   .mapbar{padding:4px 8px;gap:4px 10px;flex-wrap:nowrap;font-size:12px}.mapbar .ddak{font-size:14px;white-space:nowrap}.mapbar .btn.small{font-size:12px;padding:4px 8px;white-space:nowrap}
@@ -151,6 +158,8 @@ td .xpb{display:inline-block;width:60px;vertical-align:middle;margin:0 0 0 4px}.
 .skids{display:flex;gap:4px;overflow-x:auto;align-items:center;padding-bottom:2px}.sk{border:2px solid transparent;background:#0003;border-radius:8px;padding:2px;cursor:pointer;display:grid;justify-items:center;color:var(--ink);font:inherit}
 .sk img{width:30px;height:30px}.sk small{font-size:10px}.sk.on{border-color:var(--gold)}
 @media (max-width:720px){.mcards{grid-template-columns:1fr}.team,.shop{grid-template-columns:repeat(3,minmax(0,1fr))}.regions{grid-template-columns:1fr 1fr}}
+@media (max-height:520px){#title .logo{width:min(560px,80vw,calc(100vh * .78))}#title.ov2{gap:4px}#title .sub2{font-size:17px}#title .btn.big{font-size:19px;padding:8px 30px}#title .btn.big small{font-size:11px}#title .tap{font-size:17px;padding:6px 16px}#title .tmenu{gap:6px}}
+@media (pointer:coarse){#title .ver{left:104px}}
 </style>
 </head>
 <body>
@@ -205,7 +214,7 @@ td .xpb{display:inline-block;width:60px;vertical-align:middle;margin:0 0 0 4px}.
       <div class="mapteam" id="mapTeam"></div>
     </div>
   </div>
-  <button id="bSnd" aria-label="소리 켜기/끄기">🔊</button>
+  <button id="bSnd" aria-label="소리 켜기/끄기">🔊</button><button id="bFull" aria-label="전체 화면" hidden>⛶</button>
   <div class="ov" id="mission" hidden>
     <div class="box"><h2 style="justify-self:start">오늘의 미션 · 하나를 고르세요</h2>
       <p class="sub" style="margin:0">고른 미션을 해내면 보너스 딱지를 받아요. 지거나 실패해도 벌칙은 없어요.</p>
@@ -1326,7 +1335,14 @@ function regionCard(i){const r=REGIONS[i],T=RT[i],op=open_(i),c=$('regionCard');
   $('rcClose').onclick=()=>c.hidden=true;
   if(op)$('bPrep').onclick=()=>{SAVE.region=i;save();hideAll();lobby();$('lobby').hidden=false}}
 document.addEventListener('click',e=>{if(e.target.closest&&e.target.closest('button'))sfx('click')});
-$('title').onclick=e=>{if(titleStage===0){titleStage=1;$('tapHint').hidden=true;$('titleMenu').hidden=false}};
+/* 전체 화면 (휴대폰 주소창 숨기기) */
+const canFull=()=>!!document.documentElement.requestFullscreen&&document.fullscreenEnabled!==false;
+const isFull=()=>!!document.fullscreenElement;
+function goFull(on){try{if(on===false||isFull()){if(isFull())document.exitFullscreen().catch(()=>{});return}
+  document.documentElement.requestFullscreen({navigationUI:'hide'}).then(()=>{try{screen.orientation&&screen.orientation.lock&&screen.orientation.lock('landscape').catch(()=>{})}catch(e){}}).catch(()=>{})}catch(e){}}
+if(canFull()){$('bFull').hidden=false;$('bFull').onclick=e=>{e.stopPropagation();goFull()};document.addEventListener('fullscreenchange',()=>{$('bFull').textContent=isFull()?'🗗':'⛶';setTimeout(resize,120)})}
+const standalone=()=>matchMedia('(display-mode: fullscreen), (display-mode: standalone)').matches;
+$('title').onclick=e=>{if(titleStage===0&&canFull()&&!isFull()&&!standalone()&&matchMedia('(pointer:coarse)').matches)goFull(true);if(titleStage===0){titleStage=1;$('tapHint').hidden=true;$('titleMenu').hidden=false}};
 $('bContinue').onclick=e=>{e.stopPropagation();if(!SAVE.tutDone){startTut();return}showMap();checkAttendance();showMap()};
 $('bReset').onclick=e=>{e.stopPropagation();if(!resetArm){resetArm=true;$('bReset').textContent='정말요? 한 번 더 누르면 처음부터';return}
   SAVE={ddak:50,inv:{pack:1,cocoa:1},bag:['pack','cocoa'],gear:{},gown:{},owned:{},glove:{},cleared:[],me:'jihun',region:0,day:0,played:0,team:[],recruits:[],realDay:true,streak:0,lastLogin:realDayNum(),revenge:null};ALL.forEach(k=>{SAVE.owned[k]=[0];SAVE.glove[k]=0});save();showMap()};
