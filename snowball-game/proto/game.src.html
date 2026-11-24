@@ -453,6 +453,7 @@ const PACK=['bgm_dasan_afterschool','bgm_byeollae_bunny','bgm_hopyeong_chase','b
   'snow_gather','snow_throw','snow_hit','snow_miss','snow_wall_build','snow_wall_break','snow_step_01','snow_step_02','snow_slide','cold_hands','snow_reload',
   'item_pickup','item_hotpack','item_hotcocoa','crate_break','ice_skid','ice_crack','shield_block','snowball_big','round_start','round_win','round_lose',
   'button_hover','button_confirm','team_switch','clock_warning','home_call',
+  'keeper_0','keeper_1','keeper_2','keeper_3','keeper_4','keeper_5',
   'voice_jihun_cheer','voice_sumin_support','voice_minjae_ready','voice_doyun_charge','voice_seoyeon_tease','voice_ouch','voice_cold','voice_victory'];
 const BUF={},LOOPPT={};
 function loadPack(){for(const id of PACK)fetch(`assets/audio/${id}.mp3`).then(r=>{if(!r.ok)throw 0;return r.arrayBuffer()}).then(a=>SND.ac.decodeAudioData(a)).then(b=>{BUF[id]=b;
@@ -1104,7 +1105,13 @@ const $=id=>document.getElementById(id);let FACES={},GICON={};
 let SHOPTAB='glove',SHOPKID=null,SHOPFROM='map',KT=null;
 const SAYS=['어서 와라~','잘 골랐네!','딱지가 모자라는구나…','오호, 그걸 사다니!'];
 function say(f,t){const c=$('kpc'),r=SKMETA[f],x=c.getContext('2d');c.width=r[2];c.height=r[3];x.drawImage(IMG.shopkeeper,r[0],r[1],r[2],r[3],0,0,r[2],r[3]);
-  const b=$('kbub');b.textContent=t||SAYS[f];b.classList.remove('pop');void b.offsetWidth;b.classList.add('pop');clearTimeout(KT);if(f)KT=setTimeout(()=>say(0,'또 필요한 거 있니?'),2600)}
+  const b=$('kbub');b.textContent=t||SAYS[f];keeperVoice(t||SAYS[f]);b.classList.remove('pop');void b.offsetWidth;b.classList.add('pop');clearTimeout(KT);if(f)KT=setTimeout(()=>say(0,'또 필요한 거 있니?'),2600)}
+/* 아저씨 목소리: 녹음 파일(assets/audio/keeper_0~5.mp3)이 있으면 그걸, 없으면 브라우저 한국어 음성 */
+const KEEPLINE={'어서 와라~':0,'잘 골랐네!':1,'딱지가 모자라는구나…':2,'오호, 그걸 사다니!':3,'잘 어울리는구나':4,'또 필요한 거 있니?':5};
+function keeperVoice(text){if(!sndOn())return;const n=KEEPLINE[text];if(n!=null&&BUF['keeper_'+n]){play('keeper_'+n,1,SND.voice);return}
+  const S=window.speechSynthesis;if(!S)return;try{S.cancel();const u=new SpeechSynthesisUtterance(text.replace('~','').replace('…','.'));u.lang='ko-KR';
+    const vs=S.getVoices().filter(v=>/^ko/i.test(v.lang));const male=vs.find(v=>/injoon|male|남|minsu|bongjin|gookmin|hyunsu/i.test(v.name));if(male||vs[0])u.voice=male||vs[0];
+    u.pitch=male?.85:.55;u.rate=.88;u.volume=.9;S.speak(u)}catch(e){}}
 function bought(g){sfx('pickup');if(g.g==='영웅')say(3);else say(1)}
 function showShop(from){SHOPFROM=from||'map';SHOPKID=SAVE.me;hideAll();$('shopScr').hidden=false;say(0);renderShop()}
 function renderShop(){$('sDdak').textContent=`🪙 딱지 ${SAVE.ddak}장`;
