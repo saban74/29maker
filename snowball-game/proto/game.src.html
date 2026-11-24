@@ -244,7 +244,9 @@ const KMETA=/*KMETA*/;
 const OMETA=/*OMETA*/;
 const IMETA=/*IMETA*/;
 const SKMETA=/*SKMETA*/;
-const RVMETA=/*RVMETA*/;Object.assign(KMETA,RVMETA);
+const RVMETA=/*RVMETA*/;
+const MOMMETA=/*MOMMETA*/;
+const MOMS={m1:['지영 엄마','다혈질 행동파',n=>`${n}! 당장 집에 와!`],m2:['민서 엄마','잔소리 마스터',n=>`${n}! 숙제는 다 하고 노는 거니?!`],m3:['하준 엄마','스포츠맘',n=>`${n}! 약속 시간 지났잖아!`]};Object.assign(KMETA,RVMETA);
 const PMETA=/*PMETA*/;
 const RTMETA=/*RMETA*/;
 </script>
@@ -281,7 +283,7 @@ const GEAR={
 const ITEMS={pack:{n:'핫팩',p:30,e:'손 시림 즉시 0',src:'i',ic:'pack'},cocoa:{n:'핫초코',p:40,e:'젖음(체력) 30% 회복',src:'i',ic:'cocoa'},shovel:{n:'눈삽',p:50,e:'그 자리에서 눈덩이 가득 + 8초 뭉치기 2배',src:'i',ic:'shovel'},
   big:{n:'큰 눈덩이',p:80,e:'굴려서 앞의 여러 명을 한꺼번에 맞힘',src:'i',ic:'bigball'},
   mong:{sn:'몽패딩',n:'엄빠 몽패딩',p:1200,e:'어른 옷처럼 큰 패딩! 그 판 끝까지 맞아도 피해 절반 · 대신 엄빠한테 혼나서 3일간 못 나옴',src:'img',ic:'mong'},
-  tattle:{sn:'엄마 부르기',n:'상대 엄마에게 이르기',p:1200,e:'상대 에이스의 엄마가 와서 집으로 끌고 가요',src:'emo',emo:'📞'}};
+  tattle:{sn:'엄마 부르기',n:'상대 엄마에게 이르기',p:1200,e:'상대 에이스의 엄마(지영·민서·하준 엄마 중 한 명)가 와서 집으로 끌고 가요',src:'emo',emo:'📞'}};
 const GRADE={일반:'#e8f1ff',고급:'#ff8f7a',희귀:'#6fb8ff',영웅:'#ffcf4a'};
 const REGIONS=[{n:'다산동',d:'우리 동네 친구들과 연습 경기',s:1,lv:.56,gl:0,x:18,y:72},{n:'별내동',d:'별빛 눈토끼단',s:2,lv:.64,gl:1,x:21,y:39},{n:'호평동',d:'골목 번개단',s:2,lv:.72,gl:1,x:40,y:49},
   {n:'진접읍',d:'눈보라 수비대',s:3,lv:.8,gl:2,x:49,y:29},{n:'평내동',d:'한강친구들',s:2,lv:.88,gl:2,x:63,y:50},{n:'와부읍(덕소)',d:'강바람 원정대',s:3,lv:.98,gl:3,x:51,y:70},
@@ -642,7 +644,7 @@ function useItem(u,it){sfx(BUF.item_hotpack&&(it==='pack'||it==='cocoa')?it:'ite
   else if(it==='mong'){u.mong=true;u.dmgMul=(u.dmgMul||1)*.5;if(u.key){SAVE.grounded=SAVE.grounded||{};SAVE.grounded[u.key]=today()+3;save()}sfx('pickup');
     banner(`🧥 ${u.k.n} 엄빠 몽패딩 착용!`,'맞아도 피해 절반 · 대신 엄빠한테 혼나서 3일간 못 나와요','#ffcf4a');bubble(u,'아빠 패딩 몰래 입었다!','#ffe08a')}
   else if(it==='tattle'){const fs=alive(1-u.team).filter(f=>!f.held);if(!fs.length)return;const t=fs.find(f=>f.k.boss)||fs.sort((a,b)=>(b.hits-a.hits)||((b.max-b.wet)-(a.max-a.wet)))[0];
-    t.held=true;G.moms.push({x:t.team?FX1+60:FX0-60,y:t.y,t,ph:0,tt:0,dir:t.team?1:-1,walk:0});sfx('drop');banner(`📞 ${t.k.n} 엄마 출동!`,`"${t.k.n}! 숙제 안 하고 여기서 뭐 해!"`,'#ff8f7a')}
+    const mk=['m1','m2','m3'][Math.floor(Math.random()*3)],M=MOMS[mk];t.held=true;G.moms.push({x:t.team?FX1+60:FX0-60,y:t.y,t,ph:0,tt:0,dir:t.team?1:-1,walk:0,mk});sfx('drop');banner(`📞 ${M[0]} 출동! (${t.k.n})`,`"${M[2](t.k.n)}"`,'#ff8f7a')}
   else if(it==='big'){const a=aimXY(u),dx=a.x-u.x,dy=a.y-u.y,d=Math.hypot(dx,dy)||1,sp=380;sfx('specialfoe');
     G.balls.push({x:u.x,y:u.y,sy:-8,vx:dx/d*sp,vy:dy/d*sp,team:u.team,owner:u,t:0,T:620/sp,dmg:u.k.dmg*2.2,big:true,giant:true,pierce:true,roll:true,hitSet:new Set()});bubble(u,'큰 눈덩이 굴러간다!','#e8f3ff')}}
 function buildWall(u,tx,ty){if(!u.k.wall||u.wallCd>0||u.ammo<3||u.out)return false;const dx=tx-u.x,dy=ty-u.y,d=Math.hypot(dx,dy)||1;
@@ -1132,7 +1134,12 @@ function momTick(dt){for(const m of G.moms){const t=m.t;m.walk+=dt;
     else{m.x+=m.dir*190*dt;t.x=m.x-m.dir*24;t.y=m.y;t.anim+=dt;t.dir='S';t.flip=m.dir<0;t.vx=m.dir;
       if(m.x<-40||m.x>W+40){t.held=false;t.out=true;t.outT=99;t.gone=true;m.done=true;banner(`🏠 ${t.k.n} 집에 감!`,'','#ff8f7a')}}}
   G.moms=G.moms.filter(m=>!m.done)}
-function drawMom(m){const x=m.x,y=m.y,b=Math.abs(Math.sin(m.walk*9))*3*(m.ph!==1?1:0),f=m.dir;ctx.save();
+function drawMom(m){if(IMG.moms&&MOMMETA[m.mk]){const F=MOMMETA[m.mk],x=m.x,y=m.y,run=m.ph!==1,b=run?Math.abs(Math.sin(m.walk*10))*4:0,vx=m.ph===0?-m.dir:m.ph===2?m.dir:0;
+    let r,flip=false;if(m.mk==='m3'){r=m.ph===0?F.run:m.ph===1?F.grab:F.drag;flip=vx<0}else{r=m.ph===1?F.front:F.side;flip=vx>0}
+    ctx.fillStyle='rgba(40,60,90,.25)';ctx.beginPath();ctx.ellipse(x,y,26,8,0,0,7);ctx.fill();spr(IMG.moms,r,x,y+2-b,flip,.82*DS(y));
+    if(m.ph===1){ctx.font='22px sans-serif';ctx.textAlign='center';ctx.fillText('💢',x+18,y-130)}
+    ctx.font='13px Jua, sans-serif';ctx.textAlign='center';ctx.lineWidth=3;ctx.strokeStyle='#fff';ctx.strokeText(MOMS[m.mk][0],x,y-132);ctx.fillStyle='#c4473a';ctx.fillText(MOMS[m.mk][0],x,y-132);return}
+  const x=m.x,y=m.y,b=Math.abs(Math.sin(m.walk*9))*3*(m.ph!==1?1:0),f=m.dir;ctx.save();
   ctx.fillStyle='rgba(40,60,90,.22)';ctx.beginPath();ctx.ellipse(x,y,22,7,0,0,7);ctx.fill();
   ctx.fillStyle='#3a3046';ctx.fillRect(x-11,y-14-b,8,14);ctx.fillRect(x+3,y-14-b,8,14);
   ctx.fillStyle='#8a5bd1';ctx.beginPath();ctx.moveTo(x-20,y-14-b);ctx.lineTo(x+20,y-14-b);ctx.lineTo(x+15,y-70-b);ctx.lineTo(x-15,y-70-b);ctx.closePath();ctx.fill();
@@ -1321,7 +1328,7 @@ const SPEEDS=[['느리게',.7],['보통',.85],['빠르게',1]];const gspeed=()=>
 function loop(now){const dt=Math.min(.05,(now-last)/1000);last=now;if(G)update(dt*gspeed());draw();requestAnimationFrame(loop)}
 (async()=>{
   resize();
-  const names=[...ALL,'objects','rivals','props','items','shopkeeper','rivalsprites','mong'];
+  const names=[...ALL,'objects','rivals','props','items','shopkeeper','rivalsprites','mong','moms'];
   try{const imgs=await Promise.all(names.map(n=>load(`assets/${n}.png`)));names.forEach((n,i)=>IMG[n]=imgs[i])}
   catch(e){document.querySelector('#lobby .box').insertAdjacentHTML('afterbegin',`<p style="color:#ff6b57">${e.message}</p>`);return}
   for(const n of['arena26','arena27','arena28','arena29','arena_jinjeop','arena_pyeongnae','arena_wabu'])try{IMG[n]=await load(`assets/${n}.jpg`)}catch(e){}
