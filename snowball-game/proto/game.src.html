@@ -115,7 +115,7 @@ button:focus-visible{outline:2px solid var(--gold);outline-offset:2px}
   .rcard{width:min(320px,62%);padding:10px;gap:6px}.rch b{font-size:20px}.rm img{width:40px;height:40px}.rsk{display:none}
   .box{padding:12px;gap:10px}.kc img{width:52px;height:52px}.kc .d{display:none}
   h1{font-size:24px}.logo{width:min(420px,60vw)}.sub2{font-size:18px}.btn.big{font-size:20px;padding:10px 28px}}
-.dg{width:min(1180px,100%)}.dtabs{display:flex;flex-wrap:wrap;gap:6px}
+.dg{width:min(1180px,100%)}.onl{width:min(1040px,100%)}.onl .crow{display:grid;grid-template-columns:44px 1fr auto auto;gap:10px;align-items:center;background:var(--panel2);border-radius:12px;padding:8px 12px}.onl .crow.me{outline:2px solid var(--gold)}.onl .rk{font-family:var(--display);font-size:20px;color:var(--gold);text-align:center}.onl .cn{display:grid;gap:3px;min-width:0}.onl .cn b{font-size:16px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.onl .cn span{font-size:12px;color:var(--sub)}.onl .fc{display:flex;gap:2px}.onl .fc img{width:30px;height:30px;border-radius:8px;background:#0003}.onl .flag{display:inline-block;width:14px;height:14px;border-radius:3px;vertical-align:-2px;margin-right:6px;border:1px solid #0006}.onl .list{display:grid;gap:6px;max-height:min(52vh,440px);overflow:auto}.onl input{font:inherit;font-size:16px;padding:8px 12px;border-radius:10px;border:2px solid var(--line);background:#0b1430;color:var(--ink);width:min(260px,100%)}.onl .flags{display:flex;gap:6px;flex-wrap:wrap}.onl .flags button{width:34px;height:34px;border-radius:8px;border:3px solid transparent;cursor:pointer}.onl .flags button.on{border-color:#fff}.onl .msg{min-height:20px;margin:0;color:var(--gold)}@media (max-width:640px){.onl .crow{grid-template-columns:34px 1fr auto}.onl .crow .fc{display:none}}.dtabs{display:flex;flex-wrap:wrap;gap:6px}
 .dhead{display:flex;flex-wrap:wrap;gap:10px 20px;justify-content:space-between;align-items:center}.dhead h3{font-size:22px}
 .dlv{display:flex;flex-wrap:wrap;gap:4px 10px;align-items:baseline;background:var(--panel2);border-radius:12px;padding:6px 12px;font-size:13px;color:var(--sub)}.dlv b{font-family:var(--display);font-weight:400;font-size:24px;color:var(--gold)}.dlv span:first-of-type{color:var(--gold)}
 .dgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:10px;margin-top:10px}
@@ -189,7 +189,7 @@ td .xpb{display:inline-block;width:60px;vertical-align:middle;margin:0 0 0 4px}.
         <button class="btn alt small" id="bToTitle">≡ 첫 화면</button>
         <span class="ddak" id="mapDay"></span><span class="ddak" id="mapDdak"></span>
         <span class="pct"><span>남양주시 평정도</span><span class="pbar"><i id="mapBar"></i></span><b id="mapPct"></b></span>
-        <button class="btn alt small" id="bTut">🎓 연습</button><button class="btn alt small" id="bDogam">📖 도감</button><button class="btn alt small" id="bShopM">🏪 문방구</button><button class="btn small" id="bMembers">오늘의 멤버 · 문방구</button>
+        <button class="btn alt small" id="bTut">🎓 연습</button><button class="btn alt small" id="bDogam">📖 도감</button><button class="btn alt small" id="bShopM">🏪 문방구</button><button class="btn alt small" id="bOnline">🌐 온라인 크루</button><button class="btn small" id="bMembers">오늘의 멤버 · 문방구</button>
       </div>
       <div class="mapwrap"><img src="assets/map.jpg" alt="남양주시 월드맵"><div id="spots"></div>
         <div class="rcard" id="regionCard" hidden></div></div>
@@ -227,6 +227,10 @@ td .xpb{display:inline-block;width:60px;vertical-align:middle;margin:0 0 0 4px}.
         <p class="note" id="shopNote"></p>
       </div>
     </div>
+  </div>
+  <div class="ov" id="online" hidden>
+    <div class="box onl"><div class="row" style="justify-content:space-between"><h2>🌐 온라인 크루 결투</h2><button class="btn alt small" id="bOnClose">← 지도로</button></div>
+      <div class="dtabs" id="onTabs"></div><p class="msg" id="onMsg"></p><div id="onBody"></div></div>
   </div>
   <button class="btn alt small" id="bTutSkip" hidden style="position:absolute;z-index:30;right:max(10px,env(safe-area-inset-right,0px));top:70px">연습 건너뛰기 ⏭</button>
   <div class="ov" id="result" hidden>
@@ -309,8 +313,8 @@ const xpNeed=L=>40+L*30;
 const baseOf=k=>k[0]==='r'?kdef(k).b:k;
 function lvOf(k){initKid(k);return SAVE.lv[k]}
 function statNow(k){const b=STATS[baseOf(k)],g=lvOf(k).g;return b.map((v,i)=>Math.max(1,Math.min(10,v-2+g[i])))}
-function mults(k){const V=lvOf(k),gl=.02*(V.L-1);return V.g.map(x=>.82+.035*x+gl)}
-function applyGrowth(d,k){const m=mults(k);d.hp*=m[4];d.spd*=m[2];d.dmg*=m[0];d.bs*=(.5+.5*m[0]);d.range*=(.92+.08*m[0]);d.acc=Math.min(.99,d.acc*(.9+.1*m[1]+ (m[1]-1)*.3));
+function mults(k,V){V=V||lvOf(k);const gl=.02*(V.L-1);return V.g.map(x=>.82+.035*x+gl)}
+function applyGrowth(d,k,V){const m=mults(k,V);d.hp*=m[4];d.spd*=m[2];d.dmg*=m[0];d.bs*=(.5+.5*m[0]);d.range*=(.92+.08*m[0]);d.acc=Math.min(.99,d.acc*(.9+.1*m[1]+ (m[1]-1)*.3));
   d.gather=(d.gather||1)*m[3];d.stag=1/m[5];return d}
 function gainXP(k,x){const V=lvOf(k),ups=[];if(V.L>=MAXLV)return ups;V.xp+=x;
   while(V.L<MAXLV&&V.xp>=xpNeed(V.L)){V.xp-=xpNeed(V.L);V.L++;const P=PRIO[baseOf(k)],a=P[0],b=P[V.L%2?1:2];V.g[a]++;V.g[b]++;ups.push(`${SNAME[a]}+1 ${SNAME[b]}+1`)}
@@ -600,6 +604,9 @@ function newGame(demo,tut){
     sh.slice(5).forEach((k,i)=>G.units.push(mkUnit({b:k,...KIDS[k]},1,RX-40,ys[i],1,GLOVES[2],0)));G.me=null;G.enemyName='';return}
   SAVE.team.forEach((k,i)=>{const d=applyGrowth(kdef(k),k);const u=mkUnit(d,0,LX,ys[i],1,GLOVES[SAVE.glove[k]],d.hue||0);u.key=k;wear(u,SAVE.gear[k]||{});G.units.push(u)});
   G.bag=SAVE.bag.filter(id=>(SAVE.inv[id]||0)>0).slice(0,2).map(id=>({id,used:false}));
+  if(ONLINE){const C=ONLINE.crew;G.online=C;G.enemyName='🌐 '+C.name;G.revenge=null;
+    C.members.forEach((m,i)=>{const d=applyGrowth(kdef(m.k),m.k,{L:m.lv,g:m.g});const u=mkUnit(d,1,RX,ys[i],1,GLOVES[m.glove],d.hue||165);wear(u,m.gear);G.units.push(u)});
+    G.ms={crates:0,drops:0,specials:0,myHits:0,boss:false};G.mission=null;G.me=G.units.find(u=>u.team===0&&u.id===SAVE.me)||G.units[0];bubble(G.me,'온라인 결투다!','#ffcf4a');return}
   const E=enemyDefs(SAVE.region);G.enemyName=E.t;G.revenge=revengeOn(SAVE.region);if(G.revenge)G.enemyName='⚔복수전 '+E.t;const LV=R.lv+(G.revenge?.12:0);
   E.list.forEach((d,i)=>{const u=mkUnit(d,1,RX,ys[i],LV,GLOVES[Math.min(4,R.gl+(G.revenge?1:0))],E.h);const t=Math.max(0,R.gl-2+(G.revenge?1:0));wear(u,{hat:t,outer:t,shoe:t,scarf:t});G.units.push(u)});
   G.ms={crates:0,drops:0,specials:0,myHits:0,boss:false};G.mission=MISSION_PICK;
@@ -831,9 +838,10 @@ function finish(a,e){G.over=true;let win=a>e;
   musicStop();setTimeout(()=>{if(play(win?'m_victory':'m_defeat',.9,SND.bgm)){if(win)play('voice_victory')}else sfx(win?'win':'lose')},300);
   const hits=G.units.filter(u=>u.team===0).reduce((s,u)=>s+u.hits,0);
   const bonus=1+(G.R.s-1)*.2;let gain=Math.round((win?150+hits*10:30+hits*5)*bonus),first=false;
-  if(win&&!SAVE.cleared.includes(SAVE.region)){SAVE.cleared.push(SAVE.region);first=true;gain+=300}
+  if(G.online)gain=Math.round(gain*.6);
+  if(win&&!G.online&&!SAVE.cleared.includes(SAVE.region)){SAVE.cleared.push(SAVE.region);first=true;gain+=300}
   let extra=[];if(G.revenge&&win){gain*=2;SAVE.revenge=null;extra.push('⚔ 복수전 승리! 딱지 2배')}
-  if(win&&first&&RT[SAVE.region]&&!SAVE.recruits.includes(SAVE.region)){SAVE.recruits.push(SAVE.region);initKid('r'+SAVE.region);const m=RT[SAVE.region].m.find(m=>m.boss);extra.push(`👑 대장 ${m.n}이(가) 우리 팀 동료가 됐어요!`)}
+  if(!G.online&&win&&first&&RT[SAVE.region]&&!SAVE.recruits.includes(SAVE.region)){SAVE.recruits.push(SAVE.region);initKid('r'+SAVE.region);const m=RT[SAVE.region].m.find(m=>m.boss);extra.push(`👑 대장 ${m.n}이(가) 우리 팀 동료가 됐어요!`)}
   if(G.mission){const M=G.mission;if(M.ok(win,G)){gain+=M.b;extra.push(`🎯 미션 '${M.t}' 성공! +${M.b}`)}else extra.push(`🎯 미션 '${M.t}' 실패`)}
   const xpRows={};const RB=1+(G.R.s-1)*.15;for(const u of G.units.filter(u=>u.team===0&&u.key)){const x=Math.round((20+(win?30:0)+u.hits*4+(u.out?0:10)+(G.revenge?20:0))*RB);
     const ups=gainXP(u.key,x);xpRows[u.key]={x,ups};if(ups.length)extra.push(`⬆ ${u.k.n} Lv.${lvOf(u.key).L}! ${ups[ups.length-1]}`)}
@@ -844,6 +852,7 @@ function finish(a,e){G.over=true;let win=a>e;
     document.getElementById('resSub').textContent=`${G.R.n} · 딱지 +${gain}장${first?' (처음 이긴 보너스 포함)':''} · 지금 딱지 ${SAVE.ddak}장${newDay?' · 해가 져서 하루가 끝났어요. 내일은 '+DAYS[SAVE.day%7]+'요일!':''}`+(extra.length?'\n'+extra.join('\n'):'');
     const rows=G.units.filter(u=>u.team===0).map(u=>{const X=xpRows[u.key]||{x:0,ups:[]},V=u.key?lvOf(u.key):{L:1,xp:0};return `<tr><td>${u.k.n}</td><td>${u.k.role}</td><td>${u.hits}번</td><td>${u.out?'아웃':'끝까지 버팀'}</td><td>+${X.x} XP ${X.ups.length?'<b style="color:var(--gold)">⬆ LEVEL UP!</b>':''}</td><td>Lv.${V.L}${V.L<MAXLV?` <span class="xpb"><i style="width:${V.xp/xpNeed(V.L)*100}%"></i></span>`:' MAX'}</td></tr>`}).join('');
     document.getElementById('resTab').innerHTML=`<tr><th>이름</th><th>역할</th><th>맞힌 횟수</th><th>결과</th><th>경험치</th><th>레벨</th></tr>${rows}`;
+    if(G.online){$('bAgain').textContent='다른 크루와 결투';$('resSub').textContent=`🌐 ${G.online.name} 크루와 결투 · 딱지 +${gain}장 · 지금 딱지 ${SAVE.ddak}장`+(extra.length?'\n'+extra.join('\n'):'')+'\n점수 기록 중…';onReport(G.online,win,hits)}
     document.getElementById('result').hidden=false},900)}
 
 /* ---------- 튜토리얼 ---------- */
@@ -1271,7 +1280,7 @@ function lobby(){
   $('bStart').disabled=SAVE.team.length<5;
   document.querySelectorAll('.rg').forEach(b=>b.onclick=()=>{SAVE.region=+b.dataset.i;save();lobby()});
 }
-function start(){if(SAVE.team.length<5)return;showMissions()}
+function start(){if(SAVE.team.length<5)return;ONLINE=null;showMissions()}
 const REGION_BGM=['bgm_dasan_afterschool','bgm_byeollae_bunny','bgm_hopyeong_chase','bgm_jinjeop_fort','bgm_hopyeong_chase','bgm_deokso_river','bgm_hwado_boss'];
 const REGION_AMB=['amb_calm_wind','amb_park_wind','amb_market_distant','amb_snowfall','amb_market_distant','amb_park_wind','amb_ice_valley'];
 const AREA=['dasan','byeollae','hopyeong','jinjeop','pyeongnae','deokso','hwado'];
@@ -1282,7 +1291,7 @@ function musicTick(dt){if(!SND.ac||!BUF['m_'+AREA[SAVE.region]+'_base'])return;c
   if(a===1&&!G.lastOne){G.lastOne=true;play('m_last_one',.9,SND.bgm)}
   G.mhold=(G.mhold||0)-dt;if(want!==G.mst&&G.mhold<=0){G.mst=want;G.mhold=2;music('m_'+AREA[SAVE.region]+'_'+want)}}
 function go(){hideAll();newGame();sfx('start');G.mst='base';G.mhold=0;music(battleTrack());ambience(REGION_AMB[SAVE.region])}
-function hideAll(){const sk=document.getElementById('bTutSkip');if(sk)sk.hidden=true;['title','map','lobby','result','mission','dogam','shopScr'].forEach(id=>$(id).hidden=true)}
+function hideAll(){const sk=document.getElementById('bTutSkip');if(sk)sk.hidden=true;['title','map','lobby','result','mission','dogam','shopScr','online'].forEach(id=>$(id).hidden=true)}
 function progress(){return Math.round(SAVE.cleared.filter(i=>i>0).length/6*100)}
 let titleStage=0,resetArm=false;
 function showTitle(){music('bgm_dasan_afterschool');ambience('amb_snowfall');hideAll();$('title').hidden=false;G=null;newGame(true);titleStage=0;$('titleMenu').hidden=true;$('tapHint').hidden=false;
@@ -1291,7 +1300,7 @@ function showTitle(){music('bgm_dasan_afterschool');ambience('amb_snowfall');hid
   $('bReset').hidden=!has;$('bReset').textContent='처음부터 다시';resetArm=false}
 function rivalFace(f){const r=RMETA[f],c=document.createElement('canvas');c.width=c.height=r[3];c.getContext('2d').drawImage(IMG.rivals,r[0]+(r[2]-r[3])/2,r[1],r[3],r[3],0,0,r[3],r[3]);return c.toDataURL()}
 function open_(i){return i===0||SAVE.cleared.includes(i-1)}
-function showMap(){music('bgm_deokso_river');ambience('amb_snowfall');hideAll();G=null;newGame(true);fixTeam();$('map').hidden=false;$('regionCard').hidden=true;
+function showMap(){ONLINE=null;music('bgm_deokso_river');ambience('amb_snowfall');hideAll();G=null;newGame(true);fixTeam();$('map').hidden=false;$('regionCard').hidden=true;
   $('mapDdak').textContent=`딱지 ${SAVE.ddak}장`;$('mapDay').textContent=dayLabel()+(SAVE.realDay===false?` · 남은 대결 ${2-SAVE.played}번`:'');
   $('mapPct').textContent=progress()+'%';$('mapBar').style.width=progress()+'%';
   $('mapTeam').innerHTML=SAVE.team.map(k=>`<span class="mt"><img alt="" src="${face(k)}"><b>${SAVE.me===k?'★':''}${kname(k)}</b></span>`).join('')+`<span class="mtc">오늘의 멤버 · 동료 ${ROSTER().length}/16 · 🔥 출석 ${SAVE.streak}일째</span>`;
@@ -1317,10 +1326,73 @@ $('bDogam').onclick=()=>showDogam(0);$('bTut').onclick=()=>startTut();$('bTutSki
 $('bShopBack').onclick=()=>{if(SHOPFROM==='lobby'){hideAll();lobby();$('lobby').hidden=false}else showMap()};
 document.querySelectorAll('.hs').forEach(h=>h.onclick=()=>{SHOPTAB=h.dataset.t;renderShop();sfx('click')});$('bDgClose').onclick=()=>showMap();
 $('bMembers').onclick=()=>{hideAll();lobby();$('lobby').hidden=false};
+$('bOnline').onclick=()=>showOnline('crew');$('bOnClose').onclick=()=>showMap();
 $('bStart').onclick=start;$('bNextDay').onclick=()=>{SAVE.day++;SAVE.played=0;rollRevenge();fixTeam();save();lobby()};
-$('bDayMode').onclick=()=>{if(SAVE.realDay===false){SAVE.realDay=true}else{SAVE.realDay=false;SAVE.day=realDayNum()}SAVE.revenge=null;fixTeam();save();lobby()};$('bAgain').onclick=start;
+$('bDayMode').onclick=()=>{if(SAVE.realDay===false){SAVE.realDay=true}else{SAVE.realDay=false;SAVE.day=realDayNum()}SAVE.revenge=null;fixTeam();save();lobby()};$('bAgain').onclick=()=>{if(ONLINE){$('result').hidden=true;showOnline('rank')}else start()};
 $('bLobby').onclick=()=>{$('result').hidden=true;showMap()};
 $('bNoMission').onclick=()=>{MISSION_PICK=null;go()};$('bAttOk').onclick=()=>{$('attend').hidden=true};
+
+/* ---------- 온라인 크루 (Cloudflare 서버) ---------- */
+let ONLINE=null,ONTAB='crew',ONOK=null,ONFLAG='red';
+const FLAGC={red:'#e5484d',blue:'#3e7bfa',green:'#30a46c',yellow:'#ffcf4a',purple:'#8e4ec6',black:'#222',pink:'#ff7eb6',sky:'#7dd3fc'};
+const esc=t=>String(t).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+function onMe(){try{return JSON.parse(localStorage.getItem('snowfight-online')||'null')}catch(e){return null}}
+function onSave(v){try{localStorage.setItem('snowfight-online',JSON.stringify(v))}catch(e){}}
+async function api(path,body){const r=await fetch('/api/'+path,body?{method:'POST',headers:{'content-type':'application/json'},body:JSON.stringify(body)}:{});
+  let j=null;try{j=await r.json()}catch(e){throw new Error('서버 응답을 읽을 수 없어요')}if(!r.ok)throw new Error(j.error||'서버 오류');return j}
+async function onCheck(){if(ONOK!==null)return ONOK;try{ONOK=!!(await api('ping')).ok}catch(e){ONOK=false}return ONOK}
+function snapshot(){return SAVE.team.slice(0,5).map(k=>{const V=lvOf(k),g=SAVE.gear[k]||{};return{k,lv:V.L,g:V.g.slice(),glove:SAVE.glove[k]||0,
+  gear:{hat:g.hat||0,outer:g.outer||0,shoe:g.shoe||0,scarf:g.scarf||0}}})}
+const onFaces=m=>`<span class="fc">${m.map(x=>`<img alt="" title="${esc(kname(x.k))} Lv.${x.lv}" src="${face(x.k)}">`).join('')}</span>`;
+const onFlag=f=>`<span class="flag" style="background:${FLAGC[f]||'#888'}"></span>`;
+function onMsg(t,bad){$('onMsg').textContent=t||'';$('onMsg').style.color=bad?'var(--red)':'var(--gold)'}
+async function showOnline(tab){hideAll();$('online').hidden=false;ONTAB=tab;const me=onMe();
+  const T=[['crew','🚩 내 크루'],['rank','🏆 크루 순위'],['log','📜 결투 기록']];
+  $('onTabs').innerHTML=T.map(([k,n])=>`<button class="btn alt small" data-t="${k}" style="${k===tab?'background:var(--gold);color:#3a2a00':''}">${n}</button>`).join('');
+  document.querySelectorAll('#onTabs button').forEach(b=>b.onclick=()=>showOnline(b.dataset.t));
+  onMsg('서버에 연결하는 중…');$('onBody').innerHTML='';
+  if(!await onCheck()){onMsg('');$('onBody').innerHTML=`<p class="sub" style="font-size:16px">지금 화면에서는 온라인 기능을 쓸 수 없어요.<br>온라인 크루 결투는 <b>game.029.kr</b> 에서 할 수 있어요.</p>`;return}
+  onMsg('');
+  try{
+    if(tab==='crew'){
+      let C=null;if(me){try{C=(await api('crew/'+me.id)).crew}catch(e){}}
+      if(me&&C&&SAVE.team.length===5){try{await api('crew',{id:me.id,token:me.token,name:C.name,flag:C.flag,members:snapshot()});C.members=snapshot()}catch(e){}}
+      if(!C){ONFLAG=ONFLAG||'red';$('onBody').innerHTML=`<div style="display:grid;gap:12px">
+        <p class="sub" style="font-size:15px;margin:0">오늘의 멤버 5명으로 다산동 크루를 만들어요. 다른 사람들이 내 크루에 도전하면, 내 아이들이 컴퓨터 조종으로 대신 싸워요!</p>
+        <div class="row" style="gap:8px;flex-wrap:wrap"><input id="onName" maxlength="12" placeholder="크루 이름 (2~12글자)"><span class="flags" id="onFlags">${Object.keys(FLAGC).map(f=>`<button data-f="${f}" class="${f===ONFLAG?'on':''}" style="background:${FLAGC[f]}" aria-label="${f}"></button>`).join('')}</span></div>
+        <div>${onFaces(snapshot())}</div>
+        <div><button class="btn" id="onMake" ${SAVE.team.length<5?'disabled':''}>${SAVE.team.length<5?'오늘의 멤버 5명이 필요해요':'크루 만들기 🚩'}</button></div></div>`;
+        document.querySelectorAll('#onFlags button').forEach(b=>b.onclick=()=>{ONFLAG=b.dataset.f;document.querySelectorAll('#onFlags button').forEach(x=>x.classList.toggle('on',x===b))});
+        if(SAVE.team.length===5)$('onMake').onclick=async()=>{const name=$('onName').value.trim();$('onMake').disabled=true;onMsg('만드는 중…');
+          try{const r=await api('crew',{name,flag:ONFLAG,members:snapshot()});onSave({id:r.id,token:r.token});sfx('win');showOnline('crew')}
+          catch(e){onMsg(e.message,true);$('onMake').disabled=false}};
+        return}
+      $('onBody').innerHTML=`<div style="display:grid;gap:12px">
+        <div class="crow me"><div class="rk">${C.rank}위</div><div class="cn"><b>${onFlag(C.flag)}${esc(C.name)}</b><span>점수 ${C.score} · ${C.wins}승 ${C.losses}패 · 전투력 ${C.power}</span></div>${onFaces(C.members)}<span></span></div>
+        <p class="sub" style="margin:0">내 크루 멤버는 '오늘의 멤버'와 같아요. 멤버·레벨·장비를 바꾸고 이 화면을 열면 자동으로 서버에 반영돼요.<br>이 기기(브라우저)에서만 내 크루를 관리할 수 있어요. 게임 저장을 지우면 크루 열쇠도 사라지니 주의하세요.</p>
+        <div class="row" style="gap:8px"><button class="btn" id="onGoRank">⚔ 결투할 크루 찾기</button></div></div>`;
+      $('onGoRank').onclick=()=>showOnline('rank');return}
+    if(tab==='rank'){
+      const {crews}=await api('crews');if(!crews.length){$('onBody').innerHTML='<p class="sub">아직 크루가 없어요. 첫 번째 크루가 되어 보세요!</p>';return}
+      $('onBody').innerHTML=`<div class="list">${crews.map(c=>{const mine=me&&c.id===me.id;return `<div class="crow${mine?' me':''}"><div class="rk">${c.rank}</div>
+        <div class="cn"><b>${onFlag(c.flag)}${esc(c.name)}${mine?' (내 크루)':''}</b><span>점수 ${c.score} · ${c.wins}승 ${c.losses}패 · 전투력 ${c.power}</span></div>${onFaces(c.members)}
+        ${mine?'<span></span>':`<button class="btn small" data-id="${esc(c.id)}">⚔ 결투</button>`}</div>`}).join('')}</div>`;
+      document.querySelectorAll('#onBody button[data-id]').forEach(b=>b.onclick=()=>{const c=crews.find(x=>x.id===b.dataset.id);
+        if(!me){onMsg('먼저 \'내 크루\'에서 크루를 만들어야 결투할 수 있어요',true);return}
+        if(SAVE.team.length<5){onMsg('오늘의 멤버 5명이 필요해요',true);return}
+        ONLINE={crew:c};SAVE.region=0;save();hideAll();MISSION_PICK=null;go()});return}
+    if(tab==='log'){
+      if(!me){$('onBody').innerHTML='<p class="sub">크루를 만들면 결투 기록이 여기에 쌓여요.</p>';return}
+      const {log}=await api('log/'+me.id);if(!log.length){$('onBody').innerHTML='<p class="sub">아직 결투 기록이 없어요.</p>';return}
+      $('onBody').innerHTML=`<div class="list">${log.map(l=>{const att=l.attacker===me.id,won=l.winner===me.id,d=att?l.delta:-l.delta,other=att?l.dname:l.aname,of=att?l.dflag:l.aflag,
+        t=new Date(l.created);return `<div class="crow"><div class="rk">${won?'🏆':'💧'}</div><div class="cn"><b>${onFlag(of)}${esc(other||'(사라진 크루)')}</b>
+        <span>${att?'내가 도전':'상대가 도전해 옴'} · ${won?'승리':'패배'} · ${t.getMonth()+1}/${t.getDate()} ${t.getHours()}:${String(t.getMinutes()).padStart(2,'0')}</span></div><span></span>
+        <b style="color:${d>=0?'var(--ok)':'var(--red)'}">${d>=0?'+':''}${d}</b></div>`}).join('')}</div>`}
+  }catch(e){onMsg(e.message,true)}}
+async function onReport(C,win,hits){const me=onMe(),el=$('resSub');if(!me)return;
+  try{const r=await api('battle',{id:me.id,token:me.token,defender:C.id,win,hits:Math.min(999,hits)});
+    el.textContent=el.textContent.replace('점수 기록 중…',`🏆 크루 점수 ${r.before} → ${r.score} (${r.delta>=0?'+':''}${r.delta})`)}
+  catch(e){el.textContent=el.textContent.replace('점수 기록 중…','⚠ 점수는 기록되지 않았어요: '+e.message)}}
 
 /* ---------- 시작 ---------- */
 let last=performance.now();
