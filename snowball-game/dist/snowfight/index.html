@@ -464,7 +464,8 @@ const PACK=['bgm_dasan_afterschool','bgm_byeollae_bunny','bgm_hopyeong_chase','b
   'snow_gather','snow_throw','snow_hit','snow_miss','snow_wall_build','snow_wall_break','snow_step_01','snow_step_02','snow_slide','cold_hands','snow_reload',
   'item_pickup','item_hotpack','item_hotcocoa','crate_break','ice_skid','ice_crack','shield_block','snowball_big','round_start','round_win','round_lose',
   'button_hover','button_confirm','team_switch','clock_warning','home_call',
-  'voice_jihun_cheer','voice_sumin_support','voice_minjae_ready','voice_doyun_charge','voice_seoyeon_tease','voice_ouch','voice_cold','voice_victory'];
+  'voice_jihun_cheer','voice_sumin_support','voice_minjae_ready','voice_doyun_charge','voice_seoyeon_tease','voice_ouch','voice_cold','voice_victory',
+  ...['dasan','byeollae','hopyeong','jinjeop','pyeongnae','deokso','hwado'].flatMap(a=>['base','tension','crisis'].map(t=>'m_'+a+'_'+t)),'m_last_one','m_countdown','m_victory','m_defeat'];
 const BUF={},LOOPPT={};
 function loadPack(){for(const id of PACK)fetch(`assets/audio/${id}.mp3`).then(r=>{if(!r.ok)throw 0;return r.arrayBuffer()}).then(a=>SND.ac.decodeAudioData(a)).then(b=>{BUF[id]=b;
   if(/^(bgm|amb)_/.test(id)){const d=b.getChannelData(0);let i=0,j=d.length-1;while(i<d.length&&Math.abs(d[i])<.002)i++;while(j>i&&Math.abs(d[j])<.002)j--;LOOPPT[id]=[i/b.sampleRate,(j+1)/b.sampleRate]}
@@ -472,9 +473,11 @@ function loadPack(){for(const id of PACK)fetch(`assets/audio/${id}.mp3`).then(r=
 function play(id,vol=1,bus){if(!SND.ac||!sndOn()||!BUF[id])return false;const now=SND.ac.currentTime;if(SND.last['f'+id]&&now-SND.last['f'+id]<.06)return true;SND.last['f'+id]=now;
   const s=SND.ac.createBufferSource(),g=SND.ac.createGain();s.buffer=BUF[id];g.gain.value=vol;s.connect(g);g.connect(bus||(id.startsWith('voice')?SND.voice:SND.sfx));s.start();return true}
 function loopBuf(id,bus,slot,force){const ac=SND.ac,cur=SND[slot];if(cur&&cur.id===id&&!force)return true;if(!BUF[id])return false;
-  if(cur){cur.g.gain.setTargetAtTime(0,ac.currentTime,.25);cur.s.stop(ac.currentTime+1.2)}
+  const sync=cur&&id.startsWith('m_')&&cur.id.startsWith('m_')&&cur.id.split('_')[1]===id.split('_')[1],fade=sync?1.2:.6;
+  const off=sync?((ac.currentTime-cur.t0)+cur.off)%BUF[id].duration:0;
+  if(cur){cur.g.gain.setTargetAtTime(0,ac.currentTime,sync?.4:.25);cur.s.stop(ac.currentTime+(sync?2.2:1.2))}
   const s=ac.createBufferSource(),g=ac.createGain();s.buffer=BUF[id];s.loop=true;const L=LOOPPT[id];if(L){s.loopStart=L[0];s.loopEnd=L[1]}
-  g.gain.setValueAtTime(0,ac.currentTime);g.gain.linearRampToValueAtTime(1,ac.currentTime+.6);s.connect(g);g.connect(bus);s.start(0,L?L[0]:0);SND[slot]={id,s,g};return true}
+  const vol=id.startsWith('m_')?.75:1;g.gain.setValueAtTime(0,ac.currentTime);g.gain.linearRampToValueAtTime(vol,ac.currentTime+fade);s.connect(g);g.connect(bus);const st=sync?off:(L?L[0]:0);s.start(0,st);SND[slot]={id,s,g,t0:ac.currentTime,off:st};return true}
 function stopLoop(slot){const cur=SND[slot];if(!cur||!SND.ac)return;cur.g.gain.setTargetAtTime(0,SND.ac.currentTime,.2);cur.s.stop(SND.ac.currentTime+1);SND[slot]=null}
 function ambience(id,force){SND.ambWant=id;if(!SND.ac)return;if(!id){stopLoop('ambS');return}loopBuf(id,SND.amb,'ambS',force)}
 const VOICE={jihun:'voice_jihun_cheer',sumin:'voice_sumin_support',minjae:'voice_minjae_ready',doyun:'voice_doyun_charge',seoyeon:'voice_seoyeon_tease',
@@ -519,7 +522,7 @@ const SONGS={
   battle:{bpm:138,mel:[76,76,0,79,0,76,74,72,74,0,74,76,79,0,76,0, 81,0,79,76,79,0,76,74,72,74,76,0,72,0,0,0],
     bass:[45,45,57,45,43,43,55,43,41,41,53,41,43,43,55,47],drum:'k.hsk.hsk.hsk.ss'}};
 const MUSICMAP={};
-function music(name,force){SND.want=name;if(!SND.ac)return;if(PACK.includes(name)&&!BUF[name]&&SND.packFail)name=/dasan|deokso/.test(name)?'menu':'battle';if(BUF[name]||PACK.includes(name)){if(BUF[name]){SND.song=null;loopBuf(name,SND.bgm,'bgmS',force)}return}
+function music(name,force){SND.want=name;if(!SND.ac)return;if(PACK.includes(name)&&!BUF[name]&&SND.packFail)name=/^bgm_(dasan|deokso)/.test(name)?'menu':'battle';if(BUF[name]||PACK.includes(name)){if(BUF[name]){SND.song=null;loopBuf(name,SND.bgm,'bgmS',force)}return}
   stopLoop('bgmS');if(SND.song===name&&!force)return;SND.song=name;SND.step=0;SND.next=SND.ac.currentTime+.1;
   if(!SND.timer)SND.timer=setInterval(schedule,50)}
 function schedule(){const ac=SND.ac;if(!ac||!SND.song)return;const S=SONGS[SND.song],dt=60/S.bpm/2;
@@ -750,7 +753,8 @@ function ai(u,dt){
 /* ---------- 업데이트 ---------- */
 function update(dt){
   if(G.over||G.paused)return;
-  {const pt=G.t;G.t-=dt/gspeed();if(!G.demo&&pt>10&&G.t<=10)sfx('clock')}
+  {const pt=G.t;G.t-=dt/gspeed();if(!G.demo&&!G.tut&&pt>10&&G.t<=10){if(!play('m_countdown',.9,SND.bgm))sfx('clock')}}
+  if(!G.demo&&!G.tut)musicTick(dt);
   if(!G.demo&&!G.tut)weatherTick(dt);else if(G.banner){G.banner.t+=dt;if(G.banner.t>2.2)G.banner=null}
   for(const u of G.units){u.bcd=1;u.bspd=1;u.bdef=1;u.bdmg=1;const F=u.fx;for(const k in F)F[k]=Math.max(0,F[k]-dt);
     if(F.order>0){u.bcd*=.6;u.bspd*=1.2}if(F.guard>0)u.bdef*=.3;if(F.gale>0)u.bspd*=1.6;if(F.sled>0)u.bspd*=1.8;if(F.dash>0)u.bspd*=2.4;
@@ -822,7 +826,7 @@ function bubble(u,text,c){G.bubbles.push({u,text,c,t:0})}
 /* ---------- 결과 ---------- */
 function finish(a,e){G.over=true;let win=a>e;
   if(a===e){const sa=alive(0).reduce((s,u)=>s+(u.max-u.wet),0),se=alive(1).reduce((s,u)=>s+(u.max-u.wet),0);win=sa>=se}
-  musicStop();setTimeout(()=>sfx(win?'win':'lose'),300);
+  musicStop();setTimeout(()=>{if(play(win?'m_victory':'m_defeat',.9,SND.bgm)){if(win)play('voice_victory')}else sfx(win?'win':'lose')},300);
   const hits=G.units.filter(u=>u.team===0).reduce((s,u)=>s+u.hits,0);
   const bonus=1+(G.R.s-1)*.2;let gain=Math.round((win?150+hits*10:30+hits*5)*bonus),first=false;
   if(win&&!SAVE.cleared.includes(SAVE.region)){SAVE.cleared.push(SAVE.region);first=true;gain+=300}
@@ -1239,7 +1243,14 @@ function lobby(){
 function start(){if(SAVE.team.length<5)return;showMissions()}
 const REGION_BGM=['bgm_dasan_afterschool','bgm_byeollae_bunny','bgm_hopyeong_chase','bgm_jinjeop_fort','bgm_hopyeong_chase','bgm_deokso_river','bgm_hwado_boss'];
 const REGION_AMB=['amb_calm_wind','amb_park_wind','amb_market_distant','amb_snowfall','amb_market_distant','amb_park_wind','amb_ice_valley'];
-function go(){hideAll();newGame();sfx('start');music(REGION_BGM[SAVE.region]);ambience(REGION_AMB[SAVE.region])}
+const AREA=['dasan','byeollae','hopyeong','jinjeop','pyeongnae','deokso','hwado'];
+function battleTrack(){const a=AREA[SAVE.region]||'dasan';return BUF['m_'+a+'_base']||!SND.ac?'m_'+a+'_'+(G&&G.mst||'base'):REGION_BGM[SAVE.region]}
+/* 적응형 음악: 우리 편이 밀리면 긴장 → 위기, 남은 시간 30초 이하면 최소 긴장 */
+function musicTick(dt){if(!SND.ac||!BUF['m_'+AREA[SAVE.region]+'_base'])return;const a=alive(0).length,e=alive(1).length;
+  let want='base';if(a<=2&&e>a)want='crisis';else if(a<=3&&e>a)want='tension';if(a===1)want='crisis';if(e===1&&a>=2)want='base';if(G.t<=30&&want==='base')want='tension';
+  if(a===1&&!G.lastOne){G.lastOne=true;play('m_last_one',.9,SND.bgm)}
+  G.mhold=(G.mhold||0)-dt;if(want!==G.mst&&G.mhold<=0){G.mst=want;G.mhold=2;music('m_'+AREA[SAVE.region]+'_'+want)}}
+function go(){hideAll();newGame();sfx('start');G.mst='base';G.mhold=0;music(battleTrack());ambience(REGION_AMB[SAVE.region])}
 function hideAll(){const sk=document.getElementById('bTutSkip');if(sk)sk.hidden=true;['title','map','lobby','result','mission','dogam','shopScr'].forEach(id=>$(id).hidden=true)}
 function progress(){return Math.round(SAVE.cleared.filter(i=>i>0).length/6*100)}
 let titleStage=0,resetArm=false;
