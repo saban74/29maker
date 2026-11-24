@@ -133,6 +133,17 @@ td .xpb{display:inline-block;width:60px;vertical-align:middle;margin:0 0 0 4px}.
 .icard{background:var(--panel2);border-radius:12px;padding:8px 10px;display:flex;gap:10px;align-items:center;font-size:12.5px;min-width:0}
 .icard .iic{width:48px;height:48px;flex:none;display:grid;place-items:center;background:#0003;border-radius:10px}.icard .iic img{max-width:44px;max-height:44px}
 .icard b{font-size:14px}.icard p{margin:2px 0 0;color:var(--sub)}.ipr{font-size:11px;color:var(--gold);font-weight:700}
+.shopwrap{position:relative;width:min(100%,calc((100vh - 24px)*1.777));aspect-ratio:1672/941;max-width:100%;border-radius:16px;overflow:hidden;border:2px solid var(--line)}
+.sbg{position:absolute;inset:0;width:100%;height:100%}
+.hs{position:absolute;cursor:pointer;border-radius:12px}.hs:hover{background:#ffe08a33;outline:2px dashed #ffe08acc}
+.keeper{position:absolute;left:34.5%;bottom:40%;width:21%;pointer-events:none}.keeper canvas{width:100%;height:auto;display:block}
+.kbub{position:absolute;left:62%;top:-16%;white-space:nowrap;background:#fffdf5;color:#3a2a10;border:3px solid #3a2a10;border-radius:16px;padding:4px 12px;font-family:var(--display);font-size:clamp(12px,1.6vw,20px);box-shadow:0 3px 0 #0003}
+.kbub.pop{animation:pop .3s cubic-bezier(.3,1.6,.5,1)}@keyframes pop{from{transform:scale(.6)}to{transform:none}}
+.spanel{position:absolute;right:1%;top:2%;bottom:2%;width:24%;background:rgba(36,52,90,.93);border:2px solid #ffe08a88;border-radius:14px;padding:8px;display:flex;flex-direction:column;gap:6px;overflow:auto}
+.spanel .dtabs .btn{font-size:12px;padding:4px 7px}.spanel .shop{display:grid;grid-template-columns:1fr 1fr;gap:6px}.spanel .it{padding:5px}.spanel .it span{font-size:10.5px}.spanel .it b{font-size:12px}
+.spanel .it .ic{height:42px}.spanel .it .ic img{max-height:42px}.spanel .note{margin:0;font-size:11px}.it[data-poor]{opacity:.55}
+.skids{display:flex;gap:4px;overflow-x:auto;align-items:center;padding-bottom:2px}.sk{border:2px solid transparent;background:#0003;border-radius:8px;padding:2px;cursor:pointer;display:grid;justify-items:center;color:var(--ink);font:inherit}
+.sk img{width:30px;height:30px}.sk small{font-size:10px}.sk.on{border-color:var(--gold)}
 @media (max-width:720px){.mcards{grid-template-columns:1fr}.team,.shop{grid-template-columns:repeat(3,minmax(0,1fr))}.regions{grid-template-columns:1fr 1fr}}
 </style>
 
@@ -148,10 +159,7 @@ td .xpb{display:inline-block;width:60px;vertical-align:middle;margin:0 0 0 4px}.
       <div class="row" style="justify-content:space-between"><h2>우리 팀 · 다산동 새싹 눈싸움단 <span id="teamCount"></span></h2><span class="row"><span class="ddak" id="today"></span><button class="btn alt small" id="bDayMode">요일: 실제 오늘</button><button class="btn alt small" id="bNextDay">하루 넘기기</button></span></div>
       <p class="note" style="margin:0">오늘 나올 수 있는 아이 중 5명을 고르세요. 학원·엄마 감시 때문에 요일마다 나오는 아이가 달라요. 하루에 2번 대결하면 해가 집니다.</p>
       <div class="team" id="teamCards"></div>
-      <div class="row" style="justify-content:space-between"><h2>문방구</h2><span class="ddak" id="ddak"></span></div>
-      <div class="dtabs" id="shopTabs"></div>
-      <div class="shop" id="shop"></div>
-      <p class="note" id="shopNote"></p>
+      <div class="row" style="justify-content:space-between"><h2>🏪 다산 문방구</h2><span class="row"><span class="ddak" id="ddak"></span><button class="btn small" id="bShopL">문방구 들어가기 →</button></span></div>
 
       <div class="keys">
         <span><kbd>W A S D</kbd> 이동</span><span><kbd>마우스</kbd> 조준 · <kbd>클릭</kbd> 던지기</span>
@@ -181,7 +189,7 @@ td .xpb{display:inline-block;width:60px;vertical-align:middle;margin:0 0 0 4px}.
         <button class="btn alt small" id="bToTitle">≡ 첫 화면</button>
         <span class="ddak" id="mapDay"></span><span class="ddak" id="mapDdak"></span>
         <span class="pct"><span>남양주시 평정도</span><span class="pbar"><i id="mapBar"></i></span><b id="mapPct"></b></span>
-        <button class="btn alt small" id="bDogam">📖 도감</button><button class="btn small" id="bMembers">오늘의 멤버 · 문방구</button>
+        <button class="btn alt small" id="bDogam">📖 도감</button><button class="btn alt small" id="bShopM">🏪 문방구</button><button class="btn small" id="bMembers">오늘의 멤버 · 문방구</button>
       </div>
       <div class="mapwrap"><img src="assets/map.jpg" alt="남양주시 월드맵"><div id="spots"></div>
         <div class="rcard" id="regionCard" hidden></div></div>
@@ -205,6 +213,21 @@ td .xpb{display:inline-block;width:60px;vertical-align:middle;margin:0 0 0 4px}.
     <div class="box dg"><div class="row" style="justify-content:space-between"><h2>📖 동네별 아이들 도감</h2><button class="btn alt small" id="bDgClose">← 지도로</button></div>
       <div class="dtabs" id="dTabs"></div><div id="dBody"></div></div>
   </div>
+  <div class="ov" id="shopScr" hidden>
+    <div class="shopwrap"><img class="sbg" src="assets/shop_bg.jpg" alt="다산 문방구">
+      <div class="hs" data-t="hat" style="left:1%;top:14%;width:15%;height:23%" title="모자"></div><div class="hs" data-t="glove" style="left:2%;top:39%;width:14%;height:13%" title="장갑"></div>
+      <div class="hs" data-t="outer" style="left:63%;top:27%;width:14%;height:20%" title="겉옷"></div><div class="hs" data-t="shoe" style="left:63%;top:47%;width:14%;height:7%" title="신발"></div>
+      <div class="hs" data-t="scarf" style="left:63%;top:54%;width:14%;height:11%" title="목도리"></div><div class="hs" data-t="item" style="left:23%;top:63%;width:43%;height:27%" title="소모품"></div>
+      <div class="keeper" id="keeper"><canvas id="kpc" width="449" height="498"></canvas><div class="kbub" id="kbub">어서 와라~</div></div>
+      <div class="spanel">
+        <div class="row" style="justify-content:space-between"><b class="ddak" id="sDdak"></b><button class="btn alt small" id="bShopBack">← 나가기</button></div>
+        <div class="skids" id="sKids"></div>
+        <div class="dtabs" id="shopTabs"></div>
+        <div class="shop" id="shop"></div>
+        <p class="note" id="shopNote"></p>
+      </div>
+    </div>
+  </div>
   <div class="ov" id="result" hidden>
     <div class="box res">
       <h1 id="resTitle"></h1>
@@ -219,6 +242,7 @@ td .xpb{display:inline-block;width:60px;vertical-align:middle;margin:0 0 0 4px}.
 const KMETA=/*KMETA*/;
 const OMETA=/*OMETA*/;
 const IMETA=/*IMETA*/;
+const SKMETA=/*SKMETA*/;
 const PMETA=/*PMETA*/;
 const RTMETA=/*RMETA*/;
 </script>
@@ -252,7 +276,7 @@ const GEAR={
    {n:'털 부츠',g:'희귀',p:450,ic:'s3',e:'안 미끄러짐 · 이동 +5% · 구르기 대기 −20%'},{n:'보라 부츠',g:'영웅',p:800,ic:'s4',e:'안 미끄러짐 · 이동 +10% · 구르기 대기 −30%'}]},
  scarf:{t:'목도리',it:[{n:'없음',p:0,e:'—'},{n:'빨간 목도리',g:'일반',p:80,ic:'f1',e:'체력 +8%'},{n:'파란 줄무늬 목도리',g:'고급',p:250,ic:'f2',e:'아웃 직전 한 번 버팀'},
    {n:'노란 목도리',g:'희귀',p:500,ic:'f3',e:'한 번 버팀 + 버틴 뒤 젖음 30% 회복'},{n:'보라 별 목도리',g:'영웅',p:850,ic:'f4',e:'한 번 버팀 + 회복 + 근처 친구 손 시림 해소'}]}};
-const ITEMS={pack:{n:'핫팩',p:30,e:'손 시림 즉시 0',src:'o'},cocoa:{n:'핫초코',p:40,e:'젖음(체력) 30% 회복',src:'o'},shovel:{n:'눈삽',p:50,e:'그 자리에서 눈덩이 가득 + 8초 뭉치기 2배',src:'i',ic:'shovel'},
+const ITEMS={pack:{n:'핫팩',p:30,e:'손 시림 즉시 0',src:'i',ic:'pack'},cocoa:{n:'핫초코',p:40,e:'젖음(체력) 30% 회복',src:'i',ic:'cocoa'},shovel:{n:'눈삽',p:50,e:'그 자리에서 눈덩이 가득 + 8초 뭉치기 2배',src:'i',ic:'shovel'},
   big:{n:'큰 눈덩이',p:80,e:'굴려서 앞의 여러 명을 한꺼번에 맞힘',src:'i',ic:'bigball'}};
 const GRADE={일반:'#e8f1ff',고급:'#ff8f7a',희귀:'#6fb8ff',영웅:'#ffcf4a'};
 const REGIONS=[{n:'다산동',d:'우리 동네 친구들과 연습 경기',s:1,lv:.72,gl:0,x:18,y:72},{n:'별내동',d:'별빛 눈토끼단',s:2,lv:.8,gl:1,x:21,y:39},{n:'호평동',d:'골목 번개단',s:2,lv:.86,gl:1,x:40,y:49},
@@ -1077,7 +1101,38 @@ function hud(){
 
 /* ---------- 로비 ---------- */
 const $=id=>document.getElementById(id);let FACES={},GICON={};
-let SHOPTAB='glove';
+let SHOPTAB='glove',SHOPKID=null,SHOPFROM='map',KT=null;
+const SAYS=['어서 와라~','잘 골랐네!','딱지가 모자라는구나…','오호, 그걸 사다니!'];
+function say(f,t){const c=$('kpc'),r=SKMETA[f],x=c.getContext('2d');c.width=r[2];c.height=r[3];x.drawImage(IMG.shopkeeper,r[0],r[1],r[2],r[3],0,0,r[2],r[3]);
+  const b=$('kbub');b.textContent=t||SAYS[f];b.classList.remove('pop');void b.offsetWidth;b.classList.add('pop');clearTimeout(KT);if(f)KT=setTimeout(()=>say(0,'또 필요한 거 있니?'),2600)}
+function bought(g){sfx('pickup');if(g.g==='영웅')say(3);else say(1)}
+function showShop(from){SHOPFROM=from||'map';SHOPKID=SAVE.me;hideAll();$('shopScr').hidden=false;say(0);renderShop()}
+function renderShop(){$('sDdak').textContent=`🪙 딱지 ${SAVE.ddak}장`;
+  $('sKids').innerHTML=`<span class="note">누구 장비?</span>`+ROSTER().map(q=>`<button class="sk${q===(SHOPKID||SAVE.me)?' on':''}" id="sk-${q}" data-k="${q}" title="${kname(q)}"><img alt="" src="${face(q)}"><small>${kname(q)}</small></button>`).join('');
+  document.querySelectorAll('#sKids .sk').forEach(b=>b.onclick=()=>{SHOPKID=b.dataset.k;renderShop()});
+  const k=SHOPKID&&ROSTER().includes(SHOPKID)?SHOPKID:SAVE.me;initKid(k);const TABS=[['glove','🧤 장갑'],['hat','🧢 모자'],['outer','🧥 겉옷'],['shoe','👢 신발'],['scarf','🧣 목도리'],['item','🎒 소모품']];
+  $('shopTabs').innerHTML=TABS.map(([id,n])=>`<button class="btn alt small" id="st-${id}" data-t="${id}" style="${SHOPTAB===id?'background:var(--gold);color:#3a2a00':''}">${n}</button>`).join('');
+  document.querySelectorAll('#shopTabs button').forEach(b=>b.onclick=()=>{SHOPTAB=b.dataset.t;renderShop()});
+  const gr=g=>g?`<span class="gr" style="color:${GRADE[g]}">${g}</span>`:'';
+  if(SHOPTAB==='glove'){const own=SAVE.owned[k];
+    $('shop').innerHTML=GLOVES.map((g,i)=>{const has=own.includes(i),eq=SAVE.glove[k]===i,can=has||SAVE.ddak>=g.p;
+      return `<button class="it" id="gl-${i}" data-i="${i}" aria-pressed="${eq}" ${can?'':'data-poor="1"'}><span class="ic">${g.ic?`<img alt="" src="${iconURL(g.ic)}">`:'✋'}</span>${gr(g.g)}<b>${g.n}</b><span>연속 ${g.lim}개${g.x?' · '+g.x:''}</span><span class="p">${eq?'끼는 중':has?'끼기':'딱지 '+g.p}</span></button>`}).join('');
+    $('shopNote').textContent=`★ ${kname(k)}에게 끼울 장갑이에요. 산 장비는 그 아이 것이 됩니다.`;
+    document.querySelectorAll('.it').forEach(b=>b.onclick=()=>{const i=+b.dataset.i,g=GLOVES[i];if(!own.includes(i)){if(SAVE.ddak<g.p){say(2);return}SAVE.ddak-=g.p;own.push(i);bought(g)}else say(0,'잘 어울리는구나');SAVE.glove[k]=i;save();renderShop()})}
+  else if(SHOPTAB==='item'){
+    $('shop').innerHTML=Object.entries(ITEMS).map(([id,I])=>{const n=SAVE.inv[id]||0,inBag=SAVE.bag.includes(id);
+      return `<div class="it itc"><span class="ic"><img alt="" src="${itemIcon(id)}"></span><b>${I.n} <small>보유 ${n}개</small></b><span>${I.e}</span>
+        <span class="row" style="gap:4px;justify-content:center"><button class="btn small buy" id="buy-${id}" data-id="${id}" >사기 ${I.p}</button><button class="btn alt small bagb" id="bag-${id}" data-id="${id}" ${n||inBag?'':'disabled'} style="${inBag?'background:var(--blue);color:#fff':''}">${inBag?'가방 ✓':'가방에'}</button></span></div>`}).join('');
+    $('shopNote').textContent=`🎒 가방(한 판에 2개까지): ${SAVE.bag.length?SAVE.bag.map(id=>ITEMS[id].n).join(', '):'비어 있음'} · 대결 중 Q / E로 씁니다. 쓴 것만 없어지고, 안 쓰면 그대로 남아요.`;
+    document.querySelectorAll('.buy').forEach(b=>b.onclick=()=>{const id=b.dataset.id,I=ITEMS[id];if(SAVE.ddak<I.p){say(2);return}SAVE.ddak-=I.p;bought(I);SAVE.inv[id]=(SAVE.inv[id]||0)+1;if(SAVE.bag.length<2&&!SAVE.bag.includes(id))SAVE.bag.push(id);save();renderShop()});
+    document.querySelectorAll('.bagb').forEach(b=>b.onclick=()=>{const id=b.dataset.id,i=SAVE.bag.indexOf(id);if(i>=0)SAVE.bag.splice(i,1);else{if(SAVE.bag.length>=2)SAVE.bag.shift();SAVE.bag.push(id)}save();renderShop()})}
+  else{const S=GEAR[SHOPTAB],own=SAVE.gown[k][SHOPTAB],cur=SAVE.gear[k][SHOPTAB];
+    $('shop').innerHTML=S.it.map((g,i)=>{const has=own.includes(i),eq=cur===i,can=has||SAVE.ddak>=g.p;
+      return `<button class="it" id="gr-${i}" data-i="${i}" aria-pressed="${eq}" ${can?'':'data-poor="1"'}><span class="ic">${g.ic?`<img alt="" src="${iconURL(g.ic)}">`:'—'}</span>${gr(g.g)}<b>${g.n}</b><span>${g.e}</span><span class="p">${eq?'입는 중':has?'입기':'딱지 '+g.p}</span></button>`}).join('');
+    $('shopNote').textContent=`★ ${kname(k)}의 ${S.t}. 산 장비는 그 아이 것이 됩니다.`;
+    document.querySelectorAll('.it').forEach(b=>b.onclick=()=>{const i=+b.dataset.i,g=S.it[i];if(!own.includes(i)){if(SAVE.ddak<g.p){say(2);return}SAVE.ddak-=g.p;own.push(i);bought(g)}else say(0,'잘 어울리는구나');SAVE.gear[k][SHOPTAB]=i;save();renderShop()})}
+}
+function lobbyOldShop(){}
 function gearLine(k){initKid(k);const g=SAVE.gear[k],a=[GLOVES[SAVE.glove[k]||0]].concat(['hat','outer','shoe','scarf'].map(s=>GEAR[s].it[g[s]])).filter(x=>x.ic);return a.length?a.map(x=>`<img class="gi" alt="${x.n}" title="${x.n}" src="${iconURL(x.ic)}">`).join(''):'<small>장비 없음</small>'}
 function lobby(){
   $('ddak').textContent=`딱지 ${SAVE.ddak}장`;
@@ -1092,27 +1147,6 @@ function lobby(){
     if(i>=0){if(SAVE.team.length>1)SAVE.team.splice(i,1)}else if(SAVE.team.length<5)SAVE.team.push(k);else{SAVE.team.splice(SAVE.team.indexOf(SAVE.me)===4?3:4,1);SAVE.team.push(k)}
     if(!SAVE.team.includes(SAVE.me))SAVE.me=SAVE.team[0];save();lobby()});
   document.querySelectorAll('.star').forEach(b=>b.onclick=()=>{SAVE.me=b.dataset.k;save();lobby()});
-  const k=SAVE.me;initKid(k);const TABS=[['glove','🧤 장갑'],['hat','🧢 모자'],['outer','🧥 겉옷'],['shoe','👢 신발'],['scarf','🧣 목도리'],['item','🎒 소모품']];
-  $('shopTabs').innerHTML=TABS.map(([id,n])=>`<button class="btn alt small" id="st-${id}" data-t="${id}" style="${SHOPTAB===id?'background:var(--gold);color:#3a2a00':''}">${n}</button>`).join('');
-  document.querySelectorAll('#shopTabs button').forEach(b=>b.onclick=()=>{SHOPTAB=b.dataset.t;lobby()});
-  const gr=g=>g?`<span class="gr" style="color:${GRADE[g]}">${g}</span>`:'';
-  if(SHOPTAB==='glove'){const own=SAVE.owned[k];
-    $('shop').innerHTML=GLOVES.map((g,i)=>{const has=own.includes(i),eq=SAVE.glove[k]===i,can=has||SAVE.ddak>=g.p;
-      return `<button class="it" id="gl-${i}" data-i="${i}" aria-pressed="${eq}" ${can?'':'disabled'}><span class="ic">${g.ic?`<img alt="" src="${iconURL(g.ic)}">`:'✋'}</span>${gr(g.g)}<b>${g.n}</b><span>연속 ${g.lim}개${g.x?' · '+g.x:''}</span><span class="p">${eq?'끼는 중':has?'끼기':'딱지 '+g.p}</span></button>`}).join('');
-    $('shopNote').textContent=`★ ${kname(k)}에게 끼울 장갑이에요. 산 장비는 그 아이 것이 됩니다.`;
-    document.querySelectorAll('.it').forEach(b=>b.onclick=()=>{const i=+b.dataset.i,g=GLOVES[i];if(!own.includes(i)){if(SAVE.ddak<g.p)return;SAVE.ddak-=g.p;own.push(i)}SAVE.glove[k]=i;save();lobby()})}
-  else if(SHOPTAB==='item'){
-    $('shop').innerHTML=Object.entries(ITEMS).map(([id,I])=>{const n=SAVE.inv[id]||0,inBag=SAVE.bag.includes(id);
-      return `<div class="it itc"><span class="ic"><img alt="" src="${itemIcon(id)}"></span><b>${I.n} <small>보유 ${n}개</small></b><span>${I.e}</span>
-        <span class="row" style="gap:4px;justify-content:center"><button class="btn small buy" id="buy-${id}" data-id="${id}" ${SAVE.ddak>=I.p?'':'disabled'}>사기 ${I.p}</button><button class="btn alt small bagb" id="bag-${id}" data-id="${id}" ${n||inBag?'':'disabled'} style="${inBag?'background:var(--blue);color:#fff':''}">${inBag?'가방 ✓':'가방에'}</button></span></div>`}).join('');
-    $('shopNote').textContent=`🎒 가방(한 판에 2개까지): ${SAVE.bag.length?SAVE.bag.map(id=>ITEMS[id].n).join(', '):'비어 있음'} · 대결 중 Q / E로 씁니다. 쓴 것만 없어지고, 안 쓰면 그대로 남아요.`;
-    document.querySelectorAll('.buy').forEach(b=>b.onclick=()=>{const id=b.dataset.id,I=ITEMS[id];if(SAVE.ddak<I.p)return;SAVE.ddak-=I.p;SAVE.inv[id]=(SAVE.inv[id]||0)+1;if(SAVE.bag.length<2&&!SAVE.bag.includes(id))SAVE.bag.push(id);save();lobby()});
-    document.querySelectorAll('.bagb').forEach(b=>b.onclick=()=>{const id=b.dataset.id,i=SAVE.bag.indexOf(id);if(i>=0)SAVE.bag.splice(i,1);else{if(SAVE.bag.length>=2)SAVE.bag.shift();SAVE.bag.push(id)}save();lobby()})}
-  else{const S=GEAR[SHOPTAB],own=SAVE.gown[k][SHOPTAB],cur=SAVE.gear[k][SHOPTAB];
-    $('shop').innerHTML=S.it.map((g,i)=>{const has=own.includes(i),eq=cur===i,can=has||SAVE.ddak>=g.p;
-      return `<button class="it" id="gr-${i}" data-i="${i}" aria-pressed="${eq}" ${can?'':'disabled'}><span class="ic">${g.ic?`<img alt="" src="${iconURL(g.ic)}">`:'—'}</span>${gr(g.g)}<b>${g.n}</b><span>${g.e}</span><span class="p">${eq?'입는 중':has?'입기':'딱지 '+g.p}</span></button>`}).join('');
-    $('shopNote').textContent=`★ ${kname(k)}의 ${S.t}. 산 장비는 그 아이 것이 됩니다.`;
-    document.querySelectorAll('.it').forEach(b=>b.onclick=()=>{const i=+b.dataset.i,g=S.it[i];if(!own.includes(i)){if(SAVE.ddak<g.p)return;SAVE.ddak-=g.p;own.push(i)}SAVE.gear[k][SHOPTAB]=i;save();lobby()})}
   $('speedOpts').innerHTML=SPEEDS.map(([n],i)=>`<button class="btn alt small" id="spd-${i}" data-i="${i}" aria-pressed="${(SAVE.speed??1)===i}" style="${(SAVE.speed??1)===i?'background:var(--gold);color:#3a2a00':''}">${n}</button>`).join('');
   document.querySelectorAll('#speedOpts button').forEach(b=>b.onclick=()=>{SAVE.speed=+b.dataset.i;save();lobby()});
   $('aimOpts').innerHTML=AIMS.map(([id,n])=>`<button class="btn alt small" id="aim-${id}" data-a="${id}" aria-pressed="${aimMode()===id}" style="${aimMode()===id?'background:var(--gold);color:#3a2a00':''}">${n}</button>`).join('');
@@ -1126,7 +1160,7 @@ function start(){if(SAVE.team.length<5)return;showMissions()}
 const REGION_BGM=['bgm_dasan_afterschool','bgm_byeollae_bunny','bgm_hopyeong_chase','bgm_jinjeop_fort','bgm_hopyeong_chase','bgm_deokso_river','bgm_hwado_boss'];
 const REGION_AMB=['amb_calm_wind','amb_park_wind','amb_market_distant','amb_snowfall','amb_market_distant','amb_park_wind','amb_ice_valley'];
 function go(){hideAll();newGame();sfx('start');music(REGION_BGM[SAVE.region]);ambience(REGION_AMB[SAVE.region])}
-function hideAll(){['title','map','lobby','result','mission','dogam'].forEach(id=>$(id).hidden=true)}
+function hideAll(){['title','map','lobby','result','mission','dogam','shopScr'].forEach(id=>$(id).hidden=true)}
 function progress(){return Math.round(SAVE.cleared.filter(i=>i>0).length/6*100)}
 let titleStage=0,resetArm=false;
 function showTitle(){music('bgm_dasan_afterschool');ambience('amb_snowfall');hideAll();$('title').hidden=false;G=null;newGame(true);titleStage=0;$('titleMenu').hidden=true;$('tapHint').hidden=false;
@@ -1157,7 +1191,9 @@ $('bContinue').onclick=e=>{e.stopPropagation();showMap();checkAttendance();showM
 $('bReset').onclick=e=>{e.stopPropagation();if(!resetArm){resetArm=true;$('bReset').textContent='정말요? 한 번 더 누르면 처음부터';return}
   SAVE={ddak:50,inv:{pack:1,cocoa:1},bag:['pack','cocoa'],gear:{},gown:{},owned:{},glove:{},cleared:[],me:'jihun',region:0,day:0,played:0,team:[],recruits:[],realDay:true,streak:0,lastLogin:realDayNum(),revenge:null};ALL.forEach(k=>{SAVE.owned[k]=[0];SAVE.glove[k]=0});save();showMap()};
 $('bToMap').onclick=()=>showMap();$('bToTitle').onclick=()=>showTitle();
-$('bDogam').onclick=()=>showDogam(0);$('bDgClose').onclick=()=>showMap();
+$('bDogam').onclick=()=>showDogam(0);$('bShopL').onclick=()=>showShop('lobby');$('bShopM').onclick=()=>showShop('map');
+$('bShopBack').onclick=()=>{if(SHOPFROM==='lobby'){hideAll();lobby();$('lobby').hidden=false}else showMap()};
+document.querySelectorAll('.hs').forEach(h=>h.onclick=()=>{SHOPTAB=h.dataset.t;renderShop();sfx('click')});$('bDgClose').onclick=()=>showMap();
 $('bMembers').onclick=()=>{hideAll();lobby();$('lobby').hidden=false};
 $('bStart').onclick=start;$('bNextDay').onclick=()=>{SAVE.day++;SAVE.played=0;rollRevenge();fixTeam();save();lobby()};
 $('bDayMode').onclick=()=>{if(SAVE.realDay===false){SAVE.realDay=true}else{SAVE.realDay=false;SAVE.day=realDayNum()}SAVE.revenge=null;fixTeam();save();lobby()};$('bAgain').onclick=start;
@@ -1170,7 +1206,7 @@ const SPEEDS=[['느리게',.7],['보통',.85],['빠르게',1]];const gspeed=()=>
 function loop(now){const dt=Math.min(.05,(now-last)/1000);last=now;if(G)update(dt*gspeed());draw();requestAnimationFrame(loop)}
 (async()=>{
   resize();
-  const names=[...ALL,'objects','rivals','props','items'];
+  const names=[...ALL,'objects','rivals','props','items','shopkeeper'];
   try{const imgs=await Promise.all(names.map(n=>load(`assets/${n}.png`)));names.forEach((n,i)=>IMG[n]=imgs[i])}
   catch(e){document.querySelector('#lobby .box').insertAdjacentHTML('afterbegin',`<p style="color:#ff6b57">${e.message}</p>`);return}
   for(const n of['arena26','arena27','arena28','arena29'])try{IMG[n]=await load(`assets/${n}.jpg`)}catch(e){}
