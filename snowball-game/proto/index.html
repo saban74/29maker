@@ -1108,8 +1108,7 @@ function say(f,t){const c=$('kpc'),r=SKMETA[f],x=c.getContext('2d');c.width=r[2]
   const b=$('kbub');b.textContent=t||SAYS[f];keeperVoice(t||SAYS[f]);b.classList.remove('pop');void b.offsetWidth;b.classList.add('pop');clearTimeout(KT);if(f)KT=setTimeout(()=>say(0,'또 필요한 거 있니?'),2600)}
 /* 아저씨 목소리: 녹음 파일(assets/audio/keeper_0~5.mp3)이 있으면 그걸, 없으면 브라우저 한국어 음성 */
 const KEEPLINE={'어서 와라~':0,'잘 골랐네!':1,'딱지가 모자라는구나…':2,'오호, 그걸 사다니!':3,'잘 어울리는구나':4,'또 필요한 거 있니?':5};
-function keeperVoice(text){if(!sndOn())return;const n=KEEPLINE[text];if(n!=null&&BUF['keeper_'+n]){play('keeper_'+n,1,SND.voice);return}
-  babble(text)}
+function keeperVoice(text){if(!sndOn())return;const n=KEEPLINE[text];if(n!=null&&BUF['keeper_'+n]){play('keeper_'+n,1,SND.voice)}}
 /* 웅얼웅얼 아저씨 소리: 글자마다 낮은 목소리 톤 (동물의 숲처럼 말소리 흉내) */
 function babble(text){if(!SND.ac)return;const ac=SND.ac,t0=ac.currentTime+.03,ch=[...text].filter(c=>/[가-힣]/.test(c));
   ch.forEach((c,i)=>{const code=c.charCodeAt(0)-0xAC00,v=code%588/588,t=t0+i*.105,last=i===ch.length-1;
