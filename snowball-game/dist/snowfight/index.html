@@ -288,8 +288,8 @@ const GEAR={
 const ITEMS={pack:{n:'핫팩',p:30,e:'손 시림 즉시 0',src:'i',ic:'pack'},cocoa:{n:'핫초코',p:40,e:'젖음(체력) 30% 회복',src:'i',ic:'cocoa'},shovel:{n:'눈삽',p:50,e:'그 자리에서 눈덩이 가득 + 8초 뭉치기 2배',src:'i',ic:'shovel'},
   big:{n:'큰 눈덩이',p:80,e:'굴려서 앞의 여러 명을 한꺼번에 맞힘',src:'i',ic:'bigball'}};
 const GRADE={일반:'#e8f1ff',고급:'#ff8f7a',희귀:'#6fb8ff',영웅:'#ffcf4a'};
-const REGIONS=[{n:'다산동',d:'우리 동네 친구들과 연습 경기',s:1,lv:.72,gl:0,x:18,y:72},{n:'별내동',d:'별빛 눈토끼단',s:2,lv:.8,gl:1,x:21,y:39},{n:'호평동',d:'골목 번개단',s:2,lv:.86,gl:1,x:40,y:49},
-  {n:'진접읍',d:'눈보라 수비대',s:3,lv:.93,gl:2,x:49,y:29},{n:'평내동',d:'한강친구들',s:2,lv:.98,gl:2,x:63,y:50},{n:'와부읍(덕소)',d:'강바람 원정대',s:3,lv:1.04,gl:3,x:51,y:70},
+const REGIONS=[{n:'다산동',d:'우리 동네 친구들과 연습 경기',s:1,lv:.56,gl:0,x:18,y:72},{n:'별내동',d:'별빛 눈토끼단',s:2,lv:.64,gl:1,x:21,y:39},{n:'호평동',d:'골목 번개단',s:2,lv:.72,gl:1,x:40,y:49},
+  {n:'진접읍',d:'눈보라 수비대',s:3,lv:.8,gl:2,x:49,y:29},{n:'평내동',d:'한강친구들',s:2,lv:.88,gl:2,x:63,y:50},{n:'와부읍(덕소)',d:'강바람 원정대',s:3,lv:.98,gl:3,x:51,y:70},
   {n:'화도읍',d:'설산 호랑이단',s:3,lv:1.12,gl:4,x:84,y:55,crown:1}];
 const RT={
   1:{t:'별빛 눈토끼단',st:'빠른 기동 · 회피 특화',sk:['토끼 점프 (빠른 이동)','눈가속 (이동속도 증가)','연속투척 (빠른 3연타)'],h:205,m:[{b:'seoyeon',n:'유리',role:'스피드',f:'yuri',spd:1.45},{b:'doyun',n:'한결',role:'회피',f:'hangyeol',dodgeAI:.6,dcd:.7},{b:'jihun',n:'서호',role:'연속투척',f:'seoho',burst:1,boss:1}]},
@@ -462,7 +462,6 @@ const PACK=['bgm_dasan_afterschool','bgm_byeollae_bunny','bgm_hopyeong_chase','b
   'snow_gather','snow_throw','snow_hit','snow_miss','snow_wall_build','snow_wall_break','snow_step_01','snow_step_02','snow_slide','cold_hands','snow_reload',
   'item_pickup','item_hotpack','item_hotcocoa','crate_break','ice_skid','ice_crack','shield_block','snowball_big','round_start','round_win','round_lose',
   'button_hover','button_confirm','team_switch','clock_warning','home_call',
-  'keeper_0','keeper_1','keeper_2','keeper_3','keeper_4','keeper_5',
   'voice_jihun_cheer','voice_sumin_support','voice_minjae_ready','voice_doyun_charge','voice_seoyeon_tease','voice_ouch','voice_cold','voice_victory'];
 const BUF={},LOOPPT={};
 function loadPack(){for(const id of PACK)fetch(`assets/audio/${id}.mp3`).then(r=>{if(!r.ok)throw 0;return r.arrayBuffer()}).then(a=>SND.ac.decodeAudioData(a)).then(b=>{BUF[id]=b;
@@ -598,7 +597,7 @@ function enemyDefs(ri){
   const T=RT[ri],gen=['harin','minjae'].map(b=>({...KIDS[b],b,n:'단원',f:null}));
   return{t:T.t,h:T.h,list:[...T.m.map(m=>({...KIDS[m.b],...m})),...gen].sort(()=>Math.random()-.5)}}
 function mkUnit(k,team,x,y,lv,glove,hue){const id=k.b;
-  return {id,k,team,x,y,vx:0,vy:0,wet:0,max:k.hp*3.2*(team?Math.max(.85,lv):1)*(k.boss?1.3:1),img:hue?eimg(id,hue):IMG[id],ammo:5,maxAmmo:k.maxAmmo||6,glove,streak:0,streakT:0,coldT:0,cd:0,gT:0,gathering:false,
+  return {id,k,team,x,y,vx:0,vy:0,wet:0,max:k.hp*3.2*(team?Math.max(.7,lv):1)*(k.boss?1.3:1),img:hue?eimg(id,hue):IMG[id],ammo:5,maxAmmo:k.maxAmmo||6,glove,streak:0,streakT:0,coldT:0,cd:0,gT:0,gathering:false,
     throwT:0,pend:null,dodgeT:0,dodgeCd:0,dvx:0,dvy:0,hitT:0,slowT:0,out:false,outT:0,dir:'S',flip:team===1,anim:0,cheerT:0,
     items:{},bag:[],wallCd:0,supT:2,hits:0,lv:team?lv:1,
     ai:{t:null,mode:'fight',goal:null,think:0,wait:rnd(.3,1),seed:Math.random()*9,dodge:k.dodgeAI||(team?.22*lv:.3)},clT:2,bcd:1,bspd:1,bdef:1,bdmg:1,sp:team?rnd(0,30):0,fx:{},gold:0}}
