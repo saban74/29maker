@@ -80,7 +80,7 @@ button:focus-visible{outline:2px solid var(--gold);outline-offset:2px}
 @keyframes blink{50%{opacity:.35}}
 .tmenu{display:grid;gap:10px;justify-items:center}
 .btn.big{font-size:26px;padding:14px 40px;display:grid;gap:2px}.btn.big small{font-family:var(--body);font-size:13px;font-weight:400;opacity:.9}
-.ver{position:absolute;right:16px;bottom:10px;font-size:12px;color:#fff;opacity:.7}
+.ver{position:absolute;right:16px;bottom:10px;left:16px;text-align:right;font-size:12px;color:#fff;opacity:.8;text-shadow:0 1px 2px #000a}.disc{font-size:11px}
 .mapbox{width:min(1280px,100%,calc((100vh - 170px) * 1.777));display:grid;gap:8px}
 .mapbar,.mapteam{display:flex;flex-wrap:wrap;gap:8px 14px;align-items:center;background:var(--panel);border:2px solid var(--line);border-radius:14px;padding:8px 12px}
 .pct{display:flex;gap:8px;align-items:center;margin-left:auto;font-size:13px;color:var(--sub)}.pct b{color:var(--gold);font-family:var(--display);font-size:20px;font-weight:400}
@@ -190,7 +190,7 @@ td .xpb{display:inline-block;width:60px;vertical-align:middle;margin:0 0 0 4px}.
       <button class="btn big" id="bContinue">이어하기</button>
       <button class="btn alt" id="bReset">처음부터 다시</button>
     </div>
-    <div class="ver">1단계 시제품 · PC 키보드·마우스</div>
+    <div class="ver">1단계 시제품<br><span class="disc">실제 지역을 배경으로 한 창작 게임이며, 등장 인물·학교·가게는 지어낸 것입니다. 남양주시 등 해당 지자체와는 관계가 없습니다.</span></div>
   </div>
   <div class="ov" id="map" hidden>
     <div class="mapbox">
