@@ -2,6 +2,9 @@
 
 게임 화면(`../dist/snowfight`)과 온라인 크루 서버(`functions/api/[[path]].js`)를 Cloudflare Pages 하나로 올립니다.
 
+## 배포 주소
+- Cloudflare Pages 프로젝트: `snowfight` → https://snowfight-37l.pages.dev (예정: game.029.kr)
+
 ## 구성
 - **Pages**: 게임 화면 (빌드할 때 `../dist/snowfight` 를 `public/` 으로 복사)
 - **Pages Functions**: `/api/...` 주소의 서버 (크루 만들기, 순위, 결투 결과, 기록)
