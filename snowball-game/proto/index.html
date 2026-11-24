@@ -164,7 +164,7 @@ td .xpb{display:inline-block;width:60px;vertical-align:middle;margin:0 0 0 4px}.
       <div class="keys">
         <span><kbd>W A S D</kbd> 이동</span><span><kbd>마우스</kbd> 조준 · <kbd>클릭</kbd> 던지기</span>
         <span><kbd>Space</kbd> 누르고 있기: 눈 뭉치기</span><span><kbd>Shift</kbd> 피하기(구르기)</span>
-        <span><kbd>Q</kbd> <kbd>E</kbd> 가방 아이템 1·2</span><span><kbd>R</kbd> 눈벽 쌓기 (하린)</span>
+        <span><kbd>Q</kbd> <kbd>E</kbd> 가방 아이템 1·2</span><span><kbd>R</kbd> 눈벽 쌓기 (수빈)</span>
         <span><kbd>Tab</kbd> 다른 아이로 바꾸기</span><span><kbd>P</kbd> 잠깐 멈춤</span>
       </div>
       <div class="row" style="justify-content:center;gap:6px 18px"><span class="row" style="gap:6px"><span class="note">게임 속도</span><span id="speedOpts" class="row" style="gap:6px"></span></span><span class="row" style="gap:6px"><span class="note">조준</span><span id="aimOpts" class="row" style="gap:6px"></span></span></div>
@@ -253,16 +253,16 @@ const RTMETA={"yuri": [0, 0, 142, 96], "hangyeol": [144, 0, 118, 96], "seoho": [
 const W=1280,H=720;let FX0=40,FX1=1240,FY0=176,FY1=636;const SC=.84,BASESPD=150;
 const DS=y=>.9+.2*Math.max(0,Math.min(1,(y-FY0)/(FY1-FY0)));
 const KIDS={
-  jihun:{n:'지훈',role:'투수',d:'공이 빠르고 셉니다',hp:5,spd:1,dmg:1.4,cd:.34,bs:640,range:360,acc:.93,pref:230},
-  sumin:{n:'수민',role:'지원',d:'근처 친구의 젖음을 말려 줍니다',hp:5,spd:1,dmg:1,cd:.42,bs:520,range:320,acc:.85,pref:250,heal:.3},
-  minjae:{n:'민재',role:'눈 공급',d:'뭉치기 2배, 친구에게 눈을 나눠 줍니다',hp:5,spd:.95,dmg:1,cd:.42,bs:520,range:320,acc:.82,pref:270,gather:2,maxAmmo:8,supply:1},
-  doyun:{n:'도윤',role:'돌격',d:'빠르게 파고듭니다',hp:5.5,spd:1.25,dmg:1.15,cd:.36,bs:560,range:300,acc:.82,pref:140},
-  harin:{n:'하린',role:'수비',d:'잘 버티고 눈벽을 쌓습니다 (R)',hp:8,spd:.85,dmg:1,cd:.45,bs:520,range:320,acc:.84,pref:190,wall:1},
-  taeho:{n:'태호',role:'저격',d:'아주 멀리, 정확하게 던집니다',hp:4.5,spd:.95,dmg:1.25,cd:.62,bs:720,range:470,acc:.97,pref:360},
-  seoyeon:{n:'서연',role:'기동',d:'가장 빠르고 자주 구릅니다',hp:4.8,spd:1.4,dmg:1,cd:.38,bs:560,range:300,acc:.84,pref:170,dcd:.7,dodgeAI:.5},
-  junho:{n:'준호',role:'버팀',d:'잘 안 젖고, 맞아도 안 밀립니다',hp:8.5,spd:.85,dmg:1.1,cd:.46,bs:520,range:310,acc:.8,pref:170,armor:1},
-  yerin:{n:'예린',role:'상태해제',d:'친구의 손 시림을 풀어 줍니다',hp:5,spd:1,dmg:1,cd:.42,bs:540,range:320,acc:.86,pref:240,cleanse:1},
-  kangmin:{n:'강민',role:'리더',d:'근처 친구가 더 빨리 던지고 뜁니다',hp:5.5,spd:1,dmg:1,cd:.4,bs:560,range:330,acc:.86,pref:230,lead:1},
+  jihun:{n:'지용',role:'투수',d:'공이 빠르고 셉니다',hp:5,spd:1,dmg:1.4,cd:.34,bs:640,range:360,acc:.93,pref:230},
+  sumin:{n:'소연',role:'지원',d:'근처 친구의 젖음을 말려 줍니다',hp:5,spd:1,dmg:1,cd:.42,bs:520,range:320,acc:.85,pref:250,heal:.3},
+  minjae:{n:'재용',role:'눈 공급',d:'뭉치기 2배, 친구에게 눈을 나눠 줍니다',hp:5,spd:.95,dmg:1,cd:.42,bs:520,range:320,acc:.82,pref:270,gather:2,maxAmmo:8,supply:1},
+  doyun:{n:'재윤',role:'돌격',d:'빠르게 파고듭니다',hp:5.5,spd:1.25,dmg:1.15,cd:.36,bs:560,range:300,acc:.82,pref:140},
+  harin:{n:'수빈',role:'수비',d:'잘 버티고 눈벽을 쌓습니다 (R)',hp:8,spd:.85,dmg:1,cd:.45,bs:520,range:320,acc:.84,pref:190,wall:1},
+  taeho:{n:'윤재',role:'저격',d:'아주 멀리, 정확하게 던집니다',hp:4.5,spd:.95,dmg:1.25,cd:.62,bs:720,range:470,acc:.97,pref:360},
+  seoyeon:{n:'한솔',role:'기동',d:'가장 빠르고 자주 구릅니다',hp:4.8,spd:1.4,dmg:1,cd:.38,bs:560,range:300,acc:.84,pref:170,dcd:.7,dodgeAI:.5},
+  junho:{n:'서진',role:'버팀',d:'잘 안 젖고, 맞아도 안 밀립니다',hp:8.5,spd:.85,dmg:1.1,cd:.46,bs:520,range:310,acc:.8,pref:170,armor:1},
+  yerin:{n:'서희',role:'상태해제',d:'친구의 손 시림을 풀어 줍니다',hp:5,spd:1,dmg:1,cd:.42,bs:540,range:320,acc:.86,pref:240,cleanse:1},
+  kangmin:{n:'도현',role:'리더',d:'근처 친구가 더 빨리 던지고 뜁니다',hp:5.5,spd:1,dmg:1,cd:.4,bs:560,range:330,acc:.86,pref:230,lead:1},
 };
 const ALL=['jihun','sumin','minjae','doyun','harin','taeho','seoyeon','junho','yerin','kangmin'];
 const SCHED={jihun:[[0,2],'영어학원'],sumin:[[1],'피아노',1],minjae:[[],''],doyun:[[0,4],'태권도'],harin:[[2],'미술학원'],
@@ -289,7 +289,7 @@ const RT={
   2:{t:'골목 번개단',st:'기습 · 연속 공격',sk:['곡선투척 (벽 넘기기)','눈벽 설치 (임시 방어벽)','폭발눈덩이 (범위 공격)'],h:120,m:[{b:'yerin',n:'지우',role:'교란',f:'jiu',arc:1},{b:'doyun',n:'승민',role:'기습',f:'seungmin',spd:1.3,wall:1},{b:'jihun',n:'재하',role:'폭발눈덩이',f:'jaeha',splash:1,boss:1}]},
   3:{t:'눈보라 수비대',st:'튼튼한 수비 · 눈요새',sk:['방어막 (팀 피해 감소)','눈회복 (젖음 감소)','중장갑 (맞아도 안 밀림)'],h:185,m:[{b:'harin',n:'은지',role:'방어막',f:'eunji',shield:1},{b:'minjae',n:'현우',role:'눈요새',f:'hyeonu',wall:1,heal:.2},{b:'junho',n:'민석',role:'중장갑',f:'minseok',armor:1,hp:9,boss:1}]},
   5:{t:'강바람 원정대',st:'원거리 · 정확도 특화',sk:['정확투척 (장거리 투척)','바람 도약 (짧은 대시)','곡사포 (높은 포물선 투척)'],h:95,m:[{b:'sumin',n:'다희',role:'원거리',f:'dahui',range:430,pref:330},{b:'taeho',n:'시우',role:'정확도',f:'siu',acc:.99},{b:'jihun',n:'건우',role:'곡사투척',f:'geonu',arc:1,range:420,boss:1}]},
-  4:{t:'한강친구들',st:'팀 지원 · 지속 싸움',sk:['체력회복 (젖음 회복)','눈보급 (눈 생산량 증가)','응원 (팀 공격력 상승)'],h:265,m:[{b:'sumin',n:'지아',role:'회복',f:'jia',heal:.35},{b:'seoyeon',n:'로운',role:'돌격',f:'roun',spd:1.4,dcd:.6},{b:'kangmin',n:'민하',role:'범위공격',f:'minha',splash:1,cheer:1,boss:1}]},
+  4:{t:'한강친구들',st:'팀 지원 · 지속 싸움',sk:['체력회복 (젖음 회복)','눈보급 (눈 생산량 증가)','응원 (팀 공격력 상승)'],h:265,m:[{b:'sumin',n:'지아',role:'회복',f:'jia',heal:.35},{b:'seoyeon',n:'로운',role:'돌격',f:'roun',spd:1.4,dcd:.6},{b:'kangmin',n:'재준',role:'범위공격',f:'minha',splash:1,cheer:1,boss:1}]},
   6:{t:'설산 호랑이단',st:'강력 투척 · 돌격 전투',sk:['파워투척 (넉백 큰 눈덩이)','돌격 (빠른 전진)','거대눈덩이 (강력 투척)'],h:25,m:[{b:'yerin',n:'소연',role:'파워던지기',f:'soyeon',big:1},{b:'doyun',n:'동현',role:'돌격',f:'donghyeon',spd:1.35,armor:1},{b:'junho',n:'진호',role:'거대눈덩이',f:'jinho',big:1,armor:1,hp:9,boss:1}]},
 };
 
@@ -778,7 +778,7 @@ function update(dt){
     for(const c of G.crates)if(c.on&&dist(u,c)<30&&u.ammo<u.maxAmmo){c.on=false;c.t=15;u.ammo=u.maxAmmo;if(u.team===0&&G.ms)G.ms.crates++;if(!G.demo)sfx('crate',u===G.me?1:near(u)*.7);bubble(u,'눈상자 득템!','#ffe08a');poof(c.x,c.y-10,8)}
     if(u.k.heal)for(const m of alive(u.team))if(dist(u,m)<140)m.wet=Math.max(0,m.wet-u.k.heal*dt*(m===u?.4:1));
     if(u.k.cleanse){u.clT-=dt;if(u.clT<=0){u.clT=3;const m=alive(u.team).find(m=>dist(u,m)<220&&(m.coldT>.4||m.slowT>0));
-      if(m){m.coldT=0;m.slowT=0;m.streak=0;bubble(m,'괜찮아! (예린)','#ffe08a');u.clT=4}}}
+      if(m){m.coldT=0;m.slowT=0;m.streak=0;bubble(m,'괜찮아! (서희)','#ffe08a');u.clT=4}}}
     if(u.k.supply){u.supT-=dt;if(u.supT<=0){u.supT=3.5;if(u.ammo>=3){const m=alive(u.team).filter(m=>m!==u&&m.ammo<=1&&dist(u,m)<240)[0];
       if(m){u.ammo--;m.ammo++;G.balls.push({x:u.x,y:u.y,sy:-30,vx:(m.x-u.x)/.5,vy:(m.y-u.y)/.5,team:u.team,owner:u,t:0,T:.5,gift:m});}}}}
   }
@@ -935,7 +935,7 @@ function showDogam(tab){hideAll();$('dogam').hidden=false;
     <div class="dgrid">${T.m.map((m,i)=>{const st=STATS[m.b].map(v=>Math.max(1,Math.min(10,Math.round((v-2)*R_.lv/.86*(m.boss?1.1:1)))));
       return dCard(rivalFace(m.f),(m.boss?'👑 ':'')+m.n,m.role+(m.boss?' · 대장':''),[`<b>특기</b> ${T.sk[i]}`,`<b>필살기(임시)</b> ${SPECIAL[m.b][0]} — ${SPECIAL[m.b][1]}`,m.boss?`<b>체력</b> 대장이라 1.3배`:''].filter(Boolean),st,
       m.boss?`<p class="lvl">${rec?'✅ 우리 팀 동료가 됐어요':'처음 이기면 동료로 영입'}</p>`:'')}).join('')}
-    <div class="dcard"><div class="dh"><div><b>단원 2명</b><span class="chip2">일반</span></div></div><p>이름 없는 팀원들이에요. 수비(하린 타입)와 눈 공급(민재 타입)을 맡아요.</p><p>능력은 동네 레벨에 맞춰 올라가요.</p></div></div>
+    <div class="dcard"><div class="dh"><div><b>단원 2명</b><span class="chip2">일반</span></div></div><p>이름 없는 팀원들이에요. 수비(수빈 타입)와 눈 공급(재용 타입)을 맡아요.</p><p>능력은 동네 레벨에 맞춰 올라가요.</p></div></div>
     <p class="note">※ 라이벌 능력치는 기본 아이 능력에 동네 레벨(상대 능력 %)을 곱해 계산한 값이에요. 우리 팀 Lv.1과 비교해 보세요. 라이벌 몸 그림은 아직 임시예요.</p>`}
 
 /* ---------- 그리기 ---------- */
