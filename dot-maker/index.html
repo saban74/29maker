@@ -1,0 +1,136 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>도트 캐릭터 메이커</title>
+  <style>
+    :root { --bg: #1e1b2e; --panel: #2a2640; --line: #3d3858; --text: #f2eefc; --muted: #a59fc0; --accent: #ffcf4a; }
+    * { box-sizing: border-box; }
+    body { margin: 0; background: var(--bg); color: var(--text); font-family: system-ui, "Apple SD Gothic Neo", "Malgun Gothic", sans-serif; }
+    header { display: flex; align-items: center; gap: 10px; padding: 12px 16px; border-bottom: 1px solid var(--line); flex-wrap: wrap; }
+    header h1 { font-size: 18px; margin: 0 auto 0 0; }
+    button, .btn { background: var(--panel); color: var(--text); border: 1px solid var(--line); border-radius: 8px; padding: 8px 12px; font-size: 14px; cursor: pointer; text-decoration: none; }
+    button:hover, .btn:hover { border-color: var(--accent); }
+    button.main { background: var(--accent); color: #2a2100; border-color: var(--accent); font-weight: 700; }
+    main { display: grid; grid-template-columns: 360px 1fr; gap: 16px; padding: 16px; max-width: 1200px; margin: 0 auto; }
+    @media (max-width: 820px) { main { grid-template-columns: 1fr; } }
+    .card { background: var(--panel); border: 1px solid var(--line); border-radius: 14px; padding: 14px; }
+    h2 { font-size: 14px; color: var(--muted); margin: 0 0 10px; font-weight: 600; }
+
+    #stage { width: 100%; aspect-ratio: 1; border-radius: 10px; image-rendering: pixelated; display: block; }
+    .row { display: flex; gap: 6px; flex-wrap: wrap; margin-top: 10px; align-items: center; }
+    .seg button.on { background: var(--accent); color: #2a2100; border-color: var(--accent); }
+    label.chk { font-size: 13px; color: var(--muted); display: flex; gap: 4px; align-items: center; }
+    select { background: var(--bg); color: var(--text); border: 1px solid var(--line); border-radius: 8px; padding: 7px; font-size: 14px; }
+
+    .tabs { display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 12px; }
+    .tabs button.on { background: var(--accent); color: #2a2100; border-color: var(--accent); font-weight: 700; }
+    #options { display: grid; grid-template-columns: repeat(auto-fill, minmax(84px, 1fr)); gap: 8px; }
+    .opt { background: var(--bg); border: 2px solid var(--line); border-radius: 10px; padding: 6px 4px 4px; cursor: pointer; text-align: center; font-size: 12px; color: var(--muted); }
+    .opt canvas { width: 64px; height: 64px; image-rendering: pixelated; display: block; margin: 0 auto 2px; }
+    .opt.on { border-color: var(--accent); color: var(--text); }
+
+    .slots { display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 10px; }
+    .slot { display: flex; align-items: center; gap: 6px; font-size: 13px; padding: 6px 10px; }
+    .slot i { width: 16px; height: 16px; border-radius: 4px; border: 1px solid rgba(255,255,255,.4); }
+    .slot.on { border-color: var(--accent); }
+    #swatches { display: grid; grid-template-columns: repeat(auto-fill, 32px); gap: 6px; }
+    .sw { width: 32px; height: 32px; border-radius: 6px; border: 2px solid transparent; cursor: pointer; }
+    .sw.on { border-color: var(--accent); }
+    input[type=color] { width: 32px; height: 32px; padding: 0; border: 0; background: none; cursor: pointer; }
+    #toast { position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%); background: var(--accent); color: #2a2100; padding: 10px 16px; border-radius: 8px; font-weight: 700; opacity: 0; transition: opacity .3s; pointer-events: none; }
+    .form { display: grid; gap: 6px; }
+    .form input, .form select { width: 100%; background: var(--bg); color: var(--text); border: 1px solid var(--line); border-radius: 8px; padding: 8px; font-size: 14px; }
+    .field { flex: 1; min-width: 0; background: var(--bg); color: var(--text); border: 1px solid var(--line); border-radius: 8px; padding: 8px; font-size: 14px; }
+    #lib { display: grid; grid-template-columns: repeat(auto-fill, minmax(76px, 1fr)); gap: 8px; margin-top: 10px; }
+    #lib .item { position: relative; background: var(--bg); border: 2px solid var(--line); border-radius: 10px; padding: 4px; text-align: center; font-size: 12px; cursor: pointer; overflow: hidden; }
+    #lib .item:hover { border-color: var(--accent); }
+    #lib .item canvas { width: 64px; height: 64px; image-rendering: pixelated; display: block; margin: 0 auto; }
+    #lib .item span { display: block; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    #lib .del { position: absolute; top: 2px; right: 2px; padding: 0 6px; font-size: 12px; line-height: 18px; border-radius: 6px; }
+    #lib .empty { grid-column: 1 / -1; color: var(--muted); font-size: 13px; padding: 8px 0; }
+    .hint { color: var(--muted); font-size: 12px; margin: 10px 0 0; }
+    textarea { width: 100%; background: var(--bg); color: var(--text); border: 1px solid var(--line); border-radius: 8px; padding: 8px; font-size: 12px; font-family: monospace; resize: vertical; }
+  </style>
+</head>
+<body>
+<header>
+  <h1>🎨 도트 캐릭터 메이커</h1>
+  <button id="random">🎲 랜덤</button>
+  <button id="reset">처음으로</button>
+</header>
+
+<main>
+  <section>
+    <div class="card">
+      <canvas id="stage" width="320" height="320"></canvas>
+      <div class="row seg" id="anims"></div>
+      <div class="row">
+        <label class="chk"><input type="checkbox" id="outline" checked> 외곽선</label>
+        <label class="chk"><input type="checkbox" id="grid"> 격자 보기</label>
+        <label class="chk">배경
+          <select id="bgSel">
+            <option value="check">체크무늬</option>
+            <option value="#7cbf5a">풀밭</option>
+            <option value="#ffffff">흰색</option>
+            <option value="#1e1b2e">어두움</option>
+          </select>
+        </label>
+      </div>
+    </div>
+
+    <div class="card" style="margin-top:16px">
+      <h2>내려받기 · 저장</h2>
+      <div class="row">
+        <label class="chk">크기
+          <select id="scale">
+            <option value="1">1배 (32px)</option>
+            <option value="4">4배 (128px)</option>
+            <option value="8" selected>8배 (256px)</option>
+            <option value="16">16배 (512px)</option>
+          </select>
+        </label>
+      </div>
+      <div class="row">
+        <button class="main" id="dlPng">PNG 그림</button>
+        <button class="main" id="dlSheet">스프라이트 시트</button>
+      </div>
+      <div class="row">
+        <button id="copyCode">캐릭터 코드 복사</button>
+        <button id="loadCode">코드 불러오기</button>
+      </div>
+      <textarea id="codeBox" rows="2" placeholder="친구가 준 캐릭터 코드를 여기에 붙여 넣고 [코드 불러오기]"></textarea>
+    </div>
+
+    <div class="card" style="margin-top:16px">
+      <h2>📦 내 캐릭터 보관함 <span id="libCount"></span></h2>
+      <div class="row" style="margin-top:0">
+        <input id="libName" maxlength="20" placeholder="캐릭터 이름" class="field">
+        <button class="main" id="libSave">저장</button>
+      </div>
+      <div id="lib"></div>
+      <div class="row">
+        <button id="libExport">보관함 백업 파일 받기</button>
+        <button id="libImport">백업 파일 열기</button>
+        <input type="file" id="libFile" accept=".json,application/json" hidden>
+      </div>
+      <p class="hint">보관함은 이 컴퓨터의 이 브라우저에만 저장돼요. 가끔 백업 파일을 받아 두면 안전해요.</p>
+    </div>
+  </section>
+
+  <section class="card">
+    <div class="tabs" id="tabs"></div>
+    <div id="options"></div>
+    <h2 style="margin-top:18px">색깔</h2>
+    <div class="slots" id="slots"></div>
+    <div id="swatches"></div>
+  </section>
+</main>
+<div id="toast"></div>
+
+<script src="maker-parts.js"></script>
+<script src="dot-engine.js"></script>
+<script src="maker.js"></script>
+</body>
+</html>
