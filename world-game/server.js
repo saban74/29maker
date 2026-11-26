@@ -20,6 +20,7 @@ const WORLD_H = 80;
 const ITEMS_DIR = path.join(ROOT, "items");
 const WORLD_FILE = path.join(ROOT, "data", "world.json");
 const PUBLIC_DIR = path.join(ROOT, "public");
+const WORLDS_DIR = path.join(ROOT, "data", "worlds"); // 월드 스튜디오에서 게시한 월드들
 
 // ---------------- 아이템 ----------------
 let items = {};
@@ -139,6 +140,32 @@ const server = http.createServer((req, res) => {
     return;
   }
 
+  // ---- 월드 스튜디오: 게시하기 / 쇼케이스 ----
+  if (url.pathname === "/api/worlds" && req.method === "GET") return sendJson(res, 200, listWorlds());
+  const wm = url.pathname.match(/^\/api\/worlds\/([a-z0-9]{6})$/);
+  if (wm && req.method === "GET") {
+    try { return sendJson(res, 200, JSON.parse(fs.readFileSync(path.join(WORLDS_DIR, wm[1] + ".json"), "utf8"))); }
+    catch { return sendJson(res, 404, { error: "그런 월드가 없습니다" }); }
+  }
+  if (url.pathname === "/api/worlds" && req.method === "POST") {
+    let body = "";
+    req.on("data", (c) => { body += c; if (body.length > 200_000) req.destroy(); });
+    req.on("end", () => {
+      let w;
+      try { w = JSON.parse(body); } catch { return sendJson(res, 400, { error: "JSON 형식이 아닙니다" }); }
+      const clean = cleanWorld(w);
+      if (typeof clean === "string") return sendJson(res, 400, { error: clean });
+      fs.mkdirSync(WORLDS_DIR, { recursive: true });
+      let slug;
+      do { slug = Math.random().toString(36).slice(2, 8).padEnd(6, "0"); } while (fs.existsSync(path.join(WORLDS_DIR, slug + ".json")));
+      clean.slug = slug;
+      clean.created = new Date().toISOString();
+      fs.writeFileSync(path.join(WORLDS_DIR, slug + ".json"), JSON.stringify(clean));
+      sendJson(res, 200, { ok: true, slug, url: `/studio.html?w=${slug}` });
+    });
+    return;
+  }
+
   // 정적 파일 (public/ 폴더)
   let file = url.pathname === "/" ? "/index.html" : url.pathname;
   const full = path.normalize(path.join(PUBLIC_DIR, file));
@@ -149,6 +176,42 @@ const server = http.createServer((req, res) => {
     res.end(data);
   });
 });
+
+// ---------------- 게시된 월드 검사 ----------------
+const STUDIO_W = 24, STUDIO_H = 16, STUDIO_TILES = 7, MAX_CAST = 12;
+const strOk = (v, n) => typeof v === "string" && v.length <= n;
+function cleanWorld(w) {
+  if (!w || typeof w !== "object") return "월드 정보가 없습니다";
+  if (!strOk(w.name, 30) || !w.name.trim()) return "월드 이름은 1~30자";
+  if (w.author !== undefined && !strOk(w.author, 20)) return "만든 사람은 20자 이하";
+  if (w.desc !== undefined && !strOk(w.desc, 200)) return "설명은 200자 이하";
+  const m = w.map;
+  if (!m || m.w !== STUDIO_W || m.h !== STUDIO_H || !Array.isArray(m.tiles) || m.tiles.length !== STUDIO_W * STUDIO_H) return "지도 크기가 맞지 않습니다";
+  if (!m.tiles.every((t) => Number.isInteger(t) && t >= 0 && t < STUDIO_TILES)) return "지도에 모르는 타일이 있습니다";
+  if (!Array.isArray(w.casts) || w.casts.length > MAX_CAST) return `캐릭터는 ${MAX_CAST}명까지`;
+  const casts = [];
+  for (const c of w.casts) {
+    if (!c || !strOk(c.name, 12) || !strOk(c.job || "", 12) || !strOk(c.intro || "", 60) || !strOk(c.speech || "", 12)) return "캐릭터 정보가 이상합니다";
+    if (!Array.isArray(c.tags) || c.tags.length > 3 || !c.tags.every((t) => strOk(t, 10))) return "성격 키워드가 이상합니다";
+    const st = c.state;
+    if (!st || typeof st.parts !== "object" || typeof st.colors !== "object") return "캐릭터 모습 정보가 없습니다";
+    if (!Object.values(st.parts).every((v) => Number.isInteger(v) && v >= 0 && v < 50)) return "캐릭터 부품 번호가 이상합니다";
+    if (!Object.values(st.colors).every((v) => /^#[0-9a-fA-F]{6}$/.test(v))) return "캐릭터 색이 이상합니다";
+    if (!Number.isInteger(c.x) || !Number.isInteger(c.y) || c.x < 0 || c.y < 0 || c.x >= STUDIO_W || c.y >= STUDIO_H) return "캐릭터 위치가 이상합니다";
+    casts.push({ name: c.name, job: c.job || "", intro: c.intro || "", tags: c.tags, speech: c.speech || "", state: { parts: st.parts, colors: st.colors }, x: c.x, y: c.y });
+  }
+  return { name: w.name.trim(), author: (w.author || "").trim() || "익명", desc: (w.desc || "").trim(), map: { w: STUDIO_W, h: STUDIO_H, tiles: m.tiles }, casts };
+}
+function listWorlds() {
+  let files = [];
+  try { files = fs.readdirSync(WORLDS_DIR).filter((f) => f.endsWith(".json")); } catch { return []; }
+  return files.map((f) => {
+    try {
+      const w = JSON.parse(fs.readFileSync(path.join(WORLDS_DIR, f), "utf8"));
+      return { slug: w.slug, name: w.name, author: w.author, desc: w.desc, created: w.created, castCount: w.casts.length, map: w.map, casts: w.casts.slice(0, 6) };
+    } catch { return null; }
+  }).filter(Boolean);
+}
 
 // ---------------- 실시간 접속 (WebSocket) ----------------
 const wss = new WebSocketServer({ server });
@@ -254,5 +317,8 @@ for (const sig of ["SIGINT", "SIGTERM"]) {
 server.listen(PORT, () => {
   console.log(`\n  게임 주소:       http://localhost:${PORT}/`);
   console.log(`  아이템 편집기:   http://localhost:${PORT}/editor.html`);
+  console.log(`  캐릭터 메이커:   http://localhost:${PORT}/maker.html`);
+  console.log(`  월드 스튜디오:   http://localhost:${PORT}/studio.html`);
+  console.log(`  쇼케이스:        http://localhost:${PORT}/showcase.html`);
   if (!DEV_KEY) console.log("  (DEV_KEY 가 없어서 누구나 아이템을 추가할 수 있습니다)\n");
 });

@@ -40,6 +40,8 @@
     .sw.on { border-color: var(--accent); }
     input[type=color] { width: 32px; height: 32px; padding: 0; border: 0; background: none; cursor: pointer; }
     #toast { position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%); background: var(--accent); color: #2a2100; padding: 10px 16px; border-radius: 8px; font-weight: 700; opacity: 0; transition: opacity .3s; pointer-events: none; }
+    .form { display: grid; gap: 6px; }
+    .form input, .form select { width: 100%; background: var(--bg); color: var(--text); border: 1px solid var(--line); border-radius: 8px; padding: 8px; font-size: 14px; }
     textarea { width: 100%; background: var(--bg); color: var(--text); border: 1px solid var(--line); border-radius: 8px; padding: 8px; font-size: 12px; font-family: monospace; resize: vertical; }
   </style>
 </head>
@@ -92,6 +94,21 @@
       </div>
       <textarea id="codeBox" rows="2" placeholder="친구가 준 캐릭터 코드를 여기에 붙여 넣고 [코드 불러오기]"></textarea>
     </div>
+
+    <div class="card" style="margin-top:16px">
+      <h2>🌍 월드 스튜디오로 보내기</h2>
+      <div class="form">
+        <input id="cName" maxlength="12" placeholder="이름 (예: 루미)">
+        <input id="cJob" maxlength="12" placeholder="직업 (예: 마법사)">
+        <input id="cTags" maxlength="40" placeholder="성격 3개, 쉼표로 (예: 다정함, 호기심, 수다쟁이)">
+        <select id="cSpeech"></select>
+        <input id="cIntro" maxlength="60" placeholder="한 줄 소개">
+      </div>
+      <div class="row">
+        <button class="main" id="saveCast">캐스트로 저장</button>
+        <a class="btn" href="studio.html">스튜디오 열기 →</a>
+      </div>
+    </div>
   </section>
 
   <section class="card">
@@ -105,6 +122,7 @@
 <div id="toast"></div>
 
 <script src="maker-parts.js"></script>
+<script src="dot-engine.js"></script>
 <script src="maker.js"></script>
 </body>
 </html>

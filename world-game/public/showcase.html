@@ -1,0 +1,88 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>월드 쇼케이스</title>
+  <link rel="stylesheet" href="studio.css">
+</head>
+<body>
+<header>
+  <h1>🏞 월드 쇼케이스</h1>
+  <div class="spacer"></div>
+  <a class="btn" href="index.html">🌱 게임</a>
+  <a class="btn" href="maker.html">🎨 캐릭터 메이커</a>
+  <a class="btn" href="studio.html">🌍 월드 스튜디오</a>
+</header>
+<div class="wrap">
+  <div class="hero">
+    <h2>우리가 만든 <em>도트 월드</em>, 함께 구경해요</h2>
+    <p class="muted">월드 스튜디오에서 [게시하기] 를 누르면 여기에 올라옵니다. 카드를 누르면 그 월드에 들어가 캐릭터들에게 말을 걸어 볼 수 있어요.</p>
+  </div>
+  <div class="tools">
+    <input id="q" placeholder="월드 이름, 만든 사람, 캐릭터 이름으로 찾기">
+    <select id="sort">
+      <option value="new">최신순</option>
+      <option value="name">이름순</option>
+      <option value="cast">캐릭터 많은 순</option>
+    </select>
+    <span class="muted" id="count"></span>
+  </div>
+  <div class="grid" id="grid"></div>
+</div>
+
+<script src="maker-parts.js"></script>
+<script src="dot-engine.js"></script>
+<script src="world-tiles.js"></script>
+<script>
+let worlds = [];
+const grid = document.getElementById("grid");
+
+function thumb(w) {
+  const cell = 12, cv = document.createElement("canvas");
+  cv.width = w.map.w * cell; cv.height = w.map.h * cell;
+  const ctx = cv.getContext("2d");
+  ctx.imageSmoothingEnabled = false;
+  drawMiniMap(ctx, w.map, cell);
+  for (const c of [...w.casts].sort((a, b) => a.y - b.y)) {
+    const st = normalize(c.state);
+    if (st) ctx.drawImage(spriteCanvas(st), c.x * cell + cell / 2 - 16, c.y * cell + cell - 30);
+  }
+  return cv;
+}
+
+function render() {
+  const q = document.getElementById("q").value.trim().toLowerCase();
+  const sort = document.getElementById("sort").value;
+  let list = worlds.filter((w) => !q || [w.name, w.author, w.desc, ...w.casts.map((c) => c.name)].join(" ").toLowerCase().includes(q));
+  list.sort(sort === "name" ? (a, b) => a.name.localeCompare(b.name, "ko") : sort === "cast" ? (a, b) => b.castCount - a.castCount : (a, b) => (b.created || "").localeCompare(a.created || ""));
+  document.getElementById("count").textContent = `${list.length}개`;
+  grid.innerHTML = "";
+  if (!list.length) {
+    grid.innerHTML = `<div class="card empty">${worlds.length ? "찾는 월드가 없어요." : "아직 게시된 월드가 없어요. <a href='studio.html' style='color:var(--accent)'>월드 스튜디오</a>에서 첫 월드를 게시해 보세요!"}</div>`;
+    return;
+  }
+  for (const w of list) {
+    const a = document.createElement("a");
+    a.className = "card wcard";
+    a.href = `studio.html?w=${encodeURIComponent(w.slug)}`;
+    a.style.cssText = "color:inherit;text-decoration:none";
+    const body = document.createElement("div");
+    body.className = "body";
+    const h = document.createElement("h3"); h.textContent = w.name;
+    const p = document.createElement("p"); p.textContent = w.desc || "소개가 없어요.";
+    const meta = document.createElement("div"); meta.className = "meta";
+    meta.textContent = `${w.author} · 캐릭터 ${w.castCount}명 · ${(w.created || "").slice(0, 10)}`;
+    body.append(h, p, meta);
+    a.append(thumb(w), body);
+    grid.appendChild(a);
+  }
+}
+
+document.getElementById("q").oninput = render;
+document.getElementById("sort").onchange = render;
+fetch("/api/worlds").then((r) => r.json()).then((list) => { worlds = list; render(); })
+  .catch(() => { grid.innerHTML = '<div class="card empty">서버에 연결할 수 없어요. npm start 로 서버를 켰는지 확인해 주세요.</div>'; });
+</script>
+</body>
+</html>

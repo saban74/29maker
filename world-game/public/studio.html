@@ -1,0 +1,104 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>월드 스튜디오</title>
+  <link rel="stylesheet" href="studio.css">
+</head>
+<body>
+<header>
+  <h1 id="title">🌍 월드 스튜디오</h1>
+  <input id="worldName" maxlength="30" value="나의 첫 마을" class="edit-only" aria-label="월드 이름">
+  <span id="byline" class="view-only"></span>
+  <span class="pill" id="castCount">0명 활동 중</span>
+  <div class="spacer"></div>
+  <button id="paintBtn" class="edit-only">🖌 땅 그리기</button>
+  <button id="exportBtn" class="edit-only">스냅샷 내보내기</button>
+  <button id="importBtn" class="edit-only">불러오기</button>
+  <input type="file" id="importFile" accept=".json,application/json" hidden>
+  <button id="resetBtn" class="edit-only">초기화</button>
+  <button id="publishBtn" class="main edit-only">🚀 게시하기</button>
+  <a class="btn view-only" href="showcase.html">← 모든 월드</a>
+  <a class="btn view-only" id="remixLink" href="studio.html">나도 만들기</a>
+</header>
+
+<main>
+  <!-- 왼쪽: 고른 캐릭터 + 명령 + 기록 -->
+  <aside>
+    <div class="card" id="selCard">
+      <h2>선택한 캐릭터</h2>
+      <div id="selEmpty" class="empty">월드에서 캐릭터를 눌러 고르세요.</div>
+      <div id="selBody" hidden>
+        <div class="sel-top">
+          <canvas id="selSprite" width="128" height="128"></canvas>
+          <div>
+            <div class="sel-name" id="selName"></div>
+            <div class="muted" id="selJob"></div>
+            <div class="tags" id="selTags"></div>
+          </div>
+        </div>
+        <p class="intro" id="selIntro"></p>
+        <div class="muted small" id="selSpeech"></div>
+        <div class="cmds">
+          <button id="cmdTalk">💬 대화</button>
+          <button id="cmdMove">🚶 이동</button>
+          <button id="cmdRest">💤 휴식</button>
+          <button id="cmdUndo">↩ 되돌리기</button>
+        </div>
+        <button id="cmdRemove" class="ghost edit-only">월드에서 빼기</button>
+      </div>
+    </div>
+
+    <div class="card">
+      <h2>기록</h2>
+      <div class="chips" id="logFilter">
+        <button data-f="all" class="on">전체</button>
+        <button data-f="talk">대화</button>
+        <button data-f="move">이동</button>
+        <button data-f="sys">시스템</button>
+      </div>
+      <ol id="log"></ol>
+    </div>
+  </aside>
+
+  <!-- 가운데: 월드 -->
+  <section class="card world-card">
+    <div id="brushes" hidden></div>
+    <canvas id="world" width="768" height="512"></canvas>
+    <div class="status" id="statusLine"></div>
+  </section>
+
+  <!-- 오른쪽: 캐스트 고르기 -->
+  <aside>
+    <div class="card">
+      <h2 id="castTitle">캐스트 고르기</h2>
+      <div id="castList"></div>
+      <a class="btn wide edit-only" href="maker.html">＋ 메이커에서 새 캐릭터 만들기</a>
+    </div>
+  </aside>
+</main>
+
+<!-- 게시하기 창 -->
+<div id="modal" hidden>
+  <form id="pubForm" class="card">
+    <h2>🚀 월드 게시하기</h2>
+    <p class="muted small">게시하면 링크를 아는 누구나 이 월드를 구경할 수 있고, 쇼케이스에도 올라갑니다.</p>
+    <label>월드 이름<input id="pubName" maxlength="30" required></label>
+    <label>만든 사람<input id="pubAuthor" maxlength="20" placeholder="닉네임"></label>
+    <label>소개<textarea id="pubDesc" maxlength="200" rows="3" placeholder="어떤 월드인가요?"></textarea></label>
+    <div id="pubResult"></div>
+    <div class="row">
+      <button type="button" id="pubCancel">닫기</button>
+      <button class="main" id="pubGo">게시하기</button>
+    </div>
+  </form>
+</div>
+<div id="toast"></div>
+
+<script src="maker-parts.js"></script>
+<script src="dot-engine.js"></script>
+<script src="world-tiles.js"></script>
+<script src="studio.js"></script>
+</body>
+</html>
