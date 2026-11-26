@@ -1,0 +1,128 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>아이템 편집기</title>
+  <style>
+    * { box-sizing: border-box; }
+    body { margin: 0; font-family: system-ui, "Apple SD Gothic Neo", "Malgun Gothic", sans-serif; background: #f4f1ea; color: #222; }
+    main { max-width: 900px; margin: 0 auto; padding: 24px 16px; display: grid; grid-template-columns: 1fr 1fr; gap: 24px; }
+    @media (max-width: 700px) { main { grid-template-columns: 1fr; } }
+    h1 { grid-column: 1 / -1; margin: 0; font-size: 22px; }
+    h1 small { display: block; font-size: 14px; font-weight: normal; color: #666; margin-top: 4px; }
+    section { background: #fff; border-radius: 12px; padding: 18px; box-shadow: 0 1px 3px rgba(0,0,0,.08); }
+    label { display: block; font-size: 13px; font-weight: 600; margin: 12px 0 4px; }
+    label span { font-weight: normal; color: #777; }
+    input, select { width: 100%; padding: 8px; font-size: 15px; border: 1px solid #ccc; border-radius: 6px; }
+    input[type=color] { height: 40px; padding: 2px; }
+    .row { display: flex; gap: 10px; } .row > * { flex: 1; }
+    button { margin-top: 16px; width: 100%; padding: 11px; font-size: 16px; font-weight: bold; border: 0; border-radius: 8px; background: #2e7d32; color: #fff; cursor: pointer; }
+    #msg { margin-top: 10px; font-size: 14px; min-height: 20px; }
+    #preview { width: 96px; height: 96px; border-radius: 10px; margin: 8px auto; display: flex; align-items: center; justify-content: center; font-size: 60px; border: 1px solid #ddd; }
+    ul { list-style: none; padding: 0; margin: 0; max-height: 420px; overflow-y: auto; }
+    li { display: flex; align-items: center; gap: 10px; padding: 6px; border-radius: 6px; cursor: pointer; }
+    li:hover { background: #f0f0f0; }
+    li i { width: 28px; height: 28px; border-radius: 5px; display: flex; align-items: center; justify-content: center; font-style: normal; flex: none; }
+    li small { color: #888; margin-left: auto; }
+    code { background: #eee; padding: 1px 5px; border-radius: 4px; font-size: 12px; }
+  </style>
+</head>
+<body>
+<main>
+  <h1>🛠 아이템 편집기
+    <small>여기서 저장하면 <code>items/아이디.json</code> 파일이 만들어지고, 게임 속 모든 사람에게 바로 나타납니다.</small>
+  </h1>
+
+  <section>
+    <form id="f">
+      <div id="preview"></div>
+      <label>아이디 <span>(영어 소문자·숫자·-·_ / 같은 아이디면 덮어쓰기)</span></label>
+      <input name="id" required pattern="[a-z0-9_\-]{1,30}" placeholder="예: brick">
+      <label>이름</label>
+      <input name="name" required maxlength="20" placeholder="예: 벽돌">
+      <div class="row">
+        <div><label>색깔</label><input name="color" type="color" value="#c0504d"></div>
+        <div><label>그림 <span>(이모지, 비워도 됨)</span></label><input name="emoji" maxlength="8" placeholder="예: 🧱"></div>
+      </div>
+      <div class="row">
+        <div><label>종류</label>
+          <select name="layer">
+            <option value="object">물건 (바닥 위에 놓임)</option>
+            <option value="ground">바닥 (땅 자체를 바꿈)</option>
+          </select></div>
+        <div><label>지나갈 수 있나요?</label>
+          <select name="solid">
+            <option value="false">지나갈 수 있음</option>
+            <option value="true">막힘 (벽처럼)</option>
+          </select></div>
+      </div>
+      <label>만든 사람</label>
+      <input name="author" maxlength="20" placeholder="내 이름">
+      <label>개발자 키 <span>(서버에 DEV_KEY 를 정했을 때만)</span></label>
+      <input name="key" type="password" autocomplete="off">
+      <button>저장하기</button>
+      <div id="msg"></div>
+    </form>
+  </section>
+
+  <section>
+    <b>지금 있는 아이템</b> <span style="color:#777;font-size:13px">(누르면 불러와서 고칠 수 있어요)</span>
+    <ul id="list"></ul>
+  </section>
+</main>
+<script>
+const f = document.getElementById("f");
+const preview = document.getElementById("preview");
+const msg = document.getElementById("msg");
+let items = {};
+
+function updatePreview() {
+  preview.style.background = f.color.value;
+  preview.textContent = f.emoji.value;
+}
+f.addEventListener("input", updatePreview);
+
+async function loadList() {
+  items = await (await fetch("/api/items")).json();
+  const ul = document.getElementById("list");
+  ul.innerHTML = "";
+  for (const it of Object.values(items)) {
+    const li = document.createElement("li");
+    const sw = document.createElement("i");
+    sw.style.background = it.color; sw.textContent = it.emoji || "";
+    const name = document.createElement("span"); name.textContent = `${it.name} (${it.id})`;
+    const by = document.createElement("small"); by.textContent = it.author || "";
+    li.append(sw, name, by);
+    li.onclick = () => {
+      f.id.value = it.id; f.name.value = it.name; f.color.value = it.color; f.emoji.value = it.emoji || "";
+      f.layer.value = it.layer; f.solid.value = String(it.solid); f.author.value = it.author || "";
+      updatePreview();
+    };
+    ul.appendChild(li);
+  }
+}
+
+f.addEventListener("submit", async (e) => {
+  e.preventDefault();
+  const item = {
+    id: f.id.value.trim(), name: f.name.value.trim(), color: f.color.value,
+    layer: f.layer.value, solid: f.solid.value === "true", author: f.author.value.trim(),
+  };
+  if (f.emoji.value.trim()) item.emoji = f.emoji.value.trim();
+  const res = await fetch("/api/items", {
+    method: "POST",
+    headers: { "Content-Type": "application/json", "x-dev-key": f.key.value },
+    body: JSON.stringify(item),
+  });
+  const out = await res.json();
+  msg.style.color = res.ok ? "#2e7d32" : "#c62828";
+  msg.textContent = res.ok ? `✅ "${out.item.name}" 저장 완료! 게임에 바로 나타납니다.` : `❌ ${out.error}`;
+  if (res.ok) loadList();
+});
+
+updatePreview();
+loadList();
+</script>
+</body>
+</html>

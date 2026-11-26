@@ -1,0 +1,40 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>함께 만드는 세상</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <canvas id="view"></canvas>
+
+  <div id="top">
+    <b>함께 만드는 세상</b>
+    <span id="status">연결 중…</span>
+    <a href="editor.html" target="_blank">🛠 아이템 만들기</a>
+  </div>
+
+  <div id="help">
+    이동: <kbd>W A S D</kbd> 또는 방향키 · 놓기: <b>왼쪽 클릭</b> · 지우기: <b>오른쪽 클릭</b> · 아이템 고르기: 숫자키/아래 칸 · 채팅: <kbd>Enter</kbd>
+  </div>
+
+  <div id="chat">
+    <div id="log"></div>
+    <input id="say" maxlength="200" placeholder="Enter 를 눌러 채팅">
+  </div>
+
+  <div id="hotbar"></div>
+
+  <div id="join">
+    <form id="joinForm">
+      <h1>함께 만드는 세상</h1>
+      <p>아무것도 없는 빈 땅에서 시작합니다.<br>모두가 함께 세상을 만들어 가요.</p>
+      <input id="name" maxlength="12" placeholder="내 이름" autofocus>
+      <button>들어가기</button>
+    </form>
+  </div>
+
+  <script src="game.js"></script>
+</body>
+</html>

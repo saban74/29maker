@@ -1,0 +1,13 @@
+{
+  "name": "world-game",
+  "version": "0.1.0",
+  "description": "빈 땅에서 접속자들이 함께 세상을 만드는 멀티플레이 게임",
+  "type": "module",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "dependencies": {
+    "ws": "^8.18.0"
+  }
+}
